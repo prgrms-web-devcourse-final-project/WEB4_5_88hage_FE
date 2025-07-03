@@ -1,8 +1,9 @@
+import PasswordFind from '@/pages/PasswordFind';
+
 export default function page() {
   return (
     <>
-      <div className=""></div>
-      <h1>page Component</h1>
+      <PasswordFind />
     </>
   );
 }
