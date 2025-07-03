@@ -1,7 +1,8 @@
 export default function notFound() {
   return (
     <>
-      <h1>not-found Component</h1>
+      <img src="/hip-girl-thinking.svg" alt="" />
+      <div className="t4 bg-white">hello</div>
     </>
   );
 }
