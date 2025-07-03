@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import email from '../assets/email.png';
 
-export default function PasswordFind() {
+export default function EmailCheck() {
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center bg-[var(--color-black)] px-5 text-[var(--color-gray-3)]">
       <div className="flex h-full w-full flex-col items-center justify-center">
