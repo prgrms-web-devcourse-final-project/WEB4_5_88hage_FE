@@ -1,7 +1,9 @@
+import Signup from '@/pages/Signup';
+
 export default function page() {
   return (
     <>
-      <h1>page</h1>
+      <Signup />
     </>
   );
 }
