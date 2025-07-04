@@ -36,7 +36,12 @@ export default function Signup() {
             className="md:hidden"
           />
           <div className="flex w-full max-w-150 flex-col gap-[15px]">
-            <Input type="text" placeholder="이름을 입력 해주세요." />
+            <div className="relative flex items-center">
+              <Input type="text" placeholder="닉네임을 입력 해주세요." />
+              <button className="absolute right-2 cursor-pointer text-sm">
+                중복 검사
+              </button>
+            </div>
             <Input type="text" placeholder="이메일을 입력 해주세요." />
             <Input type="password" placeholder="비밀번호를 입력 해주세요." />
             <Input type="password" placeholder="비밀번호를 확인 해주세요." />
