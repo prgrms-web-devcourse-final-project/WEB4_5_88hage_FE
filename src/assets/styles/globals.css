@@ -1,2 +1,7 @@
 @import './colors.css';
 @import './fonts.css';
+
+html,
+body {
+  @apply bg-bg-color;
+}
