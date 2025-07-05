@@ -1,22 +1,2 @@
 @import './colors.css';
 @import './fonts.css';
-
-/* input[type='checkbox'] {
-  display: none;
-}
-
-.hiddenLabel {
-  display: block;
-  width: 20px;
-  height: 20px;
-}
-
-input[type='checkbox'] + .hiddenLabel {
-  background-repeat: no-repeat;
-  background-image: url('../assets/checkbox.png');
-}
-
-input[type='checkbox']:checked + .hiddenLabel {
-  background-repeat: no-repeat;
-  background-image: url('../assets/checkbox_checked.png');
-} */
