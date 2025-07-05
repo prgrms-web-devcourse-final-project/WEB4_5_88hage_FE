@@ -105,9 +105,9 @@ export default function Signup() {
         </div>
       )}
       {nextPage && (
-        <div className="flex min-h-screen w-full flex-col items-center justify-between gap-[30px] bg-[#232323] px-4 pt-6 pb-4 text-[#8d8d8d] md:ml-[50%] md:w-1/2 md:justify-center md:bg-[#262626]">
+        <div className="flex h-screen w-full flex-col items-center justify-between gap-[30px] bg-[#232323] px-4 pt-6 pb-4 text-[#8d8d8d] md:ml-[50%] md:w-1/2 md:justify-center md:bg-[#262626]">
           <div></div>
-          <div className="flex max-w-150 flex-col gap-12">
+          <div className="flex max-w-150 flex-col gap-10">
             <div className="flex flex-col gap-1">
               <Image
                 src={thinking}
