@@ -2,11 +2,12 @@
 
 import Image from 'next/image';
 import logo from '@/assets/logo.png';
+import thinking from '@/assets/thinking.png';
 import Input from '@/components/common/Input';
 import Checkbox from '@/components/common/Checkbox';
 import { useState } from 'react';
 
-function Tag({ children }: { children: string }) {
+function Tag({ type, children }: { type: string; children: string }) {
   const [checked, setChecked] = useState(false);
   return (
     <div
@@ -88,7 +89,7 @@ export default function Signup() {
             </div>
             <button
               type="button"
-              className="mt-2 hidden w-full cursor-pointer rounded-[5px] bg-[#1CEBB9] p-2 font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:block"
+              className="mt-2 hidden w-full cursor-pointer rounded-[5px] bg-[#1CEBB9] py-5 text-2xl font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:block"
               onClick={() => setNextPage(true)}
             >
               다음
@@ -96,7 +97,7 @@ export default function Signup() {
           </div>
           <button
             type="button"
-            className="w-full cursor-pointer rounded-[5px] bg-[#1CEBB9] p-2 font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:hidden"
+            className="w-full max-w-150 cursor-pointer rounded-[5px] bg-[#1CEBB9] p-3 text-2xl font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:hidden"
             onClick={() => setNextPage(true)}
           >
             다음
@@ -106,40 +107,54 @@ export default function Signup() {
       {nextPage && (
         <div className="flex min-h-screen w-full flex-col items-center justify-between gap-[30px] bg-[#232323] px-4 pt-6 pb-4 text-[#8d8d8d] md:ml-[50%] md:w-1/2 md:justify-center md:bg-[#262626]">
           <div></div>
-          <div className="flex flex-col gap-5">
-            <div>
-              <div className="text-white">당신의 취향을 알려주세요</div>
-              <div>더 정확한 추천을 위해 관심 있는 태그를 골라주세요.</div>
+          <div className="flex max-w-150 flex-col gap-12">
+            <div className="flex flex-col gap-1">
+              <Image
+                src={thinking}
+                alt=""
+                width={32}
+                height={32}
+                quality={100}
+                className="mb-1"
+              />
+              <div className="text-2xl font-semibold text-white">
+                당신의 취향을 알려주세요
+              </div>
+              <div className="">딱 맞는 컨텐츠를 보여 드립니다</div>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <Tag>문화/예술</Tag>
-              <Tag>운동/신체활동</Tag>
-              <Tag>푸드/드링크</Tag>
-              <Tag>지식/자기계발</Tag>
-              <Tag>게임</Tag>
-              <Tag>여행/나들이</Tag>
-              <Tag>교육/체험</Tag>
-              <Tag>클래식</Tag>
-              <Tag>연극</Tag>
-              <Tag>뮤지컬</Tag>
-              <Tag>무용</Tag>
-              <Tag>전시/미술</Tag>
-              <Tag>국악</Tag>
-              <Tag>영화</Tag>
-              <Tag>축제</Tag>
-              <Tag>콘서트</Tag>
-              <Tag>독주/독창회</Tag>
+            <div className="flex flex-col gap-3">
+              <div className="font-medium text-[#dfdfdf]">모임 카테고리 ❤️</div>
+              <div className="flex flex-wrap gap-2.5">
+                <Tag type="art">예술 🎨</Tag>
+                <Tag type="travel">여행 🧭</Tag>
+                <Tag type="food">음식 🍔</Tag>
+                <Tag type="game">게임 🎮</Tag>
+                <Tag type="culture">문화 🌍</Tag>
+                <Tag type="sports">운동 👟</Tag>
+                <Tag type="development">자기 계발 📖</Tag>
+                <Tag type="movie_group">영화 🎬</Tag>
+              </div>
             </div>
-            <button
-              type="button"
-              className="hidden w-full cursor-pointer rounded-[5px] bg-[#1CEBB9] p-2 font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:block"
-            >
-              완료
-            </button>
+            <div className="flex flex-col gap-3">
+              <div className="font-medium text-[#dfdfdf]">행사 카테고리 🎈</div>
+              <div className="flex flex-wrap gap-2.5">
+                <Tag type="classic">클래식 🎹</Tag>
+                <Tag type="country_music">국악 🪘</Tag>
+                <Tag type="movie_event">영화 🎞️</Tag>
+                <Tag type="solo">독주/독창회 🎻</Tag>
+                <Tag type="musical">연극/뮤지컬 👏</Tag>
+                <Tag type="art">전시/미술 🖼️</Tag>
+                <Tag type="education">교육/체험 👨‍🏫</Tag>
+                <Tag type="dance">무용 💃</Tag>
+                <Tag type="concert">콘서트 🎤</Tag>
+                <Tag type="festival">축제 🎆</Tag>
+              </div>
+            </div>
           </div>
           <button
             type="button"
-            className="w-full cursor-pointer rounded-[5px] bg-[#1CEBB9] p-2 font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:hidden"
+            className="w-full max-w-150 cursor-pointer rounded-[5px] bg-[#1CEBB9] p-3 text-2xl font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:mt-5 md:py-5"
+            onClick={() => setNextPage(false)} // 테스트용
           >
             완료
           </button>
