@@ -70,7 +70,9 @@ export default function Signup() {
             </div>
             <div className="h-2"></div>
             <div className="flex items-center gap-2">
-              <Checkbox id="allAgree">모두 동의 (선택 포함)</Checkbox>
+              <Checkbox id="allAgree" box>
+                모두 동의 (선택 포함)
+              </Checkbox>
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
