@@ -10,7 +10,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="flex h-[60px] items-center justify-between px-6">
+      <header className="flex h-[80px] items-center justify-between px-6">
         {/* 왼쪽: 로고 */}
         <Logo />
 
@@ -18,11 +18,11 @@ export default function Header() {
         <div className="flex items-center gap-8">
           <Navigation />
           <button
-            className="bg-gray-8 rounded-full p-2 transition"
+            className="bg-gray-8 flex h-[52px] w-[52px] items-center justify-center rounded-full transition"
             aria-label="사이드바 열기"
             onClick={() => setSidebarOpen(true)}
           >
-            <BiMenuAltLeft className="text-main h-6 w-6" />
+            <BiMenuAltLeft className="text-main h-10 w-10" />
           </button>
         </div>
       </header>

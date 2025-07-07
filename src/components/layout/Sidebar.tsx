@@ -21,10 +21,10 @@ export default function Sidebar() {
 
   return (
     <aside className="fixed top-0 right-0 z-50 flex h-screen w-[335px] flex-col p-5 lg:w-[450px] lg:p-15">
-      <div className="absolute top-2 right-2 flex">
+      <div className="absolute top-3 right-6 flex">
         <DarkModeToggle />
-        <button className="bg-gray-7 ml-3 rounded-full p-1">
-          <X className="text-main" />
+        <button className="bg-gray-7 ml-3 flex h-[52px] w-[52px] items-center justify-around rounded-full">
+          <X className="text-main h-10 w-10" />
         </button>
       </div>
       <div className="mt-[50px] lg:mt-0">
