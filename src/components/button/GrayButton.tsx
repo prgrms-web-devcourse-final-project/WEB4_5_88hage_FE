@@ -1,20 +1,21 @@
 'use client';
 
+import { ButtonHTMLAttributes } from 'react';
+
 type GrayButtonProps = {
   children: React.ReactNode;
-  onClick?: () => void;
   className?: string;
-};
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export default function GrayButton({
   children,
-  onClick,
   className = '',
+  ...props
 }: GrayButtonProps) {
   return (
     <button
-      onClick={onClick}
-      className={`bg-gray-default text-gray-6 rounded py-3 text-[16px] font-semibold ${className}`}
+      className={`bg-gray-default text-gray-6 w-full rounded py-3 text-[16px] font-semibold ${className}`}
+      {...props}
     >
       {children}
     </button>
