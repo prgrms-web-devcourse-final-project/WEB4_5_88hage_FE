@@ -2,28 +2,16 @@
 
 import Image from 'next/image';
 
-type PostCardProps = {
-  thumbnail: string;
-  title: string;
-  description: string;
-  period: string;
-};
-
-export default function PostCard({
-  thumbnail,
-  title,
-  description,
-  period,
-}: PostCardProps) {
+export default function PostCard() {
   return (
-    <div className="relative w-[300px] overflow-hidden rounded-lg bg-[#2f2f2f] text-white shadow-md">
+    <div className="relative w-[345px] overflow-hidden rounded bg-black text-white">
       {/* 햄버거 이모지 */}
-      <div className="absolute top-3 left-3 z-10 text-2xl">🍔</div>
+      <div className="absolute top-3 left-3 z-10 text-[30px]">🍔</div>
 
       {/* 썸네일 */}
-      <div className="relative h-[180px] w-full">
+      <div className="relative h-[240px] w-full">
         <Image
-          src={thumbnail}
+          src={'/hip-girl-thinking.svg'}
           alt="썸네일"
           fill
           className="rounded-t-lg object-cover"
@@ -32,10 +20,10 @@ export default function PostCard({
       </div>
 
       {/* 콘텐츠 */}
-      <div className="space-y-2 p-4">
-        <h2 className="t3 font-bold">{title}</h2>
-        <p className="text-sm text-gray-300">{description}</p>
-        <p className="text-xs text-gray-400">{period}</p>
+      <div className="h-[120px] p-3">
+        <h2 className="t3 mb-1">모임 이름</h2>
+        <p className="text-gray-4 mb-5 text-[14px]">모임 소개글</p>
+        <p className="text-gray-5 text-[14px]">모임 기간 (07.08 ~ 07.27)</p>
       </div>
     </div>
   );
