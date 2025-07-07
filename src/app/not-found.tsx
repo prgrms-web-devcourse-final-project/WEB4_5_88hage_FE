@@ -1,4 +1,5 @@
 import GrayButton from '@/components/GrayButton';
+
 import Image from 'next/image';
 
 export default function notFound() {
