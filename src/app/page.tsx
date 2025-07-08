@@ -1,10 +1,9 @@
-
+import GroupDetail from '@/pages/GroupDetail';
 
 export default function page() {
-
   return (
     <>
-      <h1>page</h1>
+      <GroupDetail />
     </>
   );
 }
