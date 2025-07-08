@@ -35,7 +35,6 @@ export default function GroupDetail() {
           </button>
         </div>
       </div>
-      <div className="fixed top-0 right-0 h-180 w-180 rounded-full bg-amber-600"></div>
     </div>
   );
 }
