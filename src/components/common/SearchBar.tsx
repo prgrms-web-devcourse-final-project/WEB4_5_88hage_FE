@@ -1,4 +1,4 @@
-import { Search } from 'lucide-react';
+import { Filter, Search, SlidersHorizontal } from 'lucide-react';
 
 export default function SearchBar() {
   return (
@@ -13,7 +13,8 @@ export default function SearchBar() {
           placeholder="빠르게 축제를 추천 해 드릴게요"
           className="border-gray-8 w-full rounded border bg-transparent p-5 pr-12 font-semibold text-white"
         />
-        <Search className="text-gray-8 absolute top-1/2 right-5 h-[30px] w-[30px] -translate-y-1/2" />
+        <Search className="text-gray-8 absolute top-1/2 right-5 h-[27px] w-[27px] -translate-y-1/2" />
+        <SlidersHorizontal className="text-gray-8 absolute top-1/2 right-15 h-[25px] w-[25px] -translate-y-1/2" />
       </div>
     </div>
   );
