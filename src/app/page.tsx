@@ -1,9 +1,7 @@
-import EventPage from '@/pages/EventPage';
-
 export default function page() {
   return (
     <>
-      <EventPage />
+      <h1>page</h1>
     </>
   );
 }
