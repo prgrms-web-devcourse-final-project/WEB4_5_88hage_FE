@@ -1,11 +1,10 @@
-import GroupDetail from '@/pages/GroupDetail';
-import EventDetail from '@/pages/EventDetail';
+import Header from '@/components/layout/Header';
+import Sidebar from '@/components/layout/Sidebar';
 
 export default function page() {
   return (
     <>
-      {/* <GroupDetail /> */}
-      <EventDetail />
+      <Header />
     </>
   );
 }
