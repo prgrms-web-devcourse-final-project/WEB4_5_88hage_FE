@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import logo from '@/assets/logo.png';
-import thinking from '@/assets/thinking.png';
+import logo from '@/assets/images/logo.png';
+import thinking from '@/assets/images/thinking.png';
 import Input from '@/components/common/Input';
 import Checkbox from '@/components/common/Checkbox';
 import { useState } from 'react';
