@@ -1,43 +1,77 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { ChevronDown } from 'lucide-react';
 
 type CategorySelectProps = {
-  title: string;
   isRequired?: boolean;
   options: string[];
 };
 
 export default function CategorySelect({
-  title,
   isRequired = false,
   options,
 }: CategorySelectProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState('');
+  const componentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        componentRef.current &&
+        !componentRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [componentRef]);
+
+  const handleSelect = (option: string) => {
+    setSelected(option);
+    setIsOpen(false);
+  };
 
   return (
-    <div className="mt-6 w-full px-6">
-      <label className="text-main mb-2 block text-[16px] font-semibold lg:text-[24px]">
-        {title}
+    <div className="relative mt-6 w-full lg:mt-10" ref={componentRef}>
+      <label className="text-main mb-3 block text-[16px] font-semibold lg:text-[24px]">
+        카테고리
         {isRequired && (
-          <span className="ml-2 text-[12px] font-medium text-[#cecece]">
-            (필수)
-          </span>
+          <span className="t4 ml-2 font-medium text-[#cecece]">필수</span>
         )}
       </label>
-      <select
-        className="t3 w-full rounded border border-[#343434] bg-[#1a1a1a] p-4 text-white"
-        value={selected}
-        onChange={(e) => setSelected(e.target.value)}
+      <button
+        type="button"
+        className="t3 bg-bg-color flex w-full items-center justify-between rounded border border-[#343434] p-4 text-left text-white"
+        onClick={() => setIsOpen(!isOpen)}
       >
-        <option value="" disabled hidden>
-          카테고리를 골라주세요
-        </option>
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
+        <span>{selected || '카테고리를 골라주세요'}</span>
+        <ChevronDown
+          className={`transform transition-transform duration-200 ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+          color="#9CA3AF"
+        />
+      </button>
+      {isOpen && (
+        <div className="absolute z-10 mt-2 w-full rounded border border-[#343434] bg-[#242424] p-4 text-white">
+          <div className="flex-wrap gap-2">
+            {options.map((option) => (
+              <button
+                key={option}
+                type="button"
+                className="t3 bg-[#343434] px-4 py-2"
+                onClick={() => handleSelect(option)}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

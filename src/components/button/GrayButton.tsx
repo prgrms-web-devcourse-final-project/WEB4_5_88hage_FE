@@ -14,7 +14,7 @@ export default function GrayButton({
 }: GrayButtonProps) {
   return (
     <button
-      className={`bg-gray-default text-gray-6 w-full rounded py-3 text-[16px] font-semibold ${className}`}
+      className={`bg-gray-default text-gray-6 t3 w-full rounded py-3 font-semibold ${className}`}
       {...props}
     >
       {children}

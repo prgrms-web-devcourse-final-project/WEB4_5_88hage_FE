@@ -22,14 +22,14 @@ export default function WritingForm({
 
   return (
     <>
-      <div className="w-full px-6">
+      <div className="w-full">
         <div className="text-main text-[16px] font-semibold lg:text-[24px]">
           {title}
           {isRequired && (
             <span className="t5 t4 ml-2 font-medium text-[#cecece]">필수</span>
           )}
         </div>
-        <div className="relative mb-4">
+        <div className="relative mb-4 lg:mb-10">
           {isLongForm ? (
             <textarea
               className="placeholder-gray-4 t3 mt-3 h-64 w-full resize-none rounded border border-[#343434] p-4 text-white"
