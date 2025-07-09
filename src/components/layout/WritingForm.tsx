@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { Search } from 'lucide-react';
 
 export default function WritingForm({
   title,
@@ -30,6 +31,11 @@ export default function WritingForm({
           )}
         </div>
         <div className="relative mb-4 lg:mb-10">
+          {!isLongForm && title === '모임 위치' && (
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pt-2 pr-4">
+              <Search size={20} color="#9CA3AF" />
+            </div>
+          )}
           {isLongForm ? (
             <textarea
               className="placeholder-gray-4 t3 mt-3 h-64 w-full resize-none rounded border border-[#343434] p-4 text-white"
@@ -41,7 +47,9 @@ export default function WritingForm({
           ) : (
             <input
               type="text"
-              className="placeholder-gray-4 t3 mt-3 w-full rounded border border-[#343434] p-4 text-white"
+              className={`placeholder-gray-4 t3 mt-3 w-full rounded border border-[#343434] p-4 text-white ${
+                title === '모임 위치' ? 'pr-12' : ''
+              }`}
               placeholder={placeholder}
               value={value}
               onChange={handleChange}
