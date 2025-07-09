@@ -14,7 +14,7 @@ type NewUserData = {
   nickname: string;
   address: string;
   birthDate: string;
-  gender: 'male' | 'female';
+  gender: 'MALE' | 'FEMALE';
   isMarketingAgreed: boolean;
 };
 
@@ -56,23 +56,26 @@ export default function Signup() {
 
   const [newUser, setNewUser] = useState<NewUserData>();
 
+  const nicknameCheck = /^[가-힣|a-z|A-Z|0-9|]+$/;
   const emailCheck = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
   const passwordCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/;
   const birthDateCheck = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/;
 
   const goNextPage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({
-      email: email,
-      password: password,
-      confirmPassword: confirmPassword,
-      nickname: nickname,
-      termsChecked: termsChecked,
-      privacyChecked: privacyChecked,
-      marketingChecked: marketingChecked,
-    });
+    // type NewUserData = {
+    //   email: string;
+    //   password: string;
+    //   confirmPassword: string;
+    //   nickname: string;
+    //   address: string;
+    //   birthDate: string;
+    //   gender: 'male' | 'female';
+    //   isMarketingAgreed: boolean;
+    // };
     if (
       nickname.length === 0 ||
+      !nicknameCheck.test(nickname) ||
       email.length === 0 ||
       !emailCheck.test(email) ||
       password.length === 0 ||
@@ -85,6 +88,20 @@ export default function Signup() {
       !privacyChecked
     )
       alert('error');
+    else {
+      setNewUser({
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword,
+        nickname: nickname,
+        address: address,
+        birthDate: birthDate,
+        gender: maleSelected ? 'MALE' : 'FEMALE',
+        isMarketingAgreed: marketingChecked,
+      });
+      console.log(newUser);
+      setNextPage(true);
+    }
   };
 
   return (
@@ -109,10 +126,15 @@ export default function Signup() {
                 value={nickname}
                 onChange={(e) => {
                   setNickname(e.target.value);
-                  if (e.target.value.length > 0) setInvalidNickname(false);
+                  if (
+                    e.target.value.length > 0 &&
+                    nicknameCheck.test(e.target.value)
+                  )
+                    setInvalidNickname(false);
                 }}
                 onBlur={() => {
-                  if (nickname.length === 0) setInvalidNickname(true);
+                  if (nickname.length === 0 || !nicknameCheck.test(nickname))
+                    setInvalidNickname(true);
                 }}
               />
               <button className="absolute right-2 cursor-pointer text-sm">
@@ -340,7 +362,10 @@ export default function Signup() {
           <button
             type="button"
             className="w-full max-w-150 cursor-pointer rounded-[5px] bg-[#1CEBB9] p-3 text-2xl font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:mt-5 md:py-5"
-            onClick={() => setNextPage(false)} // 테스트용
+            onClick={() => {
+              // setNextPage(false);
+              console.log(newUser);
+            }} // 테스트용
           >
             완료
           </button>
