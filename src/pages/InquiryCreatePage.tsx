@@ -1,73 +1,61 @@
-'use client';
-
-import { useForm } from 'react-hook-form';
 import GrayButton from '@/components/button/GrayButton';
-import Input from '@/components/common/Input';
-
-type InquiryCreateFormData = {
-  title: string;
-  content: string;
-};
+import Tag from '@/components/common/Tag';
+import CategorySelect from '@/components/layout/CategorySelect';
+import WritingForm from '@/components/layout/WritingForm';
 
 export default function InquiryCreatePage() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<InquiryCreateFormData>();
-
-  const onSubmit = (data: InquiryCreateFormData) => {
-    console.log('문의 글 작성 데이터:', data);
-    // 문의 글 작성 API 연동 부분
-  };
-
   return (
-    <div className="flex min-h-screen w-screen flex-col items-center bg-black p-8 text-white">
-      <div className="w-full max-w-4xl">
-        <h1 className="mb-8 text-3xl font-bold">문의하기</h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div>
-            <label htmlFor="title" className="mb-2 block text-lg font-semibold">
-              제목
-            </label>
-            <Input
-              id="title"
-              placeholder="문의 제목을 입력해주세요"
-              {...register('title', {
-                required: '제목을 입력해주세요',
-              })}
-              className="w-full"
+    <>
+      <div className="mx-auto mb-10 flex w-full max-w-[1220px] flex-col items-center px-6">
+        <div className="from-main to-text mt-10 mb-10 inline bg-gradient-to-r bg-clip-text text-[24px] font-semibold text-transparent md:text-[30px] lg:text-[32px]">
+          문의글 작성
+        </div>
+
+        <WritingForm
+          title="제목"
+          placeholder="제목을 입력해 주세요."
+          isRequired
+          isLongForm={false}
+        />
+
+        <CategorySelect isRequired options={['신고', '버그', '기타 문의']} />
+
+        <div className="flex w-full flex-col items-baseline lg:flex-row lg:gap-6">
+          {/* 태그 입력 영역 */}
+          <div className="w-full lg:w-1/2">
+            <WritingForm
+              title="태그"
+              placeholder="태그를 작성 해주세요."
+              isRequired={false}
+              isLongForm={false}
             />
-            {errors.title && (
-              <p className="mt-1 text-sm text-red-500">{errors.title.message}</p>
-            )}
+            <div className="flex flex-wrap justify-start gap-2 lg:mt-[-20px]">
+              <Tag />
+              <Tag />
+              <Tag />
+              <Tag />
+            </div>
           </div>
 
-          <div>
-            <label htmlFor="content" className="mb-2 block text-lg font-semibold">
-              문의 내용
-            </label>
-            <textarea
-              id="content"
-              placeholder="문의하실 내용을 자세히 적어주세요"
-              {...register('content', {
-                required: '내용을 입력해주세요',
-              })}
-              className="h-60 w-full rounded-md border border-gray-700 bg-gray-900 p-3 text-white placeholder-gray-500 focus:border-main focus:outline-none focus:ring-1 focus:ring-main"
-              rows={10}
+          {/* 카테고리 선택 영역 */}
+          <div className="w-full lg:w-1/2">
+            <CategorySelect
+              isRequired
+              options={[
+                '문화',
+                '운동',
+                '푸드',
+                '자기계발',
+                '게임',
+                '여행',
+                '예술',
+              ]}
             />
-            {errors.content && (
-              <p className="mt-1 text-sm text-red-500">{errors.content.message}</p>
-            )}
           </div>
+        </div>
 
-          <div className="flex justify-end">
-            <GrayButton type="submit" className="w-full px-6 py-3 text-lg sm:w-auto">
-              제출하기
-            </GrayButton>
-          </div>
-        </form>
+        <GrayButton className="mt-10 lg:mt-20">작성하기</GrayButton>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,9 +1,9 @@
-import GatheringCreatePage from '@/pages/GatheringCreatePage';
+import InquiryCreatePage from '@/pages/InquiryCreatePage';
 
 export default function page() {
   return (
     <>
-      <GatheringCreatePage />
+      <InquiryCreatePage />
     </>
   );
 }
