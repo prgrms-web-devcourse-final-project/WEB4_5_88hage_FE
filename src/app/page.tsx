@@ -1,9 +1,9 @@
-import Footer from '@/components/layout/Footer';
+import GatheringCreatePage from '@/pages/GatheringCreatePage';
 
 export default function page() {
   return (
     <>
-      <Footer />
+      <GatheringCreatePage />
     </>
   );
 }
