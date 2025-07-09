@@ -22,19 +22,17 @@ export default function WritingForm({
 
   return (
     <>
-      <div className="w-full px-6 lg:w-[1220px]">
+      <div className="w-full px-6">
         <div className="text-main text-[16px] font-semibold lg:text-[24px]">
           {title}
           {isRequired && (
-            <span className="t5 ml-2 text-[12px] font-medium text-[#cecece]">
-              필수
-            </span>
+            <span className="t5 t4 ml-2 font-medium text-[#cecece]">필수</span>
           )}
         </div>
-        <div className="relative">
+        <div className="relative mb-4">
           {isLongForm ? (
             <textarea
-              className="placeholder-gray-4 mt-3 h-64 w-full resize-none rounded border border-[#343434] p-4"
+              className="placeholder-gray-4 t3 mt-3 h-64 w-full resize-none rounded border border-[#343434] p-4 text-white"
               placeholder={placeholder}
               value={value}
               onChange={handleChange}
@@ -50,7 +48,7 @@ export default function WritingForm({
             />
           )}
           {isLongForm && (
-            <div className="absolute right-5 bottom-5 text-gray-400">
+            <div className="t3 absolute right-3 bottom-3 text-[#595858]">
               {value.length} / 1000
             </div>
           )}
