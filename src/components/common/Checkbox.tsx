@@ -7,6 +7,7 @@ type CheckboxProps = {
   children?: string;
   className?: string;
   onChange?: any;
+  onDataChange?: any;
 };
 
 export default function Checkbox({
@@ -15,6 +16,7 @@ export default function Checkbox({
   children,
   className,
   onChange,
+  onDataChange,
 }: CheckboxProps) {
   const [checked, setChecked] = useState(false);
 
@@ -27,6 +29,7 @@ export default function Checkbox({
         className="hidden"
         onChange={(e) => {
           setChecked(e.target.checked);
+          onDataChange(e.target.checked);
         }}
       />
       <label htmlFor={id}>
