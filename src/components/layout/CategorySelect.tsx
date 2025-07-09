@@ -63,7 +63,7 @@ export default function CategorySelect({
               <button
                 key={option}
                 type="button"
-                className="t3 bg-[#343434] px-4 py-2"
+                className="t3 px-4 py-2"
                 onClick={() => handleSelect(option)}
               >
                 {option}
