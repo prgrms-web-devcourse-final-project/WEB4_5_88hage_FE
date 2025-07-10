@@ -21,8 +21,8 @@ export default function page() {
 
   const getUserData = (data: NewUserData) => {
     console.log(data);
-    setNewUserData(newUserData);
     setPage(2);
+    setNewUserData(newUserData);
   };
 
   return (

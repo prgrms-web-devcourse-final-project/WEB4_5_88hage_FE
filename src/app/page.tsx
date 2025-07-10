@@ -1,10 +1,9 @@
-import Footer from '@/components/layout/Footer';
-import Signup from '@/pages/Signup';
+import NotiDetail from '@/pages/NotiDetail';
 
 export default function page() {
   return (
     <>
-      <Footer />
+      <NotiDetail />
     </>
   );
 }

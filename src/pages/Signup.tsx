@@ -31,6 +31,7 @@ export default function Signup({
   const [birthDate, setBirthDate] = useState('');
   const [maleSelected, setMaleSelected] = useState(true);
   const [checkedList, setCheckedList] = useState<string[]>([]);
+  const [duplicationCheck, setDuplicationCheck] = useState(false);
 
   const [invalidNickname, setInvalidNickname] = useState(false);
   const [invalidEmail, setInvalidEmail] = useState(false);
@@ -40,7 +41,6 @@ export default function Signup({
   const [invalidBirthDate, setInvalidBirthDate] = useState(false);
 
   const [newUser, setNewUser] = useState<NewUserData>();
-  // const [newUserPreferences, setNewUserPreferences] = useState<string[]>([]);
 
   const nicknameCheck = /^[가-힣|a-z|A-Z|0-9|]+$/;
   const emailCheck = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
@@ -70,6 +70,7 @@ export default function Signup({
     e.preventDefault();
     if (
       nickname.length === 0 ||
+      !duplicationCheck ||
       !nicknameCheck.test(nickname) ||
       email.length === 0 ||
       !emailCheck.test(email) ||
@@ -81,9 +82,10 @@ export default function Signup({
       !birthDateCheck.test(birthDate) ||
       !checkedList.includes('terms') ||
       !checkedList.includes('privacy')
-    )
-      alert('error');
-    else {
+    ) {
+      if (!duplicationCheck) alert('닉네임 중복 체크해주세요.');
+      else alert('회원가입에 실패했습니다.');
+    } else {
       setNewUser({
         email: email,
         password: password,
@@ -98,7 +100,19 @@ export default function Signup({
   };
 
   useEffect(() => {
-    if (newUser && newUser.email.length > 0) sendUserData(newUser);
+    if (newUser && newUser.email.length > 0) {
+      sendUserData(newUser);
+      fetch('http://34.122.67.230/api/users/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newUser),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+        .catch((error) => console.log(error));
+    }
   }, [newUser]);
 
   return (
@@ -121,6 +135,7 @@ export default function Signup({
             value={nickname}
             onChange={(e) => {
               setNickname(e.target.value);
+              setDuplicationCheck(false);
               if (
                 e.target.value.length > 0 &&
                 nicknameCheck.test(e.target.value)
@@ -136,6 +151,32 @@ export default function Signup({
             type="button"
             className="absolute right-2 cursor-pointer text-sm"
             tabIndex={-1}
+            onClick={() => {
+              if (!nicknameCheck.test(nickname)) {
+                alert('닉네임이 올바른 형식이 아닙니다.');
+              } else {
+                fetch('http://34.122.67.230/api/users/verify/nickname', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    nickname: nickname,
+                  }),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    if (data.code === '0000') {
+                      alert(data.data);
+                      setDuplicationCheck(true);
+                    } else if (data.code === '4014') {
+                      alert(data.message);
+                      setDuplicationCheck(false);
+                    }
+                  })
+                  .catch((error) => console.log(error));
+              }
+            }}
           >
             중복 검사
           </button>
