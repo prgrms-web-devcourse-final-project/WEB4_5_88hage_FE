@@ -25,10 +25,12 @@ export default function Login() {
 
   const router = useRouter();
 
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
   const onSubmit = async (data: LoginFormData) => {
     try {
       const response = await axios.post(
-        'http://34.55.41.203/auth/login',
+        `${API}/auth/login`,
         {
           email: data.email,
           password: data.password,
@@ -54,7 +56,7 @@ export default function Login() {
       <div className="hidden w-1/2 bg-black lg:block" />
       {/* 오른쪽: 로그인 창 */}
       <div className="flex w-full flex-col items-center justify-center px-5 lg:w-1/2">
-        <Image alt="logo" src={logo} className="mb-5" />
+        <Image alt="logo" src={logo} className="mb-5" priority />
         <div className="w-full max-w-md space-y-4">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
