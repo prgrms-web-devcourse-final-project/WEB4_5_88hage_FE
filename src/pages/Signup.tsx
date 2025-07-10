@@ -76,7 +76,7 @@ export default function Signup() {
 
   const nicknameCheck = /^[가-힣|a-z|A-Z|0-9|]+$/;
   const emailCheck = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
-  const passwordCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/;
+  const passwordCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=_-])(?=.*[0-9]).{8,20}$/;
   const birthDateCheck = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/;
 
   const handleCheckChange = (id: string) => {
@@ -172,6 +172,7 @@ export default function Signup() {
                 }}
               />
               <button
+                type="button"
                 className="absolute right-2 cursor-pointer text-sm"
                 tabIndex={-1}
               >
@@ -366,7 +367,7 @@ export default function Signup() {
             <div className="flex flex-col gap-3">
               <div className="font-medium text-[#dfdfdf]">모임 카테고리 ❤️</div>
               <div className="flex flex-wrap gap-2.5">
-                <Tag selected={tagSelectHandler} type="art_group">
+                <Tag selected={tagSelectHandler} type="art">
                   예술 🎨
                 </Tag>
                 <Tag selected={tagSelectHandler} type="travel">
@@ -387,7 +388,7 @@ export default function Signup() {
                 <Tag selected={tagSelectHandler} type="development">
                   자기 개발 📖
                 </Tag>
-                <Tag selected={tagSelectHandler} type="movie_group">
+                <Tag selected={tagSelectHandler} type="movie">
                   영화 🎬
                 </Tag>
               </div>
@@ -395,35 +396,41 @@ export default function Signup() {
             <div className="flex flex-col gap-3">
               <div className="font-medium text-[#dfdfdf]">행사 카테고리 🎈</div>
               <div className="flex flex-wrap gap-2.5">
-                <Tag selected={tagSelectHandler} type="classic">
-                  클래식 🎹
-                </Tag>
-                <Tag selected={tagSelectHandler} type="country_music">
-                  국악 🪘
-                </Tag>
-                <Tag selected={tagSelectHandler} type="movie_event">
-                  영화 🎞️
-                </Tag>
-                <Tag selected={tagSelectHandler} type="solo">
-                  독주/독창회 🎻
-                </Tag>
-                <Tag selected={tagSelectHandler} type="musical">
-                  연극/뮤지컬 👏
-                </Tag>
-                <Tag selected={tagSelectHandler} type="art_event">
-                  전시/미술 🖼️
-                </Tag>
-                <Tag selected={tagSelectHandler} type="education">
-                  교육/체험 👨‍🏫
+                <Tag selected={tagSelectHandler} type="drama">
+                  연극 👏
                 </Tag>
                 <Tag selected={tagSelectHandler} type="dance">
                   무용 💃
                 </Tag>
-                <Tag selected={tagSelectHandler} type="concert">
-                  콘서트 🎤
+                <Tag selected={tagSelectHandler} type="popular_dance">
+                  대중무용 🕺
                 </Tag>
-                <Tag selected={tagSelectHandler} type="festival">
-                  축제 🎆
+                <Tag selected={tagSelectHandler} type="classic">
+                  클래식 🎻
+                </Tag>
+                <Tag selected={tagSelectHandler} type="korean_music">
+                  국악 🪘
+                </Tag>
+                <Tag selected={tagSelectHandler} type="popular_music">
+                  대중음악 🎸
+                </Tag>
+                <Tag selected={tagSelectHandler} type="composite">
+                  복합 🎉
+                </Tag>
+                <Tag selected={tagSelectHandler} type="circus">
+                  서커스/마술 🎪
+                </Tag>
+                <Tag selected={tagSelectHandler} type="musical">
+                  뮤지컬 🎤
+                </Tag>
+                <Tag selected={tagSelectHandler} type="tourist_spot">
+                  관광지 🏛️
+                </Tag>
+                <Tag selected={tagSelectHandler} type="cultural_venues">
+                  문화 시설 🗼
+                </Tag>
+                <Tag selected={tagSelectHandler} type="leisure_sports">
+                  레포츠 🏌
                 </Tag>
               </div>
             </div>
@@ -432,8 +439,7 @@ export default function Signup() {
             type="button"
             className="w-full max-w-150 cursor-pointer rounded-[5px] bg-[#1CEBB9] p-3 text-2xl font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:mt-5 md:py-5"
             onClick={() => {
-              // setNextPage(false);
-              console.log(newUser);
+              console.log(newUser, newUserPreferences);
             }} // 테스트용
           >
             완료
