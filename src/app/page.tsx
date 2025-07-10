@@ -1,9 +1,9 @@
-import InquiryCreatePage from '@/pages/InquiryCreatePage';
+import NotiDetail from "@/pages/NotiDetail";
 
-export default function page() {
+export default function page () {
   return (
     <>
-      <InquiryCreatePage />
+      <NotiDetail />
     </>
   );
 }
