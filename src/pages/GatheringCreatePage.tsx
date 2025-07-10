@@ -41,7 +41,7 @@ export default function GatheringCreatePage() {
               isRequired={false}
               isLongForm={false}
             />
-            <div className="flex flex-wrap justify-start gap-2 lg:mt-[-20px]">
+            <div className="flex flex-wrap justify-start gap-2 mt-[10px] lg:mt-[20px]">
               <Tag />
               <Tag />
               <Tag />

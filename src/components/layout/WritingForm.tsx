@@ -30,7 +30,7 @@ export default function WritingForm({
             <span className="t5 t4 ml-2 font-medium text-[#cecece]">필수</span>
           )}
         </div>
-        <div className="relative mb-4 lg:mb-10">
+        <div className="relative">
           {!isLongForm && title === '모임 위치' && (
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pt-2 pr-4">
               <Search size={20} color="#9CA3AF" />
