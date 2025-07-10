@@ -1,8 +1,8 @@
-"use client";
+// "use client";
 import Image from "next/image";
 import Clap from "@/assets/clap.svg";
 
-export default function Emailsend() {
+export default function SignupClap() {
   return (
     <div className="min-h-screen bg-[#232323] text-white flex flex-col items-center justify-start md:justify-center px-6 pt-[140px] md:pt-12 text-center">
   <div className="w-full max-w-[620px] flex flex-col items-center">
