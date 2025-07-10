@@ -113,7 +113,7 @@ export default function Signup() {
         >
           <Image
             src={logo}
-            alt=""
+            alt="logo"
             width={75}
             height={24}
             className="md:hidden"
@@ -222,7 +222,7 @@ export default function Signup() {
             )}
             <Input
               type="text"
-              placeholder="생년 월일 8자리 (YYYYMMDD)"
+              placeholder="생년 월일 8자리 ( YYYYMMDD )"
               className="mt-[9px]"
               value={birthDate}
               onChange={(e) => {
@@ -249,14 +249,14 @@ export default function Signup() {
                 disabled={maleSelected}
                 onClick={() => setMaleSelected(true)}
               >
-                남자
+                남성
               </button>
               <button
                 className="w-full cursor-pointer rounded-md bg-[#313131] p-3 text-sm text-[#8d8d8d] disabled:cursor-default disabled:bg-[#1CEBB9] disabled:text-[#333333]"
                 disabled={!maleSelected}
                 onClick={() => setMaleSelected(false)}
               >
-                여자
+                여성
               </button>
             </div>
             <div className="h-2"></div>
