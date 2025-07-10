@@ -1,9 +1,9 @@
-import NotiDetail from "@/pages/NotiDetail";
+import Faq from "@/pages/Faq";
 
 export default function page () {
   return (
     <>
-      <NotiDetail />
+      <Faq />
     </>
   );
 }
