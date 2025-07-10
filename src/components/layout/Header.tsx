@@ -39,7 +39,7 @@ export default function Header({
               <Navigation />
             </div>
             <button
-              className="bg-[#0d0d0d] flex h-[52px] w-[52px] items-center justify-center rounded-full transition"
+              className="flex h-[52px] w-[52px] items-center justify-center rounded-full transition"
               aria-label="사이드바 열기"
               onClick={() => setSidebarOpen(true)}
             >

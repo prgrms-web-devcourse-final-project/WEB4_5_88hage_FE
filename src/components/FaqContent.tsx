@@ -34,7 +34,7 @@ export default function FaqContent({ activeTab }: FaqContentProps) {
               </p>
             </div>
 
-            <div className="lg:w-2/3 space-y-4">
+            <div className="lg:w-2/3 space-y-2">
               <FaqAccordion />
 
               <div className="flex justify-center space-x-4 mt-8">
@@ -58,44 +58,45 @@ function SectionNotice() {
   }));
 
   return (
-    <section className="pt-12 pb-32">
+    <section className="pt-10 lg:pt-12 pb-32">
       <div className="max-w-7xl mx-auto">
         {/* 제목 */}
-        <h2 className="text-2xl text-white text-center mb-8">
+        <h2 className="text-xl lg:text-2xl text-white text-center mb-8">
           공지사항
         </h2>
 
         {/* 상단 가로선 */}
-<div className="border-t-2 border-[#383838] mb-4" />
+<div className="border-t-2 border-[#383838] lg:mb-4 mb-1" />
 
 
 
 {/* 테이블 */}
 <div className="overflow-x-auto">
-  <table className="w-full table-auto border-collapse">
-  <thead>
+  <table className="min-w-[335px] sm:min-w-[657px] table-auto border-collapse">
+  <thead className="hidden lg:block">
     <tr className="border-b-2 border-[#383838]">
-      <th className="px-15 pt-1 pb-5 align-top leading-none text-left text-[#06ce9e] font-semibold">
+      <th className="px-15 pt-1 lg:pb-5 align-top leading-none text-left text-[#06ce9e] font-semibold">
         카테고리
       </th>
-      <th className="px-8 pt-1 pb-5 align-top leading-none text-center text-white font-medium">
+      <th className="px-8 pt-1 lg:pb-5 align-top leading-none text-center text-white font-medium">
         내용
       </th>
-      <th className="px-15 pt-1 pb-5 align-top leading-none text-right text-white font-medium">
+      <th className="px-15 pt-1 lg:pb-5 align-top leading-none text-right text-white font-medium">
         등록일
       </th>
     </tr>
   </thead>
   <tbody>
     {notices.map((n, idx) => (
-      <tr key={idx} className="border-b border-[#383838]">
-        <td className="px-8 py-6 align-top text-[#06CE9E] font-semibold whitespace-nowrap">
+      <tr key={idx} className="flex flex-col lg:table-row
+        border-b border-[#383838] mb-1">
+        <td className="px-8 lg:py-6 py-2 lg:align-top text-[#06CE9E] font-semibold whitespace-nowrap">
           {n.category}
         </td>
-        <td className="px-8 py-6 align-top text-white overflow-hidden text-ellipsis">
+        <td className="text-sm lg:text-base px-8 lg:py-6 py-1 lg:align-top text-white overflow-hidden text-ellipsis">
           {n.content}
         </td>
-        <td className="px-8 py-6 align-top text-[#ffffff] text-right whitespace-nowrap">
+        <td className="text-xs lg:text-base px-8 lg:py-6 py-3 lg:align-top text-[#ffffff] lg:text-right whitespace-nowrap overflow-visible lg:whitespace-nowrap lg:overflow-hidden lg:text-ellipsis">
           {n.date}
         </td>
       </tr>
