@@ -36,7 +36,7 @@ export default function CategorySelect({
   };
 
   return (
-    <div className="relative mt-6 w-full lg:mt-10" ref={componentRef}>
+    <div className="relative w-full" ref={componentRef}>
       <label className="text-main mb-3 block text-[16px] font-semibold lg:text-[24px]">
         카테고리
         {isRequired && (
