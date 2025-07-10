@@ -1,4 +1,5 @@
 import FaqAccordion from "./FaqAccordion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type Tab = "FAQ" | "공지사항";
 
@@ -50,10 +51,10 @@ function SectionNotice() {
   }));
 
   return (
-    <section className="pt-10 pb-32">
+    <section className="pt-12 pb-32">
       <div className="max-w-7xl mx-auto">
         {/* 제목 */}
-        <h2 className="text-2xl font-semibold text-white text-center mb-6">
+        <h2 className="text-2xl text-white text-center mb-8">
           공지사항
         </h2>
 
@@ -98,27 +99,27 @@ function SectionNotice() {
 </div>
 
         {/* 페이징 */}
-        <div className="flex justify-center items-center space-x-3 text-[#ffffff] mt-6">
-          <button className="px-2 py-1 hover:text-white transition">
-            &#60;
-          </button>
-          {[1, 2, 3, 4, 5].map((p) => (
-            <button
-              key={p}
-              className={`
-                px-3 py-1 rounded-full transition
-                ${p === 1
-                  ? "bg-[#06CE9E] text-black"
-                  : "hover:bg-[#3E3E5E] hover:text-white"}
-              `}
-            >
-              {p}
-            </button>
-          ))}
-          <button className="px-2 py-1 hover:text-white transition">
-            &#62;
-          </button>
-        </div>
+        <div className="flex justify-center space-x-3 mt-6 text-[#C1C1E0]">
+  <button className="p-2 hover:text-white transition">
+    <ChevronLeft size={16} />
+  </button>
+  {[1, 2, 3, 4, 5].map((p) => (
+    <button
+      key={p}
+      className={`
+        px-3 py-1 rounded-full transition
+        ${p === 1
+          ? "bg-[#06CE9E] text-black"
+          : "hover:bg-[#3E3E5E] hover:text-white"}
+      `}
+    >
+      {p}
+    </button>
+  ))}
+  <button className="p-2 hover:text-white transition">
+    <ChevronRight size={16} />
+  </button>
+</div>
       </div>
     </section>
   );

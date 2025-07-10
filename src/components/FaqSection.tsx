@@ -11,7 +11,7 @@ export default function FaqSection() {
 
   return (
     <>
-      <div className="flex justify-center pt-4 pb-8 bg-[#1d1d1d]">
+      <div className="flex justify-center pt-2 pb-8 bg-[#1d1d1d]">
         <TabToggle active={activeTab} onChange={setActiveTab} />
       </div>
 
