@@ -31,7 +31,7 @@ export default function Signup() {
         <div className="flex min-h-screen w-full flex-col items-center justify-between gap-[30px] bg-[#232323] px-4 pt-6 pb-4 text-[#8d8d8d] md:ml-[50%] md:w-1/2 md:justify-center md:bg-[#262626]">
           <Image
             src={logo}
-            alt=""
+            alt="logo"
             width={75}
             height={24}
             className="md:hidden"
@@ -39,7 +39,7 @@ export default function Signup() {
           <div className="flex w-full max-w-150 flex-col gap-[15px]">
             <div className="relative flex items-center">
               <Input type="text" placeholder="닉네임을 입력 해주세요." />
-              <button className="absolute right-2 cursor-pointer text-sm">
+              <button className="absolute right-3 cursor-pointer text-[12px]">
                 중복 검사
               </button>
             </div>
@@ -49,7 +49,7 @@ export default function Signup() {
             <Input type="text" placeholder="주소를 작성해 주세요." />
             <Input
               type="text"
-              placeholder="생년 월일 8자리 (YYYYMMDD)"
+              placeholder="생년 월일 8자리 ( YYYYMMDD )"
               className="mt-[9px]"
             />
             <div className="flex gap-3.5">
@@ -58,14 +58,14 @@ export default function Signup() {
                 disabled={maleSelected}
                 onClick={() => setMaleSelected(true)}
               >
-                남자
+                남성
               </button>
               <button
                 className="w-full cursor-pointer rounded-md bg-[#313131] p-3 text-sm text-[#8d8d8d] disabled:cursor-default disabled:bg-[#1CEBB9] disabled:text-[#333333]"
                 disabled={!maleSelected}
                 onClick={() => setMaleSelected(false)}
               >
-                여자
+                여성
               </button>
             </div>
             <div className="h-2"></div>

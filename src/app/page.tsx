@@ -1,9 +1,9 @@
-import Footer from '@/components/layout/Footer';
+import InquiryCreatePage from '@/pages/InquiryCreatePage';
 
 export default function page() {
   return (
     <>
-      <Footer />
+      <InquiryCreatePage />
     </>
   );
 }
