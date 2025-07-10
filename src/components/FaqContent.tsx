@@ -72,7 +72,7 @@ function SectionNotice() {
 
 {/* 테이블 */}
 <div className="overflow-x-auto">
-  <table className="min-w-[335px] sm:min-w-[657px] table-auto border-collapse">
+  <table className="w-full table-auto border-collapse">
   <thead className="hidden lg:block">
     <tr className="border-b-2 border-[#383838]">
       <th className="px-15 pt-1 lg:pb-5 align-top leading-none text-left text-[#06ce9e] font-semibold">
