@@ -1,9 +1,9 @@
-import NotiDetail from "@/pages/NotiDetail";
 
-export default function page () {
+export default function page() {
   return (
     <>
-      <NotiDetail />
+      <h1>page</h1>
+
     </>
   );
 }
