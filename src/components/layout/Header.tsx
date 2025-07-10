@@ -52,7 +52,7 @@ export default function Header({
         {pageTitle && (
           <section className="text-center ${headerBgClass} pb-4 lg:pb-10">
             <p className="text-xs lg:text-base text-white">{pageTitle.subtitle}</p>
-            <h1 className="mt-2 text-3xl lg:text-4xl font-bold">
+            <h1 className="mt-2 text-xl lg:text-4xl font-bold">
               <span className="bg-gradient-to-r from-[#1cebb9] to-[#7f74ff] bg-clip-text text-transparent">
                 {pageTitle.title}
               </span>

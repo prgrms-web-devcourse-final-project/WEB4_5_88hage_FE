@@ -45,15 +45,15 @@ export default function FaqAccordion() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 flex flex-col items-center">
       {faqs.map((item, idx) => {
         const isOpen = openIndex === idx;
         return (
-          <div key={idx} className="relative bg-[#1C1C1C] rounded-xl overflow-hidden">
+          <div key={idx} className="relative bg-[#1C1C1C] rounded-xl overflow-hidden w-[327px] mx-auto lg:w-[657px]">
             <span className="absolute inset-y-0 left-0 w-[5px] bg-[#06c29e]" />
             <button
               onClick={() => setOpenIndex(isOpen ? null : idx)}
-              className="flex items-center justify-between w-full pl-10 pr-6 py-5"
+              className="flex items-center justify-between pl-10 pr-6 py-5 w-[327px] mx-auto lg:w-[657px]"
             >
                  <span className="text-white text-lg font-semibold">
      {item.question}
