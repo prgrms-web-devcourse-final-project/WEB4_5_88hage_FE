@@ -5,7 +5,7 @@ import logo from '@/assets/images/logo.png';
 import thinking from '@/assets/images/thinking.png';
 import Input from '@/components/common/Input';
 import Checkbox from '@/components/common/Checkbox';
-import { FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 
 type NewUserData = {
   email: string;
@@ -18,17 +18,37 @@ type NewUserData = {
   isMarketingAgreed: boolean;
 };
 
-function Tag({ type, children }: { type: string; children: string }) {
+function Tag({
+  type,
+  children,
+  selected,
+}: {
+  type: string;
+  children: string;
+  selected: (type: string, checked: boolean) => void;
+}) {
   const [checked, setChecked] = useState(false);
+  const checkHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setChecked(e.target.checked);
+    selected(type, e.target.checked);
+  };
   return (
-    <div
-      className={`cursor-default rounded-full px-4 py-2 ${checked ? 'bg-[#1CEBB9] text-[#333333]' : 'bg-[#313131]'}`}
-      onClick={() => {
-        setChecked(!checked);
-      }}
-    >
-      {children}
-    </div>
+    <>
+      <input
+        type="checkbox"
+        name={type}
+        id={type}
+        checked={checked}
+        className="hidden"
+        onChange={checkHandler}
+      />
+      <label
+        htmlFor={type}
+        className={`cursor-default rounded-full px-4 py-2 select-none ${checked ? 'bg-[#1CEBB9] text-[#333333]' : 'bg-[#313131]'}`}
+      >
+        {children}
+      </label>
+    </>
   );
 }
 
@@ -42,10 +62,7 @@ export default function Signup() {
   const [address, setAddress] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [maleSelected, setMaleSelected] = useState(true);
-  const [termsChecked, setTermsChecked] = useState(false);
-  const [privacyChecked, setPrivacyChecked] = useState(false);
-  const [marketingChecked, setMarketingChecked] = useState(false);
-  const [allChecked, setAllChecked] = useState(false);
+  const [checkedList, setCheckedList] = useState<string[]>([]);
 
   const [invalidNickname, setInvalidNickname] = useState(false);
   const [invalidEmail, setInvalidEmail] = useState(false);
@@ -55,24 +72,34 @@ export default function Signup() {
   const [invalidBirthDate, setInvalidBirthDate] = useState(false);
 
   const [newUser, setNewUser] = useState<NewUserData>();
+  const [newUserPreferences, setNewUserPreferences] = useState<string[]>([]);
 
   const nicknameCheck = /^[가-힣|a-z|A-Z|0-9|]+$/;
   const emailCheck = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
   const passwordCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/;
   const birthDateCheck = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/;
 
+  const handleCheckChange = (id: string) => {
+    const isChecked = checkedList.includes(id);
+    if (!isChecked) {
+      setCheckedList((prev) => [...prev, id]);
+    } else {
+      setCheckedList((prev) => prev.filter((el) => el !== id));
+    }
+  };
+
+  const handleAllCheck = ({
+    target: { checked },
+  }: {
+    target: { checked: boolean };
+  }) => {
+    if (checked) {
+      setCheckedList(['terms', 'privacy', 'marketing']);
+    } else setCheckedList([]);
+  };
+
   const goNextPage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // type NewUserData = {
-    //   email: string;
-    //   password: string;
-    //   confirmPassword: string;
-    //   nickname: string;
-    //   address: string;
-    //   birthDate: string;
-    //   gender: 'male' | 'female';
-    //   isMarketingAgreed: boolean;
-    // };
     if (
       nickname.length === 0 ||
       !nicknameCheck.test(nickname) ||
@@ -84,8 +111,8 @@ export default function Signup() {
       address.length === 0 ||
       birthDate.length === 0 ||
       !birthDateCheck.test(birthDate) ||
-      !termsChecked ||
-      !privacyChecked
+      !checkedList.includes('terms') ||
+      !checkedList.includes('privacy')
     )
       alert('error');
     else {
@@ -97,10 +124,17 @@ export default function Signup() {
         address: address,
         birthDate: birthDate,
         gender: maleSelected ? 'MALE' : 'FEMALE',
-        isMarketingAgreed: marketingChecked,
+        isMarketingAgreed: checkedList.includes('marketing'),
       });
-      console.log(newUser);
       setNextPage(true);
+    }
+  };
+
+  const tagSelectHandler = (type: string, checked: boolean) => {
+    if (checked) {
+      setNewUserPreferences((list) => [...list, type]);
+    } else {
+      setNewUserPreferences(newUserPreferences.filter((item) => item !== type));
     }
   };
 
@@ -137,7 +171,10 @@ export default function Signup() {
                     setInvalidNickname(true);
                 }}
               />
-              <button className="absolute right-2 cursor-pointer text-sm">
+              <button
+                className="absolute right-2 cursor-pointer text-sm"
+                tabIndex={-1}
+              >
                 중복 검사
               </button>
             </div>
@@ -262,9 +299,10 @@ export default function Signup() {
             <div className="h-2"></div>
             <div className="flex items-center gap-2">
               <Checkbox
-                id="allAgree"
                 box
-                onDataChange={(data: boolean) => setAllChecked(data)}
+                id="allAgree"
+                onChange={handleAllCheck}
+                checked={checkedList.length === 3}
               >
                 모두 동의 (선택 포함)
               </Checkbox>
@@ -273,7 +311,8 @@ export default function Signup() {
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="terms"
-                  onDataChange={(data: boolean) => setTermsChecked(data)}
+                  onChange={() => handleCheckChange('terms')}
+                  checked={checkedList.includes('terms')}
                 >
                   (필수) 이용 약관 [ 보기 ]
                 </Checkbox>
@@ -281,7 +320,8 @@ export default function Signup() {
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="privacy"
-                  onDataChange={(data: boolean) => setPrivacyChecked(data)}
+                  onChange={() => handleCheckChange('privacy')}
+                  checked={checkedList.includes('privacy')}
                 >
                   (필수) 개인정보 취급방침 [ 보기 ]
                 </Checkbox>
@@ -289,25 +329,18 @@ export default function Signup() {
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="marketing"
-                  onDataChange={(data: boolean) => setMarketingChecked(data)}
+                  onChange={() => handleCheckChange('marketing')}
+                  checked={checkedList.includes('marketing')}
                 >
                   (선택) 마케팅 정보 수신 [ 보기 ]
                 </Checkbox>
               </div>
             </div>
-            <button
-              // type="button"
-              className="mt-2 hidden w-full cursor-pointer rounded-[5px] bg-[#1CEBB9] py-5 text-2xl font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:block"
-              // onClick={() => setNextPage(true)}
-            >
+            <button className="mt-2 hidden w-full cursor-pointer rounded-[5px] bg-[#1CEBB9] py-5 text-2xl font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:block">
               다음
             </button>
           </div>
-          <button
-            // type="button"
-            className="w-full max-w-150 cursor-pointer rounded-[5px] bg-[#1CEBB9] p-3 text-2xl font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:hidden"
-            // onClick={() => setNextPage(true)}
-          >
+          <button className="w-full max-w-150 cursor-pointer rounded-[5px] bg-[#1CEBB9] p-3 text-2xl font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:hidden">
             다음
           </button>
         </form>
@@ -333,29 +366,65 @@ export default function Signup() {
             <div className="flex flex-col gap-3">
               <div className="font-medium text-[#dfdfdf]">모임 카테고리 ❤️</div>
               <div className="flex flex-wrap gap-2.5">
-                <Tag type="art">예술 🎨</Tag>
-                <Tag type="travel">여행 🧭</Tag>
-                <Tag type="food">음식 🍔</Tag>
-                <Tag type="game">게임 🎮</Tag>
-                <Tag type="culture">문화 🌍</Tag>
-                <Tag type="sports">운동 👟</Tag>
-                <Tag type="development">자기 계발 📖</Tag>
-                <Tag type="movie_group">영화 🎬</Tag>
+                <Tag selected={tagSelectHandler} type="art_group">
+                  예술 🎨
+                </Tag>
+                <Tag selected={tagSelectHandler} type="travel">
+                  여행 🧭
+                </Tag>
+                <Tag selected={tagSelectHandler} type="food">
+                  음식 🍔
+                </Tag>
+                <Tag selected={tagSelectHandler} type="game">
+                  게임 🎮
+                </Tag>
+                <Tag selected={tagSelectHandler} type="culture">
+                  문화 🌍
+                </Tag>
+                <Tag selected={tagSelectHandler} type="sports">
+                  운동 👟
+                </Tag>
+                <Tag selected={tagSelectHandler} type="development">
+                  자기 개발 📖
+                </Tag>
+                <Tag selected={tagSelectHandler} type="movie_group">
+                  영화 🎬
+                </Tag>
               </div>
             </div>
             <div className="flex flex-col gap-3">
               <div className="font-medium text-[#dfdfdf]">행사 카테고리 🎈</div>
               <div className="flex flex-wrap gap-2.5">
-                <Tag type="classic">클래식 🎹</Tag>
-                <Tag type="country_music">국악 🪘</Tag>
-                <Tag type="movie_event">영화 🎞️</Tag>
-                <Tag type="solo">독주/독창회 🎻</Tag>
-                <Tag type="musical">연극/뮤지컬 👏</Tag>
-                <Tag type="art">전시/미술 🖼️</Tag>
-                <Tag type="education">교육/체험 👨‍🏫</Tag>
-                <Tag type="dance">무용 💃</Tag>
-                <Tag type="concert">콘서트 🎤</Tag>
-                <Tag type="festival">축제 🎆</Tag>
+                <Tag selected={tagSelectHandler} type="classic">
+                  클래식 🎹
+                </Tag>
+                <Tag selected={tagSelectHandler} type="country_music">
+                  국악 🪘
+                </Tag>
+                <Tag selected={tagSelectHandler} type="movie_event">
+                  영화 🎞️
+                </Tag>
+                <Tag selected={tagSelectHandler} type="solo">
+                  독주/독창회 🎻
+                </Tag>
+                <Tag selected={tagSelectHandler} type="musical">
+                  연극/뮤지컬 👏
+                </Tag>
+                <Tag selected={tagSelectHandler} type="art_event">
+                  전시/미술 🖼️
+                </Tag>
+                <Tag selected={tagSelectHandler} type="education">
+                  교육/체험 👨‍🏫
+                </Tag>
+                <Tag selected={tagSelectHandler} type="dance">
+                  무용 💃
+                </Tag>
+                <Tag selected={tagSelectHandler} type="concert">
+                  콘서트 🎤
+                </Tag>
+                <Tag selected={tagSelectHandler} type="festival">
+                  축제 🎆
+                </Tag>
               </div>
             </div>
           </div>
