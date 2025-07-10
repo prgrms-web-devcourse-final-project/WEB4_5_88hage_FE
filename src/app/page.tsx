@@ -1,9 +1,9 @@
-import Footer from '@/components/layout/Footer';
+import Login from '@/pages/Login';
 
 export default function page() {
   return (
     <>
-      <Footer />
+      <Login />
     </>
   );
 }

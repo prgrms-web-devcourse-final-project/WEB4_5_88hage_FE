@@ -3,9 +3,12 @@
 import { useForm } from 'react-hook-form';
 import GrayButton from '@/components/button/GrayButton';
 import Input from '@/components/common/Input';
-import Logo from '@/components/Logo';
+import logo from '@/assets/images/logo.svg';
 import LoginButton from '@/components/button/LoginButton';
 import Checkbox from '@/components/Checkbox';
+import Image from 'next/image';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 type LoginFormData = {
   email: string;
@@ -20,9 +23,29 @@ export default function Login() {
     formState: { errors },
   } = useForm<LoginFormData>();
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log('로그인 데이터:', data);
-    // 로그인 요청 API 연동 부분
+  const router = useRouter();
+
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      const response = await axios.post(
+        'http://34.55.41.203/auth/login',
+        {
+          email: data.email,
+          password: data.password,
+          rememberMe: data.keepLoggedIn,
+        },
+        {
+          withCredentials: true, // 쿠키 포함 필수!
+        },
+      );
+
+      console.log('로그인 성공:', response.data);
+      router.push('/');
+    } catch (error: any) {
+      console.error('로그인 실패:', error.response?.data || error.message);
+      // TODO: 사용자에게 에러 메시지 보여주기
+      alert('로그인에 실패했습니다.');
+    }
   };
 
   return (
@@ -31,7 +54,7 @@ export default function Login() {
       <div className="hidden w-1/2 bg-black lg:block" />
       {/* 오른쪽: 로그인 창 */}
       <div className="flex w-full flex-col items-center justify-center px-5 lg:w-1/2">
-        <Logo className="mb-5" />
+        <Image alt="logo" src={logo} className="mb-5" />
         <div className="w-full max-w-md space-y-4">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input

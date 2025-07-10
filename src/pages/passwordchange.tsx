@@ -19,7 +19,7 @@ export default function PasswordChangePage() {
     <div className="flex min-h-screen flex-col bg-[#232323] px-4 text-white md:px-0">
       <div className="flex flex-1 flex-col items-center justify-center">
         <div className="flex w-full max-w-md flex-col items-center gap-6">
-          <h1 className="text-3xl font-bold text-[#1CEBB9]">
+          <h1 className="text-main text-3xl font-bold">
             <span className="text-white">FU</span>N
             <span className="text-white">FU</span>N
           </h1>
