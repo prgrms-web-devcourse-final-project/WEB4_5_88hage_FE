@@ -165,17 +165,16 @@ export default function Signup({
                       },
                     },
                   )
-                  .then((data) => {
-                    console.log(data.data);
-                    if (data.data.code === '0000') {
-                      alert(data.data.data);
-                      setDuplicationCheck(true);
-                    } else if (data.data.code === '4014') {
-                      alert(data.data.message);
-                      setDuplicationCheck(false);
-                    }
+                  .then((response) => {
+                    console.log(response.data);
+                    alert(response.data.data);
+                    setDuplicationCheck(true);
                   })
-                  .catch((error) => console.log(error));
+                  .catch((error) => {
+                    console.log(error.response.data);
+                    alert(error.response.data.message);
+                    setDuplicationCheck(false);
+                  });
               }
             }}
           >
