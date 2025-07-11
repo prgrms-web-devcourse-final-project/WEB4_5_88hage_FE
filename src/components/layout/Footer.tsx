@@ -4,7 +4,7 @@ import logo from '@/assets/images/logo.png';
 export default function Footer() {
   return (
     <>
-      <div className="w-[375px] p-4 lg:w-[1440px]">
+      <div className="w-[375px] p-4 lg:w-[1440px] bg-[#1c1c1c]">
         <div className="relative h-[24px] w-[60px] lg:h-[40px] lg:w-[100px]">
           <Image
             alt="logo"

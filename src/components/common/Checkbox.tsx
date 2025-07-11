@@ -1,23 +1,19 @@
 import { LucideCheck, LucideCheckCheck } from 'lucide-react';
-import { useState } from 'react';
+import { ChangeEvent, InputHTMLAttributes, useState } from 'react';
 
-type CheckboxProps = {
-  id: string;
+interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   box?: boolean;
-  children?: string;
-  className?: string;
-  onChange?: any;
-};
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+}
 
 export default function Checkbox({
   id,
   box,
   children,
+  checked,
   className,
   onChange,
 }: CheckboxProps) {
-  const [checked, setChecked] = useState(false);
-
   return (
     <>
       <input
@@ -25,9 +21,7 @@ export default function Checkbox({
         id={id}
         checked={checked}
         className="hidden"
-        onChange={(e) => {
-          setChecked(e.target.checked);
-        }}
+        onChange={onChange}
       />
       <label htmlFor={id}>
         {box ? (
