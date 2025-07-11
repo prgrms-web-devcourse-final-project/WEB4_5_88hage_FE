@@ -3,9 +3,13 @@
 import { useForm } from 'react-hook-form';
 import GrayButton from '@/components/button/GrayButton';
 import Input from '@/components/common/Input';
-import Logo from '@/components/Logo';
+import logo from '@/assets/images/logo.svg';
 import LoginButton from '@/components/button/LoginButton';
 import Checkbox from '@/components/Checkbox';
+import Image from 'next/image';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 type LoginFormData = {
   email: string;
@@ -20,9 +24,31 @@ export default function Login() {
     formState: { errors },
   } = useForm<LoginFormData>();
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log('로그인 데이터:', data);
-    // 로그인 요청 API 연동 부분
+  const router = useRouter();
+  const [loginError, setLoginError] = useState('');
+
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      const response = await axios.post(
+        `${API}auth/login`,
+        {
+          email: data.email,
+          password: data.password,
+          rememberMe: data.keepLoggedIn,
+        },
+        {
+          withCredentials: true, // 쿠키 포함 필수!
+        },
+      );
+
+      console.log('로그인 성공:', response.data);
+      router.push('/');
+    } catch (error: any) {
+      console.error('로그인 실패:', error.response?.data || error.message);
+      setLoginError('이메일 또는 비밀번호가 일치하지 않습니다.');
+    }
   };
 
   return (
@@ -31,7 +57,7 @@ export default function Login() {
       <div className="hidden w-1/2 bg-black lg:block" />
       {/* 오른쪽: 로그인 창 */}
       <div className="flex w-full flex-col items-center justify-center px-5 lg:w-1/2">
-        <Logo className="mb-5" />
+        <Image alt="logo" src={logo} className="mb-5" priority />
         <div className="w-full max-w-md space-y-4">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
@@ -58,6 +84,11 @@ export default function Login() {
             <GrayButton type="submit" className="text-white">
               로그인
             </GrayButton>
+            {loginError && (
+              <p className="py-2 text-center text-sm text-red-500">
+                {loginError}
+              </p>
+            )}
 
             <div className="t4 flex items-center justify-between font-semibold text-[#8d8d8d]">
               <label className="flex items-center gap-2">
