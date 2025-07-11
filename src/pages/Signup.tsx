@@ -8,6 +8,7 @@ import Checkbox from '@/components/common/Checkbox';
 import { FormEvent, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { useSignupStore } from '@/stores/signupStore';
 
 type NewUserData = {
   email: string;
@@ -38,7 +39,8 @@ export default function Signup() {
   const [invalidAddress, setInvalidAddress] = useState(false);
   const [invalidBirthDate, setInvalidBirthDate] = useState(false);
 
-  const [newUser, setNewUser] = useState<NewUserData>();
+  // const [newUser, setNewUser] = useState<NewUserData>();
+  const { userData, setData } = useSignupStore();
   const router = useRouter();
 
   const nicknameCheck = /^[가-힣a-zA-Z0-9]{2,10}$/;
@@ -85,7 +87,7 @@ export default function Signup() {
       if (!duplicationCheck) alert('닉네임 중복 체크해주세요.');
       else alert('회원가입에 실패했습니다.');
     } else {
-      setNewUser({
+      setData({
         email: email,
         password: password,
         confirmPassword: confirmPassword,
@@ -99,9 +101,9 @@ export default function Signup() {
   };
 
   useEffect(() => {
-    if (newUser && newUser.email.length > 0) {
+    if (userData) {
       axios
-        .post('http://funfun.cloud/api/users/signup', newUser, {
+        .post('http://funfun.cloud/api/users/signup', userData, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -115,7 +117,7 @@ export default function Signup() {
           alert(error.response.data.message);
         });
     }
-  }, [newUser]);
+  }, [userData]);
 
   return (
     <form
