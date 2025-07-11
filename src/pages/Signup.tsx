@@ -1,13 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import logo from '@/assets/images/logo.png';
-import thinking from '@/assets/images/thinking.png';
+import logo from '@/assets/images/logo.svg';
+// import thinking from '@/assets/images/thinking.png';
 import Input from '@/components/common/Input';
 import Checkbox from '@/components/common/Checkbox';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import axios from 'axios';
-import { headers } from 'next/headers';
+import { useRouter } from 'next/navigation';
 
 type NewUserData = {
   email: string;
@@ -20,11 +20,7 @@ type NewUserData = {
   isMarketingAgreed: boolean;
 };
 
-export default function Signup({
-  sendUserData,
-}: {
-  sendUserData: (data: NewUserData) => void;
-}) {
+export default function Signup() {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -43,6 +39,7 @@ export default function Signup({
   const [invalidBirthDate, setInvalidBirthDate] = useState(false);
 
   const [newUser, setNewUser] = useState<NewUserData>();
+  const router = useRouter();
 
   const nicknameCheck = /^[가-힣a-zA-Z0-9]{2,10}$/;
   const emailCheck = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
@@ -68,7 +65,7 @@ export default function Signup({
     } else setCheckedList([]);
   };
 
-  const gotoEmailsendPage = (e: FormEvent<HTMLFormElement>) => {
+  const siguUpValidation = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
       nickname.length === 0 ||
@@ -111,7 +108,7 @@ export default function Signup({
         })
         .then((data) => {
           console.log(data.data);
-          sendUserData(newUser);
+          router.push('/signup/success');
         })
         .catch((error) => {
           console.log(error.response.data);
@@ -122,7 +119,7 @@ export default function Signup({
 
   return (
     <form
-      onSubmit={gotoEmailsendPage}
+      onSubmit={siguUpValidation}
       className="flex min-h-screen w-full flex-col items-center justify-between gap-[30px] bg-[#232323] px-4 pt-6 pb-4 text-[#8d8d8d] md:ml-[50%] md:w-1/2 md:justify-center md:bg-[#262626]"
     >
       <Image
