@@ -1,8 +1,9 @@
-"use client";
+'use client'
 
 import { useState } from "react";
 import TabToggle from "./TabToggle";
-import FaqContent from "./FaqContent";
+import FaqContent from "./Faq";
+import NoticeContent from "./Notice";
 
 type Tab = "FAQ" | "공지사항";
 
@@ -14,8 +15,7 @@ export default function FaqSection() {
       <div className="flex justify-center pt-2 pb-8 bg-[#1d1d1d]">
         <TabToggle active={activeTab} onChange={setActiveTab} />
       </div>
-
-      <FaqContent activeTab={activeTab} />
+      {activeTab === "FAQ" ? <FaqContent /> : <NoticeContent />}
     </>
   );
 }

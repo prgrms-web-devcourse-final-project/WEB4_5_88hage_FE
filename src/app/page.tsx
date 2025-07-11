@@ -1,4 +1,4 @@
-import Faq from "@/pages/Faq";
+import Faq from "@/pages/FaqNotice";
 
 export default function page () {
   return (
