@@ -6,6 +6,8 @@ import thinking from '@/assets/images/thinking.png';
 import Input from '@/components/common/Input';
 import Checkbox from '@/components/common/Checkbox';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import axios from 'axios';
+import { headers } from 'next/headers';
 
 type NewUserData = {
   email: string;
@@ -42,7 +44,7 @@ export default function Signup({
 
   const [newUser, setNewUser] = useState<NewUserData>();
 
-  const nicknameCheck = /^[가-힣|a-z|A-Z|0-9|]+$/;
+  const nicknameCheck = /^[가-힣a-zA-Z0-9]{2,10}$/;
   const emailCheck = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
   const passwordCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=_-])(?=.*[0-9]).{8,20}$/;
   const birthDateCheck = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/;
@@ -102,15 +104,13 @@ export default function Signup({
   useEffect(() => {
     if (newUser && newUser.email.length > 0) {
       sendUserData(newUser);
-      fetch('http://34.122.67.230/api/users/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newUser),
-      })
-        .then((res) => res.json())
-        .then((data) => console.log(data))
+      axios
+        .post('http://funfun.cloud/api/users/signup', newUser, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((data) => console.log(data.data))
         .catch((error) => console.log(error));
     }
   }, [newUser]);
@@ -155,22 +155,23 @@ export default function Signup({
               if (!nicknameCheck.test(nickname)) {
                 alert('닉네임이 올바른 형식이 아닙니다.');
               } else {
-                fetch('http://34.122.67.230/api/users/verify/nickname', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    nickname: nickname,
-                  }),
-                })
-                  .then((response) => response.json())
+                axios
+                  .post(
+                    'http://funfun.cloud/api/users/verify/nickname',
+                    { nickname: nickname },
+                    {
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                    },
+                  )
                   .then((data) => {
-                    if (data.code === '0000') {
-                      alert(data.data);
+                    console.log(data.data);
+                    if (data.data.code === '0000') {
+                      alert(data.data.data);
                       setDuplicationCheck(true);
-                    } else if (data.code === '4014') {
-                      alert(data.message);
+                    } else if (data.data.code === '4014') {
+                      alert(data.data.message);
                       setDuplicationCheck(false);
                     }
                   })
