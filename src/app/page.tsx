@@ -1,8 +1,9 @@
+import DashSidebar from "@/components/layout/DashSidebar";
 
 export default function page() {
   return (
     <>
-      <h1>page</h1>
+      <DashSidebar />
 
     </>
   );
