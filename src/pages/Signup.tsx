@@ -103,15 +103,20 @@ export default function Signup({
 
   useEffect(() => {
     if (newUser && newUser.email.length > 0) {
-      sendUserData(newUser);
       axios
         .post('http://funfun.cloud/api/users/signup', newUser, {
           headers: {
             'Content-Type': 'application/json',
           },
         })
-        .then((data) => console.log(data.data))
-        .catch((error) => console.log(error));
+        .then((data) => {
+          console.log(data.data);
+          sendUserData(newUser);
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+          alert(error.response.data.message);
+        });
     }
   }, [newUser]);
 

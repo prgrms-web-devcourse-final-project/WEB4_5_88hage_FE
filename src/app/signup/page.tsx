@@ -1,5 +1,5 @@
 'use client';
-import Emailsend from '@/pages/Emailsend';
+import Emailsend from '@/pages/emailsend';
 import Signup from '@/pages/Signup';
 import SignupPreferences from '@/pages/SignupPreferences';
 import { useEffect, useState } from 'react';
