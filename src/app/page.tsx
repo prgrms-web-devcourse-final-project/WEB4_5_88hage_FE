@@ -1,9 +1,7 @@
-import Faq from "@/pages/FaqNotice";
-
-export default function page () {
+export default function page() {
   return (
     <>
-      <Faq />
+      <h1>page</h1>
     </>
   );
 }
