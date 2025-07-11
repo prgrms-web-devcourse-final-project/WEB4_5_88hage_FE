@@ -8,11 +8,24 @@ export default function LoginButton({ type }: { type: string }) {
   const naverStyles = 'bg-[#03C75A] text-white';
   const googleStyles = 'bg-white text-black';
   const iconWrapperStyles = 'absolute left-4';
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
+  const handleNaverLogin = () => {
+    const url = `${API}oauth2/authorization/naver`;
+    window.location.href = url;
+  };
+  const handleGoogleLogin = () => {
+    const url = `${API}oauth2/authorization/google`;
+    window.location.href = url;
+  };
 
   return (
     <>
       {type === 'naver' && (
-        <button className={`${buttonStyles} ${naverStyles}`}>
+        <button
+          className={`${buttonStyles} ${naverStyles}`}
+          onClick={handleNaverLogin}
+        >
           <span className={iconWrapperStyles}>
             <SiNaver size={16} />
           </span>
@@ -20,7 +33,10 @@ export default function LoginButton({ type }: { type: string }) {
         </button>
       )}
       {type === 'google' && (
-        <button className={`${buttonStyles} ${googleStyles}`}>
+        <button
+          className={`${buttonStyles} ${googleStyles}`}
+          onClick={handleGoogleLogin}
+        >
           <span className={iconWrapperStyles}>
             <FcGoogle size={20} />
           </span>
