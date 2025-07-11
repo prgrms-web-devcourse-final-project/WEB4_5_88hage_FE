@@ -110,7 +110,7 @@ export default function Signup() {
         })
         .then((data) => {
           console.log(data.data);
-          router.push('/signup/success');
+          router.push('/signup/email-check');
         })
         .catch((error) => {
           console.log(error.response.data);

@@ -1,5 +1,5 @@
-import Emailsend from '@/pages/emailsend';
+import SignupPreferences from '@/pages/SignupPreferences';
 
 export default function page() {
-  return <Emailsend />;
+  return <SignupPreferences />;
 }
