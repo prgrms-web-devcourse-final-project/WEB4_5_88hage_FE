@@ -9,6 +9,7 @@ import Checkbox from '@/components/Checkbox';
 import Image from 'next/image';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 type LoginFormData = {
   email: string;
@@ -24,13 +25,14 @@ export default function Login() {
   } = useForm<LoginFormData>();
 
   const router = useRouter();
+  const [loginError, setLoginError] = useState('');
 
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const onSubmit = async (data: LoginFormData) => {
     try {
       const response = await axios.post(
-        `${API}/auth/login`,
+        `${API}auth/login`,
         {
           email: data.email,
           password: data.password,
@@ -45,8 +47,7 @@ export default function Login() {
       router.push('/');
     } catch (error: any) {
       console.error('로그인 실패:', error.response?.data || error.message);
-      // TODO: 사용자에게 에러 메시지 보여주기
-      alert('로그인에 실패했습니다.');
+      setLoginError('이메일 또는 비밀번호가 일치하지 않습니다.');
     }
   };
 
@@ -83,6 +84,11 @@ export default function Login() {
             <GrayButton type="submit" className="text-white">
               로그인
             </GrayButton>
+            {loginError && (
+              <p className="py-2 text-center text-sm text-red-500">
+                {loginError}
+              </p>
+            )}
 
             <div className="t4 flex items-center justify-between font-semibold text-[#8d8d8d]">
               <label className="flex items-center gap-2">
