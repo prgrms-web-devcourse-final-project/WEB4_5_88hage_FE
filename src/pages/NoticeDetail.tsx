@@ -1,11 +1,11 @@
-import Footer from "@/components/layout/Footer";
-import Header from "@/components/layout/Header";
+// import Footer from "@/components/layout/Footer";
+// import Header from "@/components/layout/Header";
 
 export default function NotiDetail () {
   return (
     <>
     <div className="flex flex-col bg-[#121212]">
-    <Header pageTitle={{ subtitle: '고객지원', title: '공지사항' }} />
+    {/* <Header pageTitle={{ subtitle: '고객지원', title: '공지사항' }} /> */}
       <main className="flex justify-center bg-[#121212] mb-20">
         <div className="w-full max-w-[1220px] mx-auto px-6 mt-[46px]">
             <p className="text-base lg:text-lg text-white font-semibold">[공지] 문토 VOD 가이드</p>
@@ -28,7 +28,7 @@ export default function NotiDetail () {
 감사합니다!</p>
         </div>
         </main>
-        <Footer />
+        {/* <Footer /> */}
     </div></>
   );
 }

@@ -1,6 +1,6 @@
 // "use client";
 import Image from "next/image";
-import Clap from "@/assets/clap.svg";
+import Clap from "@/assets/images/clap.svg";
 
 export default function SignupClap() {
   return (

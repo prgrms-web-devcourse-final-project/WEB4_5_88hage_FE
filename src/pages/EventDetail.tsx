@@ -3,7 +3,7 @@ import { LucideLink2 } from 'lucide-react';
 
 export default function GroupDetail() {
   return (
-    <div className="flex min-h-screen bg-[#121212] px-60 py-20 text-[#f6f6f6]">
+    <div className="flex min-h-screen bg-[#121212] text-[#f6f6f6] w-full">
       <DetailSection />
       <div className="sticky top-8 h-full w-full px-10">
         <div className="flex flex-col gap-7.5 self-start rounded-sm bg-[#1c1c1c] p-6">

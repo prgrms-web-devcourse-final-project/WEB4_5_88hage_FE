@@ -1,3 +1,4 @@
+'use client'
 import Image from 'next/image';
 import thinking from '@/assets/images/thinking.png';
 import { ChangeEvent, useState } from 'react';

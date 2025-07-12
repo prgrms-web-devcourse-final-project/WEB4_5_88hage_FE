@@ -1,5 +1,5 @@
-import Emailsend from '@/pages/emailsend';
+import SignupClap from '@/pages/SignupClap';
 
 export default function page() {
-  return <Emailsend />;
+  return <SignupClap />;
 }
