@@ -1,9 +1,9 @@
-import DashSidebar from "@/components/layout/DashSidebar";
+import FaqPage from "@/pages/FaqNotice";
 
 export default function page() {
   return (
     <>
-      <DashSidebar />
+      <FaqPage />
 
     </>
   );
