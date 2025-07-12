@@ -1,9 +1,10 @@
+import EventDetail from '@/pages/EventDetail';
+import GatheringDetail from '@/pages/GatheringDetail';
 
 export default function page() {
   return (
     <>
-      <h1>page</h1>
-
+      <EventDetail />
     </>
   );
 }

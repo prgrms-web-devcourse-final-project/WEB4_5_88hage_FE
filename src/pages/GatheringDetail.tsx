@@ -1,7 +1,6 @@
 import DetailSection from '@/components/DetailSection';
-import { LucideLink2 } from 'lucide-react';
 
-export default function EventDetail() {
+export default function GatheringDetail() {
   return (
     <div className="flex w-340 min-w-screen justify-center bg-[#121212]">
       <div className="flex h-full min-h-screen py-20 text-[#f6f6f6]">
@@ -9,22 +8,18 @@ export default function EventDetail() {
         <div className="sticky top-8 h-full w-160 px-5">
           <div className="flex flex-col gap-7.5 self-start rounded-sm bg-[#1c1c1c] p-6">
             <div className="flex flex-col gap-5">
-              <div className="gradient-border self-start px-6 py-1.5">
+              <div className="gradient-border self-start px-6 py-2.5">
                 음식 🍔
               </div>
               <div className="gradient-text text-3xl font-bold">
-                워터밤 [서울]
-              </div>
-              <div className="flex gap-5">
-                <span>경기도</span>
-                <span>2025년 7월 19일 - 2025년 7월 21일</span>
+                힙스터들의 재즈바 모임
               </div>
               <div className="flex gap-2">
-                <div className="gradient-border flex gap-2 rounded-full bg-[#2a2a2a] px-3.5 py-1.5 text-[#e4e4e4]">
-                  멜론 티켓 <LucideLink2 />
+                <div className="rounded-full bg-[#2a2a2a] px-3.5 py-1.5 text-[#e4e4e4]">
+                  #태그
                 </div>
-                <div className="gradient-border flex gap-2 rounded-full bg-[#2a2a2a] px-3.5 py-1.5 text-[#e4e4e4]">
-                  멜론 티켓 <LucideLink2 />
+                <div className="rounded-full bg-[#2a2a2a] px-3.5 py-1.5 text-[#e4e4e4]">
+                  #태그
                 </div>
               </div>
             </div>
@@ -37,7 +32,7 @@ export default function EventDetail() {
               이전의 자유를 가진다...
             </div>
             <button className="mt-[17px] cursor-pointer rounded-sm bg-[#2a2a2a] p-4 text-3xl">
-              <span className="gradient-text">알람 예약</span>
+              <span className="gradient-text">모임 신청</span>
             </button>
           </div>
         </div>
