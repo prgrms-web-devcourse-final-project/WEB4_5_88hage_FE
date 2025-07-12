@@ -1,10 +1,9 @@
-import FaqPage from "@/pages/FaqNotice";
+import InquiryDetail from "@/pages/InquiryDetail";
 
-export default function page() {
+export default function page () {
   return (
     <>
-      <FaqPage />
-
+      <InquiryDetail />
     </>
   );
 }
