@@ -1,10 +1,9 @@
-import EventDetail from '@/pages/EventDetail';
-import GatheringDetail from '@/pages/GatheringDetail';
+import Header from '@/components/layout/Header';
 
 export default function page() {
   return (
     <>
-      <EventDetail />
+      <Header />
     </>
   );
 }
