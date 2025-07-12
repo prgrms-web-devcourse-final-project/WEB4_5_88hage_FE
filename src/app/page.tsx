@@ -1,8 +1,9 @@
+import FaqPage from "@/pages/FaqNotice";
 
 export default function page() {
   return (
     <>
-      <h1>page</h1>
+      <FaqPage />
 
     </>
   );
