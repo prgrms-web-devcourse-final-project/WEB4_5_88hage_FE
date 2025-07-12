@@ -1,17 +1,17 @@
 import Image from 'next/image';
-import logo from '@/assets/images/logo.png';
+import logo from '@/assets/images/logo.svg';
 
 export default function Footer() {
   return (
     <>
-      <div className="w-[375px] p-4 lg:w-[1440px] bg-[#1c1c1c]">
+      <div className="w-[375px] p-4 lg:w-full pl-50">
         <div className="relative h-[24px] w-[60px] lg:h-[40px] lg:w-[100px]">
           <Image
             alt="logo"
             src={logo}
             fill
             style={{ objectFit: 'contain' }}
-            sizes="(max-width: 1024px) 60px, 100px"
+            sizes="60px, 100px"
             priority
           />
         </div>

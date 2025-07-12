@@ -2,7 +2,7 @@
 import { useState, type ReactNode } from "react";
 import { BiMenuAltLeft } from "react-icons/bi";
 import Image from "next/image";
-import logo from "@/assets/images/logo.png";
+import logo from "@/assets/images/logo.svg";
 import Navigation from "../Navigation";
 import Sidebar from "./Sidebar";
 

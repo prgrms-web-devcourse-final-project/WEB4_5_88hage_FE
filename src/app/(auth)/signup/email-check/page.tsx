@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Emailsend from "@/pages/EmailSend";
 
 export default function page(){
@@ -7,3 +8,10 @@ export default function page(){
     </>
   );
 };
+=======
+import Emailsend from '@/pages/emailsend';
+
+export default function page() {
+  return <Emailsend />;
+}
+>>>>>>> dev
