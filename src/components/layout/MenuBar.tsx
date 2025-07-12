@@ -16,15 +16,15 @@ const NAV_ITEMS = [
   '인테리어',
 ];
 
-export default function Sidebar() {
+export default function MenuBar() {
   const [active, setActive] = useState('');
 
   return (
     <aside className="fixed top-0 right-0 z-50 flex h-screen w-[335px] flex-col p-5 lg:w-[450px] lg:p-15">
       <div className="absolute top-3 right-6 flex">
         <DarkModeToggle />
-        <button className="bg-gray-7 ml-3 flex h-[52px] w-[52px] items-center justify-around rounded-full">
-          <X className="text-main h-10 w-10" />
+        <button className="bg-gray-7 ml-3 flex items-center justify-around rounded-full p-1">
+          <X className="text-main h-8 w-8" />
         </button>
       </div>
       <div className="mt-[50px] lg:mt-0">
