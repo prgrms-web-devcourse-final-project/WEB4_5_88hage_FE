@@ -1,3 +1,4 @@
+'use client';
 import Image from 'next/image';
 import thinking from '@/assets/images/thinking.png';
 import { ChangeEvent, useState } from 'react';
@@ -47,7 +48,7 @@ export default function SignupPreferences() {
     }
   };
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-between gap-[30px] bg-[#232323] px-4 pt-6 pb-4 text-[#8d8d8d] md:ml-[50%] md:w-1/2 md:justify-center md:bg-[#262626]">
+    <div className="signup-bg">
       <div></div>
       <div className="flex max-w-150 flex-col gap-10">
         <div className="flex flex-col gap-1">
@@ -96,40 +97,40 @@ export default function SignupPreferences() {
         <div className="flex flex-col gap-3">
           <div className="font-medium text-[#dfdfdf]">행사 카테고리 🎈</div>
           <div className="flex flex-wrap gap-2.5">
-            <Tag selected={tagSelectHandler} type="drama">
+            <Tag selected={tagSelectHandler} type="theater">
               연극 👏
             </Tag>
             <Tag selected={tagSelectHandler} type="dance">
               무용 💃
             </Tag>
-            <Tag selected={tagSelectHandler} type="popular_dance">
+            <Tag selected={tagSelectHandler} type="pop_dance">
               대중무용 🕺
             </Tag>
             <Tag selected={tagSelectHandler} type="classic">
               클래식 🎻
             </Tag>
-            <Tag selected={tagSelectHandler} type="korean_music">
-              국악 🪘
-            </Tag>
-            <Tag selected={tagSelectHandler} type="popular_music">
+            <Tag selected={tagSelectHandler} type="pop_music">
               대중음악 🎸
             </Tag>
-            <Tag selected={tagSelectHandler} type="composite">
+            <Tag selected={tagSelectHandler} type="gukak">
+              국악 🪘
+            </Tag>
+            <Tag selected={tagSelectHandler} type="mix">
               복합 🎉
             </Tag>
-            <Tag selected={tagSelectHandler} type="circus">
+            <Tag selected={tagSelectHandler} type="magic">
               서커스/마술 🎪
             </Tag>
             <Tag selected={tagSelectHandler} type="musical">
               뮤지컬 🎤
             </Tag>
-            <Tag selected={tagSelectHandler} type="tourist_spot">
+            <Tag selected={tagSelectHandler} type="tour">
               관광지 🏛️
             </Tag>
-            <Tag selected={tagSelectHandler} type="cultural_venues">
+            <Tag selected={tagSelectHandler} type="cultural_facilities">
               문화 시설 🗼
             </Tag>
-            <Tag selected={tagSelectHandler} type="leisure_sports">
+            <Tag selected={tagSelectHandler} type="sports">
               레포츠 🏌
             </Tag>
           </div>
@@ -137,7 +138,7 @@ export default function SignupPreferences() {
       </div>
       <button
         type="button"
-        className="w-full max-w-150 cursor-pointer rounded-[5px] bg-[#1CEBB9] p-3 text-2xl font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:mt-5 md:py-5"
+        className="signup-btn"
         onClick={() => {
           console.log(newUserPreferences);
         }} // 테스트용
