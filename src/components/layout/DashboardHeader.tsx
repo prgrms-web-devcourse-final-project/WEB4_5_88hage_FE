@@ -11,7 +11,7 @@ export default function DashboardHeader(){
     }
   return (
     <>
-    <header className="fixed t-0 right-0 z-10 w-full">
+    <header className="fixed t-0 right-0 z-10 w-full min-w-[335px] lg:min-w-[1240px]">
     <nav className="w-full flex items-center justify-between px-[20px] pt-[10px]">
         <button className="lg:hidden" onClick={()=>{previousHistory()}}>
             <IoIosArrowBack fill="#ffffff" size={24}/>
