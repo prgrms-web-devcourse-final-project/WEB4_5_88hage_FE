@@ -4,7 +4,7 @@ import { LucideLink2 } from 'lucide-react';
 export default function EventDetail() {
   return (
     <div className="flex w-340 min-w-screen justify-center bg-[#121212]">
-      <div className="flex h-full min-h-screen py-20 text-[#f6f6f6]">
+      <div className="flex h-full min-h-screen py-15 text-[#f6f6f6]">
         <DetailSection />
         <div className="sticky top-8 h-full w-160 px-5">
           <div className="flex flex-col gap-7.5 self-start rounded-sm bg-[#1c1c1c] p-6">
