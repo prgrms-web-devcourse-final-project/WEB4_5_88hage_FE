@@ -1,9 +1,7 @@
-import InquiryDetail from "@/pages/InquiryDetail";
-
-export default function page () {
+export default function page() {
   return (
     <>
-      <InquiryDetail />
+      <h1>page</h1>
     </>
   );
 }
