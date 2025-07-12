@@ -1,10 +1,5 @@
-import SignupPreferences from "@/pages/SignupPreferences";
+import SignupPreferences from '@/pages/SignupPreferences';
 
-export default function page(){
-  return (
-    <>
-    <SignupPreferences/>
-
-    </>
-  );
-};
+export default function page() {
+  return <SignupPreferences />;
+}
