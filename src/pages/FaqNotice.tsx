@@ -7,7 +7,6 @@ export default function FaqPage() {
     <>
       <Header
         headerBgClass="bg-[#1d1d1d]"
-        pageTitle={{ subtitle: "고객지원", title: "무엇을 도와드릴까요?" }}
       >
       </Header>
 

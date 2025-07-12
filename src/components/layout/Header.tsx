@@ -4,7 +4,12 @@ import { BiMenuAltLeft } from 'react-icons/bi';
 import Image from 'next/image';
 import logo from '@/assets/images/logo.svg';
 import Navigation from '../Navigation';
-import MenuBar from './MenuBar';
+import Sidebar from './Sidebar';
+
+export type PageTitleProps = {
+  subtitle: string;
+  title: string;
+};
 
 type HeaderProps = {
   children?: ReactNode;
