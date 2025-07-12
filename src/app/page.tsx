@@ -1,9 +1,9 @@
-import FaqPage from '@/pages/FaqNotice';
+import Sidebar from '@/components/layout/Sidebar';
 
 export default function page() {
   return (
     <>
-      <FaqPage />
+      <Sidebar />
     </>
   );
 }

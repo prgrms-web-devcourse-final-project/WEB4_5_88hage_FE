@@ -1,28 +1,18 @@
 'use client';
-import { useState, type ReactNode } from 'react';
+import { useState } from 'react';
 import { BiMenuAltLeft } from 'react-icons/bi';
 import Image from 'next/image';
 import logo from '@/assets/images/logo.svg';
 import Navigation from '../Navigation';
-import Sidebar from './Sidebar';
+import MenuBar from './MenuBar';
 
-export type PageTitleProps = {
-  subtitle: string;
-  title: string;
-};
-
-type HeaderProps = {
-  children?: ReactNode;
-  headerBgClass?: string;
-};
-
-export default function Header({ headerBgClass = 'bg-bg-color' }: HeaderProps) {
+export default function Header() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <>
       {/* 헤더 전체 컨테이너 */}
-      <header className={`flex flex-col ${headerBgClass}`}>
+      <header className={`flex flex-col`}>
         {/* 네비게이션 영역 */}
         <div className="flex h-[50px] items-center justify-between px-6 lg:h-[65px]">
           {/* 로고 */}
