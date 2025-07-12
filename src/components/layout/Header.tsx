@@ -4,7 +4,7 @@ import { BiMenuAltLeft } from 'react-icons/bi';
 import Image from 'next/image';
 import logo from '@/assets/images/logo.svg';
 import Navigation from '../Navigation';
-import Sidebar from './Sidebar';
+import MenuBar from './MenuBar';
 
 export type PageTitleProps = {
   subtitle: string;
