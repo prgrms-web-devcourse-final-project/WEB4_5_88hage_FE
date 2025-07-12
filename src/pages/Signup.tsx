@@ -10,17 +10,6 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSignupStore } from '@/stores/signupStore';
 
-type NewUserData = {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  nickname: string;
-  address: string;
-  birthDate: string;
-  gender: 'MALE' | 'FEMALE';
-  isMarketingAgreed: boolean;
-};
-
 export default function Signup() {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
@@ -120,10 +109,7 @@ export default function Signup() {
   }, [userData]);
 
   return (
-    <form
-      onSubmit={siguUpValidation}
-      className="flex min-h-screen w-full flex-col items-center justify-between gap-[30px] bg-[#232323] px-4 pt-6 pb-4 text-[#8d8d8d] md:ml-[50%] md:w-1/2 md:justify-center md:bg-[#262626]"
-    >
+    <form onSubmit={siguUpValidation} className="signup-bg">
       <Image
         src={logo}
         alt="logo"
@@ -335,13 +321,9 @@ export default function Signup() {
             </Checkbox>
           </div>
         </div>
-        <button className="mt-2 hidden w-full cursor-pointer rounded-[5px] bg-[#1CEBB9] py-5 text-2xl font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:block">
-          다음
-        </button>
+        <button className="signup-btn hidden md:block">다음</button>
       </div>
-      <button className="w-full max-w-150 cursor-pointer rounded-[5px] bg-[#1CEBB9] p-3 text-2xl font-bold text-[#333333] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:hidden">
-        다음
-      </button>
+      <button className="signup-btn md:hidden">다음</button>
     </form>
   );
 }

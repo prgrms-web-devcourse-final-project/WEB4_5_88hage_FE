@@ -6,7 +6,7 @@ import { LucideChevronDown, LucideHeart, LucideMapPin } from 'lucide-react';
 
 export default function DetailSection() {
   return (
-    <div className="flex w-full flex-col gap-9 px-10">
+    <div className="flex w-160 flex-col gap-9 px-5">
       <div className="flex flex-col gap-7.5">
         <Image src={test} alt="" />
         <div className="text-2xl text-[#00e6ae]">상세 정보</div>

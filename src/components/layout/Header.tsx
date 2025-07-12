@@ -1,10 +1,10 @@
-"use client";
-import { useState, type ReactNode } from "react";
-import { BiMenuAltLeft } from "react-icons/bi";
-import Image from "next/image";
-import logo from "@/assets/images/logo.svg";
-import Navigation from "../Navigation";
-import Sidebar from "./Sidebar";
+'use client';
+import { useState, type ReactNode } from 'react';
+import { BiMenuAltLeft } from 'react-icons/bi';
+import Image from 'next/image';
+import logo from '@/assets/images/logo.svg';
+import Navigation from '../Navigation';
+import Sidebar from './Sidebar';
 
 export type PageTitleProps = {
   subtitle: string;
@@ -12,16 +12,11 @@ export type PageTitleProps = {
 };
 
 type HeaderProps = {
-  pageTitle?: PageTitleProps;
   children?: ReactNode;
   headerBgClass?: string;
 };
 
-export default function Header({
-  pageTitle,
-  children,
-  headerBgClass = "bg-[#0d0d0d]",
-}: HeaderProps) {
+export default function Header({ headerBgClass = 'bg-bg-color' }: HeaderProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -29,38 +24,32 @@ export default function Header({
       {/* 헤더 전체 컨테이너 */}
       <header className={`flex flex-col ${headerBgClass}`}>
         {/* 네비게이션 영역 */}
-        <div className="flex h-[80px] items-center justify-between px-6">
+        <div className="flex h-[50px] items-center justify-between px-6 lg:h-[65px]">
           {/* 로고 */}
-          <Image src={logo} alt="logo" />
+          <div className="relative h-[30px] w-[70px] lg:h-[40px] lg:w-[110px]">
+            <Image
+              src={logo}
+              alt="logo"
+              priority
+              fill
+              className="object-contain"
+            />
+          </div>
 
           {/* 네비 + 사이드바 토글 */}
-          <div className="flex items-center gap-8">
+          <nav className="flex items-center gap-8">
             <div className="hidden lg:block">
               <Navigation />
             </div>
             <button
-              className="flex h-[52px] w-[52px] items-center justify-center rounded-full transition"
+              className="lg:bg-gray-8 lg:rounded-full lg:p-1"
               aria-label="사이드바 열기"
               onClick={() => setSidebarOpen(true)}
             >
-              <BiMenuAltLeft className="text-main h-10 w-10" />
+              <BiMenuAltLeft className="text-main -mr-2 h-8 w-8 lg:mr-0" />
             </button>
-          </div>
+          </nav>
         </div>
-
-        {/* pageTitle 섹션 (옵션) */}
-        {pageTitle && (
-          <section className="text-center ${headerBgClass} pb-4 lg:pb-10">
-            <p className="text-xs lg:text-base text-white">{pageTitle.subtitle}</p>
-            <h1 className="mt-2 text-xl lg:text-4xl font-bold">
-              <span className="bg-gradient-to-r from-[#1cebb9] to-[#7f74ff] bg-clip-text text-transparent">
-                {pageTitle.title}
-              </span>
-            </h1>
-          </section>
-        )}
-
-        <div className="flex justify-center">{children}</div>
       </header>
 
       {/* 사이드바 오버레이 */}
@@ -74,7 +63,7 @@ export default function Header({
           />
           {/* 실제 사이드바 */}
           <aside className="relative z-50">
-            <Sidebar />
+            <MenuBar />
           </aside>
         </div>
       )}
