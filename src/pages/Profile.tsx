@@ -3,18 +3,25 @@ import Image from 'next/image';
 import profileImg from '@/assets/images/profile_test.png';
 import mapIcon from '@/assets/images/map_icon_test.png';
 import { BiMenuAltLeft } from 'react-icons/bi';
-import { LucideChevronsLeftRight } from 'lucide-react';
+import {
+  LucideArrowUpRight,
+  LucideChevronsLeftRight,
+  LucideUsers2,
+} from 'lucide-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore from 'swiper';
+import 'swiper/css';
 
 export default function Profile() {
   return (
     <>
       <Sidebar />
-      <div className="flex h-screen w-full flex-col gap-5 text-white lg:ml-[270px] lg:w-[calc(100%-270px)]">
-        <div className="mt-6 mr-5 flex w-[calc(100%*(1525/1650))] items-center justify-between self-end">
+      <div className="ml-[270px] hidden h-screen w-[calc(100%-270px)] flex-col gap-5 text-white lg:flex">
+        <div className="mt-6 flex w-full items-center justify-between lg:mr-5 lg:w-[calc(100%*(1525/1650))] lg:self-end">
           <div className="text-[32px] font-extrabold">
             안녕하세요, 홍길동님 👋🏻
           </div>
-          <button className="rounded-full bg-[#414141] p-1">
+          <button className="hidden rounded-full bg-[#414141] p-1 lg:block">
             <BiMenuAltLeft className="text-main -mr-2 h-8 w-8 lg:mr-0" />
           </button>
         </div>
@@ -113,7 +120,8 @@ export default function Profile() {
                   <LucideChevronsLeftRight />
                 </button>
               </div>
-              <div className="flex flex-col gap-2.5">
+              {/* 달력 */}
+              {/* <div className="flex flex-col gap-2.5">
                 <div className="flex gap-2.5">
                   <div className="w-12 text-center text-[#ffb6b6]">일</div>
                   <div className="w-12 text-center">월</div>
@@ -172,7 +180,7 @@ export default function Profile() {
                     <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="flex h-[356px] gap-[30px]">
@@ -194,9 +202,11 @@ export default function Profile() {
                 </button>
               </div>
               <div className="bg-gray-7 h-[276px] w-full rounded-[5px] px-5 py-[15px]">
-                <div className="mb-5 flex justify-between border-b-1 border-[#4d4d4d] pb-4">
-                  <div className="text-[#a8a8a8]">내가 작성한 모임 글</div>
-                  <div className=""></div>
+                <div className="mb-5 flex items-center justify-between border-b-1 border-[#4d4d4d] pb-4 text-[#a8a8a8]">
+                  <div>내가 작성한 모임 글</div>
+                  <button>
+                    <LucideArrowUpRight />
+                  </button>
                 </div>
                 <div className="flex flex-col gap-3">
                   <div className="bg-gray-6 flex rounded-[5px] px-5 py-4">
@@ -227,9 +237,11 @@ export default function Profile() {
               </div>
             </div>
             <div className="bg-gray-7 h-full w-[calc(100%*(467/1440))] rounded-[5px] px-5 py-[26px]">
-              <div className="mb-5 flex justify-between border-b-1 border-[#4d4d4d] pb-4">
-                <div className="text-[#a8a8a8]">오늘의 일정</div>
-                <div className=""></div>
+              <div className="mb-5 flex justify-between border-b-1 border-[#4d4d4d] pb-4 text-[#a8a8a8]">
+                <div>오늘의 일정</div>
+                <button>
+                  <LucideArrowUpRight />
+                </button>
               </div>
               <div className="flex flex-col gap-[15px]">
                 <div>
@@ -283,6 +295,145 @@ export default function Profile() {
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex min-h-screen w-full flex-col overflow-scroll text-white lg:hidden">
+        <div className="bg-gray-7 mb-[30px] px-5 py-5">
+          <div className="mb-4.5 flex w-full items-center justify-between font-extrabold">
+            안녕하세요, 홍길동님 👋🏻
+          </div>
+          <div className="text-medium mb-[17px] text-xl">내 프로필</div>
+          <div className="bg-gray-6 flex w-full flex-col items-center justify-center gap-2.5 rounded-[5px] p-[31px] font-medium">
+            <Image
+              src={profileImg}
+              alt="profile"
+              className="rounded-full bg-black"
+            />
+            <div className="text-xl">홍길동 님</div>
+            <div className="flex gap-5">
+              <span className="text-[#999999]">
+                팔로워 <span className="text-white">27</span>
+              </span>
+              <span className="text-[#999999]">
+                팔로잉 <span className="text-white">27</span>
+              </span>
+            </div>
+            <button className="mt-[17px] w-45 rounded-[5px] bg-[#323232] p-3">
+              정보 수정
+            </button>
+          </div>
+          <div className="bg-gray-7 w-full rounded-[5px] p-5 font-semibold">
+            <div className="mb-[21px]">👍 즐겨 찾는 여가 생활</div>
+            <div className="mb-8 flex flex-col gap-[9px] text-[12px]">
+              <div className="flex gap-2.5">
+                <div className="flex items-center gap-2.5">
+                  <div className="bg-main size-3 rounded-full"></div> 예술
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <div className="size-3 rounded-full bg-[#60c2ff]"></div> 게임
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <div className="size-3 rounded-full bg-[#bd3aff]"></div> 여행
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <div className="size-3 rounded-full bg-[#ff4bcc]"></div> 자기
+                  개발
+                </div>
+              </div>
+              <div className="flex gap-2.5">
+                <div className="flex items-center gap-2.5">
+                  <div className="size-3 rounded-full bg-[#62ff57]"></div> 영화
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <div className="size-3 rounded-full bg-[#ffd042]"></div> 음식
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <div className="size-3 rounded-full bg-[#ff5457]"></div> 문화
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <div className="size-3 rounded-full bg-[#546bff]"></div> 운동
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-between">
+              <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
+                <div className="bg-main h-10 w-5 rounded-[10px]"></div>
+              </div>
+              <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
+                <div className="h-13 w-5 rounded-[10px] bg-[#60c2ff]"></div>
+              </div>
+              <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
+                <div className="h-16 w-5 rounded-[10px] bg-[#bd3aff]"></div>
+              </div>
+              <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
+                <div className="h-19 w-5 rounded-[10px] bg-[#ff4bcc]"></div>
+              </div>
+              <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
+                <div className="h-22 w-5 rounded-[10px] bg-[#62ff57]"></div>
+              </div>
+              <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
+                <div className="h-25 w-5 rounded-[10px] bg-[#ffd042]"></div>
+              </div>
+              <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
+                <div className="h-28 w-5 rounded-[10px] bg-[#ff5457]"></div>
+              </div>
+              <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
+                <div className="h-30 w-5 rounded-[10px] bg-[#546bff]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="mx-[41px] mb-[30px] h-12.5">
+          <button className="bg-gray-7 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 text-lg">
+            <div className="bg-gray-4 size-[31px] rounded-full"></div>
+            내가 작성한 모임 글<div />
+          </button>
+        </div>
+        <div className="bg-gray-7 mx-5 mb-[110px] rounded-[5px] p-4.5">
+          <div className="pt-[9px] pb-[26px] font-semibold text-[#a8a8a8]">
+            내가 작성한 모임 글
+          </div>
+          <div className="flex flex-col gap-5">
+            <div className="bg-gray-6 flex w-full flex-col gap-[15px] rounded-[5px] px-[11px] py-3">
+              <div className="font-semibold">같이 꽃놀이 가실 분</div>
+              <div className="">
+                4월 9일에 벚꽃놀이 멤버 구합니다. 같이 돗자리 펴고 꽃놀이...
+              </div>
+              <div className="text-gray-3 flex gap-3 text-sm">
+                <div className="">20250401</div>
+                <div className="flex items-center gap-1">
+                  3명
+                  <LucideUsers2 size={18} />
+                </div>
+              </div>
+            </div>
+            <div className="bg-gray-6 flex w-full flex-col gap-[15px] rounded-[5px] px-[11px] py-3">
+              <div className="font-semibold">같이 꽃놀이 가실 분</div>
+              <div className="">
+                4월 9일에 벚꽃놀이 멤버 구합니다. 같이 돗자리 펴고 꽃놀이...
+              </div>
+              <div className="text-gray-3 flex gap-3 text-sm">
+                <div className="">20250401</div>
+                <div className="flex items-center gap-1">
+                  3명
+                  <LucideUsers2 size={18} />
+                </div>
+              </div>
+            </div>
+            <div className="bg-gray-6 flex w-full flex-col gap-[15px] rounded-[5px] px-[11px] py-3">
+              <div className="font-semibold">같이 꽃놀이 가실 분</div>
+              <div className="">
+                4월 9일에 벚꽃놀이 멤버 구합니다. 같이 돗자리 펴고 꽃놀이...
+              </div>
+              <div className="text-gray-3 flex gap-3 text-sm">
+                <div className="">20250401</div>
+                <div className="flex items-center gap-1">
+                  3명
+                  <LucideUsers2 size={18} />
                 </div>
               </div>
             </div>
