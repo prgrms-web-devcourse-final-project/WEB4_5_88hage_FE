@@ -1,21 +1,33 @@
+'use client';
+
+import { useState } from 'react';
 import { Users } from 'lucide-react';
 import { BiSolidChat } from 'react-icons/bi';
-
+import GatheringTabButton from './button/GatheringTabButton';
 export default function GatheringSide() {
+  const [activeTab, setActiveTab] = useState('my-gathering');
+
   return (
     <>
       <div className="h-full w-full p-2">
-        <div className="text-gray-disabled-opacity flex items-baseline">
-          <button className="flex flex-col items-center">
-            <Users />
-            <div className="t3 mt-2">내 모임</div>
-            <hr className="w-[125px]" />
-          </button>
-          <button className="flex flex-col items-center">
-            <BiSolidChat className="h-[19px] w-[19px]" />
-            <div className="t3 mt-2">모임 채팅</div>
-            <hr className="w-[125px]" />
-          </button>
+        <div className="relative flex items-baseline">
+          <GatheringTabButton
+            icon={<Users />}
+            label="내 모임"
+            isActive={activeTab === 'my-gathering'}
+            onClick={() => setActiveTab('my-gathering')}
+          />
+          <GatheringTabButton
+            icon={<BiSolidChat className="h-[19px] w-[19px]" />}
+            label="모임 채팅"
+            isActive={activeTab === 'chat'}
+            onClick={() => setActiveTab('chat')}
+          />
+          <div
+            className={`absolute bottom-0 h-0.5 w-[125px] bg-main transition-transform duration-300 ease-in-out ${
+              activeTab === 'my-gathering' ? 'translate-x-0' : 'translate-x-full'
+            }`}
+          />
         </div>
       </div>
     </>
