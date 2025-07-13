@@ -1,3 +1,7 @@
 export default function GatheringMain() {
-  return <></>;
+  return (
+    <>
+      <div></div>
+    </>
+  );
 }
