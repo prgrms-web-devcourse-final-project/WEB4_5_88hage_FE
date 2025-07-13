@@ -1,11 +1,9 @@
-import DashboardHeader from '@/components/layout/DashboardHeader';
-import Profile from '@/pages/Profile';
+import MeetingPage from '@/pages/MeetingPage';
 
 export default function page() {
   return (
     <>
-    <DashboardHeader/>
-      <Profile />
+      <MeetingPage />
     </>
   );
 }
