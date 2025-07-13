@@ -1,3 +1,4 @@
+import GatheringChatting from '@/components/GatheringChatting';
 import GatheringMain from '@/components/GatheringMain';
 import GatheringSide from '@/components/GatheringSide';
 
@@ -14,7 +15,8 @@ export default function MyGathering() {
           </div>
           {/* 유동 너비 메인 */}
           <div className="max-w-[1050px] flex-grow lg:ml-10 lg:h-[740px]">
-            <GatheringMain />
+            {/* <GatheringMain /> */}
+            <GatheringChatting />
           </div>
         </div>
       </div>
