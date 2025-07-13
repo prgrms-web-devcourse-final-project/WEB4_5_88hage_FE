@@ -81,7 +81,7 @@ export default function Login() {
               <p className="text-sm text-red-500">{errors.password.message}</p>
             )}
 
-            <GrayButton type="submit" className="text-white">
+            <GrayButton type="submit" className="text-white h-[80px]">
               로그인
             </GrayButton>
             {loginError && (
