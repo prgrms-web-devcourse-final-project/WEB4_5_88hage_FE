@@ -8,8 +8,8 @@ import testMap from '@/assets/images/testmap.png';
 export default function GatheringMain() {
   return (
     <>
-      <div className="bg-gray-7 mt-5 flex h-full w-full flex-col rounded-[15px] p-5">
-        <div className="flex items-start">
+      <div className="bg-gray-7 lg:border-gray-5 mt-5 flex h-full w-full flex-col rounded-[15px] p-5 lg:border">
+        <div className="flex items-start lg:items-center">
           <Image
             src={test}
             width={50}
@@ -17,16 +17,17 @@ export default function GatheringMain() {
             alt="profileImage"
             className="rounded-full"
           />
-          <div className="ml-4">
-            <h1 className="gradient-text h2 mb-2 text-[16px]">
+          <div className="ml-2 lg:flex lg:items-center">
+            <h1 className="gradient-text h2 mb-2 text-[16px] lg:mb-0 lg:text-[24px]">
               2025 그린 페스티벌
             </h1>
-            <div className="bg-gray-4 t3 w-fit rounded-[30px] px-3 py-1 text-white">
+            <div className="bg-gray-4 t3 w-fit rounded-[30px] px-3 py-1 text-white lg:ml-5">
               콘서트 🎤
             </div>
           </div>
 
-          <div className="text-gray-disabled ml-auto flex items-center">
+          <div className="text-gray-disabled ml-auto flex items-center gap-2">
+            <div className="t3">3명</div>
             <Users2 className="h-[20px] w-[20px]" />
             <EllipsisVertical className="h-[20px] w-[20px]" />
           </div>

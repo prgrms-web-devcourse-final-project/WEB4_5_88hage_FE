@@ -11,7 +11,9 @@ export default function GatheringSide() {
 
   return (
     <>
-      <div className="bg-gray-7 mt-5 flex h-full w-full flex-col items-center rounded-[15px] p-2">
+      <div
+        className={`bg-gray-7 lg:border-gray-5 mt-5 flex h-full w-full flex-col items-center rounded-[15px] p-2 lg:w-[360px] lg:border`}
+      >
         <div className="relative mt-3 flex items-baseline">
           <GatheringTabButton
             icon={<Users />}
