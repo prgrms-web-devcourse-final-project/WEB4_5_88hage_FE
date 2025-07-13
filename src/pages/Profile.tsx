@@ -186,7 +186,7 @@ export default function Profile() {
           <div className="flex h-[356px] gap-[30px]">
             <div className="flex w-[calc(100%*(943/1440))] flex-col gap-[30px]">
               <div className="flex h-[50px] w-full gap-8">
-                <button className="bg-gray-7 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 text-lg">
+                <button className="bg-gray-7 text-main flex h-full w-full items-center justify-between rounded-[5px] px-2.5 text-lg font-semibold">
                   <div className="bg-gray-4 size-[31px] rounded-full"></div>
                   내가 작성한 모임 글<div />
                 </button>
@@ -388,7 +388,7 @@ export default function Profile() {
           </div>
         </div>
         <div className="mx-[41px] mb-[30px] h-12.5">
-          <button className="bg-gray-7 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 text-lg">
+          <button className="bg-gray-7 text-main flex h-full w-full items-center justify-between rounded-[5px] px-2.5 text-lg font-semibold">
             <div className="bg-gray-4 size-[31px] rounded-full"></div>
             내가 작성한 모임 글<div />
           </button>
