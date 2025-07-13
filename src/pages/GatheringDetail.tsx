@@ -115,7 +115,7 @@ export default function GatheringDetail() {
         <div className="flex w-full flex-col gap-7.5 self-start rounded-sm bg-[#1c1c1c] p-6">
           <div className="mt-[61px] mb-[59px] flex flex-col items-center gap-5 text-white">
             <div className="gradient-border px-6 py-2.5">음식 🍔</div>
-            <div className="gradient-text text-3xl font-bold">
+            <div className="gradient-text text-xl font-bold">
               힙스터들의 재즈바 모임
             </div>
             <div className="flex gap-2">

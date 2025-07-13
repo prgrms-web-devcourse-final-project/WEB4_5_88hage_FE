@@ -166,9 +166,7 @@ export default function EventDetail() {
               </div>
               {/* <div className="text-[#777777]">2025년 7월 19일</div> */}
             </div>
-            <div className="gradient-text text-3xl font-bold">
-              워터밤 [서울]
-            </div>
+            <div className="gradient-text text-xl font-bold">워터밤 [서울]</div>
             <div className="text-[#777777]">2025년 7월 19일</div>
             <div className="flex gap-2">
               <div className="gradient-border flex gap-2 rounded-full bg-[#2a2a2a] px-3.5 py-1.5 text-[#e4e4e4]">
