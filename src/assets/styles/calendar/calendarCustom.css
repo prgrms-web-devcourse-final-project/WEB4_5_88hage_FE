@@ -1,7 +1,7 @@
 .rbc-calendar{
     width: 1140px;
     /* 넓이 % */
-    height: 745px !important;
+    height: calc(100vh - 260px)  !important;
     background-color: #1a1a1a;
     padding: 15px;
     padding-top: 0;
