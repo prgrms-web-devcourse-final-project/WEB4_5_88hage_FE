@@ -19,23 +19,3 @@ button {
     @apply md:bg-gray-5 flex min-h-screen w-full flex-col items-center justify-between gap-[30px] bg-[#232323] px-4 pt-6 pb-4 text-[#8d8d8d] md:ml-[50%] md:w-1/2 md:justify-center;
   }
 }
-
-.blue-border {
-  box-shadow: 0 0 0 3px blue inset;
-}
-
-.green-border {
-  box-shadow: 0 0 0 2px green inset;
-}
-
-.red-border {
-  box-shadow: 0 0 0 4px red inset;
-}
-
-.orange-border {
-  box-shadow: 0 0 0 2px orange inset;
-}
-
-.yellow-border {
-  box-shadow: 0 0 0 2px yellow inset;
-}
