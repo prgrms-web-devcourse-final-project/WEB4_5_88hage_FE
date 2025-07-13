@@ -14,13 +14,14 @@ export default function CalendarContainer(){
 
   return (
     <>
-    <div style={{ height: '80vh' }} className='flex justify-center items-center'>
+    <div className='w-fit h-fit'>
       <Calendar
         localizer={localizer}
+        views={['month']}
         // events={events}
         startAccessor="start"
         endAccessor="end"
-        // style={{ height: '100%' }}
+        style={{ height: '100%' }}
         // onSelectEvent={}
         messages={{
           next: ">",
