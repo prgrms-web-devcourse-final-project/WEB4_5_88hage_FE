@@ -24,10 +24,10 @@ export default function MeetingPage() {
           <PostCard />
           <PostCard />
           <PostCard />
+          {/* <PostCard />
           <PostCard />
           <PostCard />
-          <PostCard />
-          <PostCard />
+          <PostCard /> */}
         </div>
         <div className="gradient-box mt-[51.45px] mb-[100px] flex flex-col rounded-[5px] px-[40px] text-white">
           <div className="mt-[33px] mb-[29px] text-[24px] font-semibold">
