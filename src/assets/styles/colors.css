@@ -17,7 +17,8 @@
   --color-white: #f2f2f2;
   --color-text: #7f74ff;
 
-  /* text */ /* 강조색은 그라디언트 색 사용해 주세요 */
+  /* text */
+  /* 강조색은 그라디언트 색 사용해 주세요 */
   --color-gray-default: #ffffff;
   --color-gray-sub: #f6f6f6;
   --color-gray-sub-opacity: rgba(102, 102, 102, 0.4);
