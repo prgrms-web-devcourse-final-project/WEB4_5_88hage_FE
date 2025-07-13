@@ -16,6 +16,6 @@ button {
   }
 
   .signup-bg {
-    @apply md:bg-gray-5 flex min-h-screen w-full flex-col items-center justify-between gap-[30px] bg-[#232323] px-4 pt-6 pb-4 text-[#8d8d8d] md:ml-[50%] md:w-1/2 md:justify-center;
+    @apply md:bg-gray-7 flex min-h-screen w-full flex-col items-center justify-between gap-[30px] bg-[#232323] px-4 pt-6 pb-4 text-[#8d8d8d] md:ml-[50%] md:w-1/2 md:justify-center;
   }
 }
