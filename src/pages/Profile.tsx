@@ -210,24 +210,24 @@ export default function Profile() {
                 </div>
                 <div className="flex flex-col gap-3">
                   <div className="bg-gray-6 flex rounded-[5px] px-5 py-4">
-                    <div className="w-[25%]">같이 꽃놀이 가실 분</div>
-                    <div className="w-[60%]">
+                    <div className="w-[25%] truncate">같이 꽃놀이 가실 분</div>
+                    <div className="w-[60%] truncate">
                       4월 9일에 벚꽃놀이 멤버 구합니다. 같이 돗자리 펴고
                       꽃놀이...
                     </div>
                     <div className="w-[15%] text-right">20250401</div>
                   </div>
                   <div className="bg-gray-6 flex rounded-[5px] px-5 py-4">
-                    <div className="w-[25%]">같이 꽃놀이 가실 분</div>
-                    <div className="w-[60%]">
+                    <div className="w-[25%] truncate">같이 꽃놀이 가실 분</div>
+                    <div className="w-[60%] truncate">
                       4월 9일에 벚꽃놀이 멤버 구합니다. 같이 돗자리 펴고
                       꽃놀이...
                     </div>
                     <div className="w-[15%] text-right">20250401</div>
                   </div>
                   <div className="bg-gray-6 flex rounded-[5px] px-5 py-4">
-                    <div className="w-[25%]">같이 꽃놀이 가실 분</div>
-                    <div className="w-[60%]">
+                    <div className="w-[25%] truncate">같이 꽃놀이 가실 분</div>
+                    <div className="w-[60%] truncate">
                       4월 9일에 벚꽃놀이 멤버 구합니다. 같이 돗자리 펴고
                       꽃놀이...
                     </div>
