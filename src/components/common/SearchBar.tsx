@@ -1,4 +1,4 @@
-import { Filter, Search, SlidersHorizontal } from 'lucide-react';
+import { Search, SlidersHorizontal } from 'lucide-react';
 
 export default function SearchBar() {
   return (
