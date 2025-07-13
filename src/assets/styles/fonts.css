@@ -1,29 +1,29 @@
 @layer components {
   .h1 {
-    @apply text-[30px] font-bold lg:text-[36px];
+    @apply text-[24px] font-bold lg:text-[32px];
   }
 
   .h2 {
-    @apply text-[26px] font-bold lg:text-[32px];
+    @apply text-[20px] font-bold lg:text-[24px];
   }
 
   .h3 {
-    @apply text-[24px] font-semibold lg:text-[30px];
+    @apply text-[18px] font-semibold lg:text-[20px];
   }
 
   .t1 {
-    @apply text-[20px] font-medium lg:text-[26px];
+    @apply text-[16px] font-medium lg:text-[18px];
   }
 
   .t2 {
-    @apply text-[16px] font-normal lg:text-[22px];
+    @apply text-[15px] font-normal lg:text-[16px];
   }
 
   .t3 {
-    @apply text-[14px] font-normal lg:text-[18px];
+    @apply text-[14px] font-normal lg:text-[14px];
   }
 
   .t4 {
-    @apply text-[12px] font-normal lg:text-[16px];
+    @apply text-[12px] font-normal lg:text-[12px];
   }
 }
