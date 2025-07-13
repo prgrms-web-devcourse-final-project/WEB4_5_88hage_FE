@@ -1,7 +1,9 @@
+import MyGathering from '@/pages/MyGathering';
+
 export default function page() {
   return (
     <>
-      <h1>page</h1>
+      <MyGathering />
     </>
   );
 }
