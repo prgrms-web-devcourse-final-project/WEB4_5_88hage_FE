@@ -1,9 +1,8 @@
-import EmailCheck from "@/pages/EmailCheck";
-
+import FaqNotice from '@/pages/FaqNotice'
 export default function page(){
   return (
     <>
-    <EmailCheck/>
+    <FaqNotice/>
     </>
   );
 };

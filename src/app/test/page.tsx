@@ -1,12 +1,11 @@
-import EventDetail from '@/pages/EventDetail';
-import GatheringDetail from '@/pages/GatheringDetail';
+import DashboardHeader from '@/components/layout/DashboardHeader';
 import Profile from '@/pages/Profile';
 
 export default function page() {
   return (
     <>
-      {/* <EventDetail /> */}
-      <GatheringDetail />
+      <DashboardHeader/>
+      <Profile />
     </>
   );
 }
