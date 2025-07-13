@@ -2,7 +2,6 @@ import Sidebar from '@/components/layout/Sidebar';
 import Image from 'next/image';
 import profileImg from '@/assets/images/profile_test.png';
 import mapIcon from '@/assets/images/map_icon_test.png';
-import { BiMenuAltLeft } from 'react-icons/bi';
 import {
   LucideArrowUpRight,
   LucideChevronsLeftRight,
@@ -21,9 +20,6 @@ export default function Profile() {
           <div className="text-[32px] font-extrabold">
             안녕하세요, 홍길동님 👋🏻
           </div>
-          <button className="hidden rounded-full bg-[#414141] p-1 lg:block">
-            <BiMenuAltLeft className="text-main -mr-2 h-8 w-8 lg:mr-0" />
-          </button>
         </div>
         <div className="mb-[27px] flex h-full flex-col self-center lg:w-[calc(100%*1440/1650)]">
           <div className="mb-6 text-[28px] font-semibold">내 프로필</div>
