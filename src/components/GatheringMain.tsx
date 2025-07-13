@@ -27,7 +27,7 @@ export default function GatheringMain() {
           </div>
 
           <div className="text-gray-disabled ml-auto flex items-center gap-2">
-            <div className="t3">3명</div>
+            <div className="t3 hidden lg:block">3명</div>
             <Users2 className="h-[20px] w-[20px]" />
             <EllipsisVertical className="h-[20px] w-[20px]" />
           </div>

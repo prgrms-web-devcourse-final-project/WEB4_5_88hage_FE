@@ -9,11 +9,11 @@ export default function MyGathering() {
         <h2 className="h3 text-white">모임</h2>
         <div className="lg:flex lg:min-w-[1220px] lg:items-center lg:justify-center">
           {/* 고정 너비 사이드 */}
-          <div className="w-[360px] flex-shrink-0 lg:h-[740px]">
+          <div className="flex-shrink-0 lg:h-[740px] lg:w-[360px]">
             <GatheringSide />
           </div>
           {/* 유동 너비 메인 */}
-          <div className="ml-10 max-w-[1050px] flex-grow lg:ml-10 lg:h-[740px]">
+          <div className="max-w-[1050px] flex-grow lg:ml-10 lg:h-[740px]">
             <GatheringMain />
           </div>
         </div>
