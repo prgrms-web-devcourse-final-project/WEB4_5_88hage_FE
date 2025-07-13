@@ -1,9 +1,9 @@
-import EmailCheck from "@/pages/EmailCheck";
+import EventPage from "@/pages/EventPage";
 
 export default function page(){
   return (
     <>
-    <EmailCheck/>
+    <EventPage/>
     </>
   );
 };

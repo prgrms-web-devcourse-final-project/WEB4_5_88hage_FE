@@ -1,9 +1,9 @@
-import EmailCheck from "@/pages/EmailCheck";
+import MeetingPage from "@/pages/MeetingPage";
 
 export default function page(){
   return (
     <>
-    <EmailCheck/>
+    <MeetingPage/>
     </>
   );
 };
