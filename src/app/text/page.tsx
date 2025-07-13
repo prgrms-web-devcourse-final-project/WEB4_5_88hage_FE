@@ -1,9 +1,10 @@
-import EmailCheck from "@/pages/EmailCheck";
+import Test from "../../pages/Test";
+
 
 export default function page(){
   return (
     <>
-    <EmailCheck/>
+    <Test/>
     </>
   );
 };
