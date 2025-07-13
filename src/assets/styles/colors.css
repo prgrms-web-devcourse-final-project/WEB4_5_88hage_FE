@@ -12,9 +12,9 @@
   --color-gray-5: #292929;
   --color-gray-4: #313131;
   --color-gray-3: #888888;
-  --color-gray-2: #B0B0B0;
-  --color-gray-1: #D0D0D0;
-  --color-white: #F2F2F2;
+  --color-gray-2: #b0b0b0;
+  --color-gray-1: #d0d0d0;
+  --color-white: #f2f2f2;
   --color-text: #7f74ff;
 
   /* text */
@@ -50,9 +50,31 @@
     linear-gradient(#2a2a2a, #2a2a2a) padding-box,
     linear-gradient(#1cebb9, #7f74ff) border-box;
 }
+
 .gradient-text {
   background-image: linear-gradient(to right, #1cebb9, #7f74ff);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+}
+
+.hover-gradient {
+  border: 1px solid transparent;
+}
+
+.hover-gradient:hover {
+  border-radius: 5px;
+  background:
+    linear-gradient(#121212, #121212) padding-box,
+    linear-gradient(#1cebb9, #7f74ff) border-box;
+}
+
+.gradient-box {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(28, 235, 185, 0.33) 0%,
+      rgba(127, 116, 255, 0.33) 100%
+    ),
+    black;
 }
