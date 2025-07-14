@@ -1,9 +1,9 @@
-import DashboardLayout from '@/components/layout/DashboardLayout';
+import MyGathering from '@/pages/MyGathering';
 
 export default function page() {
   return (
     <>
-      <DashboardLayout />
+      <MyGathering />
     </>
   );
 }
