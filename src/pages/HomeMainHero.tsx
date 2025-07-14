@@ -49,26 +49,37 @@ export default function HomeMainHero() {
             <Image
               src={Thunder}
               alt="번개"
-              width={30}
-              height={30}
-              className="inline-block align-middle w-[30px] h-[30px]"
+              width={89}
+              height={108}
+              className="inline-block align-middle w-[89px] h-[108px]"
             />
           </div>
           
 
         </div>
-        <button className="flex items-center justify-center gap-2 w-[170px] h-[50px] bg-[#1CEBB9] rounded-full text-[24px] font-semibold text-white shadow-lg">
-  <span className="align-middle">놀러 가기</span>
-  <Image
-    src={Heart}
-    alt="하트"
-    width={30}
-    height={30}
-    draggable={false}
-  />
-</button>
+        
       </div>
-      
+      <button
+    className="
+      self-end
+      mt-[-130px]
+      mr-[150px]
+      flex items-center justify-center
+      w-[170px] h-[50px]
+      bg-[#1CEBB9] rounded-full
+      text-[24px] font-semibold text-white
+      shadow-lg
+    "
+  >
+    <span>놀러 가기</span>
+    <Image
+      src={Heart}
+      alt="하트"
+      width={30}
+      height={30}
+      draggable={false}
+    />
+  </button>
     </section>
   );
 }
