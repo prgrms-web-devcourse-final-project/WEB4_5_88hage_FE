@@ -45,7 +45,7 @@ export default function CategorySelect({
       </label>
       <button
         type="button"
-        className="t3 bg-bg-color flex w-full items-center justify-between rounded border border-[#343434] p-4 text-left text-white"
+        className="t3 bg-bg-color flex w-full items-center justify-between rounded border border-[#343434] p-4 text-left text-gray-disabled"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span>{selected || '카테고리를 골라주세요'}</span>
@@ -53,7 +53,7 @@ export default function CategorySelect({
           className={`transform transition-transform duration-200 ${
             isOpen ? 'rotate-180' : ''
           }`}
-          color="#9CA3AF"
+          color="#5e5e5e"
         />
       </button>
       {isOpen && (
