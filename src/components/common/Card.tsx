@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 export default function PostCard() {
   return (
-    <div className="hover-gradient relative w-[345px] cursor-pointer overflow-hidden rounded-[5px] bg-black text-white">
+    <div className="hover-gradient relative w-full cursor-pointer overflow-hidden rounded-[5px] bg-black text-white">
       {/* 햄버거 이모지 */}
       <div className="absolute top-3 left-3 z-10 text-[30px]">🍔</div>
 
