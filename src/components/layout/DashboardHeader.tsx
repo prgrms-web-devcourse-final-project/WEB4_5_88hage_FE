@@ -12,7 +12,7 @@ export default function DashboardHeader() {
   return (
     <>
       <header className="fixed top-0 right-0 z-10 w-full min-w-[335px] lg:min-w-[1240px]">
-        <nav className="flex w-full items-start justify-between px-[20px] pt-[10px] lg:pt-[24px]">
+        <nav className="flex w-full items-center justify-between px-[20px] pt-[10px] lg:items-start lg:pt-[24px]">
           <button
             className="lg:hidden"
             onClick={() => {
