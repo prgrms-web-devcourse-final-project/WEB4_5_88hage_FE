@@ -19,7 +19,7 @@ export default function MenuBar() {
   const [active, setActive] = useState('');
 
   return (
-    <aside className="fixed top-0 right-0 z-50 flex h-screen w-[335px] flex-col p-5 lg:w-[480px] lg:p-15 lg:bg-[rgba(18,18,18,0.6)] backdrop-blur-[20px]">
+    <aside className="fixed top-0 right-0 z-50 flex h-screen w-[335px] flex-col p-5 backdrop-blur-[20px] lg:w-[480px] lg:bg-[rgba(18,18,18,0.6)] lg:p-15">
       <div className="absolute top-3 right-6 flex">
         <DarkModeToggle />
         <button className="bg-gray-7 ml-3 flex items-center justify-around rounded-full p-1">
