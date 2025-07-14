@@ -12,7 +12,9 @@ export default function DashboardHeader() {
   return (
     <>
       <header className="fixed top-0 right-0 z-10 w-full min-w-[335px] lg:min-w-[1240px]">
-        <nav className="flex w-full items-center justify-between px-[20px] pt-[10px] lg:items-start lg:pt-[24px]">
+        {/* 모바일에서만 블러 배경 */}
+        <div className="absolute inset-0 h-full w-full backdrop-blur-md lg:bg-transparent lg:backdrop-blur-none" />
+        <nav className="relative flex w-full items-center justify-between px-[20px] pt-[10px] lg:items-start lg:pt-[24px]">
           <button
             className="lg:hidden"
             onClick={() => {
