@@ -1,4 +1,4 @@
-// import Header from '@/components/layout/Header';
+import Header from '@/components/layout/Header';
 import '../assets/styles/globals.css';
 // import Footer from '@/components/layout/Footer';
 
@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="bg-bg">
-        {/* <Header/> */}
+        <Header/>
         {children}
         {/* <Footer/> */}
       </body>
