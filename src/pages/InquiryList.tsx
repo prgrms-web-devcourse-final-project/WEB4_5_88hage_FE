@@ -1,3 +1,5 @@
+import Greeting from '@/components/common/Greeting';
+
 export default function InquiryListPage() {
   const notices = Array.from({ length: 8 }).map(() => ({
     category: '특정 사용자 신고',
@@ -7,11 +9,10 @@ export default function InquiryListPage() {
   }));
 
   return (
-    <div className="min-h-screen w-full bg-[#121212]">
-      <main className="mainColor-gradient flex w-full flex-col bg-[#121212] px-4 lg:px-[105px]">
-        <h1 className="mt-[32px] mb-[45px] flex items-center text-[16px] font-bold text-white lg:mt-[24px] lg:mb-[69px] lg:text-[32px]">
-          안녕하세요, 홍길동님 👋
-        </h1>
+    <div className="min-h-screen w-full bg-[#121212] p-5">
+      <main className="flex w-full max-w-[1440px] flex-col bg-[#121212] px-4">
+        <Greeting />
+
         <div className="relative flex w-full items-center">
           <button className="z-10 border-b-2 border-[#1CEBB9] pb-[14px] text-[18px] font-semibold text-[#1CEBB9] lg:text-[24px]">
             문의 내역
