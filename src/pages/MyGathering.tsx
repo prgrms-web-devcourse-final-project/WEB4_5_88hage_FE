@@ -1,4 +1,5 @@
 import GatheringChatting from '@/components/GatheringChatting';
+
 import GatheringMain from '@/components/GatheringMain';
 import GatheringSide from '@/components/GatheringSide';
 
@@ -22,4 +23,6 @@ export default function MyGathering() {
       </div>
     </>
   );
+
 }
+
