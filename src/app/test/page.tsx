@@ -1,9 +1,10 @@
-import MeetingPage from '@/pages/MeetingPage';
+import MockupCalendar from '@/pages/MockupCalendar';
+
 
 export default function page() {
   return (
     <>
-      <MeetingPage />
+    <MockupCalendar/>
     </>
   );
 }
