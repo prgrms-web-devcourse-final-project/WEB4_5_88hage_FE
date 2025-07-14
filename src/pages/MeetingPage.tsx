@@ -7,14 +7,14 @@ import { ChevronDown } from 'lucide-react';
 export default function MeetingPage() {
   return (
     <div className="w-full">
-      <div className="meetingPage-gradient h-[380px]">
+      <div className="meetingPage-gradient lg:h-[450px] lg:pt-[115px]">
         <SearchBar />
         <RelatedTags />
       </div>
-      <div className="mx-auto max-w-[1440px]">
+      <div className="mx-auto max-w-[1440px] lg:my-[30px]">
         <div className="mb-8 flex items-center justify-between">
           <AIrecommendButton />
-          <button className="t4 flex items-center text-white">
+          <button className="t4 flex items-center text-[#cecece]">
             최신순
             <ChevronDown className="ml-2 h-5 w-5" />
           </button>
