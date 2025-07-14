@@ -55,7 +55,7 @@ export default function FaqAccordion() {
               onClick={() => setOpenIndex(isOpen ? null : idx)}
               className="flex items-center justify-between pl-10 pr-6 py-5 w-[327px] mx-auto lg:w-[657px]"
             >
-                 <span className="text-white lg:text-lg font-semibold">
+                 <span className="text-white text-[16px] lg:text-[24px] font-semibold">
      {item.question}
    </span>
               <ChevronDown
@@ -73,7 +73,7 @@ export default function FaqAccordion() {
                 ${isOpen ? "max-h-96 py-2 mb-4" : "max-h-0"}
               `}
             >
-              <p className="pl-10 pr-6 text-[#e4e4e4] text-sm leading-relaxed whitespace-pre-line">
+              <p className="pl-10 pr-6 text-[#e4e4e4] text-[14px] lg:text-[16px] leading-relaxed whitespace-pre-line">
                 {item.answer}
               </p>
             </div>

@@ -38,7 +38,7 @@ export default function TabToggle({ active, onChange }: TabToggleProps) {
           ref={(el) => (btnRefs.current[tab] = el)}
           onClick={() => onChange(tab)}
           className={`
-            relative z-10 px-6 py-2 text-base font-medium
+            relative z-10 px-6 py-2 text-[14px] lg:text-[16px] font-medium
             ${active === tab ? "text-black font-semibold" : "text-[#606060]"}
           `}
         >
