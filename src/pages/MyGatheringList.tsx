@@ -1,49 +1,52 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function MyGatheringList() {
   const notices = Array.from({ length: 6 }).map(() => ({
-    category: "특정 사용자 신고",
-    content: "안녕하세요. 특정 악질 사용자 신고 문의 넣었는데 대응이 잘될까요?",
-    date: "2025년06월28일",
+    category: '특정 사용자 신고',
+    content: '안녕하세요. 특정 악질 사용자 신고 문의 넣었는데 대응이 잘될까요?',
+    date: '2025년06월28일',
   }));
 
   return (
-    <section className="bg-[#121212] text-white px-6 lg:px-24 pt-10 lg:pt-12 pb-32">
-      <div className="max-w-7xl mx-auto">
+    <section className="mainColor-gradient bg-[#121212] px-6 pt-10 pb-32 text-white lg:px-24 lg:pt-12">
+      <div className="mx-auto max-w-7xl">
         {/* 제목 */}
-        <h2 className="text-[20px] lg:text-[28px] text-white text-left mb-8 font-semibold">
+        <h2 className="mb-8 text-left text-[20px] font-semibold text-white lg:text-[28px]">
           내 게시물
         </h2>
 
         {/* 상단 가로선 */}
-        <div className="border-t-2 border-[#383838] lg:mb-4 mb-1" />
+        <div className="mb-1 border-t-2 border-[#383838] lg:mb-4" />
 
         {/* 테이블 */}
         <div className="overflow-x-auto">
           <table className="w-full table-auto border-collapse">
             <thead className="hidden lg:table-header-group">
               <tr className="border-b-2 border-[#383838]">
-                <th className="px-15 pt-1 lg:pb-5 align-top leading-none text-left text-[#06ce9e] font-semibold">
+                <th className="px-15 pt-1 text-left align-top leading-none font-semibold text-[#06ce9e] lg:pb-5">
                   제목
                 </th>
-                <th className="px-8 pt-1 lg:pb-5 align-top leading-none text-center text-white font-medium">
+                <th className="px-8 pt-1 text-center align-top leading-none font-medium text-white lg:pb-5">
                   내용
                 </th>
-                <th className="px-15 pt-1 lg:pb-5 align-top leading-none text-right text-white font-medium">
+                <th className="px-15 pt-1 text-right align-top leading-none font-medium text-white lg:pb-5">
                   등록일
                 </th>
               </tr>
             </thead>
             <tbody>
               {notices.map((n, idx) => (
-                <tr key={idx} className="flex flex-col lg:table-row border-b border-[#383838] mb-1">
-                  <td className="px-8 lg:py-6 py-2 lg:align-top text-[#06CE9E] font-semibold whitespace-nowrap">
+                <tr
+                  key={idx}
+                  className="mb-1 flex flex-col border-b border-[#383838] lg:table-row"
+                >
+                  <td className="px-8 py-2 font-semibold whitespace-nowrap text-[#06CE9E] lg:py-6 lg:align-top">
                     {n.category}
                   </td>
-                  <td className="text-sm lg:text-base px-8 lg:py-6 py-1 lg:align-top text-white overflow-hidden text-ellipsis">
+                  <td className="overflow-hidden px-8 py-1 text-sm text-ellipsis text-white lg:py-6 lg:align-top lg:text-base">
                     {n.content}
                   </td>
-                  <td className="text-xs lg:text-base px-8 lg:py-6 py-3 lg:align-top text-[#ffffff] lg:text-right whitespace-nowrap overflow-visible lg:whitespace-nowrap lg:overflow-hidden lg:text-ellipsis">
+                  <td className="overflow-visible px-8 py-3 text-xs whitespace-nowrap text-[#ffffff] lg:overflow-hidden lg:py-6 lg:text-right lg:align-top lg:text-base lg:text-ellipsis lg:whitespace-nowrap">
                     {n.date}
                   </td>
                 </tr>
@@ -53,24 +56,23 @@ export default function MyGatheringList() {
         </div>
 
         {/* 페이징 */}
-        <div className="flex justify-center space-x-3 mt-6 text-[#C1C1E0]">
-          <button className="p-2 hover:text-white transition">
+        <div className="mt-6 flex justify-center space-x-3 text-[#C1C1E0]">
+          <button className="p-2 transition hover:text-white">
             <ChevronLeft size={16} />
           </button>
           {[1, 2, 3, 4, 5].map((p) => (
             <button
               key={p}
-              className={`
-                px-3 py-1 rounded-full transition
-                ${p === 1
-                  ? "bg-[#06CE9E] text-black"
-                  : "hover:bg-[#3E3E5E] hover:text-white"}
-              `}
+              className={`rounded-full px-3 py-1 transition ${
+                p === 1
+                  ? 'bg-[#06CE9E] text-black'
+                  : 'hover:bg-[#3E3E5E] hover:text-white'
+              } `}
             >
               {p}
             </button>
           ))}
-          <button className="p-2 hover:text-white transition">
+          <button className="p-2 transition hover:text-white">
             <ChevronRight size={16} />
           </button>
         </div>
