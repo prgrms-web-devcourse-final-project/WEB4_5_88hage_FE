@@ -1,9 +1,9 @@
-import MeetingPage from '@/pages/MeetingPage';
+import GatheringCreatePage from "@/pages/GatheringCreatePage";
 
 export default function page() {
   return (
     <>
-      <EventPage />
+      <GatheringCreatePage/>
     </>
   );
 }

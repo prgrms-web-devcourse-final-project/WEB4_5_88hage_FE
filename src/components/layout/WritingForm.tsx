@@ -32,13 +32,13 @@ export default function WritingForm({
         </div>
         <div className="relative">
           {!isLongForm && title === '모임 위치' && (
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pt-2 pr-4">
-              <Search size={20} color="#9CA3AF" />
-            </div>
+            <button className="absolute inset-y-0 right-0 flex items-center pt-2 pr-4">
+              <Search size={20} color="#5e5e5e" />
+            </button>
           )}
           {isLongForm ? (
             <textarea
-              className="placeholder-gray-4 t3 mt-3 h-64 w-full resize-none rounded border border-[#343434] p-4 text-white"
+              className="placeholder-gray-disabled t3 mt-3 h-64 w-full resize-none rounded border border-[#343434] p-4 text-white"
               placeholder={placeholder}
               value={value}
               onChange={handleChange}
@@ -47,7 +47,7 @@ export default function WritingForm({
           ) : (
             <input
               type="text"
-              className={`placeholder-gray-4 t3 mt-3 w-full rounded border border-[#343434] p-4 text-white ${
+              className={`placeholder-gray-disabled t3 mt-3 w-full rounded border border-[#343434] p-4 text-white ${
                 title === '모임 위치' ? 'pr-12' : ''
               }`}
               placeholder={placeholder}
