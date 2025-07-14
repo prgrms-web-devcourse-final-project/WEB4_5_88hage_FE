@@ -1,5 +1,6 @@
 type CheckboxProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
+  className?:string;
 };
 
 export default function Checkbox({ label, ...props }: CheckboxProps) {
@@ -8,7 +9,7 @@ export default function Checkbox({ label, ...props }: CheckboxProps) {
       <span className="relative flex items-center">
         <input
           type="checkbox"
-          className="peer checked:border-main focus:ring-main bg-gray-8 h-5 w-5 appearance-none rounded transition-all duration-150 focus:ring-2 focus:outline-none"
+          className="peer checked:border-main focus:ring-main bg-gray-5 h-5 w-5 appearance-none rounded transition-all duration-150 focus:ring-2 focus:outline-none"
           {...props}
         />
         {/* 체크 표시 (V)만 보이도록 */}

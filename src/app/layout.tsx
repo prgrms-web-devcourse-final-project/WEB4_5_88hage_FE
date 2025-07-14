@@ -1,4 +1,6 @@
+import Header from '@/components/layout/Header';
 import '../assets/styles/globals.css';
+// import Footer from '@/components/layout/Footer';
 
 export const metadata = {
   title: 'Next.js',
@@ -12,7 +14,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body className="bg-bg">{children}</body>
+      <body className="bg-bg">
+        {/* <Header/> */}
+        {children}
+        {/* <Footer/> */}
+      </body>
     </html>
   );
 }

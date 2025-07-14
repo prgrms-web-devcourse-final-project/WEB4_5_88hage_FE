@@ -12,7 +12,7 @@ export default function Header() {
   return (
     <>
       {/* 헤더 전체 컨테이너 */}
-      <header className={`flex flex-col`}>
+      <header className="flex flex-col fixed z-30 top-0 w-full">
         {/* 네비게이션 영역 */}
         <div className="flex h-[50px] items-center justify-between px-6 lg:h-[65px]">
           {/* 로고 */}
