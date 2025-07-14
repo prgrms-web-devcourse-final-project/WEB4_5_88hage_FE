@@ -44,7 +44,7 @@ export default function HomeMainHero() {
           />
         </div>
         <div className="flex flex-col items-center gap-4">
-          <div className="flex items-baseline gap-2 whitespace-nowrap text-[48px] font-bold leading-none">
+          <div className="mt-[-70px] flex items-baseline gap-2 whitespace-nowrap text-[48px] font-bold leading-none">
             <span className="text-white font-semibold">놀고 싶은 애들은 모여!</span>
             <Image
               src={Thunder}
@@ -62,7 +62,7 @@ export default function HomeMainHero() {
       <button
     className="
       self-end
-      mt-[-130px]
+      mt-[-180px]
       mr-[150px]
       flex items-center justify-center
       w-[170px] h-[50px]
