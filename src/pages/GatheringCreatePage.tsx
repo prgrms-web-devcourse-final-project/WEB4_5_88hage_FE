@@ -67,11 +67,11 @@ export default function GatheringCreatePage() {
               isRequired={false}
               isLongForm={false}
             />
-            <div className="flex flex-wrap justify-start gap-2 mt-[10px] lg:mt-[20px]">
-              <Tag />
-              <Tag />
-              <Tag />
-              <Tag />
+            <div className="mt-[10px] flex flex-wrap justify-start gap-2 lg:mt-[20px]">
+              <Tag name="태그" />
+              <Tag name="태그" />
+              <Tag name="태그" />
+              <Tag name="태그" />
             </div>
           </div>
 
