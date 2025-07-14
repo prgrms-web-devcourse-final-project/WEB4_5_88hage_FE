@@ -1,19 +1,22 @@
-import CalendarContainer from "@/components/calendar/CalendarContainer";
-import CalendarSidebar from "@/components/calendar/CalendarSidebar";
+import CalendarContainer from '@/components/calendar/CalendarContainer';
+import CalendarSidebar from '@/components/calendar/CalendarSidebar';
+import Greeting from '@/components/common/Greeting';
 
-export default function MyCalendar(){
+export default function MyCalendar() {
   return (
     <>
-    <div>
-        <div className="mt-[90px] mb-[20px] font-semibold text-gray-default lg:text-[32px] lg:mt-[24px] lg:mb-[30px]">안녕하세요, 홍길동님</div>
-        <div className="flex flex-col w-[335px] min-w-[335px] bg-gray-7 lg:bg-transparent lg:w-fit ">
-          <h2 className="text-[#fff] pt-[15px] pb-[5px] pl-[10px] font-semibold lg:pl-0 lg:text-[28px] lg:mb-[35px]">일정관리</h2>
-          <div className="lg:flex lg:gap-[20px] lg:flex-row flex flex-col w-full">
-            <CalendarSidebar/>
-            <CalendarContainer/>
+      <div>
+        <Greeting />
+        <div className="bg-gray-7 flex w-[335px] min-w-[335px] flex-col lg:w-fit lg:bg-transparent">
+          <h2 className="pt-[15px] pb-[5px] pl-[10px] font-semibold text-[#fff] lg:mb-[35px] lg:pl-0 lg:text-[28px]">
+            일정관리
+          </h2>
+          <div className="flex w-full flex-col lg:flex lg:flex-row lg:gap-[20px]">
+            <CalendarSidebar />
+            <CalendarContainer />
           </div>
         </div>
-    </div>
-     </>
+      </div>
+    </>
   );
-};
+}

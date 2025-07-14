@@ -2,12 +2,12 @@ import Greeting from '@/components/common/Greeting';
 
 export default function InquiryDetail() {
   return (
-    <div className="flex min-h-screen flex-col items-center bg-[#121212] px-0 py-0">
-      <div className="flex min-h-screen w-full flex-col justify-start px-4 pt-8 pb-12 sm:px-4 md:px-12 lg:px-30">
+    <div className="flex min-h-screen max-w-[1440px] flex-col bg-[#121212]">
+      <div className="flex min-h-screen w-full flex-col p-5">
         <div>
           <Greeting />
         </div>
-        <div className="flex flex-col items-start pb-4 lg:items-center lg:pb-10">
+        <div className="flex flex-col items-start justify-center pb-4 lg:items-center lg:pb-10">
           <h1 className="mb-3 w-full text-left text-[20px] font-extrabold lg:mb-2 lg:text-center lg:text-[32px]">
             <span className="bg-gradient-to-r from-[#1cebb9] to-[#7f74ff] bg-clip-text text-transparent">
               문의 내역
