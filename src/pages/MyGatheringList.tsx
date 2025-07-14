@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export default function NoticeContent() {
+export default function MyGatheringList() {
   const notices = Array.from({ length: 6 }).map(() => ({
     category: "특정 사용자 신고",
     content: "안녕하세요. 특정 악질 사용자 신고 문의 넣었는데 대응이 잘될까요?",
