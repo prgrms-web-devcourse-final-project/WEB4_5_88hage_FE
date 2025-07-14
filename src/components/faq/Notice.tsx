@@ -53,7 +53,7 @@ export default function NoticeContent() {
         </div>
 
         {/* 페이징 */}
-        <div className="flex justify-center space-x-3 mt-6 text-[#C1C1E0]">
+        <div className="flex justify-center space-x-3 lg:mt-[24px] text-[#C1C1E0]">
           <button className="p-2 hover:text-white transition">
             <ChevronLeft size={16} />
           </button>
