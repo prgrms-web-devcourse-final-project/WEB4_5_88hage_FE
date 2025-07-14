@@ -12,7 +12,7 @@ import GatheringHostBox from '@/components/GatheringHostBox';
 
 export default function EventDetail() {
   return (
-    <div className="flex w-screen min-w-screen justify-center bg-[#121212] lg:w-340">
+    <div className="eventDetail-gradient flex w-screen min-w-screen justify-center bg-[#121212] lg:w-340">
       <div className="hidden h-full min-h-screen py-15 text-[#f6f6f6] lg:flex">
         <div className="flex w-160 flex-col gap-10 px-5">
           <div className="flex flex-col gap-7.5">

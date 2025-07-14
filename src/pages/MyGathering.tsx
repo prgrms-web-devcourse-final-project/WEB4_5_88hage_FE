@@ -9,6 +9,7 @@ export default function MyGathering() {
     <>
       <div className="p-5">
         <Greeting />
+
         <h2 className="h3 text-white">모임</h2>
         <div className="lg:flex lg:min-w-[1220px] lg:items-center lg:justify-center">
           {/* 고정 너비 사이드 */}

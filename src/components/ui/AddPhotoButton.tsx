@@ -1,7 +1,7 @@
 import { FaCamera } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
 
-export default function AddPhotoButton({className}:{className:string}){
+export default function AddPhotoButton({className}:{className?:string}){
   return (
     <>
     <div className={twMerge("lg:mt-[-20px] lg:mb-[-5px]", className)}>

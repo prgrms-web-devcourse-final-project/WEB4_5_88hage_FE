@@ -1,4 +1,5 @@
 import Greeting from '@/components/common/Greeting';
+
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function MyGatheringList() {

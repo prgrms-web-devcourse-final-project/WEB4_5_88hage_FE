@@ -12,6 +12,7 @@ export default function InquiryListPage() {
     <div className="min-h-screen w-full bg-[#121212] p-5">
       <main className="flex w-full max-w-[1440px] flex-col bg-[#121212] px-4">
         <Greeting />
+
         <div className="relative flex w-full items-center">
           <button className="z-10 border-b-2 border-[#1CEBB9] pb-[14px] text-[18px] font-semibold text-[#1CEBB9] lg:text-[24px]">
             문의 내역

@@ -1,14 +1,13 @@
-import EventDetail from "@/pages/EventDetail";
+import EventDetail from '@/pages/EventDetail';
 
-export default function page(){
+export default function page() {
   return (
     <>
-    <div className="w-full flex justify-center">
-
-    <div className="min-w-[1240px] w-full max-w-[1440px]">
+<<<<<<< HEAD
     <EventDetail/>
-    </div>
-    </div>
+=======
+      <EventDetail />
+>>>>>>> 020c0b36d0322ad12577340e9726430ab4f28f4e
     </>
   );
-};
+}
