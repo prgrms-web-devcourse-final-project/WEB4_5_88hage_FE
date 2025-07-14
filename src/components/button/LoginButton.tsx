@@ -12,7 +12,7 @@ export default function LoginButton({ type }: { type: string }) {
   return (
     <>
       {type === 'naver' && (
-        <button className={`${buttonStyles} ${naverStyles}`}>
+        <button className={`${buttonStyles} ${naverStyles} h-[40px] lg:h-[60px] rounded-[5px] lg:rounded-[5px]`}>
           <span className={iconWrapperStyles}>
             <SiNaver size={16} />
           </span>
@@ -20,7 +20,7 @@ export default function LoginButton({ type }: { type: string }) {
         </button>
       )}
       {type === 'google' && (
-        <button className={`${buttonStyles} ${googleStyles}`}>
+        <button className={`${buttonStyles} ${googleStyles} h-[40px] lg:h-[60px] rounded-[5px] lg:rounded-[5px]`}>
           <span className={iconWrapperStyles}>
             <FcGoogle size={20} />
           </span>

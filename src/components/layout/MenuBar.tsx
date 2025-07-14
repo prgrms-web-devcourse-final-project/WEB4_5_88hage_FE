@@ -10,10 +10,9 @@ const NAV_ITEMS = [
   '로그아웃',
   '내 프로필',
   '알람',
-  '이사',
-  '청소',
-  '도배',
-  '인테리어',
+  '컨텐츠',
+  '모임',
+  '고객 센터',
 ];
 
 export default function MenuBar() {

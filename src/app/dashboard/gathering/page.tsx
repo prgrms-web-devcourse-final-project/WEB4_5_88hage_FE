@@ -1,9 +1,9 @@
-import EventDetail from "@/pages/EventDetail";
+import MyGathering from "@/pages/MyGathering";
 
 export default function page(){
   return (
     <>
-    <EventDetail/>
+    <MyGathering/>
     </>
   );
 };

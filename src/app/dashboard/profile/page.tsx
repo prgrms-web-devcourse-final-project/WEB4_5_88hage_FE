@@ -1,9 +1,9 @@
-import EventDetail from "@/pages/EventDetail";
+import Profile from "@/pages/Profile";
 
 export default function page(){
   return (
     <>
-    <EventDetail/>
+    <Profile/>
     </>
   );
 };
