@@ -384,6 +384,7 @@ export default function Profile() {
           </div>
         </div>
         <div className="mx-[41px] mb-[30px] h-12.5">
+          {/* Swiper */}
           <button className="bg-gray-7 text-main flex h-full w-full items-center justify-between rounded-[5px] px-2.5 text-lg font-semibold">
             <div className="bg-gray-4 size-[31px] rounded-full"></div>
             내가 작성한 모임 글<div />
