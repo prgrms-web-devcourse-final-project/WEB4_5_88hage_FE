@@ -12,10 +12,10 @@ button {
 
 @layer components {
   .signup-btn {
-    @apply hover:bg-main hover:text-gray-hover-link-text w-full max-w-150 rounded-[5px] bg-[#292929] p-3 text-2xl font-bold text-[#8d8d8d] disabled:bg-[#313131] disabled:text-[#c0c0c0] md:mt-5 md:py-5;
+    @apply hover:bg-main hover:text-gray-hover-link-text w-full max-w-150 rounded-[10px] bg-[#292929] p-3 text-2xl font-bold text-[#8d8d8d] disabled:bg-[#313131] disabled:text-[#c0c0c0] lg:py-6;
   }
 
   .signup-bg {
-    @apply md:bg-gray-7 flex min-h-screen w-full flex-col items-center justify-between gap-[30px] bg-[#232323] px-4 pt-6 pb-4 text-[#8d8d8d] md:ml-[50%] md:w-1/2 md:justify-center;
+    @apply lg:bg-gray-7 flex min-h-screen w-full flex-col items-center bg-[#121212] px-4 pt-8 text-[#8d8d8d] lg:w-1/2 lg:justify-center;
   }
 }
