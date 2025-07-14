@@ -44,29 +44,42 @@ export default function HomeMainHero() {
           />
         </div>
         <div className="flex flex-col items-center gap-4">
-          <div className="flex items-baseline gap-2 whitespace-nowrap text-[48px] font-bold leading-none">
+          <div className="mt-[-70px] flex items-baseline gap-2 whitespace-nowrap text-[48px] font-bold leading-none">
             <span className="text-white font-semibold">놀고 싶은 애들은 모여!</span>
             <Image
               src={Thunder}
               alt="번개"
-              width={30}
-              height={30}
-              className="inline-block align-middle w-[30px] h-[30px]"
+              width={89}
+              height={108}
+              className="inline-block align-middle w-[89px] h-[108px]"
             />
           </div>
-          <button className="flex items-end justify-center w-[170px] h-[50px] bg-[#1CEBB9] rounded-full text-[24px] font-semibold text-white shadow-lg">
-            놀러 가기
-            <Image
-              src={Heart}
-              alt="하트"
-              width={30}
-              height={30}
-              className="ml-2 inline-block align-middle w-[30px] h-[30px]"
-            />
-          </button>
+          
+
         </div>
         
       </div>
+      <button
+    className="
+      self-end
+      mt-[-180px]
+      mr-[150px]
+      flex items-center justify-center
+      w-[170px] h-[50px]
+      bg-[#1CEBB9] rounded-full
+      text-[24px] font-semibold text-white
+      shadow-lg
+    "
+  >
+    <span>놀러 가기</span>
+    <Image
+      src={Heart}
+      alt="하트"
+      width={30}
+      height={30}
+      draggable={false}
+    />
+  </button>
     </section>
   );
 }
