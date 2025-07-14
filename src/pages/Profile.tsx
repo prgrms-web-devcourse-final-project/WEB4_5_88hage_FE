@@ -15,7 +15,7 @@ export default function Profile() {
   return (
     <>
       <Sidebar />
-      <div className="ml-[270px] hidden h-screen w-[calc(100%-270px)] flex-col gap-5 text-white lg:flex">
+      <div className="mainColor-gradient ml-[270px] hidden h-screen w-[calc(100%-270px)] flex-col gap-5 text-white lg:flex">
         <div className="mt-6 flex w-full items-center justify-between lg:mr-5 lg:w-[calc(100%*(1525/1650))] lg:self-end">
           <div className="text-[32px] font-extrabold">
             안녕하세요, 홍길동님 👋🏻
