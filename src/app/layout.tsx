@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="bg-bg">
-        <Header/>
+        {/* <Header/> */}
         {children}
         {/* <Footer/> */}
       </body>
