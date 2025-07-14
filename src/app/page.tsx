@@ -1,9 +1,9 @@
-import MyGathering from '@/pages/MyGathering';
+import HomeMainHero from '@/pages/HomeMainHero';
 
 export default function page() {
   return (
     <>
-      <MyGathering />
+      <HomeMainHero />
     </>
   );
 }
