@@ -54,19 +54,21 @@ export default function HomeMainHero() {
               className="inline-block align-middle w-[30px] h-[30px]"
             />
           </div>
-          <button className="flex items-end justify-center w-[170px] h-[50px] bg-[#1CEBB9] rounded-full text-[24px] font-semibold text-white shadow-lg">
-            놀러 가기
-            <Image
-              src={Heart}
-              alt="하트"
-              width={30}
-              height={30}
-              className="ml-2 inline-block align-middle w-[30px] h-[30px]"
-            />
-          </button>
+          
+
         </div>
-        
+        <button className="flex items-center justify-center gap-2 w-[170px] h-[50px] bg-[#1CEBB9] rounded-full text-[24px] font-semibold text-white shadow-lg">
+  <span className="align-middle">놀러 가기</span>
+  <Image
+    src={Heart}
+    alt="하트"
+    width={30}
+    height={30}
+    draggable={false}
+  />
+</button>
       </div>
+      
     </section>
   );
 }
