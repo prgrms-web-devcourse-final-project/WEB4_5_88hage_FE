@@ -1,3 +1,5 @@
+import Greeting from '@/components/common/Greeting';
+
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function MyGatheringList() {
@@ -8,8 +10,9 @@ export default function MyGatheringList() {
   }));
 
   return (
-    <section className="mainColor-gradient bg-[#121212] px-6 pt-10 pb-32 text-white lg:px-24 lg:pt-12">
-      <div className="mx-auto max-w-7xl">
+    <section className="bg-[#121212] p-5 text-white">
+      <Greeting />
+      <div className="mx-auto max-w-[1440px]">
         {/* 제목 */}
         <h2 className="mb-8 text-left text-[20px] font-semibold text-white lg:text-[28px]">
           내 게시물

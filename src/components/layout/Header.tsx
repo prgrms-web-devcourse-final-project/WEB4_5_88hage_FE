@@ -47,7 +47,7 @@ export default function Header() {
         <div className="fixed inset-0 z-50 flex">
           {/* 반투명 배경 */}
           <div
-            className="fixed inset-0 bg-black/80"
+            className="fixed inset-0 bg-transparent"
             onClick={() => setSidebarOpen(false)}
             aria-label="오버레이 닫기"
           />

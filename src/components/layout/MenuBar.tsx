@@ -19,7 +19,7 @@ export default function MenuBar() {
   const [active, setActive] = useState('');
 
   return (
-    <aside className="fixed top-0 right-0 z-50 flex h-screen w-[335px] flex-col p-5 lg:w-[450px] lg:p-15">
+    <aside className="fixed top-0 right-0 z-50 flex h-screen w-[335px] flex-col p-5 lg:w-[480px] lg:p-15 lg:bg-[rgba(18,18,18,0.6)] backdrop-blur-[20px]">
       <div className="absolute top-3 right-6 flex">
         <DarkModeToggle />
         <button className="bg-gray-7 ml-3 flex items-center justify-around rounded-full p-1">
@@ -34,7 +34,7 @@ export default function MenuBar() {
           alt="sun"
           className="my-2"
         />
-        <div className="t3 font-semibold text-white">
+        <div className="h2 font-semibold text-white">
           <span className="text-main">홍길동</span>님 환영해요!
           <br />
           오늘은 나가 놀기 좋은 날이네요
@@ -46,7 +46,7 @@ export default function MenuBar() {
           {NAV_ITEMS.map((item) => (
             <div key={item}>
               <button
-                className={`t3 group ml-[-15px] flex w-full items-center py-1 text-left font-semibold transition ${
+                className={`h2 group ml-[-15px] flex w-full items-center py-1 text-left font-semibold transition ${
                   active === item ? 'text-main font-bold' : 'text-white'
                 } hover:text-main`}
                 onClick={() => setActive(item)}
