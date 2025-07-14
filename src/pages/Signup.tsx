@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import logo from '@/assets/images/logo.svg';
+import signupImg from '@/assets/images/signUpImg.png';
 // import thinking from '@/assets/images/thinking.png';
 import Input from '@/components/common/Input';
 import Checkbox from '@/components/common/Checkbox';
@@ -21,14 +22,7 @@ export default function Signup() {
   const [checkedList, setCheckedList] = useState<string[]>([]);
   const [duplicationCheck, setDuplicationCheck] = useState(false);
 
-  const [invalidNickname, setInvalidNickname] = useState(false);
-  const [invalidEmail, setInvalidEmail] = useState(false);
-  const [invalidPassword, setInvalidPassword] = useState(false);
-  const [invalidConfirmPassword, setInvalidConfirmPassword] = useState(false);
-  const [invalidAddress, setInvalidAddress] = useState(false);
-  const [invalidBirthDate, setInvalidBirthDate] = useState(false);
-
-  // const [newUser, setNewUser] = useState<NewUserData>();
+  const [requiredAlert, setRequiredAlert] = useState(false);
   const { userData, setData } = useSignupStore();
   const router = useRouter();
 
@@ -73,9 +67,9 @@ export default function Signup() {
       !checkedList.includes('terms') ||
       !checkedList.includes('privacy')
     ) {
-      if (!duplicationCheck) alert('닉네임 중복 체크해주세요.');
-      else alert('회원가입에 실패했습니다.');
+      setRequiredAlert(true);
     } else {
+      setRequiredAlert(false);
       setData({
         email: email,
         password: password,
@@ -109,221 +103,168 @@ export default function Signup() {
   }, [userData]);
 
   return (
-    <form onSubmit={siguUpValidation} className="signup-bg">
+    <div className="flex">
       <Image
         src={logo}
         alt="logo"
-        width={75}
-        height={24}
-        className="md:hidden"
+        width={100}
+        height={38}
+        className="absolute top-[26px] left-[40px] hidden lg:block"
       />
-      <div className="flex w-full max-w-150 flex-col gap-[15px]">
-        <div className="relative flex items-center">
+      <div className="hidden h-screen w-1/2 items-center justify-center lg:flex">
+        <Image src={signupImg} alt="signupImg" />
+      </div>
+      <form onSubmit={siguUpValidation} className="signup-bg">
+        <Image
+          src={logo}
+          alt="logo"
+          width={75}
+          height={24}
+          className="mb-[31px] lg:hidden"
+        />
+        <div className="flex w-full max-w-150 flex-col gap-[15px] lg:gap-6">
+          <div className="relative flex items-center">
+            <Input
+              type="text"
+              placeholder="닉네임을 입력 해주세요."
+              value={nickname}
+              onChange={(e) => {
+                setNickname(e.target.value);
+                setDuplicationCheck(false);
+              }}
+              className="rounded-[10px] px-4 py-4 lg:py-5"
+            />
+            <button
+              type="button"
+              className="absolute right-4 cursor-pointer text-sm"
+              tabIndex={-1}
+              onClick={() => {
+                if (!nicknameCheck.test(nickname)) {
+                  alert('닉네임이 올바른 형식이 아닙니다.');
+                } else {
+                  axios
+                    .post(
+                      'http://funfun.cloud/api/users/verify/nickname',
+                      { nickname: nickname },
+                      {
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                      },
+                    )
+                    .then((response) => {
+                      console.log(response.data);
+                      alert(response.data.data);
+                      setDuplicationCheck(true);
+                    })
+                    .catch((error) => {
+                      console.log(error.response.data);
+                      alert(error.response.data.message);
+                      setDuplicationCheck(false);
+                    });
+                }
+              }}
+            >
+              중복 검사
+            </button>
+          </div>
           <Input
             type="text"
-            placeholder="닉네임을 입력 해주세요."
-            value={nickname}
-            onChange={(e) => {
-              setNickname(e.target.value);
-              setDuplicationCheck(false);
-              if (
-                e.target.value.length > 0 &&
-                nicknameCheck.test(e.target.value)
-              )
-                setInvalidNickname(false);
-            }}
-            onBlur={() => {
-              if (nickname.length === 0 || !nicknameCheck.test(nickname))
-                setInvalidNickname(true);
-            }}
+            placeholder="이메일을 입력 해주세요."
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="rounded-[10px] px-4 py-4 lg:py-5"
           />
-          <button
-            type="button"
-            className="absolute right-2 cursor-pointer text-sm"
-            tabIndex={-1}
-            onClick={() => {
-              if (!nicknameCheck.test(nickname)) {
-                alert('닉네임이 올바른 형식이 아닙니다.');
-              } else {
-                axios
-                  .post(
-                    'http://funfun.cloud/api/users/verify/nickname',
-                    { nickname: nickname },
-                    {
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                    },
-                  )
-                  .then((response) => {
-                    console.log(response.data);
-                    alert(response.data.data);
-                    setDuplicationCheck(true);
-                  })
-                  .catch((error) => {
-                    console.log(error.response.data);
-                    alert(error.response.data.message);
-                    setDuplicationCheck(false);
-                  });
-              }
-            }}
-          >
-            중복 검사
-          </button>
-        </div>
-        {invalidNickname && (
-          <div className="text-sm text-red-400">잘못된 닉네임입니다.</div>
-        )}
-        <Input
-          type="text"
-          placeholder="이메일을 입력 해주세요."
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            if (e.target.value.length > 0 && emailCheck.test(e.target.value))
-              setInvalidEmail(false);
-          }}
-          onBlur={() => {
-            if (email.length === 0 || !emailCheck.test(email))
-              setInvalidEmail(true);
-          }}
-        />
-        {invalidEmail && (
-          <div className="text-sm text-red-400">잘못된 이메일입니다.</div>
-        )}
-        <Input
-          type="password"
-          placeholder="비밀번호를 입력 해주세요."
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-            if (e.target.value.length > 0 && passwordCheck.test(e.target.value))
-              setInvalidPassword(false);
-          }}
-          onBlur={() => {
-            if (password.length === 0 || !passwordCheck.test(password))
-              setInvalidPassword(true);
-          }}
-        />
-        {invalidPassword && (
-          <div className="text-sm text-red-400">
-            잘못된 형식의 비밀번호입니다.
-          </div>
-        )}
-        <Input
-          type="password"
-          placeholder="비밀번호를 확인 해주세요."
-          value={confirmPassword}
-          onChange={(e) => {
-            setConfirmPassword(e.target.value);
-            if (e.target.value === password) setInvalidConfirmPassword(false);
-          }}
-          onBlur={() => {
-            if (confirmPassword !== password) setInvalidConfirmPassword(true);
-          }}
-        />
-        {invalidConfirmPassword && (
-          <div className="text-sm text-red-400">
-            비밀번호를 정확하게 입력 해주세요.
-          </div>
-        )}
-        <Input
-          type="text"
-          placeholder="주소를 작성해 주세요."
-          value={address}
-          onChange={(e) => {
-            setAddress(e.target.value);
-            if (e.target.value.length > 0) setInvalidAddress(false);
-          }}
-          onBlur={() => {
-            if (address.length === 0) setInvalidAddress(true);
-          }}
-        />
-        {invalidAddress && (
-          <div className="text-sm text-red-400">주소를 입력 해주세요.</div>
-        )}
-        <Input
-          type="text"
-          placeholder="생년 월일 8자리 ( YYYYMMDD )"
-          className="mt-[9px]"
-          value={birthDate}
-          onChange={(e) => {
-            setBirthDate(e.target.value);
-            if (
-              e.target.value.length > 0 &&
-              birthDateCheck.test(e.target.value)
-            )
-              setInvalidBirthDate(false);
-          }}
-          onBlur={() => {
-            if (birthDate.length === 0 || !birthDateCheck.test(birthDate))
-              setInvalidBirthDate(true);
-          }}
-        />
-        {invalidBirthDate && (
-          <div className="text-sm text-red-400">
-            생년월일을 올바르게 입력 해주세요.
-          </div>
-        )}
-        <div className="flex gap-3.5">
-          <button
-            className="w-full cursor-pointer rounded-md bg-[#313131] p-3 text-sm text-[#8d8d8d] disabled:cursor-default disabled:bg-[#1CEBB9] disabled:text-[#333333]"
-            disabled={maleSelected}
-            onClick={() => setMaleSelected(true)}
-          >
-            남성
-          </button>
-          <button
-            className="w-full cursor-pointer rounded-md bg-[#313131] p-3 text-sm text-[#8d8d8d] disabled:cursor-default disabled:bg-[#1CEBB9] disabled:text-[#333333]"
-            disabled={!maleSelected}
-            onClick={() => setMaleSelected(false)}
-          >
-            여성
-          </button>
-        </div>
-        <div className="h-2"></div>
-        <div className="flex items-center gap-2">
-          <Checkbox
-            box
-            id="allAgree"
-            onChange={handleAllCheck}
-            checked={checkedList.length === 3}
-          >
-            모두 동의 (선택 포함)
-          </Checkbox>
-        </div>
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="terms"
-              onChange={() => handleCheckChange('terms')}
-              checked={checkedList.includes('terms')}
+          <Input
+            type="password"
+            placeholder="비밀번호를 입력 해주세요."
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="rounded-[10px] px-4 py-4 lg:py-5"
+          />
+          <Input
+            type="password"
+            placeholder="비밀번호를 확인 해주세요."
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="rounded-[10px] px-4 py-4 lg:py-5"
+          />
+          <Input
+            type="text"
+            placeholder="주소를 작성해 주세요."
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            className="rounded-[10px] px-4 py-4 lg:py-5"
+          />
+          <Input
+            type="text"
+            placeholder="생년 월일 8자리 ( YYYYMMDD )"
+            value={birthDate}
+            onChange={(e) => setBirthDate(e.target.value)}
+            className="rounded-[10px] px-4 py-4 lg:py-5"
+          />
+          <div className="flex gap-5">
+            <button
+              className="w-full cursor-pointer rounded-md bg-[#313131] p-4.5 text-[#8d8d8d] disabled:cursor-default disabled:bg-[#1CEBB9] disabled:text-[#333333]"
+              disabled={maleSelected}
+              onClick={() => setMaleSelected(true)}
             >
-              (필수) 이용 약관 [ 보기 ]
+              남성
+            </button>
+            <button
+              className="w-full cursor-pointer rounded-md bg-[#313131] p-4.5 text-[#8d8d8d] disabled:cursor-default disabled:bg-[#1CEBB9] disabled:text-[#333333]"
+              disabled={!maleSelected}
+              onClick={() => setMaleSelected(false)}
+            >
+              여성
+            </button>
+          </div>
+          <div className="mt-[26px] flex items-center gap-2 lg:mt-0">
+            <Checkbox
+              box
+              id="allAgree"
+              onChange={handleAllCheck}
+              checked={checkedList.length === 3}
+            >
+              모두 동의 (선택 포함)
             </Checkbox>
           </div>
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="privacy"
-              onChange={() => handleCheckChange('privacy')}
-              checked={checkedList.includes('privacy')}
-            >
-              (필수) 개인정보 취급방침 [ 보기 ]
-            </Checkbox>
+          <div className="mb-[41px] flex flex-col gap-2 lg:mb-0">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="terms"
+                onChange={() => handleCheckChange('terms')}
+                checked={checkedList.includes('terms')}
+              >
+                (필수) 이용 약관 [ 보기 ]
+              </Checkbox>
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="privacy"
+                onChange={() => handleCheckChange('privacy')}
+                checked={checkedList.includes('privacy')}
+              >
+                (필수) 개인정보 취급방침 [ 보기 ]
+              </Checkbox>
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="marketing"
+                onChange={() => handleCheckChange('marketing')}
+                checked={checkedList.includes('marketing')}
+              >
+                (선택) 마케팅 정보 수신 [ 보기 ]
+              </Checkbox>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="marketing"
-              onChange={() => handleCheckChange('marketing')}
-              checked={checkedList.includes('marketing')}
-            >
-              (선택) 마케팅 정보 수신 [ 보기 ]
-            </Checkbox>
-          </div>
+          <button className="signup-btn hidden lg:block">다음</button>
         </div>
-        <button className="signup-btn hidden md:block">다음</button>
-      </div>
-      <button className="signup-btn md:hidden">다음</button>
-    </form>
+        <button className="signup-btn lg:hidden">다음</button>
+        <div className="mt-1 min-h-5 text-sm text-red-400">
+          {requiredAlert && '필수 항목을 확인해주세요.'}
+        </div>
+      </form>
+    </div>
   );
 }
