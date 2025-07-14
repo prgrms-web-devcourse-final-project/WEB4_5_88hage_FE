@@ -7,9 +7,8 @@ import {
   LucideChevronsLeftRight,
   LucideUsers2,
 } from 'lucide-react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import SwiperCore from 'swiper';
 import 'swiper/css';
+import Greeting from '@/components/common/Greeting';
 
 export default function Profile() {
   return (
@@ -17,9 +16,7 @@ export default function Profile() {
       <Sidebar />
       <div className="mainColor-gradient ml-[270px] hidden h-screen w-[calc(100%-270px)] flex-col gap-5 text-white lg:flex">
         <div className="mt-6 flex w-full items-center justify-between lg:mr-5 lg:w-[calc(100%*(1525/1650))] lg:self-end">
-          <div className="text-[32px] font-extrabold">
-            안녕하세요, 홍길동님 👋🏻
-          </div>
+          <Greeting />
         </div>
         <div className="mb-[27px] flex h-full flex-col self-center lg:w-[calc(100%*1440/1650)]">
           <div className="mb-6 text-[28px] font-semibold">내 프로필</div>
@@ -182,16 +179,16 @@ export default function Profile() {
           <div className="flex h-[356px] gap-[30px]">
             <div className="flex w-[calc(100%*(943/1440))] flex-col gap-[30px]">
               <div className="flex h-[50px] w-full gap-8">
-                <button className="bg-gray-7 text-main flex h-full w-full items-center justify-between rounded-[5px] px-2.5 text-lg font-semibold">
+                <button className="bg-gray-7 text-main t2 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 font-semibold">
                   <div className="bg-gray-4 size-[31px] rounded-full"></div>
                   내가 작성한 모임 글<div />
                 </button>
-                <button className="bg-gray-7 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 text-lg">
+                <button className="bg-gray-7 t2 flex h-full w-full items-center justify-between rounded-[5px] px-2.5">
                   <div className="bg-gray-4 size-[31px] rounded-full"></div>
                   내 문의 내역
                   <div />
                 </button>
-                <button className="bg-gray-7 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 text-lg">
+                <button className="bg-gray-7 t2 flex h-full w-full items-center justify-between rounded-[5px] px-2.5">
                   <div className="bg-gray-4 size-[31px] rounded-full"></div>
                   예약한 행사
                   <div />
