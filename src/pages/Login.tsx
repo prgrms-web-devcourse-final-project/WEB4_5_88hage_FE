@@ -34,8 +34,8 @@ export default function Login() {
       console.log('로그인 성공:', result);
       router.push('/');
     } catch (error: any) {
-      console.error('로그인 실패:', error.response?.data || error.message);
-      setLoginError('이메일 또는 비밀번호가 일치하지 않습니다.');
+      console.error('로그인 실패:', error);
+      setLoginError(error.message || '로그인에 실패했습니다.');
     }
   };
 
