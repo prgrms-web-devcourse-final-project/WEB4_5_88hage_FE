@@ -1,4 +1,5 @@
-import Greeting from '@/components/common/Greeting';
+//import Greeting from '@/components/common/Greeting';
+import DashboardLayout from '@/components/layout/DashboardLayout';
 
 export default function InquiryListPage() {
   const notices = Array.from({ length: 8 }).map(() => ({
@@ -9,9 +10,10 @@ export default function InquiryListPage() {
   }));
 
   return (
-    <div className="min-h-screen w-full bg-[#121212] p-5">
-      <main className="flex w-full max-w-[1440px] flex-col bg-[#121212] px-4">
-        <Greeting />
+    <>
+    <DashboardLayout mainCss="px-[105px]">
+    <div className="min-h-screen w-full bg-[#121212]">
+      <main className="flex w-full max-w-[1440px] flex-col bg-[#121212] lg:pt-[29px]">
 
         <div className="relative flex w-full items-center">
           <button className="z-10 border-b-2 border-[#1CEBB9] pb-[14px] text-[18px] font-semibold text-[#1CEBB9] lg:text-[24px]">
@@ -57,5 +59,7 @@ export default function InquiryListPage() {
         </div>
       </main>
     </div>
+    </DashboardLayout>
+    </>
   );
 }
