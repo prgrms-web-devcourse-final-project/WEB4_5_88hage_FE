@@ -6,13 +6,13 @@ import { ChevronDown } from 'lucide-react';
 export default function EventPage() {
   return (
     <div className="w-full">
-      <div className="meetingPage-gradient h-[380px]">
+      <div className="meetingPage-gradient h-[200px] pt-[65px] lg:pt-0 lg:h-[400px] flex items-center justify-center">
         <SearchBar />
       </div>
-      <div className="mx-auto mt-[33px] max-w-[1440px]">
-        <div className="mb-8 flex items-center justify-between">
-          <AIrecommendButton />
-          <button className="t4 flex items-center text-white">
+      <div className="mx-auto max-w-[1440px] px-[20px]">
+        <div className="flex items-center justify-between my-[20px] lg:my-[32px]">
+          <AIrecommendButton className="fixed bottom-[15px] left-1/2 translate-x-[-50%] lg:translate-x-0 w-[calc(100%-40px)] z-100 lg:static h2 h-[60px]" />
+          <button className="t2 flex items-center text-[#CECECE]">
             최신순
             <ChevronDown className="ml-2 h-5 w-5" />
           </button>
@@ -47,6 +47,7 @@ export default function EventPage() {
           </div>
         </div>
       </div>
+      {/* <AIrecommendButton className='lg:hidden fixed bottom-[15px] right-[20px] w-full left-[15px]'/> */}
     </div>
   );
 }
