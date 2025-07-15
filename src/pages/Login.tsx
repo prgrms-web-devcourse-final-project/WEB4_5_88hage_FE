@@ -53,25 +53,42 @@ export default function Login() {
   };
 
   return (
-    <div className="flex h-screen w-screen relative">
+    <div className="relative flex h-screen w-screen">
       {/* 왼쪽(데스크탑 뷰): 배경  */}
       <div className="hidden w-1/2 bg-black lg:flex lg:items-center lg:justify-center">
-        <Image alt="로고" src={logo} className="mb-5 hidden lg:block lg:absolute top-[30px] left-[40px]" priority />
-        <Image alt="로그인 이미지" src={loginBgImg} className="hidden lg:block" width={500} height={500} priority />
+        <Image
+          alt="로고"
+          src={logo}
+          className="top-[30px] left-[40px] mb-5 hidden lg:absolute lg:block"
+          priority
+        />
+        <Image
+          alt="로그인 이미지"
+          src={loginBgImg}
+          className="hidden lg:block"
+          width={500}
+          height={500}
+          priority
+        />
       </div>
       {/* 오른쪽: 로그인 창 */}
-      <div className="flex w-full flex-col items-center justify-center px-[20px] lg:px-[150px] lg:w-1/2 bg-gray-7">
-        <div className="w-full space-y-4 min-w-[335px]">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 lg:space-y-7">
+      <div className="bg-gray-7 flex w-full flex-col items-center justify-center px-[20px] lg:w-1/2 lg:px-[150px]">
+        <div className="w-full min-w-[335px] space-y-4">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-4 lg:space-y-6"
+          >
             <Input
               placeholder="이메일을 입력 해주세요"
               {...register('email', {
                 required: '이메일을 입력해주세요',
               })}
-              className='h-[60px] lg:h-[80px] w-full rounded-[5px] lg:rounded-[10px]'
+              className="h-[60px] w-full rounded-[5px] lg:h-[80px] lg:rounded-[10px]"
             />
             {errors.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
+              <p className="t4 mt-[-10px] mb-3 text-red-500">
+                {errors.email.message}
+              </p>
             )}
 
             <Input
@@ -80,19 +97,23 @@ export default function Login() {
               {...register('password', {
                 required: '비밀번호를 입력해주세요',
               })}
-              className='h-[60px] lg:h-[80px] w-full rounded-[5px] lg:rounded-[10px]'
+              className="h-[60px] w-full rounded-[5px] lg:h-[80px] lg:rounded-[10px]"
             />
             {errors.password && (
-              <p className="text-sm text-red-500">{errors.password.message}</p>
+              <p className="t4 mt-[-10px] mb-3 text-red-500">
+                {errors.password.message}
+              </p>
             )}
 
-            <GrayButton type="submit" className="text-white h-[80px] bg-gray-5 w-full rounded-[10px]">
+            <GrayButton
+              type="submit"
+              className="bg-gray-5 h-[80px] w-full rounded-[10px] text-white"
+            >
               로그인
             </GrayButton>
+
             {loginError && (
-              <p className="py-2 text-center text-sm text-red-500">
-                {loginError}
-              </p>
+              <p className="t4 py-2 text-center text-red-500">{loginError}</p>
             )}
 
             <div className="t4 flex items-center justify-between font-semibold text-[#8d8d8d]">
@@ -102,20 +123,31 @@ export default function Login() {
                   {...register('keepLoggedIn')}
                 />
               </label>
-              <button type="button">비밀번호 찾기</button>
+              <button
+                type="button"
+                onClick={() => router.push('/password-change')}
+              >
+                비밀번호 찾기
+              </button>
             </div>
           </form>
 
-          <hr className="border-t border-[#434343] my-[16px] lg:my-[25px]" />
+          <hr className="my-[16px] border-t border-[#434343] lg:my-[25px]" />
 
-          <div className="lg:space-y-7 space-y-4">
+          <div className="space-y-4 lg:space-y-6">
             <LoginButton type="naver" />
             <LoginButton type="google" />
           </div>
 
-          <div className="t4 text-gray-6 mt-[14px] lg:mt-[25px] text-center font-semibold">
-            <span className='text-[#8D8D8D]'>아직 회원이 아니신가요? </span>
-            <button className="text-main">회원가입</button>
+          <div className="t4 text-gray-6 mt-[14px] text-center font-semibold lg:mt-[25px]">
+            <span className="text-[#8D8D8D]">아직 회원이 아니신가요? </span>
+            <button
+              type="button"
+              className="text-main"
+              onClick={() => router.push('/signup')}
+            >
+              회원가입
+            </button>
           </div>
         </div>
       </div>
