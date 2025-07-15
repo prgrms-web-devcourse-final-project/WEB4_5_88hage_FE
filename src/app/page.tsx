@@ -1,9 +1,9 @@
-import Login from '@/pages/Login';
+import HomeMainHero from '@/pages/HomeMainHero';
 
 export default function page() {
   return (
     <>
-      <Login />
+      <HomeMainHero />
     </>
   );
 }

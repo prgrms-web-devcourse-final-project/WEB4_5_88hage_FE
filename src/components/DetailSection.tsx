@@ -3,10 +3,11 @@ import test from '@/assets/images/test.png';
 import test2 from '@/assets/images/test2.png';
 import testmap from '@/assets/images/testmap.png';
 import { LucideChevronDown, LucideHeart, LucideMapPin } from 'lucide-react';
+import GatheringHostBox from './GatheringHostBox';
 
 export default function DetailSection() {
   return (
-    <div className="flex w-full flex-col gap-9 px-10">
+    <div className="flex w-160 flex-col gap-9 px-5">
       <div className="flex flex-col gap-7.5">
         <Image src={test} alt="" />
         <div className="text-2xl text-[#00e6ae]">상세 정보</div>
@@ -31,9 +32,10 @@ export default function DetailSection() {
           <div>모임 위치 : 서울 동작구 상도로 지하 2</div>
         </div>
         <div>
-          <Image src={testmap} alt="" />
+          <Image src={testmap} alt="map" />
         </div>
       </div>
+      <GatheringHostBox />
       <div className="flex flex-col gap-9">
         <div className="flex items-center justify-between">
           <div className="text-2xl text-[#00e6ae]">비슷한 모임도 있어요</div>

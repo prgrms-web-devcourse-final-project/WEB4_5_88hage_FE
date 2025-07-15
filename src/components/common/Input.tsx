@@ -38,7 +38,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           placeholder={placeholder}
           className={`w-full p-3 font-semibold text-white ${
             isPassword && showToggleIcon ? 'pr-10' : ''
-          } rounded bg-[#313131] text-sm placeholder-[#8d8d8d] transition outline-none focus:ring-2 focus:ring-[#00FFD1] focus:outline-none ${className}`}
+          } bg-gray-5 rounded text-sm placeholder-[#8d8d8d] transition outline-none focus:ring-2 focus:ring-[#00FFD1] focus:outline-none ${className}`}
           value={value}
           onChange={onChange}
           onBlur={onBlur}

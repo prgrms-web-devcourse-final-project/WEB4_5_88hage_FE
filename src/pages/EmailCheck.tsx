@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import email from '../assets/email.png';
+import email from '../assets/images/email.svg';
 
 export default function EmailCheck() {
   return (

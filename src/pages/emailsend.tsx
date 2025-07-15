@@ -1,11 +1,43 @@
-// "use client";
+'use client';
 import Image from 'next/image';
 import EmailImage from '@/assets/images/email.svg';
+import { FormEvent } from 'react';
+import axios from 'axios';
+import { useSignupStore } from '@/stores/signupStore';
 
 export default function Emailsend() {
+  const { userData } = useSignupStore();
+
+  const emailSendAgain = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (userData) {
+      axios
+        .post(
+          `http://funfun.cloud/api/users/send/signup/${userData.email}`,
+          userData.email,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        )
+        .then((response) => {
+          console.log(response.data);
+          alert('인증 메일이 재발송되었습니다.');
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+          alert(error.response.data.message);
+        });
+    }
+  };
+
   return (
-    <div className="flex min-h-screen flex-col items-center justify-start bg-[#232323] px-6 pt-[140px] text-center text-white md:justify-center md:pt-0">
-      <div className="flex w-full max-w-[620px] flex-col items-center">
+    <div className="bg-bg-color flex min-h-screen flex-col items-center justify-start px-6 pt-[140px] text-center text-white md:justify-center md:pt-0">
+      <form
+        onSubmit={emailSendAgain}
+        className="flex w-full max-w-[620px] flex-col items-center"
+      >
         <div className="mb-6">
           <Image src={EmailImage} alt="email icon" width={200} height={200} />
         </div>
@@ -20,10 +52,10 @@ export default function Emailsend() {
           메일함을 확인하고 인증을 완료해 주세요.
         </p>
 
-        <button className="mt-6 mb-12 h-12 w-full max-w-[510px] rounded-md bg-[#313131] text-base font-bold text-[#bdbdbd] md:h-16">
+        <button className="signup-btn absolute bottom-5 max-w-130 md:relative md:max-w-150">
           인증 메일 재발송
         </button>
-      </div>
+      </form>
     </div>
   );
 }

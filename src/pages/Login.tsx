@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import GrayButton from '@/components/button/GrayButton';
 import Input from '@/components/common/Input';
 import logo from '@/assets/images/logo.svg';
+import loginBgImg from '@/assets/images/loginBgImg.png';
 import LoginButton from '@/components/button/LoginButton';
 import Checkbox from '@/components/Checkbox';
 import Image from 'next/image';
@@ -52,19 +53,22 @@ export default function Login() {
   };
 
   return (
-    <div className="flex h-screen w-screen">
+    <div className="flex h-screen w-screen relative">
       {/* 왼쪽(데스크탑 뷰): 배경  */}
-      <div className="hidden w-1/2 bg-black lg:block" />
+      <div className="hidden w-1/2 bg-black lg:flex lg:items-center lg:justify-center">
+        <Image alt="로고" src={logo} className="mb-5 hidden lg:block lg:absolute top-[30px] left-[40px]" priority />
+        <Image alt="로그인 이미지" src={loginBgImg} className="hidden lg:block" width={500} height={500} priority />
+      </div>
       {/* 오른쪽: 로그인 창 */}
-      <div className="flex w-full flex-col items-center justify-center px-5 lg:w-1/2">
-        <Image alt="logo" src={logo} className="mb-5" priority />
-        <div className="w-full max-w-md space-y-4">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div className="flex w-full flex-col items-center justify-center px-[20px] lg:px-[150px] lg:w-1/2 bg-gray-7">
+        <div className="w-full space-y-4 min-w-[335px]">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 lg:space-y-7">
             <Input
               placeholder="이메일을 입력 해주세요"
               {...register('email', {
                 required: '이메일을 입력해주세요',
               })}
+              className='h-[60px] lg:h-[80px] w-full rounded-[5px] lg:rounded-[10px]'
             />
             {errors.email && (
               <p className="text-sm text-red-500">{errors.email.message}</p>
@@ -76,12 +80,13 @@ export default function Login() {
               {...register('password', {
                 required: '비밀번호를 입력해주세요',
               })}
+              className='h-[60px] lg:h-[80px] w-full rounded-[5px] lg:rounded-[10px]'
             />
             {errors.password && (
               <p className="text-sm text-red-500">{errors.password.message}</p>
             )}
 
-            <GrayButton type="submit" className="text-white">
+            <GrayButton type="submit" className="text-white h-[80px] bg-gray-5 w-full rounded-[10px]">
               로그인
             </GrayButton>
             {loginError && (
@@ -101,15 +106,15 @@ export default function Login() {
             </div>
           </form>
 
-          <hr className="border-t border-[#434343]" />
+          <hr className="border-t border-[#434343] my-[16px] lg:my-[25px]" />
 
-          <div className="space-y-3">
+          <div className="lg:space-y-7 space-y-4">
             <LoginButton type="naver" />
             <LoginButton type="google" />
           </div>
 
-          <div className="t4 text-gray-6 mt-10 text-center font-semibold">
-            <span>아직 회원이 아니신가요? </span>
+          <div className="t4 text-gray-6 mt-[14px] lg:mt-[25px] text-center font-semibold">
+            <span className='text-[#8D8D8D]'>아직 회원이 아니신가요? </span>
             <button className="text-main">회원가입</button>
           </div>
         </div>

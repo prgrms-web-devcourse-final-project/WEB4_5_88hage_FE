@@ -13,18 +13,18 @@ export default function DarkModeToggle() {
 
   return (
     <div
-      className="bg-gray-default relative flex h-[52px] w-20 cursor-pointer items-center rounded-full p-1 transition-colors duration-300"
+      className="bg-gray-default relative flex w-17 cursor-pointer items-center rounded-full py-1 transition-colors duration-300"
       onClick={toggleDarkMode}
     >
       <div
-        className={`bg-gray-8 absolute flex h-[52px] w-[52px] transform items-center justify-center rounded-full transition-transform duration-300 ${
-          isDarkMode ? 'translate-x-7' : 'translate-x-[-3px]'
+        className={`bg-gray-8 absolute flex transform items-center justify-center rounded-full p-1 transition-transform duration-300 ${
+          isDarkMode ? 'translate-x-7' : 'translate-x-[-2px]'
         }`}
       >
         {isDarkMode ? (
-          <Moon className="text-main h-10 w-10" />
+          <Moon className="text-main h-8 w-8" />
         ) : (
-          <Sun className="text-main h-10 w-10" />
+          <Sun className="text-main h-8 w-8" />
         )}
       </div>
     </div>

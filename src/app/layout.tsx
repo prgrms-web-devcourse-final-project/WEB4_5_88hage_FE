@@ -1,4 +1,7 @@
+import Header from '@/components/layout/Header';
 import '../assets/styles/globals.css';
+import ChatbotButton from '@/components/chatbot/ChatbotButton';
+// import Footer from '@/components/layout/Footer';
 
 export const metadata = {
   title: 'Next.js',
@@ -11,8 +14,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="bg-bg">{children}</body>
+    <html lang="ko">
+      <body className="bg-bg">
+        {/* <Header/> */}
+        {children}
+        {/* <Footer/> */}
+        <ChatbotButton/>
+      </body>
     </html>
   );
 }

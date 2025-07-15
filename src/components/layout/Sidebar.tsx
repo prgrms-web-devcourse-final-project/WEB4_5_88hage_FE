@@ -1,74 +1,67 @@
 'use client';
 
-import { X } from 'lucide-react';
-import Image from 'next/image';
+import {
+  CircleUserRound,
+  NotebookPen,
+  Calendar,
+  List,
+  Users,
+  MessagesSquare,
+} from 'lucide-react';
 import { useState } from 'react';
 
-import DarkModeToggle from '../DarkModeToggle';
-
 const NAV_ITEMS = [
-  '로그아웃',
-  '내 프로필',
-  '알람',
-  '이사',
-  '청소',
-  '도배',
-  '인테리어',
+  { icon: CircleUserRound, label: '내 프로필' },
+  { icon: NotebookPen, label: '문의 내역' },
+  { icon: Users, label: '마이 클럽' },
+  { icon: Calendar, label: '일정 관리' },
+  { icon: List, label: '내 게시물' },
+  { icon: MessagesSquare, label: '내 메신저' },
 ];
 
 export default function Sidebar() {
-  const [active, setActive] = useState('');
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
-    <aside className="fixed top-0 right-0 z-50 flex h-screen w-[335px] flex-col p-5 lg:w-[450px] lg:p-15">
-      <div className="absolute top-3 right-6 flex">
-        <DarkModeToggle />
-        <button className="bg-gray-7 ml-3 flex h-[52px] w-[52px] items-center justify-around rounded-full">
-          <X className="text-main h-10 w-10" />
-        </button>
+    <>
+      {/* 모바일 하단 네비게이션 */}
+      <div className="bg-gray-7 fixed bottom-0 left-0 z-50 flex h-[70px] w-full items-center justify-around lg:hidden">
+        {NAV_ITEMS.map(({ icon: Icon }, idx) => (
+          <button
+            key={idx}
+            onClick={() => setSelectedIndex(idx)}
+            className={`flex h-[40px] w-[40px] items-center justify-center rounded-full transition ${
+              selectedIndex === idx
+                ? 'bg-main text-black'
+                : 'bg-[#2c2c2c] text-white'
+            }`}
+          >
+            <Icon size={22} />
+          </button>
+        ))}
       </div>
-      <div className="mt-[50px] lg:mt-0">
-        <Image
-          src="sun-face.svg"
-          width={40}
-          height={40}
-          alt="sun"
-          className="my-2"
-        />
-        <div className="t3 font-semibold text-white">
-          <span className="text-main">홍길동</span>님 환영해요!
-          <br />
-          오늘은 나가 놀기 좋은 날이네요
-        </div>
 
-        <div className="my-8 w-[60px] border text-white" />
-
-        <nav className="flex flex-col gap-2">
-          {NAV_ITEMS.map((item) => (
-            <div key={item}>
+      {/* PC 사이드바 */}
+      <div className="bg-gray-7 hidden w-[270px] lg:fixed lg:top-0 lg:left-0 lg:flex lg:h-screen lg:flex-col lg:justify-start">
+        <div className="py-30">
+          <nav className="flex flex-col">
+            {NAV_ITEMS.map(({ icon: Icon, label }, idx) => (
               <button
-                className={`t3 group ml-[-15px] flex w-full items-center py-1 text-left font-semibold transition ${
-                  active === item ? 'text-main font-bold' : 'text-white'
-                } hover:text-main`}
-                onClick={() => setActive(item)}
-                type="button"
+                key={idx}
+                onClick={() => setSelectedIndex(idx)}
+                className={`flex items-center gap-3 rounded px-7 py-4 text-[18px] transition ${
+                  selectedIndex === idx
+                    ? 'bg-main text-black'
+                    : 'hover:bg-gray-8 text-white'
+                }`}
               >
-                <span
-                  className={`mr-2 h-1 w-1 rounded-full transition-all ${
-                    active === item ? 'bg-main' : 'bg-transparent'
-                  }`}
-                />
-                {item}
+                <Icon size={22} />
+                {label}
               </button>
-
-              {/* '알람' 다음에만 줄 추가 */}
-              {item === '알람' && (
-                <div className="my-6 w-[60px] border text-white" />
-              )}
-            </div>
-          ))}
-        </nav>
+            ))}
+          </nav>
+        </div>
       </div>
-    </aside>
+    </>
   );
 }
