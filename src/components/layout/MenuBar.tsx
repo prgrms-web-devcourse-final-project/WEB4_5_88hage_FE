@@ -2,9 +2,10 @@
 
 import { X } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import DarkModeToggle from '../DarkModeToggle';
+import axios from 'axios';
 
 const NAV_ITEMS = [
   '로그아웃',
@@ -17,6 +18,24 @@ const NAV_ITEMS = [
 
 export default function MenuBar() {
   const [active, setActive] = useState('');
+  const weatherApiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY
+
+  const getWeather = async () => {
+    try{
+      const {data} = await axios.get(`http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst?serviceKey=${weatherApiKey}&numOfRows=10&pageNo=1&base_date=20250715&base_time=0630&nx=126&ny=37&dataType=JSON`);
+      console.log(data);
+    } catch(e){
+      console.log('날씨 api 통신하는대 실패 했습니다.', e)
+    }
+  }
+
+  useEffect(()=>{
+    const getNowWeather = async ()=>{
+      const data = await getWeather();
+      console.log(data);
+    }
+    getNowWeather()
+  },[])
 
   return (
     <aside className="fixed top-0 right-0 z-50 flex h-screen w-[335px] flex-col p-5 backdrop-blur-[20px] lg:w-[480px] lg:bg-[rgba(18,18,18,0.6)] lg:p-15">
