@@ -1,9 +1,9 @@
-import MyGathering from '@/pages/MyGathering';
+import MockupCalendar from '@/pages/MockupCalendar';
 
 export default function page() {
   return (
     <>
-      <MyGathering />
+      <MockupCalendar/>
     </>
   );
 }

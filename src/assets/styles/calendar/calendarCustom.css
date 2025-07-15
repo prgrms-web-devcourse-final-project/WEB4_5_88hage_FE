@@ -1,6 +1,5 @@
 .rbc-calendar{
-    width: 1140px;
-    /* 넓이 % */
+    width: 100%;
     height: calc(100vh - 260px)  !important;
     background-color: #1a1a1a;
     padding: 15px;
@@ -133,7 +132,7 @@
 
 @media screen and (max-width: 700px) {
     .rbc-calendar{
-    width: 335px;
+    width: 100%;
     height: fit-content !important;
     background-color: #1a1a1a;
     padding: 15px;

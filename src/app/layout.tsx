@@ -1,5 +1,6 @@
 import Header from '@/components/layout/Header';
 import '../assets/styles/globals.css';
+import ChatbotButton from '@/components/chatbot/ChatbotButton';
 // import Footer from '@/components/layout/Footer';
 
 export const metadata = {
@@ -18,6 +19,7 @@ export default function RootLayout({
         {/* <Header/> */}
         {children}
         {/* <Footer/> */}
+        <ChatbotButton/>
       </body>
     </html>
   );
