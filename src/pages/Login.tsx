@@ -107,7 +107,7 @@ export default function Login() {
 
             <GrayButton
               type="submit"
-              className="bg-gray-5 h-[80px] w-full rounded-[10px] text-white"
+              className="bg-gray-5 h-[60px] w-full rounded-[5px] text-white lg:h-[80px] lg:rounded-[10px]"
             >
               로그인
             </GrayButton>
