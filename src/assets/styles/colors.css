@@ -107,10 +107,12 @@
     );
 }
 
-.mainColor-gradient {
-  background: radial-gradient(
-    circle 1115px at bottom right,
-    rgba(28, 235, 185, 0.15) 0%,
-    transparent 100%
-  );
+@media (width >= 1024px) {
+  .mainColor-gradient {
+    background: radial-gradient(
+      circle 1115px at bottom right,
+      rgba(28, 235, 185, 0.15) 0%,
+      transparent 100%
+    );
+  }
 }
