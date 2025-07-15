@@ -10,7 +10,7 @@ import Checkbox from '@/components/Checkbox';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { loginUser } from '@/lib/api/auth';
+import { login } from '@/lib/api/auth';
 
 type LoginFormData = {
   email: string;
@@ -30,11 +30,7 @@ export default function Login() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const result = await loginUser(
-        data.email,
-        data.password,
-        data.keepLoggedIn,
-      );
+      const result = await login(data.email, data.password, data.keepLoggedIn);
       console.log('로그인 성공:', result);
       router.push('/');
     } catch (error: any) {

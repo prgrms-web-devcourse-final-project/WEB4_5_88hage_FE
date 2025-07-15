@@ -1,4 +1,5 @@
 import axios from 'axios';
+import router from 'next/router';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -12,7 +13,7 @@ instance.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       console.warn('인증 만료됨 - 자동 로그아웃 처리');
-      // 예: router.push('/login');
+      router.push('/login');
     }
     return Promise.reject(error);
   },

@@ -1,20 +1,10 @@
+import { userData } from '@/types/auth';
 import { create } from 'zustand';
 
-type NewUserData = {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  nickname: string;
-  address: string;
-  birthDate: string;
-  gender: 'MALE' | 'FEMALE';
-  isMarketingAgreed: boolean;
-};
-
 interface SignupStore {
-  userData: NewUserData | null;
+  userData: userData | null;
   code: string;
-  setData: (data: NewUserData) => void;
+  setData: (data: userData) => void;
   clearData: () => void;
   setCode: (code: string) => void;
   clearCode: () => void;
