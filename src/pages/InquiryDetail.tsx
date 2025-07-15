@@ -1,14 +1,16 @@
-import Greeting from '@/components/common/Greeting';
+import DashboardLayout from '@/components/layout/DashboardLayout';
+//import Greeting from '@/components/common/Greeting';
 
 export default function InquiryDetail() {
   return (
+    <>
+    <DashboardLayout mainCss="px-[105px]">
     <div className="flex min-h-screen max-w-[1440px] flex-col bg-[#121212]">
-      <div className="flex min-h-screen w-full flex-col p-5">
+      <div className="flex min-h-screen w-full flex-col lg:pt-[14px]">
         <div>
-          <Greeting />
         </div>
         <div className="flex flex-col items-start justify-center pb-4 lg:items-center lg:pb-10">
-          <h1 className="mb-3 w-full text-left text-[20px] font-extrabold lg:mb-2 lg:text-center lg:text-[32px]">
+          <h1 className="mb-3 w-full text-left text-[20px] font-semibold lg:mb-2 lg:text-center lg:text-[32px]">
             <span className="bg-gradient-to-r from-[#1cebb9] to-[#7f74ff] bg-clip-text text-transparent">
               문의 내역
             </span>
@@ -17,7 +19,7 @@ export default function InquiryDetail() {
 
         {/* 문의 요약 */}
         <div className="mb-4 flex flex-col gap-1 border-t-2 border-b border-[#444] py-3 lg:mb-3 lg:flex-row lg:items-center lg:gap-6 lg:py-6">
-          <span className="text-[12px] font-semibold text-[#ffffff] lg:min-w-[140px] lg:text-sm">
+          <span className="text-[12px] font-semibold text-[#ffffff] lg:min-w-[140px] lg:text-[16px]">
             특정 사용자 신고
           </span>
           <span className="flex-1 text-left text-[12px] text-[#d2d2d2] lg:text-[16px] lg:text-[#ffffff]">
@@ -77,12 +79,14 @@ export default function InquiryDetail() {
         </div>
 
         {/* 버튼 */}
-        <div className="flex justify-center border-t-2 border-[#444] pt-16">
+        <div className="flex justify-center border-t-2 border-[#444] pb-[170px] pt-[62px]">
           <button className="h-[48px] w-[196px] rounded-md bg-[#303236] py-3 text-[15px] text-[#D4D4D4] transition hover:bg-[#35383b] lg:w-auto lg:px-6 lg:py-2 lg:text-[18px]">
             목록으로 이동
           </button>
         </div>
       </div>
     </div>
+    </DashboardLayout>
+    </>
   );
 }
