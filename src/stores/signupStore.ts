@@ -1,10 +1,10 @@
-import { userData } from '@/types/auth';
+import { UserData } from '@/types/auth';
 import { create } from 'zustand';
 
 interface SignupStore {
-  userData: userData | null;
+  userData: UserData | null;
   code: string;
-  setData: (data: userData) => void;
+  setData: (data: UserData) => void;
   clearData: () => void;
   setCode: (code: string) => void;
   clearCode: () => void;

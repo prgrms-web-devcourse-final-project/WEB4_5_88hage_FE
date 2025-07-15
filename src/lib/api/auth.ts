@@ -1,4 +1,4 @@
-import { userData } from '@/types/auth';
+import { UserData } from '@/types/auth';
 import axios from './axiosInstance';
 
 // 로그인: 응답 헤더의 Authorization, Refresh-Token로 토큰 발급
@@ -20,7 +20,7 @@ export const reissue = async () => {
   return axios.post('/auth/reissue');
 };
 // 회원가입
-export const signup = async (userData: userData) => {
+export const signup = async (userData: UserData) => {
   return axios.post('/auth/signup', userData);
 };
 
