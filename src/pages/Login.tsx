@@ -8,9 +8,9 @@ import loginBgImg from '@/assets/images/loginBgImg.png';
 import LoginButton from '@/components/button/LoginButton';
 import Checkbox from '@/components/Checkbox';
 import Image from 'next/image';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { loginUser } from '@/lib/api/auth';
 
 type LoginFormData = {
   email: string;
@@ -28,27 +28,18 @@ export default function Login() {
   const router = useRouter();
   const [loginError, setLoginError] = useState('');
 
-  const API = process.env.NEXT_PUBLIC_API_URL;
-
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const response = await axios.post(
-        `${API}api/auth/login`,
-        {
-          email: data.email,
-          password: data.password,
-          rememberMe: data.keepLoggedIn,
-        },
-        {
-          withCredentials: true, // 쿠키 포함 필수!
-        },
+      const result = await loginUser(
+        data.email,
+        data.password,
+        data.keepLoggedIn,
       );
-
-      console.log('로그인 성공:', response.data);
+      console.log('로그인 성공:', result);
       router.push('/');
     } catch (error: any) {
-      console.error('로그인 실패:', error.response?.data || error.message);
-      setLoginError('이메일 또는 비밀번호가 일치하지 않습니다.');
+      console.error('로그인 실패:', error);
+      setLoginError(error.message || '로그인에 실패했습니다.');
     }
   };
 

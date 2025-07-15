@@ -1,6 +1,6 @@
 import axios from './axiosInstance';
 
-export const login = async (
+export const loginUser = async (
   email: string,
   password: string,
   rememberMe = false,
