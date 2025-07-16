@@ -1,5 +1,5 @@
 export interface UserData {
-  email: string;
+  user_id: string;
   password: string;
   confirmPassword: string;
   latitude: number;
