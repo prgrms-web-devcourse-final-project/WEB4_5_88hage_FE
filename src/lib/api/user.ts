@@ -1,29 +1,68 @@
-import axiosInstance from './axiosInstance';
-import type { ProfileRequest, UserInfoRequest } from '@/types/user';
+import {
+  ChangePasswordRequest,
+  UserData,
+  UserInfoUpdateRequest,
+} from '@/types/auth';
+import axios from './axiosInstance';
 
 // 회원 정보 조회
 export const getUserInfo = async () => {
-  return axiosInstance.get('/users/info');
+  return axios.get('/api/users/info');
 };
 
 // 회원 정보 수정
-export const updateUserInfo = async (userInfo: UserInfoRequest) => {
-  return axiosInstance.put('/users/info', userInfo);
+export const updateUserInfo = async (data: UserInfoUpdateRequest) => {
+  return axios.put('/api/users/info', data);
 };
 
 // 프로필 수정
-export const updateProfile = async (profileData: ProfileRequest) => {
-  const formData = new FormData();
-  formData.append('image', profileData.image);
-  formData.append('imageChanged', String(profileData.imageChanged));
-  formData.append('introduction', profileData.introduction);
-  profileData.hashTags.forEach((tag) => {
-    formData.append('hashTags', tag);
+export const updateProfile = async (data: FormData) => {
+  return axios.put('/api/userInfos', data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
   });
+};
 
-  return axiosInstance.put('/userInfos', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+// 회원가입 이메일 인증
+export const verifySignupEmail = async (code: string) => {
+  return axios.post('/api/users/verify/signup', null, { params: { code } });
+};
+
+// 닉네임 중복 검사
+export const verifyNickname = async (nickname: string) => {
+  return axios.post('/api/users/verify/nickname', { nickname });
+};
+
+// 인증 코드 검증
+export const verifyAuthCode = async (code: string) => {
+  return axios.post('/api/users/verify/code', { code });
+};
+
+// 회원가입
+export const signup = async (data: UserData) => {
+  return axios.post('/api/users/signup', data);
+};
+
+// 회원가입 인증 메일 재발송
+export const resendSignupEmail = async (email: string) => {
+  return axios.post(`/api/users/send/signup/${email}`);
+};
+
+// 인증 코드 메일 발송
+export const sendCodeEmail = async () => {
+  return axios.post('/api/users/send/code');
+};
+
+// 회원 탈퇴
+export const withdrawUser = async () => {
+  return axios.patch('/api/users');
+};
+
+// 비밀번호 변경
+export const changePassword = async (data: ChangePasswordRequest) => {
+  return axios.patch('/api/users/change/password', data);
+};
+
+// 닉네임 변경
+export const changeNickname = async (nickname: string) => {
+  return axios.patch('/api/users/change/nickname', { nickname });
 };

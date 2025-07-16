@@ -7,7 +7,7 @@ const instance = axios.create({
 });
 
 instance.interceptors.response.use(
-  (res) => res, // 성공 응답은 그대로 반환
+  (res) => res,
   (err) => {
     const status = err.response?.status;
     const message =
