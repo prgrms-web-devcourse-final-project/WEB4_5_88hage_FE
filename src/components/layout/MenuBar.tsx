@@ -2,9 +2,11 @@
 
 import { X } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
 import DarkModeToggle from '../DarkModeToggle';
+import cloud from '@/assets/images/cloud-face.png.png';
+import getWeather from '@/lib/api/weather';
+
 
 const NAV_ITEMS = [
   '로그아웃',
@@ -17,6 +19,16 @@ const NAV_ITEMS = [
 
 export default function MenuBar() {
   const [active, setActive] = useState('');
+  const [weather,setWeather] = useState<number|undefined>(undefined);
+
+  useEffect(()=>{
+    const getNowWeather = async ()=>{
+      const result = await getWeather();
+      if(result === undefined) return
+      setWeather(result);
+    }
+    getNowWeather();
+  },[])
 
   return (
     <aside className="fixed top-0 right-0 z-50 flex h-screen w-[335px] flex-col p-5 backdrop-blur-[20px] lg:w-[480px] lg:bg-[rgba(18,18,18,0.6)] lg:p-15">
@@ -28,7 +40,7 @@ export default function MenuBar() {
       </div>
       <div className="mt-[50px] lg:mt-0">
         <Image
-          src="sun-face.svg"
+          src={weather! > 0 ? cloud : "sun-face.svg"}
           width={40}
           height={40}
           alt="sun"
@@ -37,7 +49,7 @@ export default function MenuBar() {
         <div className="h2 font-semibold text-white">
           <span className="text-main">홍길동</span>님 환영해요!
           <br />
-          오늘은 나가 놀기 좋은 날이네요
+          {weather! > 0 ? '실내에서 놀기 좋은 날이네요!':'실외 활동하기 좋은 날이에요!'}
         </div>
 
         <div className="my-8 w-[60px] border text-white" />

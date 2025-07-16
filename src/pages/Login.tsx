@@ -8,9 +8,10 @@ import loginBgImg from '@/assets/images/loginBgImg.png';
 import LoginButton from '@/components/button/LoginButton';
 import Checkbox from '@/components/Checkbox';
 import Image from 'next/image';
-import axios from 'axios';
+//import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAuthStore } from '@/stores/UseAuthStore';
 
 type LoginFormData = {
   email: string;
@@ -19,88 +20,84 @@ type LoginFormData = {
 };
 
 export default function Login() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormData>();
-
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
   const router = useRouter();
   const [loginError, setLoginError] = useState('');
 
-  const API = process.env.NEXT_PUBLIC_API_URL;
+  const user = useAuthStore((s) => s.user);
+  const login=useAuthStore((s)=>s.login)
+  //const setAuth = useAuthStore((s) => s.setAuth);
+
+  //const API = process.env.NEXT_PUBLIC_API_URL;
+
+  useEffect(() => {
+    if (user) {
+      router.replace('/');
+    }
+  }, [user, router]);
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const response = await axios.post(
-        `${API}auth/login`,
-        {
-          email: data.email,
-          password: data.password,
-          rememberMe: data.keepLoggedIn,
-        },
-        {
-          withCredentials: true, // 쿠키 포함 필수!
-        },
-      );
-
-      console.log('로그인 성공:', response.data);
-      router.push('/');
-    } catch (error: any) {
-      console.error('로그인 실패:', error.response?.data || error.message);
+      await login(data.email,data.password,data.keepLoggedIn)
+      router.push('/')
+    } catch (err) {
+      console.error('로그인 실패:', err);
       setLoginError('이메일 또는 비밀번호가 일치하지 않습니다.');
     }
   };
 
   return (
     <div className="flex h-screen w-screen relative">
-      {/* 왼쪽(데스크탑 뷰): 배경  */}
+      {/* 왼쪽(데스크탑): 배경 */}
       <div className="hidden w-1/2 bg-black lg:flex lg:items-center lg:justify-center">
-        <Image alt="로고" src={logo} className="mb-5 hidden lg:block lg:absolute top-[30px] left-[40px]" priority />
-        <Image alt="로그인 이미지" src={loginBgImg} className="hidden lg:block" width={500} height={500} priority />
+        <Image
+          alt="로고"
+          src={logo}
+          className="mb-5 hidden lg:block lg:absolute top-[30px] left-[40px]"
+          priority
+        />
+        <Image
+          alt="로그인 이미지"
+          src={loginBgImg}
+          className="hidden lg:block"
+          width={500}
+          height={500}
+          priority
+        />
       </div>
-      {/* 오른쪽: 로그인 창 */}
+
+      {/* 오른쪽: 로그인 폼 */}
       <div className="flex w-full flex-col items-center justify-center px-[20px] lg:px-[150px] lg:w-1/2 bg-gray-7">
         <div className="w-full space-y-4 min-w-[335px]">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 lg:space-y-7">
             <Input
               placeholder="이메일을 입력 해주세요"
-              {...register('email', {
-                required: '이메일을 입력해주세요',
-              })}
-              className='h-[60px] lg:h-[80px] w-full rounded-[5px] lg:rounded-[10px]'
+              {...register('email', { required: '이메일을 입력해주세요' })}
+              className="h-[60px] lg:h-[80px] w-full rounded-[5px] lg:rounded-[10px]"
             />
-            {errors.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
-            )}
+            {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
 
             <Input
               type="password"
               placeholder="비밀번호를 입력 해주세요"
-              {...register('password', {
-                required: '비밀번호를 입력해주세요',
-              })}
-              className='h-[60px] lg:h-[80px] w-full rounded-[5px] lg:rounded-[10px]'
+              {...register('password', { required: '비밀번호를 입력해주세요' })}
+              className="h-[60px] lg:h-[80px] w-full rounded-[5px] lg:rounded-[10px]"
             />
-            {errors.password && (
-              <p className="text-sm text-red-500">{errors.password.message}</p>
-            )}
+            {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
 
-            <GrayButton type="submit" className="text-white h-[80px] bg-gray-5 w-full rounded-[10px]">
+            <GrayButton
+              type="submit"
+              className="text-white h-[80px] bg-gray-5 w-full rounded-[10px]"
+            >
               로그인
             </GrayButton>
             {loginError && (
-              <p className="py-2 text-center text-sm text-red-500">
-                {loginError}
-              </p>
+              <p className="py-2 text-center text-sm text-red-500">{loginError}</p>
             )}
 
-            <div className="t4 flex items-center justify-between font-semibold text-[#8d8d8d]">
+            <div className="flex items-center justify-between font-semibold text-[#8d8d8d]">
               <label className="flex items-center gap-2">
-                <Checkbox
-                  label="로그인 상태 유지"
-                  {...register('keepLoggedIn')}
-                />
+                <Checkbox label="로그인 상태 유지" {...register('keepLoggedIn')} />
               </label>
               <button type="button">비밀번호 찾기</button>
             </div>
@@ -108,13 +105,13 @@ export default function Login() {
 
           <hr className="border-t border-[#434343] my-[16px] lg:my-[25px]" />
 
-          <div className="lg:space-y-7 space-y-4">
+          <div className="space-y-4 lg:space-y-7">
             <LoginButton type="naver" />
             <LoginButton type="google" />
           </div>
 
           <div className="t4 text-gray-6 mt-[14px] lg:mt-[25px] text-center font-semibold">
-            <span className='text-[#8D8D8D]'>아직 회원이 아니신가요? </span>
+            <span className="text-[#8D8D8D]">아직 회원이 아니신가요? </span>
             <button className="text-main">회원가입</button>
           </div>
         </div>
