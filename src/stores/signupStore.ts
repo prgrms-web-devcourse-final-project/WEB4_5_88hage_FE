@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 type NewUserData = {
   email: string;
@@ -6,6 +7,8 @@ type NewUserData = {
   confirmPassword: string;
   nickname: string;
   address: string;
+  latitude: number; // 위도
+  longitude: number; // 경도
   birthDate: string;
   gender: 'MALE' | 'FEMALE';
   isMarketingAgreed: boolean;
@@ -13,20 +16,25 @@ type NewUserData = {
 
 interface SignupStore {
   userData: NewUserData | null;
-  code: string;
+  isVerified: boolean;
   setData: (data: NewUserData) => void;
   clearData: () => void;
-  setCode: (code: string) => void;
-  clearCode: () => void;
+  setVerified: (data: boolean) => void;
   clearAll: () => void;
 }
 
-export const useSignupStore = create<SignupStore>((set) => ({
-  userData: null,
-  code: '',
-  setData: (data) => set({ userData: data }),
-  clearData: () => set({ userData: null }),
-  setCode: (code) => set({ code: code }),
-  clearCode: () => set({ code: '' }),
-  clearAll: () => set({ userData: null, code: '' }),
-}));
+export const useSignupStore = create(
+  persist<SignupStore>(
+    (set) => ({
+      userData: null,
+      isVerified: false,
+      setData: (data) => set({ userData: data }),
+      clearData: () => set({ userData: null }),
+      setVerified: (data) => set({ isVerified: data }),
+      clearAll: () => set({ userData: null, isVerified: false }),
+    }),
+    {
+      name: 'signup-store',
+    },
+  ),
+);

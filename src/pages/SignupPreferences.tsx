@@ -1,21 +1,26 @@
 'use client';
 import Image from 'next/image';
-import thinking from '@/assets/images/thinking.png';
-import { ChangeEvent, useState } from 'react';
+import thinking from '@/assets/images/thinking.svg';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { useSignupStore } from '@/stores/signupStore';
 
 function Tag({
   type,
   children,
+  category,
   selected,
 }: {
   type: string;
   children: string;
-  selected: (type: string, checked: boolean) => void;
+  category: string;
+  selected: (type: string, checked: boolean, category: string) => void;
 }) {
   const [checked, setChecked] = useState(false);
   const checkHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setChecked(e.target.checked);
-    selected(type, e.target.checked);
+    selected(type, e.target.checked, category);
   };
   return (
     <>
@@ -38,17 +43,36 @@ function Tag({
 }
 
 export default function SignupPreferences() {
-  const [newUserPreferences, setNewUserPreferences] = useState<string[]>([]);
+  const [newUserPreferences, setNewUserPreferences] = useState<
+    { category: string; type: string }[]
+  >([]);
+  const router = useRouter();
+  const { clearAll } = useSignupStore();
 
-  const tagSelectHandler = (type: string, checked: boolean) => {
+  useEffect(() => {
+    axios.post;
+  }, []);
+
+  const tagSelectHandler = (
+    type: string,
+    checked: boolean,
+    category: string,
+  ) => {
     if (checked) {
-      setNewUserPreferences((list) => [...list, type]);
+      setNewUserPreferences((list) => [
+        ...list,
+        { category: category, type: type },
+      ]);
     } else {
-      setNewUserPreferences(newUserPreferences.filter((item) => item !== type));
+      setNewUserPreferences(
+        newUserPreferences.filter(
+          (item) => item.category !== category && item.type !== type,
+        ),
+      );
     }
   };
   return (
-    <div className="signup-bg">
+    <div className="signup-bg lg:ml-[50%]">
       <div></div>
       <div className="flex max-w-150 flex-col gap-10">
         <div className="flex flex-col gap-1">
@@ -68,28 +92,28 @@ export default function SignupPreferences() {
         <div className="flex flex-col gap-3">
           <div className="font-medium text-[#dfdfdf]">모임 카테고리 ❤️</div>
           <div className="flex flex-wrap gap-2.5">
-            <Tag selected={tagSelectHandler} type="art">
+            <Tag selected={tagSelectHandler} category="group" type="ART">
               예술 🎨
             </Tag>
-            <Tag selected={tagSelectHandler} type="travel">
+            <Tag selected={tagSelectHandler} category="group" type="TRAVEL">
               여행 🧭
             </Tag>
-            <Tag selected={tagSelectHandler} type="food">
+            <Tag selected={tagSelectHandler} category="group" type="FOOD">
               음식 🍔
             </Tag>
-            <Tag selected={tagSelectHandler} type="game">
+            <Tag selected={tagSelectHandler} category="group" type="GAME">
               게임 🎮
             </Tag>
-            <Tag selected={tagSelectHandler} type="culture">
+            <Tag selected={tagSelectHandler} category="group" type="CULTURE">
               문화 🌍
             </Tag>
-            <Tag selected={tagSelectHandler} type="sports">
+            <Tag selected={tagSelectHandler} category="group" type="SPORT">
               운동 👟
             </Tag>
-            <Tag selected={tagSelectHandler} type="development">
+            <Tag selected={tagSelectHandler} category="group" type="STUDY">
               자기 개발 📖
             </Tag>
-            <Tag selected={tagSelectHandler} type="movie">
+            <Tag selected={tagSelectHandler} category="group" type="MOVIE">
               영화 🎬
             </Tag>
           </div>
@@ -97,40 +121,48 @@ export default function SignupPreferences() {
         <div className="flex flex-col gap-3">
           <div className="font-medium text-[#dfdfdf]">행사 카테고리 🎈</div>
           <div className="flex flex-wrap gap-2.5">
-            <Tag selected={tagSelectHandler} type="theater">
+            <Tag selected={tagSelectHandler} category="content" type="THEATER">
               연극 👏
             </Tag>
-            <Tag selected={tagSelectHandler} type="dance">
+            <Tag selected={tagSelectHandler} category="content" type="DANCE">
               무용 💃
             </Tag>
-            <Tag selected={tagSelectHandler} type="pop_dance">
+            <Tag
+              selected={tagSelectHandler}
+              category="content"
+              type="POP_DANCE"
+            >
               대중무용 🕺
             </Tag>
-            <Tag selected={tagSelectHandler} type="classic">
+            <Tag selected={tagSelectHandler} category="content" type="CLASSIC">
               클래식 🎻
             </Tag>
-            <Tag selected={tagSelectHandler} type="pop_music">
+            <Tag
+              selected={tagSelectHandler}
+              category="content"
+              type="POP_MUSIC"
+            >
               대중음악 🎸
             </Tag>
-            <Tag selected={tagSelectHandler} type="gukak">
+            <Tag selected={tagSelectHandler} category="content" type="GUKAK">
               국악 🪘
             </Tag>
-            <Tag selected={tagSelectHandler} type="mix">
+            <Tag selected={tagSelectHandler} category="content" type="MIX">
               복합 🎉
             </Tag>
-            <Tag selected={tagSelectHandler} type="magic">
+            <Tag selected={tagSelectHandler} category="content" type="MAGIC">
               서커스/마술 🎪
             </Tag>
-            <Tag selected={tagSelectHandler} type="musical">
+            <Tag selected={tagSelectHandler} category="content" type="MUSICAL">
               뮤지컬 🎤
             </Tag>
-            <Tag selected={tagSelectHandler} type="tour">
+            <Tag selected={tagSelectHandler} category="content" type="TOUR">
               관광지 🏛️
             </Tag>
-            <Tag selected={tagSelectHandler} type="cultural_facilities">
+            <Tag selected={tagSelectHandler} category="content" type="CULTURE">
               문화 시설 🗼
             </Tag>
-            <Tag selected={tagSelectHandler} type="sports">
+            <Tag selected={tagSelectHandler} category="content" type="SPORTS">
               레포츠 🏌
             </Tag>
           </div>
@@ -138,10 +170,43 @@ export default function SignupPreferences() {
       </div>
       <button
         type="button"
-        className="signup-btn"
+        className="signup-btn absolute bottom-[21px] lg:relative lg:mt-[59px]"
         onClick={() => {
-          console.log(newUserPreferences);
-        }} // 테스트용
+          const contents = newUserPreferences
+            .filter((item) => item.category === 'content')
+            .map((e) => e.type);
+          const groups = newUserPreferences
+            .filter((item) => item.category === 'group')
+            .map((e) => e.type);
+          axios
+            .post(
+              'https://funfun.cloud/api/preferences',
+              {
+                contentPreferences: contents,
+                groupPreferences: groups,
+              },
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              },
+            )
+            .then(() => {
+              clearAll;
+              localStorage.removeItem('signup-store');
+              router.push('/signup/complete');
+            })
+            .catch((error) => {
+              if (error.response.data.code === '4000') {
+                console.log(error.response.data.data);
+                if (error.response.data.data.groupPreferences) {
+                  alert(error.response.data.data.groupPreferences);
+                } else if (error.response.data.data.contentPreferences) {
+                  alert(error.response.data.data.contentPreferences);
+                }
+              } else console.log(error);
+            });
+        }}
       >
         완료
       </button>
