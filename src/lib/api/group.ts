@@ -1,9 +1,4 @@
-import {
-  Group,
-  GroupHashtag,
-  GroupHashtagRequest,
-  GroupSearchQueryParams,
-} from '@/types/group';
+import { Group, GroupHashtag, GroupSearchQueryParams } from '@/types/group';
 import axios from './axiosInstance';
 
 // 모임 상세 조회
@@ -49,6 +44,7 @@ export const searchGroups = async (
   const res = await axios.get<Group[]>('/api/groups/search', { params });
   return res.data;
 };
+// 이 API코드 잘 작동하는 지 꼭 확인!
 
 // 내가 속한 모임 조회
 export const getMyGroups = async (): Promise<Group[]> => {
