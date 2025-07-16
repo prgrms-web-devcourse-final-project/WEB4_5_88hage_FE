@@ -1,9 +1,4 @@
 import axios from './axiosInstance';
-import type {
-  NoticeCreateRequest,
-  NoticeDetail,
-  NoticeListItem,
-} from '@/types/notice';
 
 // 공지사항 생성
 export const createNotice = async (data: NoticeCreateRequest) => {
@@ -11,8 +6,9 @@ export const createNotice = async (data: NoticeCreateRequest) => {
 };
 
 // 공지사항 상세 조회
-export const getNoticeDetail = async (noticeId: string) => {
-  return axios.get<NoticeDetail>(`/notices/${noticeId}`);
+export const getNoticeById = async (id: number) => {
+  const response = await axios.get(`/api/notices/${id}`);
+  return response.data; // { id, message }
 };
 
 // 공지사항 목록 조회
