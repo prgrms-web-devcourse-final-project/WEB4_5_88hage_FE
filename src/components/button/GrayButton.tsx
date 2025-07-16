@@ -15,7 +15,10 @@ export default function GrayButton({
 }: GrayButtonProps) {
   return (
     <button
-      className={twMerge(`py-3 bg-gray-default text-gray-6 flex items-center justify-center w-full rounded font-semibold`, className)}
+      className={twMerge(
+        `bg-gray-6 text-gray-6 flex w-full items-center justify-center rounded py-3 font-semibold`,
+        className,
+      )}
       {...props}
     >
       {children}
