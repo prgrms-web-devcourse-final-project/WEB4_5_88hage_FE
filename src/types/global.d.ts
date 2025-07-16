@@ -4,3 +4,9 @@ export interface ContentCategory {
   id: number;
   category: string;
 }
+
+export interface GroupBookmark {
+  id: number;
+  email: string;
+  group: number;
+}
