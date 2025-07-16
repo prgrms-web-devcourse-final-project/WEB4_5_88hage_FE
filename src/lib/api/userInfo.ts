@@ -1,4 +1,3 @@
-import { UserDetailResponse } from '@/types/auth';
 import { ProfileRequest } from '@/types/user';
 import axios from 'axios';
 
