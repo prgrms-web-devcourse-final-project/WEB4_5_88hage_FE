@@ -1,11 +1,16 @@
+"use client"
+
 import Image from 'next/image';
 import test from '@/assets/images/test.png';
 import test2 from '@/assets/images/test2.png';
 import testmap from '@/assets/images/testmap.png';
 import { LucideChevronDown, LucideHeart, LucideMapPin } from 'lucide-react';
 import GatheringHostBox from '@/components/GatheringHostBox';
+import { useAuthStore } from '@/stores/UseAuthStore';
 
 export default function GatheringDetail() {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  console.log('로그인된 사용자 여부:', isAuthenticated)
   return (
     <div className="eventDetail-gradient flex w-screen min-w-screen justify-center bg-[#121212] lg:w-340">
       <div className="hidden h-full min-h-screen py-15 text-[#f6f6f6] lg:flex">
