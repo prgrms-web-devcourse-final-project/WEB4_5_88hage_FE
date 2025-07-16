@@ -10,3 +10,8 @@ export const getPreferences = async () => {
 export const updatePreferences = async (data: PreferenceUpdateRequest) => {
   return axios.put('/preferences', data);
 };
+
+// 사용자 취향 등록 (첫 등록시만)
+export const registerPreferences = async (data: PreferenceUpdateRequest) => {
+  return axios.put('/preferences', data);
+};
