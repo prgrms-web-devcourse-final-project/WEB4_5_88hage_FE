@@ -13,12 +13,8 @@ import Greeting from '@/components/common/Greeting';
 export default function Profile() {
   return (
     <>
-      <Sidebar />
-      <div className="mainColor-gradient ml-[270px] hidden h-screen w-[calc(100%-270px)] flex-col gap-5 text-white lg:flex">
-        <div className="mt-6 flex w-full items-center justify-between lg:mr-5 lg:w-[calc(100%*(1525/1650))] lg:self-end">
-          <Greeting />
-        </div>
-        <div className="mb-[27px] flex h-full flex-col self-center lg:w-[calc(100%*1440/1650)]">
+      <div className="hidden w-full flex-col gap-5 text-white lg:flex">
+        <div className="flex w-full max-w-[1440px] flex-col self-center">
           <div className="mb-6 text-[28px] font-semibold">내 프로필</div>
           <div className="mb-[34px] flex gap-[calc(100%*(30/1440))]">
             <div className="bg-gray-7 flex h-90 w-[calc(100%*(400/1440))] flex-col items-center justify-center gap-2.5 rounded-[5px] p-[31px] font-medium">
@@ -296,9 +292,9 @@ export default function Profile() {
       </div>
       <div className="flex min-h-screen w-full flex-col overflow-scroll text-white lg:hidden">
         <div className="bg-gray-7 mb-[30px] px-5 py-5">
-          <div className="mb-4.5 flex w-full items-center justify-between font-extrabold">
+          {/* <div className="mb-4.5 flex w-full items-center justify-between font-extrabold">
             안녕하세요, 홍길동님 👋🏻
-          </div>
+          </div> */}
           <div className="text-medium mb-[17px] text-xl">내 프로필</div>
           <div className="bg-gray-6 flex w-full flex-col items-center justify-center gap-2.5 rounded-[5px] p-[31px] font-medium">
             <Image
@@ -387,7 +383,7 @@ export default function Profile() {
             내가 작성한 모임 글<div />
           </button>
         </div>
-        <div className="bg-gray-7 mx-5 mb-[110px] rounded-[5px] p-4.5">
+        <div className="bg-gray-7 mx-5 mb-[80px] rounded-[5px] p-4.5">
           <div className="pt-[9px] pb-[26px] font-semibold text-[#a8a8a8]">
             내가 작성한 모임 글
           </div>
