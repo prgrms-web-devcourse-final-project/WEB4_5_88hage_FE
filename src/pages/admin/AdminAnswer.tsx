@@ -53,7 +53,7 @@ export default function AdminAnswer() {
               </p>
             </div>
             <h2 className="text-main h2 mt-[30px]">답변하기</h2>
-            <input className="bg-gray-6 mt-10 h-[240px] w-full max-w-[1440px] rounded" />
+            <input className="bg-gray-6 t2 mt-10 h-[240px] w-full max-w-[1440px] rounded text-white" />
             <GrayButton className="text-main mt-15 text-[30px] font-semibold">
               답변 하기
             </GrayButton>
