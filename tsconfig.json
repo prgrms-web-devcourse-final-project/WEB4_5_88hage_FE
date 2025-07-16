@@ -10,6 +10,7 @@
     "types": [
       "kakao.maps.d.ts"
     ],
+    "allowSyntheticDefaultImports": true,
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
