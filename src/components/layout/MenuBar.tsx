@@ -3,9 +3,10 @@
 import { X } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-
 import DarkModeToggle from '../DarkModeToggle';
-import axios from 'axios';
+import cloud from '@/assets/images/cloud-face.png.png';
+import getWeather from '@/lib/api/weather';
+
 
 const NAV_ITEMS = [
   '로그아웃',
@@ -18,23 +19,15 @@ const NAV_ITEMS = [
 
 export default function MenuBar() {
   const [active, setActive] = useState('');
-  const weatherApiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY
-
-  const getWeather = async () => {
-    try{
-      const {data} = await axios.get(`http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst?serviceKey=${weatherApiKey}&numOfRows=10&pageNo=1&base_date=20250715&base_time=0630&nx=126&ny=37&dataType=JSON`);
-      console.log(data);
-    } catch(e){
-      console.log('날씨 api 통신하는대 실패 했습니다.', e)
-    }
-  }
+  const [weather,setWeather] = useState<number|undefined>(undefined);
 
   useEffect(()=>{
     const getNowWeather = async ()=>{
-      const data = await getWeather();
-      console.log(data);
+      const result = await getWeather();
+      if(result === undefined) return
+      setWeather(result);
     }
-    getNowWeather()
+    getNowWeather();
   },[])
 
   return (
@@ -47,7 +40,7 @@ export default function MenuBar() {
       </div>
       <div className="mt-[50px] lg:mt-0">
         <Image
-          src="sun-face.svg"
+          src={weather! > 0 ? cloud : "sun-face.svg"}
           width={40}
           height={40}
           alt="sun"
@@ -56,7 +49,7 @@ export default function MenuBar() {
         <div className="h2 font-semibold text-white">
           <span className="text-main">홍길동</span>님 환영해요!
           <br />
-          오늘은 나가 놀기 좋은 날이네요
+          {weather! > 0 ? '실내에서 놀기 좋은 날이네요!':'실외 활동하기 좋은 날이에요!'}
         </div>
 
         <div className="my-8 w-[60px] border text-white" />
