@@ -1,21 +1,27 @@
-export interface InquiryCreateRequest {
-  // TODO: Define properties based on API documentation for inquiry creation
+export interface Inquiry {
+  id: number;
+  activate: boolean;
+  answered_at: string;
+  created_at: string;
+  modified_at: string;
+  answer: string;
+  category: string;
+  status: string;
   title: string;
-  content: string;
-  // ... other fields
+  user_id: string;
 }
 
-export interface InquiryDetail {
-  // TODO: Define properties based on API documentation for inquiry details
-  id: string;
+export interface CreateInquiryRequest {
   title: string;
   content: string;
-  // ... other fields
+  category: string;
+  images?: File[];
+  imagesChanged: boolean;
 }
 
-export interface InquiryListItem {
-  // TODO: Define properties based on API documentation for inquiry list items
-  id: string;
-  title: string;
-  // ... other fields
+export interface GetContactsParams {
+  status?: 'all' | 'pending' | 'complete';
+  page?: number;
+  size?: number;
+  sort?: string[];
 }

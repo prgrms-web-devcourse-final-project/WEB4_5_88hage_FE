@@ -1,22 +1,52 @@
 import axios from './axiosInstance';
-import type {
-  InquiryCreateRequest,
-  InquiryDetail,
-  InquiryListItem,
-} from '@/types/inquiry';
+import {
+  CreateInquiryRequest,
+  GetContactsParams,
+  Inquiry,
+} from '../../types/inquiry';
 
-// 문의 생성
-export const createInquiry = async (data: InquiryCreateRequest) => {
-  return axios.post('/inquiries', data);
-};
+// 문의 작성
+export const createInquiry = async (data: CreateInquiryRequest) => {
+  const formData = new FormData();
 
-// 문의 상세 조회
-export const getInquiryDetail = async (inquiryId: string) => {
-  return axios.get<InquiryDetail>(`/inquiries/${inquiryId}`);
+  formData.append('title', data.title);
+  formData.append('content', data.content);
+  formData.append('category', data.category);
+  formData.append('imagesChanged', String(data.imagesChanged));
+
+  if (data.images) {
+    data.images.forEach((image, index) => {
+      formData.append(`images`, image);
+    });
+  }
+
+  const response = await axios.post<number>('/api/contacts', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
 };
 
 // 문의 목록 조회
-export const getInquiryList = async () => {
-  // TODO: Add pagination, filtering, etc. parameters as needed
-  return axios.get<InquiryListItem[]>('/inquiries');
+export const getContacts = async (params?: GetContactsParams) => {
+  return axios.get('/api/contacts', { params });
+};
+
+// 문의 수정
+export const updateContact = async (contactId: number, formData: FormData) => {
+  await axios.put(`/api/contacts/${contactId}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+};
+
+// ID 조회 문의 조회
+export const getContactDetail = async (contactId: number): Promise<Inquiry> => {
+  const res = await axios.get(`/api/contacts/${contactId}`);
+  return res.data;
+};
+
+// 문의 삭제
+export const deleteContact = async (contactId: number) => {
+  await axios.patch(`/api/contacts/${contactId}`);
 };
