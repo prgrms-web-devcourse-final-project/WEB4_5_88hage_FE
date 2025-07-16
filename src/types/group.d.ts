@@ -37,3 +37,9 @@ export interface GroupSearchQueryParams {
   size?: number;
   sort?: string[];
 }
+
+export interface GroupHashtag {
+  id: number;
+  tag: string;
+  group: number;
+}

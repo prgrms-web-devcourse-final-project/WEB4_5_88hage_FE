@@ -1,4 +1,9 @@
-import { Group, GroupSearchQueryParams } from '@/types/group';
+import {
+  Group,
+  GroupHashtag,
+  GroupHashtagRequest,
+  GroupSearchQueryParams,
+} from '@/types/group';
 import axios from './axiosInstance';
 
 // 모임 상세 조회
@@ -55,4 +60,37 @@ export const getMyGroups = async (): Promise<Group[]> => {
 export const getLeaderMyGroups = async (): Promise<Group[]> => {
   const res = await axios.get<Group[]>('/api/groups/getLeaderMy');
   return res.data;
+};
+
+// 모임에 해시태그 추가
+export const createGroupHashtag = async (data: GroupHashtag) => {
+  return axios.post('/api/groupHashtags', data);
+};
+
+// 모든 해시태그 목록 조회
+export const getAllGroupHashtags = async (): Promise<GroupHashtag[]> => {
+  const res = await axios.get('/api/groupHashtags');
+  return res.data;
+};
+
+// 해시태그 삭제
+export const deleteGroupHashtag = async (id: number): Promise<void> => {
+  await axios.delete(`/api/groupHashtags/${id}`);
+};
+
+// 특정 모임 해시태그 정보 수정
+export const updateGroupHashtag = async (
+  id: number,
+  data: GroupHashtag,
+): Promise<GroupHashtag> => {
+  const response = await axios.put(`/api/groupHashtags/${id}`, data);
+  return response.data;
+};
+
+// 특정 모임 해시태그 조회
+export const getGroupHashtagById = async (
+  id: number,
+): Promise<GroupHashtag> => {
+  const response = await axios.get(`/api/groupHashtags/${id}`);
+  return response.data;
 };
