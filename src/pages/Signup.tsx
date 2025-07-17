@@ -10,6 +10,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSignupStore } from '@/stores/signupStore';
+import SearchAddressModal from '@/components/auth/SearchAddressModal';
 
 export default function Signup() {
   const [nickname, setNickname] = useState('');
@@ -21,6 +22,9 @@ export default function Signup() {
   const [maleSelected, setMaleSelected] = useState(true);
   const [checkedList, setCheckedList] = useState<string[]>([]);
   const [duplicationCheck, setDuplicationCheck] = useState(false);
+  const [showModal,setShowModal] = useState(false);
+  const [latitude,setLatitude] = useState(0);
+  const [longitude,setLongitude] = useState(0);
 
   const [requiredAlert, setRequiredAlert] = useState(false);
   const { userData, setData } = useSignupStore();
@@ -62,6 +66,8 @@ export default function Signup() {
       !passwordCheck.test(password) ||
       confirmPassword !== password ||
       address.length === 0 ||
+      latitude === 0 ||
+      longitude === 0 ||
       birthDate.length === 0 ||
       !birthDateCheck.test(birthDate) ||
       !checkedList.includes('terms') ||
@@ -76,6 +82,8 @@ export default function Signup() {
         confirmPassword: confirmPassword,
         nickname: nickname,
         address: address,
+        latitude : latitude,
+        longitude:longitude,
         birthDate: birthDate,
         gender: maleSelected ? 'MALE' : 'FEMALE',
         isMarketingAgreed: checkedList.includes('marketing'),
@@ -194,6 +202,7 @@ export default function Signup() {
             placeholder="주소를 작성해 주세요."
             value={address}
             onChange={(e) => setAddress(e.target.value)}
+            onClick={()=> setShowModal((prev) => !prev)}
             className="rounded-[10px] px-4 py-4 lg:py-5"
           />
           <Input
@@ -265,6 +274,7 @@ export default function Signup() {
           {requiredAlert && '필수 항목을 확인해주세요.'}
         </div>
       </form>
+      {showModal && <SearchAddressModal setShowModal={setShowModal}  setAddress={setAddress} setLatitude={setLatitude}  setLongitude={setLongitude}/>}
     </div>
   );
 }
