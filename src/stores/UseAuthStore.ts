@@ -1,8 +1,8 @@
-'use client'
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import axios from 'axios'
-import { Buffer } from 'buffer'
+'use client';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { Buffer } from 'buffer';
+import { login as apiLogin } from '@/lib/api/auth';
 
 interface User {
   email: string
@@ -20,8 +20,6 @@ interface AuthState {
   logout: () => void
 }
 
-const API = process.env.NEXT_PUBLIC_API_URL
-
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
@@ -37,7 +35,7 @@ export const useAuthStore = create<AuthState>()(
         )
         const token = data.data.accessToken as string
 
-        const [, payload] = token.split('.')
+        const [, payload] = token.split('.');
         const padded = payload
           .replace(/-/g, '+')
           .replace(/_/g, '/')
@@ -83,6 +81,6 @@ export const useAuthStore = create<AuthState>()(
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
-    }
-  )
-)
+    },
+  ),
+);
