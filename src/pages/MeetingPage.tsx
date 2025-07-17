@@ -7,18 +7,23 @@ import { ChevronDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function MeetingPage() {
+  const [selectedCategory,setSelectedCategory]=useState(null)
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("https://funfun.cloud/api/groups/search?sortBy=distance&page=0&size=10")
+    let url = "https://funfun.cloud/api/groups/search?sortBy=distance&page=0&size=10";
+    if (selectedCategory) {
+      url += `&category=${selectedCategory}`;
+    }
+    fetch(url)
       .then(res => res.json())
       .then(res => setData(res.data.content || []));
-  }, []);
+  }, [selectedCategory]);
   return (
     <div className="w-full">
       <div className="meetingPage-gradient lg:h-[450px] lg:pt-[115px] h-fit pt-[70px] pb-[25px]">
         <SearchBar />
-        <RelatedTags />
+        <RelatedTags selected={selectedCategory} onSelect={setSelectedCategory} />
       </div>
       <div className="mx-auto max-w-[1440px] lg:my-[30px] px-[20px]">
         <div className="flex items-center justify-between my-[20px] lg:my-[32px]">
