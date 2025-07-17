@@ -19,3 +19,19 @@ export interface EventListItem {
   title: string;
   // ... other fields
 }
+
+export interface RecommendRequest {
+  eventType: 'CONTENT' | 'GROUP';
+  startTime?: string; // date-time
+  endTime?: string; // date-time
+  address?: string;
+}
+
+export interface CalendarContentRequest {
+  activityId: number;
+  selectedDate: string; // date-time
+}
+
+export interface CalendarUpdateRequest {
+  selectedDate: string; // date-time
+}

@@ -1,6 +1,10 @@
-export interface FAQRequest {
+export interface FaqUpdateRequest {
   question: string;
   answer: string;
+}
+
+export interface FaqCreateRequest {
+  question: string;
 }
 
 export interface FAQ {

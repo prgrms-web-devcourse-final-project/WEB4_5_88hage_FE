@@ -16,6 +16,7 @@ export interface Group {
   hostEmail?: string; // 모임 주최자
   members?: string[]; // 선택적 응답 필드
 }
+
 export type GroupCategory =
   | 'ART'
   | 'TRAVEL'
@@ -41,5 +42,33 @@ export interface GroupSearchQueryParams {
 export interface GroupHashtag {
   id: number;
   tag: string;
+  group: number;
+}
+
+export interface GroupRequest {
+  title: string;
+  explain: string;
+  simpleExplain: string;
+  placeName: string;
+  groupDate: string;
+  address: string;
+  category: string;
+  maxPeople: number;
+  latitude: number;
+  longitude: number;
+  image?: string; // binary
+  hashTags: string[];
+  during: number;
+}
+
+export interface GroupHashtagDTO {
+  id: number;
+  tag: string;
+  group: number;
+}
+
+export interface GroupBookmarkDTO {
+  id: number;
+  email: string;
   group: number;
 }

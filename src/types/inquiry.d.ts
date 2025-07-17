@@ -11,11 +11,11 @@ export interface Inquiry {
   user_id: string;
 }
 
-export interface CreateInquiryRequest {
+export interface ContactRequest {
   title: string;
   content: string;
   category: string;
-  images?: File[];
+  images?: string[]; // array of binary
   imagesChanged: boolean;
 }
 

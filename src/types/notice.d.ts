@@ -1,3 +1,8 @@
+export interface NoticeDTO {
+  id: number;
+  message: string;
+}
+
 export interface NoticeDetail {
   id: number;
   title: string;
