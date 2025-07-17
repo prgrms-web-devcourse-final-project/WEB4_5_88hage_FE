@@ -1,3 +1,4 @@
+//프록시 서버
 import axios from "axios";
 
 const getAddressXYCoordinate = async(address:string)=>{
