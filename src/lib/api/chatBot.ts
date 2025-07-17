@@ -1,6 +1,5 @@
+import { RecommendRequest } from '@/types/global';
 import axios from './axiosInstance';
-import { RecommendRequest } from '@/types/event'; // RecommendRequest는 event.d.ts에 정의되어 있음
-
 // AI 빠른 추천 기능 (모임)
 export const quickRecommendGroup = async (data: RecommendRequest) => {
   return axios.post('/api/chatBots/group', data);

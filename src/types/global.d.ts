@@ -40,6 +40,13 @@ export interface AdminReportProcessRequest {
   adminComment?: string;
 }
 
+export interface RecommendRequest {
+  eventType: 'CONTENT' | 'GROUP';
+  startTime: string;
+  endTime: string;
+  address: string;
+}
+
 type WeatherInfo = {
   baseDate: string;
   baseTime: string;

@@ -8,17 +8,17 @@ import loginBgImg from '@/assets/images/loginBgImg.png';
 import LoginButton from '@/components/button/LoginButton';
 import Checkbox from '@/components/Checkbox';
 import Image from 'next/image';
-import { login } from '@/lib/api/auth';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/stores/UseAuthStore';
+import { LoginRequest } from '@/types/auth';
 
 export default function Login() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>();
+  } = useForm<LoginRequest>();
   const router = useRouter();
   const [loginError, setLoginError] = useState('');
   const user = useAuthStore((s) => s.user);
@@ -32,9 +32,9 @@ export default function Login() {
     }
   }, [user, router]);
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (data: LoginRequest) => {
     try {
-      await login(data.email, data.password, data.keepLoggedIn);
+      await login(data.email, data.password, data.rememberMe);
       router.push('/');
     } catch (err) {
       console.error('로그인 실패:', err);
@@ -107,7 +107,7 @@ export default function Login() {
               <label className="flex items-center gap-2">
                 <Checkbox
                   label="로그인 상태 유지"
-                  {...register('keepLoggedIn')}
+                  {...register('rememberMe')}
                 />
               </label>
               <button
