@@ -9,9 +9,6 @@ export const updateProfile = async (profileData: ProfileRequest) => {
   }
   formData.append('imageChanged', String(profileData.imageChanged));
   formData.append('introduction', profileData.introduction);
-  profileData.hashTags.forEach((tag) => {
-    formData.append('hashTags', tag);
-  });
 
   return axios.put('/userInfos', formData, {
     headers: {

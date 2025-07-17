@@ -1,7 +1,7 @@
 import {
   ChangePasswordRequest,
-  UserData,
-  UserInfoUpdateRequest,
+  SignupRequest,
+  UserInfoRequest,
 } from '@/types/auth';
 import axios from './axiosInstance';
 
@@ -11,15 +11,8 @@ export const getUserInfo = async () => {
 };
 
 // 회원 정보 수정
-export const updateUserInfo = async (data: UserInfoUpdateRequest) => {
+export const updateUserInfo = async (data: UserInfoRequest) => {
   return axios.put('/api/users/info', data);
-};
-
-// 프로필 수정
-export const updateProfile = async (data: FormData) => {
-  return axios.put('/api/userInfos', data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
 };
 
 // 회원가입 이메일 인증
@@ -38,7 +31,7 @@ export const verifyAuthCode = async (code: string) => {
 };
 
 // 회원가입
-export const signup = async (data: UserData) => {
+export const signup = async (data: SignupRequest) => {
   return axios.post('/api/users/signup', data);
 };
 

@@ -1,5 +1,5 @@
-export interface UserData {
-  user_id: string;
+export interface SignupRequest {
+  email: string;
   password: string;
   confirmPassword: string;
   latitude: number;
@@ -11,13 +11,11 @@ export interface UserData {
   isMarketingAgreed: boolean;
 }
 
-export interface UserInfoUpdateRequest {
-  address?: string;
-  latitude?: number;
-  longitude?: number;
-  birthDate?: string;
-  gender?: 'MALE' | 'FEMALE';
-  isMarketingAgreed?: boolean;
+export interface UserInfoRequest {
+  address: string;
+  latitude: number;
+  longitude: number;
+  isMarketingAgreed: boolean;
 }
 
 export interface ChangePasswordRequest {
