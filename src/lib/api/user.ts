@@ -2,7 +2,9 @@ import {
   ChangePasswordRequest,
   SignupRequest,
   UserInfoRequest,
+  OAuth2SignupRequest,
 } from '@/types/auth';
+import { UserCoordinate } from '@/types/user';
 import axios from './axiosInstance';
 
 // 회원 정보 조회
@@ -58,4 +60,15 @@ export const changePassword = async (data: ChangePasswordRequest) => {
 // 닉네임 변경
 export const changeNickname = async (nickname: string) => {
   return axios.patch('/api/users/change/nickname', { nickname });
+};
+
+// OAuth2 회원가입
+export const updateOAuth2User = async (data: OAuth2SignupRequest) => {
+  return axios.patch('/api/users/oauth2/signup', data);
+};
+
+// 좌표 조회
+export const getCoordinate = async (): Promise<UserCoordinate> => {
+  const response = await axios.get('/api/users/coordinate');
+  return response.data;
 };

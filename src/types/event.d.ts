@@ -31,7 +31,3 @@ export interface CalendarContentRequest {
   activityId: number;
   selectedDate: string; // date-time
 }
-
-export interface CalendarUpdateRequest {
-  selectedDate: string; // date-time
-}

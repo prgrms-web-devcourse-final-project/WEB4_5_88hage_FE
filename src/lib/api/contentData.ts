@@ -11,11 +11,17 @@ export const testKeywordToCoordinates = async (keyword: string) => {
 };
 
 // 위경도 → 주소 조회
-export const testCoordinesToAddress = async (latitude: number, longitude: number) => {
-  return axios.post('/api/content-data/coordinates-address', { latitude, longitude });
+export const testCoordinesToAddress = async (
+  latitude: number,
+  longitude: number,
+) => {
+  return axios.post('/api/content-data/coordinates-address', {
+    latitude,
+    longitude,
+  });
 };
 
 // 전체 프로세스 테스트 (키워드 → 위경도 → 주소)
-export const testFullProcess = async () => {
-  return axios.get('/api/content-data/full-process');
+export const testFullProcess = async (keyword: string) => {
+  return axios.get('/api/content-data/full-process', { params: { keyword } });
 };

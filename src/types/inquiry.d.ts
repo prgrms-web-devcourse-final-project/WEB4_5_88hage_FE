@@ -15,7 +15,7 @@ export interface ContactRequest {
   title: string;
   content: string;
   category: string;
-  images?: string[]; // array of binary
+  images?: File[]; // string[]에서 File[]으로 변경
   imagesChanged: boolean;
 }
 

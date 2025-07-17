@@ -90,3 +90,13 @@ export const getGroupHashtagById = async (
   const response = await axios.get(`/api/groupHashtags/${id}`);
   return response.data;
 };
+
+// 자동 완성을 위한 단어 저장 (모임 해시태그)
+export const saveWord = async (word: string) => {
+  return axios.post('/api/groupHashtags/save', { word });
+};
+
+// 자동 완성을 위한 단어 불러오기 (모임 해시태그)
+export const completeWord = async () => {
+  return axios.get('/api/groupHashtags/complete');
+};

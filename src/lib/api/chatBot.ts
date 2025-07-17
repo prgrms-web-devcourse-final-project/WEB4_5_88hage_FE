@@ -12,6 +12,7 @@ export const quickRecommendContent = async (data: RecommendRequest) => {
 };
 
 // 수정 예정 (chat)
-export const chat = async (data: any) => {
+// TODO: API 명세 확정 후 정확한 타입으로 변경 필요
+export const chat = async (data: unknown) => {
   return axios.post('/api/chatBots/chat', data);
 };

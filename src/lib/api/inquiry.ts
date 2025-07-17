@@ -1,12 +1,12 @@
 import axios from './axiosInstance';
 import {
-  CreateInquiryRequest,
+  ContactRequest,
   GetContactsParams,
   Inquiry,
 } from '../../types/inquiry';
 
 // 문의 작성
-export const createInquiry = async (data: CreateInquiryRequest) => {
+export const createInquiry = async (data: ContactRequest) => {
   const formData = new FormData();
 
   formData.append('title', data.title);

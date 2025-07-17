@@ -1,11 +1,10 @@
 import axios from './axiosInstance';
 import { Follower, Following } from '@/types/user';
 
-// API 요청 시 사용할 파라미터 타입을 정의합니다.
 interface GetFollowParams {
   page?: number;
   size?: number;
-  sort?: string[]; // string[]으로 변경
+  sort?: string[];
 }
 
 // 사용자 팔로우
