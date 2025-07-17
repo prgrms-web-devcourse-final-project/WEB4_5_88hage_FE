@@ -7,6 +7,7 @@ import { ChevronDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function MeetingPage() {
+  const [search,setSearch]=useState("")
   const [selectedCategory,setSelectedCategory]=useState(null)
   const [data, setData] = useState([]);
 
@@ -19,10 +20,21 @@ export default function MeetingPage() {
       .then(res => res.json())
       .then(res => setData(res.data.content || []));
   }, [selectedCategory]);
+
+  useEffect(()=>{
+    setSearch("")
+  },[selectedCategory])
+
+  const filtered=data.filter(
+    group=>
+      group.title.includes(search)||
+    group.simpleExplain.includes(search)
+  )
+
   return (
     <div className="w-full">
       <div className="meetingPage-gradient lg:h-[450px] lg:pt-[115px] h-fit pt-[70px] pb-[25px]">
-        <SearchBar />
+        <SearchBar value={search} onChange={setSearch} />
         <RelatedTags selected={selectedCategory} onSelect={setSelectedCategory} />
       </div>
       <div className="mx-auto max-w-[1440px] lg:my-[30px] px-[20px]">
@@ -34,7 +46,7 @@ export default function MeetingPage() {
           </button>
         </div>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {data.slice(0, 4).map(group => (
+          {filtered.slice(0, 4).map(group => (
             <PostCard key={group.id} group={group} />
           ))}
         </div>
