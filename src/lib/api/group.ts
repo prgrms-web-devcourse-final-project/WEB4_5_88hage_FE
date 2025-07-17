@@ -1,4 +1,4 @@
-import { Group, GroupHashtag, GroupSearchQueryParams } from '@/types/group';
+import { Group, GroupHashtag, GroupSearchQueryParams, GroupRequest } from '@/types/group';
 import axios from './axiosInstance';
 
 // 모임 상세 조회
@@ -8,10 +8,8 @@ export const getGroupById = async (groupId: number): Promise<Group> => {
 };
 
 // 모임 수정
-export const updateGroup = async (groupId: number, formData: FormData) => {
-  await axios.put(`/api/groups/${groupId}`, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
+export const updateGroup = async (groupId: number, data: GroupRequest) => {
+  await axios.put(`/api/groups/${groupId}`, data);
 };
 
 // 모임 삭제
@@ -20,10 +18,8 @@ export const deleteGroup = async (groupId: number): Promise<void> => {
 };
 
 // 모임 생성
-export const createGroup = async (formData: FormData): Promise<number> => {
-  const res = await axios.post<number>('/api/groups/create', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
+export const createGroup = async (data: GroupRequest): Promise<number> => {
+  const res = await axios.post<number>('/api/groups/create', data);
   return res.data;
 };
 
@@ -59,8 +55,9 @@ export const getLeaderMyGroups = async (): Promise<Group[]> => {
 };
 
 // 모임에 해시태그 추가
-export const createGroupHashtag = async (data: GroupHashtag) => {
-  return axios.post('/api/groupHashtags', data);
+export const createGroupHashtag = async (data: GroupHashtag): Promise<GroupHashtag> => {
+  const res = await axios.post<GroupHashtag>('/api/groupHashtags', data);
+  return res.data;
 };
 
 // 모든 해시태그 목록 조회
