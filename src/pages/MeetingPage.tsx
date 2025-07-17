@@ -1,10 +1,19 @@
+"use client"
 import AIrecommendButton from '@/components/common/AIrecommendButton';
 import PostCard from '@/components/common/Card';
 import RelatedTags from '@/components/common/RelatedTags';
 import SearchBar from '@/components/common/SearchBar';
 import { ChevronDown } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function MeetingPage() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch("https://funfun.cloud/api/groups/search?sortBy=distance&page=0&size=10")
+      .then(res => res.json())
+      .then(res => setData(res.data.content || []));
+  }, []);
   return (
     <div className="w-full">
       <div className="meetingPage-gradient lg:h-[450px] lg:pt-[115px] h-fit pt-[70px] pb-[25px]">
@@ -20,14 +29,9 @@ export default function MeetingPage() {
           </button>
         </div>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          {/* <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard /> */}
+          {data.slice(0, 4).map(group => (
+            <PostCard key={group.id} group={group} />
+          ))}
         </div>
         <div className="gradient-box mt-[51.45px] mb-[100px] flex flex-col rounded-[5px] px-[40px] text-white">
           <div className="mt-[33px] mb-[29px] text-[24px] font-semibold">
