@@ -1,23 +1,10 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-type NewUserData = {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  nickname: string;
-  address: string;
-  latitude: number; // 위도
-  longitude: number; // 경도
-  birthDate: string;
-  gender: 'MALE' | 'FEMALE';
-  isMarketingAgreed: boolean;
-};
-
 interface SignupStore {
-  userData: NewUserData | null;
+  userData: SignupUserData | null;
   isVerified: boolean;
-  setData: (data: NewUserData) => void;
+  setData: (data: SignupUserData) => void;
   clearData: () => void;
   setVerified: (data: boolean) => void;
   clearAll: () => void;
@@ -35,7 +22,7 @@ export const useSignupStore = create(
     }),
     {
       name: 'signup-store',
-      storage: createJSONStorage(() => sessionStorage),
+      storage: createJSONStorage(() => localStorage),
     },
   ),
 );

@@ -50,27 +50,24 @@ export default function SignupPreferences() {
   const router = useRouter();
   const { userData, clearAll } = useSignupStore();
 
-  // useEffect(() => {
-  //   // const tempData = JSON.parse(localStorage.getItem('signup-store'))
-  //   const loginHandler = async () => {
-  //     try {
-  //       if (userData) {
-  //         const { data } = await axios.post(
-  //           'https://funfun.cloud/api/auth/login',
-  //           {
-  //             email: userData.email,
-  //             password: userData.password,
-  //             rememberMe: true,
-  //           },
-  //           { withCredentials: true },
-  //         );
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   loginHandler();
-  // }, [userData]);
+  useEffect(() => {
+    axios
+      .post(
+        'https://funfun.cloud/api/auth/login',
+        {
+          email: userData?.email,
+          password: userData?.password,
+          rememberMe: true,
+        },
+        { withCredentials: true },
+      )
+      .then((response) => {
+        console.log(response.data);
+        clearAll();
+        localStorage.removeItem('signup-store');
+      })
+      .catch((error) => console.log(error.response.data));
+  }, [userData]);
 
   const tagSelectHandler = (
     type: string,
@@ -218,20 +215,8 @@ export default function SignupPreferences() {
               .filter((item) => item.category === 'group')
               .map((e) => e.type);
 
-            axios.post(
-              'https://funfun.cloud/api/auth/login',
-              {
-                email: 'won431236@gmail.com',
-                password: 'asdf1234*',
-                rememberMe: true,
-              },
-              {
-                withCredentials: true,
-              },
-            );
-
             axios
-              .put(
+              .post(
                 'https://funfun.cloud/api/preferences',
                 {
                   contentPreferences: contents,
@@ -241,9 +226,8 @@ export default function SignupPreferences() {
                   withCredentials: true,
                 },
               )
-              .then(() => {
-                clearAll;
-                localStorage.removeItem('signup-store');
+              .then((res) => {
+                console.log(res.data);
                 router.push('/signup/complete');
               })
               .catch((error) => {

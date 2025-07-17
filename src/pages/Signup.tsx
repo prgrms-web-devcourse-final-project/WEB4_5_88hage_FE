@@ -23,7 +23,7 @@ export default function Signup() {
   const [duplicationCheck, setDuplicationCheck] = useState(false);
 
   const [requiredAlert, setRequiredAlert] = useState(false);
-  const { userData, setData } = useSignupStore();
+  const { userData, setData } = useSignupStore((state) => state);
   const router = useRouter();
 
   const nicknameCheck = /^[가-힣a-zA-Z0-9]{2,10}$/;
@@ -70,7 +70,7 @@ export default function Signup() {
       setRequiredAlert(true);
     } else {
       setRequiredAlert(false);
-      setData({
+      const newUserData: SignupUserData = {
         email: email,
         password: password,
         confirmPassword: confirmPassword,
@@ -81,7 +81,8 @@ export default function Signup() {
         birthDate: birthDate,
         gender: maleSelected ? 'MALE' : 'FEMALE',
         isMarketingAgreed: checkedList.includes('marketing'),
-      });
+      };
+      setData(newUserData);
     }
   };
 
@@ -91,8 +92,8 @@ export default function Signup() {
         .post('https://funfun.cloud/api/users/signup', userData, {
           withCredentials: true,
         })
-        .then((data) => {
-          console.log(data.data);
+        .then((response) => {
+          console.log(response.data);
           router.push('/signup/verify');
         })
         .catch((error) => {
