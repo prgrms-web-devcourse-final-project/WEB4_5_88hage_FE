@@ -7,6 +7,8 @@ import { Buffer } from 'buffer'
 interface User {
   email: string
   nickname: string
+  latitude?: number
+  longitude?: number
 }
 
 interface AuthState {
@@ -14,6 +16,7 @@ interface AuthState {
   user: User | null
   isAuthenticated: boolean
   login: (email: string, pw: string, remember: boolean) => Promise<void>
+  fetchCoordinate: () => Promise<void>
   logout: () => void
 }
 
@@ -21,7 +24,7 @@ const API = process.env.NEXT_PUBLIC_API_URL
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       token: null,
       user: null,
       isAuthenticated: false,
@@ -33,30 +36,43 @@ export const useAuthStore = create<AuthState>()(
           { withCredentials: true }
         )
         const token = data.data.accessToken as string
-        console.log('[AuthStore] received token:', token)
 
         const [, payload] = token.split('.')
         const padded = payload
           .replace(/-/g, '+')
           .replace(/_/g, '/')
           .padEnd(payload.length + (4 - (payload.length % 4)) % 4, '=')
-        console.log('[AuthStore] base64 payload:', padded)
-
         const raw = Buffer.from(padded, 'base64').toString('utf8')
-        console.log('[AuthStore] decoded raw JSON:', raw)
-
         const { sub, nickname } = JSON.parse(raw)
-        console.log('[AuthStore] parsed payload:', { sub, nickname })
 
         set({
           token,
           user: { email: sub, nickname },
           isAuthenticated: true,
         })
+        console.log('user set 직후:', get().user);
+        await get().fetchCoordinate()
+        console.log('fetchCoordinate 후:', get().user);
+      },
+
+      fetchCoordinate: async () => {
+        const { token, user } = get()
+        if (!token || !user) return
+        const { data } = await axios.get(`${API}api/users/coordinate`, {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        })
+        const { latitude, longitude } = data.data
+        set((state) => ({
+          user: {
+            ...state.user,
+            latitude,
+            longitude,
+          },
+        }))
       },
 
       logout: () => {
-        console.log('[AuthStore] logout')
         set({ token: null, user: null, isAuthenticated: false })
       },
     }),
