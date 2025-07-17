@@ -39,3 +39,12 @@ export interface AdminReportProcessRequest {
   suspendDays?: number;
   adminComment?: string;
 }
+
+type WeatherInfo = {
+  baseDate: string;
+  baseTime: string;
+  category: string;
+  nx: number;
+  ny: number;
+  obsrValue: string;
+};

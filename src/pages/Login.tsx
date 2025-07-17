@@ -8,15 +8,10 @@ import loginBgImg from '@/assets/images/loginBgImg.png';
 import LoginButton from '@/components/button/LoginButton';
 import Checkbox from '@/components/Checkbox';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { login } from '@/lib/api/auth';
-
-type LoginFormData = {
-  email: string;
-  password: string;
-  keepLoggedIn: boolean;
-};
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useAuthStore } from '@/stores/UseAuthStore';
 
 export default function Login() {
   const {
@@ -24,18 +19,26 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>();
-
   const router = useRouter();
   const [loginError, setLoginError] = useState('');
+  const user = useAuthStore((s) => s.user);
+  const login = useAuthStore((s) => s.login);
+  //const setAuth = useAuthStore((s) => s.setAuth);
+  //const API = process.env.NEXT_PUBLIC_API_URL;
+
+  useEffect(() => {
+    if (user) {
+      router.replace('/');
+    }
+  }, [user, router]);
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const result = await login(data.email, data.password, data.keepLoggedIn);
-      console.log('로그인 성공:', result);
+      await login(data.email, data.password, data.keepLoggedIn);
       router.push('/');
-    } catch (error: any) {
-      console.error('로그인 실패:', error);
-      setLoginError(error.message || '로그인에 실패했습니다.');
+    } catch (err) {
+      console.error('로그인 실패:', err);
+      setLoginError('이메일 또는 비밀번호가 일치하지 않습니다.');
     }
   };
 
@@ -58,24 +61,21 @@ export default function Login() {
           priority
         />
       </div>
-      {/* 오른쪽: 로그인 창 */}
+
+      {/* 오른쪽: 로그인 폼 */}
       <div className="bg-gray-7 flex w-full flex-col items-center justify-center px-[20px] lg:w-1/2 lg:px-[150px]">
         <div className="w-full min-w-[335px] space-y-4">
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="space-y-4 lg:space-y-6"
+            className="space-y-4 lg:space-y-7"
           >
             <Input
               placeholder="이메일을 입력 해주세요"
-              {...register('email', {
-                required: '이메일을 입력해주세요',
-              })}
+              {...register('email', { required: '이메일을 입력해주세요' })}
               className="h-[60px] w-full rounded-[5px] lg:h-[80px] lg:rounded-[10px]"
             />
             {errors.email && (
-              <p className="t4 mt-[-10px] mb-3 text-red-500">
-                {errors.email.message}
-              </p>
+              <p className="text-sm text-red-500">{errors.email.message}</p>
             )}
 
             <Input
@@ -103,7 +103,7 @@ export default function Login() {
               <p className="t4 py-2 text-center text-red-500">{loginError}</p>
             )}
 
-            <div className="t4 flex items-center justify-between font-semibold text-[#8d8d8d]">
+            <div className="flex items-center justify-between font-semibold text-[#8d8d8d]">
               <label className="flex items-center gap-2">
                 <Checkbox
                   label="로그인 상태 유지"
@@ -120,12 +120,10 @@ export default function Login() {
           </form>
 
           <hr className="my-[16px] border-t border-[#434343] lg:my-[25px]" />
-
           <div className="space-y-4 lg:space-y-6">
             <LoginButton type="naver" />
             <LoginButton type="google" />
           </div>
-
           <div className="t4 text-gray-6 mt-[14px] text-center font-semibold lg:mt-[25px]">
             <span className="text-[#8D8D8D]">아직 회원이 아니신가요? </span>
             <button
