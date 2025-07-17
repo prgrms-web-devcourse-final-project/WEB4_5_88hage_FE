@@ -1,8 +1,8 @@
-import { FAQ, FAQRequest } from '@/types/faq';
+import { FAQ, FaqCreateRequest, FaqUpdateRequest } from '@/types/faq';
 import axios from './axiosInstance';
 
 // FAQ 생성
-export const createFAQ = async (data: FAQRequest): Promise<void> => {
+export const createFAQ = async (data: FaqCreateRequest): Promise<void> => {
   await axios.post('/api/faqs', data);
 };
 
@@ -20,7 +20,7 @@ export const deleteFAQ = async (id: number): Promise<void> => {
 // FAQ 수정
 export const updateFAQ = async (
   id: number,
-  data: FAQRequest,
+  data: FaqUpdateRequest,
 ): Promise<void> => {
   await axios.put(`/api/faqs/${id}`, data);
 };

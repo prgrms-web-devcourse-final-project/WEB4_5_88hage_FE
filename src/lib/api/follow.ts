@@ -5,7 +5,7 @@ import { Follower, Following } from '@/types/user';
 interface GetFollowParams {
   page?: number;
   size?: number;
-  sort?: string; // 예: 'createdAt,desc'
+  sort?: string[]; // string[]으로 변경
 }
 
 // 사용자 팔로우
@@ -13,12 +13,12 @@ export const followUser = async (targetEmail: string): Promise<void> => {
   await axios.post(`/api/follows/${encodeURIComponent(targetEmail)}`);
 };
 
-// 사용자 언팔로우
+// 언팔
 export const unfollowUser = async (targetEmail: string): Promise<void> => {
   await axios.delete(`/api/follows/${encodeURIComponent(targetEmail)}`);
 };
 
-// 특정 사용자에 대한 자신의 팔로잉 여부 확인
+// 특정 사용자 자신의 팔로잉 여부 확인
 export const checkFollowingStatus = async (
   targetEmail: string,
 ): Promise<boolean> => {
@@ -31,7 +31,7 @@ export const checkFollowingStatus = async (
   return response.data.isFollowing;
 };
 
-// 특정 사용자가 자신을 팔로우했는지 확인 (팔로워 여부)
+// 팔로워 여부
 export const checkFollowerStatus = async (
   targetEmail: string,
 ): Promise<boolean> => {
@@ -48,7 +48,15 @@ export const checkFollowerStatus = async (
 export const getFollowings = async (
   params: GetFollowParams = {},
 ): Promise<Following[]> => {
-  const response = await axios.get('/api/follows/followings', { params });
+  const defaultParams = {
+    page: 0,
+    size: 10,
+    sort: ['nickname', 'ASC'],
+  };
+  const mergedParams = { ...defaultParams, ...params };
+  const response = await axios.get('/api/follows/followings', {
+    params: mergedParams,
+  });
   return response.data;
 };
 
@@ -56,7 +64,15 @@ export const getFollowings = async (
 export const getFollowers = async (
   params: GetFollowParams = {},
 ): Promise<Follower[]> => {
-  const response = await axios.get('/api/follows/followers', { params });
+  const defaultParams = {
+    page: 0,
+    size: 10,
+    sort: ['nickname', 'ASC'], // 팔로워 조회도 동일한 기본값 적용
+  };
+  const mergedParams = { ...defaultParams, ...params };
+  const response = await axios.get('/api/follows/followers', {
+    params: mergedParams,
+  });
   return response.data;
 };
 
