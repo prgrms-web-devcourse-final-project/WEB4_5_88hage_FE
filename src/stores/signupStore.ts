@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 type NewUserData = {
   email: string;
@@ -35,6 +35,7 @@ export const useSignupStore = create(
     }),
     {
       name: 'signup-store',
+      storage: createJSONStorage(() => sessionStorage),
     },
   ),
 );

@@ -89,9 +89,7 @@ export default function Signup() {
     if (userData) {
       axios
         .post('https://funfun.cloud/api/users/signup', userData, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          withCredentials: true,
         })
         .then((data) => {
           console.log(data.data);

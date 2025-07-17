@@ -50,27 +50,27 @@ export default function SignupPreferences() {
   const router = useRouter();
   const { userData, clearAll } = useSignupStore();
 
-  useEffect(() => {
-    // const tempData = JSON.parse(localStorage.getItem('signup-store'))
-    const loginHandler = async () => {
-      try {
-        if (userData) {
-          const { data } = await axios.post(
-            'https://funfun.cloud/api/auth/login',
-            {
-              email: userData.email,
-              password: userData.password,
-              rememberMe: true,
-            },
-            { withCredentials: true },
-          );
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    loginHandler();
-  }, [userData]);
+  // useEffect(() => {
+  //   // const tempData = JSON.parse(localStorage.getItem('signup-store'))
+  //   const loginHandler = async () => {
+  //     try {
+  //       if (userData) {
+  //         const { data } = await axios.post(
+  //           'https://funfun.cloud/api/auth/login',
+  //           {
+  //             email: userData.email,
+  //             password: userData.password,
+  //             rememberMe: true,
+  //           },
+  //           { withCredentials: true },
+  //         );
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   loginHandler();
+  // }, [userData]);
 
   const tagSelectHandler = (
     type: string,
@@ -218,23 +218,27 @@ export default function SignupPreferences() {
               .filter((item) => item.category === 'group')
               .map((e) => e.type);
 
-            axios.post('https://funfun.cloud/api/preferences', {
-              email: 'won431236@gmail.com',
-              password: 'asdf1234*',
-              rememberMe: true,
-            });
+            axios.post(
+              'https://funfun.cloud/api/auth/login',
+              {
+                email: 'won431236@gmail.com',
+                password: 'asdf1234*',
+                rememberMe: true,
+              },
+              {
+                withCredentials: true,
+              },
+            );
 
             axios
-              .post(
+              .put(
                 'https://funfun.cloud/api/preferences',
                 {
                   contentPreferences: contents,
                   groupPreferences: groups,
                 },
                 {
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
+                  withCredentials: true,
                 },
               )
               .then(() => {
