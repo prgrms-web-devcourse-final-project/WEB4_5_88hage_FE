@@ -24,7 +24,7 @@ export const useAuthStore = create<AuthState>()(
 
       login: async (email, pw, remember) => {
         await axios.post(
-          `${API}auth/login`,
+          `${API}api/auth/login`,
           { email, password: pw, rememberMe: remember },
           { withCredentials: true }
         )
