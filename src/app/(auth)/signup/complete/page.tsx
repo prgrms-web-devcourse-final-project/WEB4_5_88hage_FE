@@ -1,9 +1,9 @@
-import SignupPreferences from '@/pages/SignupPreferences';
+import SignupComplete from '@/pages/SignupComplete';
 
 export default function page() {
   return (
     <>
-      <h1>page</h1>
+      <SignupComplete />
     </>
   );
 }

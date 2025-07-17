@@ -1,19 +1,23 @@
 'use client';
 import Image from 'next/image';
 import EmailImage from '@/assets/images/email.svg';
-import { FormEvent } from 'react';
+import { FormEvent, useEffect } from 'react';
 import axios from 'axios';
 import { useSignupStore } from '@/stores/signupStore';
+import { useRouter } from 'next/navigation';
 
 export default function Emailsend() {
-  const { userData } = useSignupStore();
+  const { userData, isVerified } = useSignupStore();
+  const router = useRouter();
+
+  // if (isVerified) router.push('/signup/tags');
 
   const emailSendAgain = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (userData) {
       axios
         .post(
-          `http://funfun.cloud/api/users/send/signup/${userData.email}`,
+          `https://funfun.cloud/api/users/send/signup/${userData.email}`,
           userData.email,
           {
             headers: {
@@ -32,10 +36,14 @@ export default function Emailsend() {
     }
   };
 
+  const goNextPage = () => {
+    router.push('/signup/tags');
+  };
+
   return (
     <div className="bg-bg-color flex min-h-screen flex-col items-center justify-start px-6 pt-[140px] text-center text-white md:justify-center md:pt-0">
       <form
-        onSubmit={emailSendAgain}
+        onSubmit={!isVerified ? emailSendAgain : goNextPage}
         className="flex w-full max-w-[620px] flex-col items-center"
       >
         <div className="mb-6">
@@ -51,6 +59,14 @@ export default function Emailsend() {
           <br className="block md:hidden" />
           메일함을 확인하고 인증을 완료해 주세요.
         </p>
+
+        {/* <button
+          className="absolute top-10 left-10 text-xl font-bold text-white"
+          type="button"
+          onClick={goNextPage}
+        >
+          다음
+        </button> */}
 
         <button className="signup-btn absolute bottom-5 max-w-130 md:relative md:max-w-150">
           인증 메일 재발송
