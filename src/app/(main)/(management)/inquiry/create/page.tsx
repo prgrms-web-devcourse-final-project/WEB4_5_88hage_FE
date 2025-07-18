@@ -1,9 +1,9 @@
-import InquiryCreatePage from "@/pages/InquiryCreatePage";
+import InquiryCreatePage from '@/pages/InquiryCreatePage';
 
-export default function page(){
+export default function page() {
   return (
     <>
-    <InquiryCreatePage/>
+      <InquiryCreatePage />
     </>
   );
-};
+}

@@ -38,6 +38,7 @@ export default function InquiryCreatePage() {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        withCredentials: true,
       })
       .then((res) => {
         console.log(res.data);
