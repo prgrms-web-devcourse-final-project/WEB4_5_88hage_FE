@@ -41,10 +41,21 @@ export default function InquiryCreatePage() {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data);
+        alert(res.data.data);
+        // e.currentTarget.reset();
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response.data);
+        if (error.response.data.data.title) {
+          alert(error.response.data.data.title);
+        } else if (error.response.data.data.category) {
+          alert(error.response.data.data.category);
+        } else if (error.response.data.data.content) {
+          alert(error.response.data.data.content);
+        } else alert(error.response.data.message);
+      })
+      .finally(() => {
+        window.location.reload();
       });
   };
 
@@ -56,6 +67,7 @@ export default function InquiryCreatePage() {
         </div>
       </section>
       <form
+        id="inquiryForm"
         onSubmit={handleSubmit}
         className="mx-auto mt-[40px] mb-[20px] flex w-full max-w-[1220px] flex-col gap-[20px] px-6 lg:mt-[50px] lg:mb-[80px] lg:gap-[45px]"
       >
