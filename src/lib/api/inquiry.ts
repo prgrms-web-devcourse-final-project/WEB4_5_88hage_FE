@@ -20,7 +20,7 @@ export const createInquiry = async (data: ContactRequest) => {
     });
   }
 
-  const response = await axios.post<number>('/api/contacts', formData, {
+  const response = await axios.post('/api/contacts', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
