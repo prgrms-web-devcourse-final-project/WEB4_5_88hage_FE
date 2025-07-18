@@ -21,8 +21,6 @@ interface AuthState {
   logout: () => void
 }
 
-const API = process.env.NEXT_PUBLIC_API_URL
-
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
