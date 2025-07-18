@@ -57,18 +57,21 @@ export default function AddPhotoButton({
           {imageList &&
             imageList.length > 0 &&
             imageList.map((item, index) => (
-              <div className="relative" key={index}>
+              <div
+                className="relative size-[50px] rounded-[5px] border border-[#343434] lg:size-[80px]"
+                key={index}
+              >
                 <img
                   src={URL.createObjectURL(item)}
                   alt=""
                   key={index}
-                  className="size-[50px] rounded-[5px] border border-[#343434] object-cover object-center p-1.5 lg:size-[80px]"
+                  className="size-full rounded-[5px] object-cover object-center"
                 />
-                <div className="bg-bg-color absolute top-1.5 left-1.5 size-[38px] opacity-50 lg:size-[68px]"></div>
+                <div className="bg-bg-color absolute top-0 left-0 size-full rounded-[5px] opacity-50"></div>
                 <button
                   type="button"
                   onClick={() => handleDelete(item)}
-                  className="absolute -top-1.5 -right-1.5 z-1"
+                  className="absolute -top-2 -right-2 z-1 lg:-top-2.5 lg:-right-2.5"
                 >
                   <CircleX className="size-[18px] text-white lg:size-[24px]" />
                 </button>
