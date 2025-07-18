@@ -3,32 +3,48 @@ import GrayButton from '@/components/button/GrayButton';
 import CategorySelect from '@/components/layout/CategorySelect';
 import WritingForm from '@/components/layout/WritingForm';
 import AddPhotoButton from '@/components/ui/AddPhotoButton';
+import axios from 'axios';
 import { FormEvent } from 'react';
 
 export default function InquiryCreatePage() {
+  const URL = process.env.NEXT_PUBLIC_API_URL;
   let formData = new FormData();
-  let imgData = new FormData();
+  let imageData = new FormData();
 
-  const handleDataChange = (data: FileList) => {
-    imgData = new FormData();
+  const handleDataChange = (data: File[]) => {
+    imageData = new FormData();
     for (let i = 0; i < data.length; i++) {
-      imgData.append('images', data[i]);
+      imageData.append('images', data[i]);
     }
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Form Data 만들기
     formData = new FormData();
     const miniData = new FormData(e.currentTarget);
     for (let [key, value] of miniData.entries()) {
       if (key !== 'images') formData.append(key, value);
     }
-    for (let [key, value] of imgData.entries()) {
+    for (let [key, value] of imageData.entries()) {
       formData.append(key, value);
     }
-    for (const x of formData.entries()) {
-      console.log(x);
-    }
+    formData.append('imagesChanged', 'true');
+
+    // API
+    axios
+      .post(`${URL}api/contacts`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -55,7 +71,7 @@ export default function InquiryCreatePage() {
           isRequired
           options={[
             { key: 'GENERAL', value: '일반' },
-            { key: 'REPORT', value: '보고' }, // 내일 이름 물어보기
+            { key: 'REPORT', value: '신고' },
           ]}
         />
 
