@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Buffer } from 'buffer';
 import axios from 'axios'
-//import { login as apiLogin } from '@/lib/api/auth';
+import { login as apiLogin } from '@/lib/api/auth';
 
 interface User {
   email: string
@@ -29,11 +29,7 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
 
       login: async (email, pw, remember) => {
-        const { data } = await axios.post(
-          `${API}api/auth/login`,
-          { email, password: pw, rememberMe: remember },
-          { withCredentials: true }
-        )
+        const { data } = await apiLogin(email, pw, remember);
         const token = data.data.accessToken as string
 
         const [, payload] = token.split('.');
@@ -57,7 +53,7 @@ export const useAuthStore = create<AuthState>()(
       fetchCoordinate: async () => {
         const { token, user } = get()
         if (!token || !user) return
-        const { data } = await axios.get(`${API}api/users/coordinate`, {
+        const { data } = await axios.get(`${API}users/coordinate`, {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         })

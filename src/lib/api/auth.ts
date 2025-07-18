@@ -6,5 +6,5 @@ export const login = async (
   password: string,
   rememberMe = false,
 ) => {
-  return axios.post('/auth/login', { email, password, rememberMe });
+  return axios.post('/auth/login', { email, password, rememberMe }, { withCredentials: true });
 };
