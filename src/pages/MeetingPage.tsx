@@ -1,57 +1,82 @@
-"use client"
+"use client";
 import AIrecommendButton from '@/components/common/AIrecommendButton';
 import PostCard from '@/components/common/Card';
 import RelatedTags from '@/components/common/RelatedTags';
 import SearchBar from '@/components/common/SearchBar';
 import { ChevronDown } from 'lucide-react';
-import { useEffect, useState,useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 
-const SORT_OPTIONS=[
-  {label:"최신순",value:"recent"},
-  {label:"조회순",value:"viewCount"},
-  {label:"거리순",value:"distance"}
-]
+const SORT_OPTIONS = [
+  { label: "최신순", value: "recent" },
+  { label: "조회순", value: "viewCount" },
+  { label: "거리순", value: "distance" }
+];
 
 export default function MeetingPage() {
-  const [search,setSearch]=useState("")
-  const [selectedCategory,setSelectedCategory]=useState(null)
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [data, setData] = useState([]);
-  const [sortBy,setSortBy]=useState("distance")
-  const [showSort,setShowSort]=useState(false)
-  const sortRef=useRef(null)
+  const [sortBy, setSortBy] = useState("distance");
+  const [showSort, setShowSort] = useState(false);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const sortRef = useRef(null);
 
   useEffect(() => {
-    let url = `https://funfun.cloud/api/groups/search?sortBy=${sortBy}&page=0&size=10`;
-    if (selectedCategory) {
-      url += `&category=${selectedCategory}`;
-    }
-    fetch(url, {
-  credentials: 'include'
-})
-      .then(res => res.json())
-      .then(res => setData(res.data.content || []));
-  }, [selectedCategory,sortBy]);
+    setData([]);
+    setPage(0);
+    setHasMore(true);
+  }, [selectedCategory, sortBy]);
 
-  useEffect(()=>{
-    setSearch("")
-  },[selectedCategory])
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      let url = `https://funfun.cloud/api/groups/search?sortBy=${sortBy}&page=${page}&size=16`;
+      if (selectedCategory) {
+        url += `&category=${selectedCategory}`;
+      }
+      const res = await fetch(url, { credentials: 'include' }).then(r => r.json());
+      const list = res.data.content || [];
+      setData(prev => (page === 0 ? list : [...prev, ...list]));
+      setHasMore(!res.data.last);
+      setLoading(false);
+    };
+    fetchData();
+  }, [selectedCategory, sortBy, page]);
 
-  useEffect(()=>{
-    const handleClick=(e)=>{
-      if(sortRef.current&&!sortRef.current.contains(e.target)) setShowSort(false)
-    }
-  if(showSort) document.addEventListener('mousedown',handleClick)
-    return()=>document.removeEventListener('mousedown',handleClick)
-  },[showSort])
+  useEffect(() => {
+    setSearch("");
+  }, [selectedCategory]);
 
-  const filtered=data.filter(
-    group=>
-      group.title.includes(search)||
-    group.simpleExplain.includes(search)
-  )
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (sortRef.current && !sortRef.current.contains(e.target)) setShowSort(false)
+    };
+    if (showSort) document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [showSort]);
 
-  const currentSortLabel=
-  SORT_OPTIONS.find(option=>option.value===sortBy)?.label||"정렬"
+  const filtered = data.filter(
+    group =>
+      group.title.includes(search) ||
+      group.simpleExplain.includes(search)
+  );
+
+  const currentSortLabel =
+    SORT_OPTIONS.find(option => option.value === sortBy)?.label || "정렬";
+
+  const observer = useRef();
+  const lastCardRef = useCallback(node => {
+    if (loading) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new window.IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        setPage(prev => prev + 1);
+      }
+    });
+    if (node) observer.current.observe(node);
+  }, [loading, hasMore]);
 
   return (
     <div className="w-full">
@@ -63,38 +88,41 @@ export default function MeetingPage() {
         <div className="flex items-center justify-between my-[20px] lg:my-[32px]">
           <AIrecommendButton className="fixed bottom-[15px] left-1/2 translate-x-[-50%] lg:translate-x-0 w-[calc(100%-40px)] z-100 lg:static h2 h-[60px]" />
           <div className="relative" ref={sortRef}>
-        <button
-          className="t1 flex items-center text-[#cecece]"
-          onClick={() => setShowSort(v => !v)}
-        >
-          {currentSortLabel}
-          <ChevronDown className="ml-2 h-5 w-5" />
-        </button>
-        {showSort && (
-          <ul className="absolute right-0 mt-2 w-[100px] bg-[#222] rounded-[4px] shadow z-10 text-sm border border-[#393939]">
-            {SORT_OPTIONS.map(option => (
-              <li key={option.value}>
-                <button
-                  className={`w-full text-left px-4 py-2 hover:bg-[#7f74ff]/30 ${
-                    sortBy === option.value ? "text-[#7f74ff]" : "text-[#cecece]"
-                  }`}
-                  onClick={() => {
-                    setSortBy(option.value);
-                    setShowSort(false);
-                  }}
-                >
-                  {option.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+            <button
+              className="t1 flex items-center text-[#cecece]"
+              onClick={() => setShowSort(v => !v)}
+            >
+              {currentSortLabel}
+              <ChevronDown className="ml-2 h-5 w-5" />
+            </button>
+            {showSort && (
+              <ul className="absolute right-0 mt-2 w-[100px] bg-[#222] rounded-[4px] shadow z-10 text-sm border border-[#393939]">
+                {SORT_OPTIONS.map(option => (
+                  <li key={option.value}>
+                    <button
+                      className={`w-full text-left px-4 py-2 hover:bg-[#7f74ff]/30 ${sortBy === option.value ? "text-[#7f74ff]" : "text-[#cecece]"}`}
+                      onClick={() => {
+                        setSortBy(option.value);
+                        setShowSort(false);
+                      }}
+                    >
+                      {option.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {filtered.slice(0, 4).map(group => (
-            <PostCard key={group.id} group={group} />
-          ))}
+          {filtered.map((group, idx) =>
+            idx === filtered.length - 1 ?
+              <div key={group.id} ref={lastCardRef}>
+                <PostCard group={group} />
+              </div>
+              :
+              <PostCard key={group.id} group={group} />
+          )}
         </div>
         <div className="gradient-box mt-[51.45px] mb-[100px] flex flex-col rounded-[5px] px-[40px] text-white">
           <div className="mt-[33px] mb-[29px] text-[24px] font-semibold">
