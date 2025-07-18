@@ -1,5 +1,6 @@
-import { RecommendRequest } from '@/types/global';
+import { ChatBotRequest, RecommendRequest } from '@/types/global';
 import axios from './axiosInstance';
+
 // AI 빠른 추천 기능 (모임)
 export const quickRecommendGroup = async (data: RecommendRequest) => {
   return axios.post('/api/chatBots/group', data);
@@ -10,8 +11,12 @@ export const quickRecommendContent = async (data: RecommendRequest) => {
   return axios.post('/api/chatBots/content', data);
 };
 
-// 수정 예정 (chat)
-// TODO: API 명세 확정 후 정확한 타입으로 변경 필요
-export const chat = async (data: unknown) => {
+// 챗봇 대화 기능
+export const chat = async (data: ChatBotRequest) => {
   return axios.post('/api/chatBots/chat', data);
+};
+
+// 챗봇 대화 종료 및 요약 기능
+export const endChat = async (data: ChatBotRequest) => {
+  return axios.post('/api/chatBots/end', data);
 };
