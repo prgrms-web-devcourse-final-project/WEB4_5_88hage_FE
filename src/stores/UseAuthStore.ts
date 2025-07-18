@@ -2,7 +2,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Buffer } from 'buffer';
-import { login as apiLogin } from '@/lib/api/auth';
+import axios from 'axios'
+//import { login as apiLogin } from '@/lib/api/auth';
 
 interface User {
   email: string
