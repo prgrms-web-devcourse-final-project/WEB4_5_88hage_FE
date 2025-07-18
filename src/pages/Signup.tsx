@@ -23,7 +23,7 @@ export default function Signup() {
   const [duplicationCheck, setDuplicationCheck] = useState(false);
 
   const [requiredAlert, setRequiredAlert] = useState(false);
-  const { userData, setData } = useSignupStore();
+  const { userData, setData } = useSignupStore((state) => state);
   const router = useRouter();
 
   const nicknameCheck = /^[가-힣a-zA-Z0-9]{2,10}$/;
@@ -70,30 +70,31 @@ export default function Signup() {
       setRequiredAlert(true);
     } else {
       setRequiredAlert(false);
-      setData({
+      const newUserData: SignupUserData = {
         email: email,
         password: password,
         confirmPassword: confirmPassword,
         nickname: nickname,
         address: address,
+        latitude: 37.402024,
+        longitude: 127.103477,
         birthDate: birthDate,
         gender: maleSelected ? 'MALE' : 'FEMALE',
         isMarketingAgreed: checkedList.includes('marketing'),
-      });
+      };
+      setData(newUserData);
     }
   };
 
   useEffect(() => {
     if (userData) {
       axios
-        .post('http://funfun.cloud/api/users/signup', userData, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
+        .post('https://funfun.cloud/api/users/signup', userData, {
+          withCredentials: true,
         })
-        .then((data) => {
-          console.log(data.data);
-          router.push('/signup/email-check');
+        .then((response) => {
+          console.log(response.data);
+          router.push('/signup/verify');
         })
         .catch((error) => {
           console.log(error.response.data);
@@ -108,7 +109,7 @@ export default function Signup() {
         src={logo}
         alt="logo"
         width={100}
-        height={38}
+        loading="lazy"
         className="absolute top-[26px] left-[40px] hidden lg:block"
       />
       <div className="hidden h-screen w-1/2 items-center justify-center lg:flex">
@@ -144,7 +145,7 @@ export default function Signup() {
                 } else {
                   axios
                     .post(
-                      'http://funfun.cloud/api/users/verify/nickname',
+                      'https://funfun.cloud/api/users/verify/nickname',
                       { nickname: nickname },
                       {
                         headers: {
