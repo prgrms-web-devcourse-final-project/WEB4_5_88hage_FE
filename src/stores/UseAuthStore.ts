@@ -1,8 +1,9 @@
-'use client'
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+'use client';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { Buffer } from 'buffer';
 import axios from 'axios'
-import { Buffer } from 'buffer'
+//import { login as apiLogin } from '@/lib/api/auth';
 
 interface User {
   email: string
@@ -37,7 +38,7 @@ export const useAuthStore = create<AuthState>()(
         )
         const token = data.data.accessToken as string
 
-        const [, payload] = token.split('.')
+        const [, payload] = token.split('.');
         const padded = payload
           .replace(/-/g, '+')
           .replace(/_/g, '/')
@@ -83,6 +84,6 @@ export const useAuthStore = create<AuthState>()(
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
-    }
-  )
-)
+    },
+  ),
+);

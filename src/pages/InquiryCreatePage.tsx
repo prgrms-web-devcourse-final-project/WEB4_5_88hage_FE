@@ -43,7 +43,7 @@ export default function InquiryCreatePage() {
         </div>
 
 
-        <GrayButton className="mt-[20px] lg:mt-[30px] h-[52px] lg:h-[80px] text-[20px] font-semibold lg:text-[36px]">작성하기</GrayButton>
+        <GrayButton className="mt-[20px] lg:mt-[30px] h-[52px] lg:h-[80px] text-[20px] font-semibold lg:text-[36px] bg-[#1F1F1F] text-[#5E5E5E]">작성하기</GrayButton>
     </section>
     </>
   );

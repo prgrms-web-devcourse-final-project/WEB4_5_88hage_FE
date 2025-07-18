@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 
 const NAV_ITEMS = [
@@ -21,7 +22,7 @@ export default function Navigation() {
               onClick={() => setActive(item.value)}
               type="button"
             >
-              {item.label}
+              <Link href={`/${item.value}`}>{item.label}</Link>
             </button>
             {/* 아래 점 표시 */}
             <span
