@@ -1,10 +1,14 @@
 import { create } from 'zustand';
+
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+import { SignupRequest } from '@/types/auth';
+
 interface SignupStore {
-  userData: SignupUserData | null;
+  userData: SignupRequest | null;
   isVerified: boolean;
-  setData: (data: SignupUserData) => void;
+  setData: (data: SignupRequest) => void;
+
   clearData: () => void;
   setVerified: (data: boolean) => void;
   clearAll: () => void;
