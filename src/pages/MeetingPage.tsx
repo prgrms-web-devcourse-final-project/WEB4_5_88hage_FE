@@ -38,7 +38,11 @@ export default function MeetingPage() {
       }
       const res = await fetch(url, { credentials: 'include' }).then(r => r.json());
       const list = res.data.content || [];
-      setData(prev => (page === 0 ? list : [...prev, ...list]));
+      setData(prev => {
+  if (page === 0) return list;
+  const newUnique = list.filter(newItem => !prev.some(prevItem => prevItem.id === newItem.id));
+  return [...prev, ...newUnique];
+});
       setHasMore(!res.data.last);
       setLoading(false);
     };
@@ -116,13 +120,15 @@ export default function MeetingPage() {
         </div>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {filtered.map((group, idx) =>
-            idx === filtered.length - 1 ?
-              <div key={group.id} ref={lastCardRef}>
-                <PostCard group={group} />
-              </div>
-              :
-              <PostCard key={group.id} group={group} />
-          )}
+  idx === filtered.length - 1 ? (
+    <div key={`${group.id}-${idx}`} ref={lastCardRef}>
+      <PostCard group={group} />
+    </div>
+  ) : (
+    <PostCard key={`${group.id}-${idx}`} group={group} />
+  )
+)}
+
         </div>
         <div className="gradient-box mt-[51.45px] mb-[100px] flex flex-col rounded-[5px] px-[40px] text-white">
           <div className="mt-[33px] mb-[29px] text-[24px] font-semibold">
