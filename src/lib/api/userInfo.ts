@@ -1,6 +1,5 @@
 import { ProfileRequest } from '@/types/user';
-import axios from 'axios';
-
+import { get, put } from './fetchInstance';
 // 프로필 수정
 export const updateProfile = async (profileData: ProfileRequest) => {
   const formData = new FormData();
@@ -10,14 +9,10 @@ export const updateProfile = async (profileData: ProfileRequest) => {
   formData.append('imageChanged', String(profileData.imageChanged));
   formData.append('introduction', profileData.introduction);
 
-  return axios.put('/userInfos', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  return put('/userInfos', formData);
 };
 
 export const getUserDetailByEmail = async (email: string) => {
-  const response = await axios.get(`/api/userInfos/${email}`);
-  return response.data;
+  const response = await get(`/api/userInfos/${email}`);
+  return response;
 };
