@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
 import { Search } from 'lucide-react';
 
 export default function WritingForm({
@@ -8,12 +8,14 @@ export default function WritingForm({
   isRequired,
   placeholder,
   isLongForm,
+  onKeyUp,
 }: {
   title: string;
   name?: string;
   isRequired: boolean;
   placeholder: string;
   isLongForm: boolean;
+  onKeyUp?: (e: KeyboardEvent<HTMLInputElement>) => void;
 }) {
   const [value, setValue] = useState('');
 
@@ -57,6 +59,7 @@ export default function WritingForm({
               placeholder={placeholder}
               value={value}
               onChange={handleChange}
+              onKeyUp={onKeyUp}
             />
           )}
           {isLongForm && (
