@@ -7,10 +7,23 @@ import testmap from '@/assets/images/testmap.png';
 import { LucideChevronDown, LucideHeart, LucideMapPin } from 'lucide-react';
 import GatheringHostBox from '@/components/GatheringHostBox';
 import { useAuthStore } from '@/stores/UseAuthStore';
+import { useEffect } from 'react';
 
 export default function GatheringDetail() {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
-  console.log('로그인된 사용자 여부:', isAuthenticated)
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+  const user= useAuthStore(s => s.user)
+
+  useEffect(() => {
+    console.log('로그인 여부:', isAuthenticated)
+    if (user) {
+      console.log('이메일:',user.email)
+      console.log('닉네임:',user.nickname)
+      console.log("위도:", user.latitude);
+    console.log("경도:", user.longitude);
+    console.log("유저 전체:", user);
+
+    }
+  }, [isAuthenticated, user])
   return (
     <div className="eventDetail-gradient flex w-screen min-w-screen justify-center bg-[#121212] lg:w-340">
       <div className="hidden h-full min-h-screen py-15 text-[#f6f6f6] lg:flex">

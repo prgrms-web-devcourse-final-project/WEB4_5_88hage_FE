@@ -55,3 +55,13 @@ type WeatherInfo = {
   ny: number;
   obsrValue: string;
 };
+
+export interface ChatHistoryEntry {
+  user: string;
+  ai: string;
+}
+
+export interface ChatBotRequest {
+  chatBotHistory: ChatHistoryEntry[];
+  userMessage: string;
+}

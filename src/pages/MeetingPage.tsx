@@ -1,10 +1,16 @@
 "use client";
+import { useEffect, useState, useRef, useCallback } from "react";
 import AIrecommendButton from '@/components/common/AIrecommendButton';
 import PostCard from '@/components/common/Card';
 import RelatedTags from '@/components/common/RelatedTags';
 import SearchBar from '@/components/common/SearchBar';
 import { ChevronDown } from 'lucide-react';
-import { useEffect, useState, useRef, useCallback } from 'react';
+
+type Group = {
+  id: number;
+  title: string;
+  simpleExplain: string;
+};
 
 const SORT_OPTIONS = [
   { label: "최신순", value: "recent" },
@@ -14,14 +20,38 @@ const SORT_OPTIONS = [
 
 export default function MeetingPage() {
   const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [data, setData] = useState([]);
-  const [sortBy, setSortBy] = useState("distance");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [data, setData] = useState<Group[]>([]);
+  const [sortBy, setSortBy] = useState<string>("distance");
   const [showSort, setShowSort] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
-  const sortRef = useRef(null);
+  const sortRef = useRef<HTMLDivElement>(null);
+
+  const [aiGroups, setAIGroups] = useState<Group[]>([]);
+  const [aiShowCount, setAIShowCount] = useState(4);
+  const [aiClick, setAIClick] = useState(0);
+  const [aiReason, setAIReason] = useState("");
+
+  const handleAIRecommend = (groups: Group[], reason?: string) => {
+    setAIGroups(groups);
+    setAIReason(reason || "");
+    setAIShowCount(4);
+    setAIClick(prev => prev + 1);
+  };
+
+  const handleShowMore = () => {
+    if (aiShowCount + 4 <= 12) setAIShowCount(aiShowCount + 4);
+    else alert("최대 3번(12개)까지만 추천됩니다!");
+  };
+
+  const resetAI = () => {
+    setAIGroups([]);
+    setAIReason("");
+    setAIShowCount(4);
+    setAIClick(0);
+  };
 
   useEffect(() => {
     setData([]);
@@ -30,6 +60,7 @@ export default function MeetingPage() {
   }, [selectedCategory, sortBy]);
 
   useEffect(() => {
+    if (aiGroups.length > 0) return;
     const fetchData = async () => {
       setLoading(true);
       let url = `https://funfun.cloud/api/groups/search?sortBy=${sortBy}&page=${page}&size=16`;
@@ -37,28 +68,28 @@ export default function MeetingPage() {
         url += `&category=${selectedCategory}`;
       }
       const res = await fetch(url, { credentials: 'include' }).then(r => r.json());
-      const list = res.data.content || [];
+      const list: Group[] = res.data.content || [];
       setData(prev => {
-  if (page === 0) return list;
-  const newUnique = list.filter(newItem => !prev.some(prevItem => prevItem.id === newItem.id));
-  return [...prev, ...newUnique];
-});
+        if (page === 0) return list;
+        const newUnique = list.filter(newItem => !prev.some(prevItem => prevItem.id === newItem.id));
+        return [...prev, ...newUnique];
+      });
       setHasMore(!res.data.last);
       setLoading(false);
     };
     fetchData();
-  }, [selectedCategory, sortBy, page]);
+  }, [selectedCategory, sortBy, page, aiGroups.length]);
 
   useEffect(() => {
     setSearch("");
   }, [selectedCategory]);
 
   useEffect(() => {
-    const handleClick = (e) => {
-      if (sortRef.current && !sortRef.current.contains(e.target)) setShowSort(false)
+    const handleClick = (e: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(e.target as Node)) setShowSort(false);
     };
-    if (showSort) document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
+    if (showSort) document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
   }, [showSort]);
 
   const filtered = data.filter(
@@ -70,8 +101,8 @@ export default function MeetingPage() {
   const currentSortLabel =
     SORT_OPTIONS.find(option => option.value === sortBy)?.label || "정렬";
 
-  const observer = useRef();
-  const lastCardRef = useCallback(node => {
+  const observer = useRef<IntersectionObserver>();
+  const lastCardRef = useCallback((node: HTMLDivElement | null) => {
     if (loading) return;
     if (observer.current) observer.current.disconnect();
     observer.current = new window.IntersectionObserver(entries => {
@@ -90,7 +121,11 @@ export default function MeetingPage() {
       </div>
       <div className="mx-auto max-w-[1440px] lg:my-[30px] px-[20px]">
         <div className="flex items-center justify-between my-[20px] lg:my-[32px]">
-          <AIrecommendButton className="fixed bottom-[15px] left-1/2 translate-x-[-50%] lg:translate-x-0 w-[calc(100%-40px)] z-100 lg:static h2 h-[60px]" />
+          <AIrecommendButton
+            className="mr-4"
+            onRecommend={(groups, reason) => handleAIRecommend(groups, reason)}
+            recommendClick={aiClick}
+          />
           <div className="relative" ref={sortRef}>
             <button
               className="t1 flex items-center text-[#cecece]"
@@ -118,37 +153,52 @@ export default function MeetingPage() {
             )}
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {filtered.map((group, idx) =>
-  idx === filtered.length - 1 ? (
-    <div key={`${group.id}-${idx}`} ref={lastCardRef}>
-      <PostCard group={group} />
-    </div>
-  ) : (
-    <PostCard key={`${group.id}-${idx}`} group={group} />
-  )
-)}
 
-        </div>
-        <div className="gradient-box mt-[51.45px] mb-[100px] flex flex-col rounded-[5px] px-[40px] text-white">
-          <div className="mt-[33px] mb-[29px] text-[24px] font-semibold">
-            추천 이유👍
+        {aiGroups.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {aiGroups.slice(0, aiShowCount).map((group) => (
+                <PostCard key={group.id} group={group} />
+              ))}
+            </div>
+            {aiGroups.length > aiShowCount && (
+              <div className="flex justify-center my-5">
+                <button
+                  onClick={handleShowMore}
+                  className="rounded bg-[#383838] px-8 py-2 text-white"
+                >
+                  더 추천 보기
+                </button>
+              </div>
+            )}
+            <div className="gradient-box mt-[51.45px] mb-[100px] flex flex-col rounded-[5px] px-[40px] text-white">
+              <div className="mt-[33px] mb-[29px] text-[24px] font-semibold">
+                추천 이유👍
+              </div>
+              <div className="mb-[39px]">{aiReason || "추천 이유 없음"}</div>
+              <div>
+                <button
+                  className="from-main to-text mb-[30px] rounded-[3px] bg-gradient-to-r px-[16px] py-[10px] font-semibold"
+                  onClick={resetAI}
+                >
+                  다른 추천 받기 ✨
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {filtered.map((group, idx) =>
+              idx === filtered.length - 1 ? (
+                <div key={`${group.id}-${idx}`} ref={lastCardRef}>
+                  <PostCard group={group} />
+                </div>
+              ) : (
+                <PostCard key={`${group.id}-${idx}`} group={group} />
+              )
+            )}
           </div>
-          <div className="mb-[39px]">
-            홍대(홍익대 앞)는 서울에서 가장 트렌디하고 활기찬 구역 중 하나로,
-            낮과 밤 모두 다채로운 매력을 지닌 ‘핫플’의 보고입니다. 산책, 카페,
-            쇼핑, 공연, 먹거리까지 모두 즐길 수 있죠. 예전 철길을 공원으로 꾸며
-            도심 속 힐링 산책 장소로 사랑받고 있어요. 주변에는 개성 있는 카페와
-            상점들도 다양합니다. 토요일에는 프리마켓, 일요일에는 호프마켓이 열려
-            창작 문화와 예술을 바로 만날 수 있어요.거리 공연과 스트리트 아트
-            중점으로 추천 드렸어요
-          </div>
-          <div>
-            <button className="from-main to-text mb-[30px] rounded-[3px] bg-gradient-to-r px-[16px] py-[10px] font-semibold">
-              다른 추천 받기 ✨
-            </button>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
