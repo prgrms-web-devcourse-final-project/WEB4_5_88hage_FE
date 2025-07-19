@@ -1,4 +1,4 @@
-import axios from './axiosInstance';
+import { post } from './fetchInstance';
 
 interface ReportRequest {
   reportedUserEmail: string;
@@ -8,5 +8,5 @@ interface ReportRequest {
 }
 
 export const reportContent = async (data: ReportRequest) => {
-  return axios.post('/api/reports', data);
+  return post('/api/reports', data);
 };
