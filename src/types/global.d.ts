@@ -70,3 +70,10 @@ export interface ChatBotRequest {
   chatBotHistory: ChatHistoryEntry[];
   userMessage: string;
 }
+
+export interface CalendarContentRequest {
+  title: string;
+  content: string;
+  startDate: string;
+  endDate: string;
+}
