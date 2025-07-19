@@ -18,6 +18,10 @@ export default function GatheringDetail() {
     if (user) {
       console.log('이메일:',user.email)
       console.log('닉네임:',user.nickname)
+      console.log("위도:", user.latitude);
+    console.log("경도:", user.longitude);
+    console.log("유저 전체:", user);
+
     }
   }, [isAuthenticated, user])
   return (

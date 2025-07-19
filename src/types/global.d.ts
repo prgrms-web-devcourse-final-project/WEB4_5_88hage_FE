@@ -55,3 +55,18 @@ type WeatherInfo = {
   ny: number;
   obsrValue: string;
 };
+
+interface Window {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  kakao: any;
+}
+
+export interface ChatHistoryEntry {
+  user: string;
+  ai: string;
+}
+
+export interface ChatBotRequest {
+  chatBotHistory: ChatHistoryEntry[];
+  userMessage: string;
+}

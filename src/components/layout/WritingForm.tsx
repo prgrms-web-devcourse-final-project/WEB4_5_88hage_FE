@@ -4,11 +4,13 @@ import { Search } from 'lucide-react';
 
 export default function WritingForm({
   title,
+  name,
   isRequired,
   placeholder,
   isLongForm,
 }: {
   title: string;
+  name?: string;
   isRequired: boolean;
   placeholder: string;
   isLongForm: boolean;
@@ -38,6 +40,7 @@ export default function WritingForm({
           )}
           {isLongForm ? (
             <textarea
+              name={name}
               className="placeholder-gray-disabled t3 mt-3 h-64 w-full resize-none rounded border border-[#343434] p-4 text-white"
               placeholder={placeholder}
               value={value}
@@ -47,6 +50,7 @@ export default function WritingForm({
           ) : (
             <input
               type="text"
+              name={name}
               className={`placeholder-gray-disabled t3 mt-3 w-full rounded border border-[#343434] p-4 text-white ${
                 title === '모임 위치' ? 'pr-12' : ''
               }`}
