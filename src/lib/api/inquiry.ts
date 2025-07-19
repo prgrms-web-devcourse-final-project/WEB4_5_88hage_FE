@@ -19,7 +19,6 @@ export const createInquiry = async (data: ContactRequest) => {
       formData.append(`images`, image);
     });
   }
-
   return post('/api/contacts', formData);
 };
 
@@ -60,4 +59,5 @@ export const getContactDetail = async (contactId: number): Promise<Inquiry> => {
 // 문의 삭제
 export const deleteContact = async (contactId: number) => {
   await patch(`/api/contacts/${contactId}`, null);
+
 };

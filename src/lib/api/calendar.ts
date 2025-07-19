@@ -1,7 +1,7 @@
 import { CalendarContentRequest } from '@/types/global';
 import { get, post, del, patch } from './fetchInstance';
 
-// 캘린더 일정 등록
+// 캘린더 일정 등록 - 예약하기
 export const addCalendar = async (data: CalendarContentRequest) => {
   return post('/api/calendars', data);
 };
@@ -11,7 +11,7 @@ export const deleteCalendar = async (calendarId: number) => {
   await del(`/api/calendars/${calendarId}`);
 };
 
-// 캘린더 일정 수정
+// 캘린더 일정 수정 - 시간
 export const updateCalendar = async (
   calendarId: number,
   selectedDate: string,
