@@ -1,4 +1,4 @@
-import axios from './axiosInstance';
+import fetchInstance, { get } from './fetchInstance';
 import { AdminReportProcessRequest } from '@/types/global';
 
 // 신고 처리
@@ -6,12 +6,12 @@ export const processReport = async (
   id: number,
   data: AdminReportProcessRequest,
 ) => {
-  return axios.patch(`/api/admin/reports/${id}`, data);
+  return fetchInstance(`/api/admin/reports/${id}`, { method: 'PATCH', data });
 };
 
 // 관리자 신고 목록 조회
 export const getAllReports = async (
   status: 'all' | 'resolved' | 'unresolved' = 'all',
 ) => {
-  return axios.get('/api/admin/reports', { params: { status } });
+  return get(`/api/admin/reports?status=${status}`);
 };

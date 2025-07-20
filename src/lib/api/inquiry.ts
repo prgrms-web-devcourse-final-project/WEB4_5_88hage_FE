@@ -1,4 +1,4 @@
-import axios from './axiosInstance';
+import { get, post, put, patch } from './fetchInstance';
 import {
   ContactRequest,
   GetContactsParams,
@@ -15,38 +15,49 @@ export const createInquiry = async (data: ContactRequest) => {
   formData.append('imagesChanged', String(data.imagesChanged));
 
   if (data.images) {
-    data.images.forEach((image, index) => {
+    data.images.forEach((image) => {
       formData.append(`images`, image);
     });
   }
-
-  const response = await axios.post<number>('/api/contacts', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return response.data;
+  return post('/api/contacts', formData);
 };
 
 // 문의 목록 조회
 export const getContacts = async (params?: GetContactsParams) => {
-  return axios.get('/api/contacts', { params });
+  const stringifiedParams = params
+    ? Object.entries(params).reduce(
+        (acc, [key, value]) => {
+          if (Array.isArray(value)) {
+            acc[key] = value.join(',');
+          } else {
+            acc[key] = String(value);
+          }
+          return acc;
+        },
+        {} as Record<string, string>,
+      )
+    : {};
+
+  const queryString = Object.keys(stringifiedParams).length > 0
+    ? `?${new URLSearchParams(stringifiedParams).toString()}`
+    : '';
+
+  return get(`/api/contacts${queryString}`);
 };
 
 // 문의 수정
 export const updateContact = async (contactId: number, formData: FormData) => {
-  await axios.put(`/api/contacts/${contactId}`, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
+  await put(`/api/contacts/${contactId}`, formData);
 };
 
 // ID 조회 문의 조회
 export const getContactDetail = async (contactId: number): Promise<Inquiry> => {
-  const res = await axios.get(`/api/contacts/${contactId}`);
-  return res.data;
+  const res = await get<Inquiry>(`/api/contacts/${contactId}`);
+  return res;
 };
 
 // 문의 삭제
 export const deleteContact = async (contactId: number) => {
-  await axios.patch(`/api/contacts/${contactId}`);
+  await patch(`/api/contacts/${contactId}`, null);
+
 };
