@@ -25,7 +25,7 @@ export default function PostCard({ group }) {
       <div className="h-[120px] bg-[#1b1b1b] p-3">
         <h2 className="t3 mb-1">{group.title}</h2>
         <p className="mb-5 text-[14px] text-[#ffffff]">{group.simpleExplain}</p>
-        <p className="text-[14px] text-[#bdbdbd]">모임 기간 ({group.during})</p>
+        <p className="text-[14px] text-[#bdbdbd]">모임 시간 ({group.during})</p>
       </div>
     </div>
   );
