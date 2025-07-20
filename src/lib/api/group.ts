@@ -60,13 +60,13 @@ export const searchGroups = async (
 
 // 내가 속한 모임 조회
 export const getMyGroups = async (): Promise<Group[]> => {
-  const res = await get<Group[]>('/api/groups/my-groups');
+  const res = await get<Group[]>('/api/groups/getMy');
   return res;
 };
 
 // 내가 리더 역할인 모임 조회
 export const getLeaderMyGroups = async (): Promise<Group[]> => {
-  const res = await get<Group[]>('/api/groups/my-leader-groups');
+  const res = await get<Group[]>('/api/groups/getLeaderMy');
   return res;
 };
 

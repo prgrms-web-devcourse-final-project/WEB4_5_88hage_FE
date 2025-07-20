@@ -73,4 +73,5 @@ export interface Group {
   currentPeople: number;
   viewCount: number;
   status: 'ACTIVE' | 'COMPLETED' | 'CANCELED';
+  createdAt?: string;
 }

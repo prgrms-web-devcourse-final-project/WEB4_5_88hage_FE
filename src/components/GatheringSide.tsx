@@ -1,58 +1,67 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Users } from 'lucide-react';
 import { BiSolidChat } from 'react-icons/bi';
 import GatheringTabButton from './button/GatheringTabButton';
 import ChatItem from './common/ChatItem';
-import GatheringItem from './common/GatheringItem'; // Import GatheringItem
-import test from '@/assets/images/test.png';
+import GatheringItem from './common/GatheringItem';
+import { getMyGroups } from '@/lib/api/group';
+import { getMyPersonalChatRooms } from '@/lib/api/chat';
+import { Group } from '@/types/group';
+import { ChatRoom } from '@/types/chat';
 
 export default function GatheringSide() {
   const [activeTab, setActiveTab] = useState('my-gathering');
   const [searchTerm, setSearchTerm] = useState('');
+  const [myGatherings, setMyGatherings] = useState<Group[]>([]);
+  const [chatItems, setChatItems] = useState<ChatRoom[]>([]);
+  const [loadingGatherings, setLoadingGatherings] = useState(true);
+  const [loadingChatItems, setLoadingChatItems] = useState(true);
+  const [errorGatherings, setErrorGatherings] = useState<string | null>(null);
+  const [errorChatItems, setErrorChatItems] = useState<string | null>(null);
 
-  // Dummy data for demonstration
-  const myGatherings = [
-    {
-      profileUrl: test,
-      name: '힙스터 모임',
-      info: '2025.07.20 - 강남',
-      time: '2시간 전',
-    },
-    {
-      profileUrl: test,
-      name: '코딩 스터디',
-      info: '2025.07.22 - 온라인',
-      time: '1일 전',
-    },
-  ];
+  useEffect(() => {
+    const fetchMyGatherings = async () => {
+      try {
+        setLoadingGatherings(true);
+        const data = await getMyGroups();
+        setMyGatherings(data);
+      } catch (error) {
+        console.error('Failed to fetch my gatherings:', error);
+        setErrorGatherings('모임을 불러오는 데 실패했습니다.');
+      } finally {
+        setLoadingGatherings(false);
+      }
+    };
 
-  const chatItems = [
-    {
-      profileUrl: test,
-      name: '01힙스터',
-      lastMessage: '다들 뭐해?',
-      time: '2시간 전',
-    },
-    {
-      profileUrl: test,
-      name: '02힙스터',
-      lastMessage: '오늘 저녁 뭐 먹지?',
-      time: '1시간 전',
-    },
-  ];
+    const fetchChatItems = async () => {
+      try {
+        setLoadingChatItems(true);
+        const data = await getMyPersonalChatRooms();
+        setChatItems(data);
+      } catch (error) {
+        console.error('Failed to fetch chat items:', error);
+        setErrorChatItems('채팅 목록을 불러오는 데 실패했습니다.');
+      } finally {
+        setLoadingChatItems(false);
+      }
+    };
+
+    fetchMyGatherings();
+    fetchChatItems();
+  }, []);
 
   const filteredMyGatherings = myGatherings.filter(
     (gathering) =>
-      gathering.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      gathering.info.toLowerCase().includes(searchTerm.toLowerCase())
+      gathering.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      gathering.placeName.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const filteredChatItems = chatItems.filter(
     (chat) =>
-      chat.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      chat.lastMessage.toLowerCase().includes(searchTerm.toLowerCase())
+      chat.roomName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      chat.lastMessage?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -97,9 +106,27 @@ export default function GatheringSide() {
         <div className="w-full flex-grow overflow-y-auto px-2">
           {activeTab === 'my-gathering' && (
             <>
-              {filteredMyGatherings.length > 0 ? (
-                filteredMyGatherings.map((gathering, index) => (
-                  <GatheringItem key={index} {...gathering} />
+              {loadingGatherings ? (
+                <div className="text-gray-5 py-10 text-center">
+                  모임을 불러오는 중...
+                </div>
+              ) : errorGatherings ? (
+                <div className="py-10 text-center text-red-500">
+                  {errorGatherings}
+                </div>
+              ) : filteredMyGatherings.length > 0 ? (
+                filteredMyGatherings.map((gathering) => (
+                  <GatheringItem
+                    key={gathering.id}
+                    profileUrl={gathering.image || '/default-gathering.png'}
+                    name={gathering.title}
+                    info={gathering.simpleExplain}
+                    time={
+                      gathering.createdAt
+                        ? new Date(gathering.createdAt).toLocaleDateString()
+                        : ''
+                    }
+                  />
                 ))
               ) : (
                 <div className="text-gray-5 py-10 text-center">
@@ -110,9 +137,27 @@ export default function GatheringSide() {
           )}
           {activeTab === 'chat' && (
             <>
-              {filteredChatItems.length > 0 ? (
-                filteredChatItems.map((chat, index) => (
-                  <ChatItem key={index} {...chat} />
+              {loadingChatItems ? (
+                <div className="text-gray-5 py-10 text-center">
+                  채팅 목록을 불러오는 중...
+                </div>
+              ) : errorChatItems ? (
+                <div className="py-10 text-center text-red-500">
+                  {errorChatItems}
+                </div>
+              ) : filteredChatItems.length > 0 ? (
+                filteredChatItems.map((chat) => (
+                  <ChatItem
+                    key={chat.chatRoomId}
+                    profileUrl={chat.imageUrl || '/default-chat.png'}
+                    name={chat.roomName}
+                    lastMessage={chat.lastMessage || '메시지 없음'}
+                    time={
+                      chat.lastMessageTime
+                        ? new Date(chat.lastMessageTime).toLocaleDateString()
+                        : ''
+                    }
+                  />
                 ))
               ) : (
                 <div className="text-gray-5 py-10 text-center">

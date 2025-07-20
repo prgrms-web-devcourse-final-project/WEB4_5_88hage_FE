@@ -9,7 +9,7 @@ export const updateProfile = async (profileData: ProfileRequest) => {
   formData.append('imageChanged', String(profileData.imageChanged));
   formData.append('introduction', profileData.introduction);
 
-  return put('/userInfos', formData);
+  return put('/api/userInfos', formData);
 };
 
 export const getUserDetailByEmail = async (email: string) => {

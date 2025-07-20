@@ -1,7 +1,7 @@
 import Image, { StaticImageData } from 'next/image';
 
 type gatheringProps = {
-  profileUrl: StaticImageData;
+  profileUrl: string | StaticImageData;
   name: string;
   info: string;
   time: string;

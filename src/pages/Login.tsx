@@ -75,7 +75,9 @@ export default function Login() {
               className="h-[60px] w-full rounded-[5px] lg:h-[80px] lg:rounded-[10px]"
             />
             {errors.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
+              <p className="t4 mt-[-15px] mb-3 text-red-500">
+                {errors.email.message}
+              </p>
             )}
 
             <Input
@@ -87,7 +89,7 @@ export default function Login() {
               className="h-[60px] w-full rounded-[5px] lg:h-[80px] lg:rounded-[10px]"
             />
             {errors.password && (
-              <p className="t4 mt-[-10px] mb-3 text-red-500">
+              <p className="t4 mt-[-15px] mb-3 text-red-500">
                 {errors.password.message}
               </p>
             )}
