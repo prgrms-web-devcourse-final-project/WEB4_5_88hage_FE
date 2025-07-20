@@ -5,9 +5,42 @@ import { Search, Users } from 'lucide-react';
 import { BiSolidChat } from 'react-icons/bi';
 import GatheringTabButton from './button/GatheringTabButton';
 import ChatItem from './common/ChatItem';
+import GatheringItem from './common/GatheringItem'; // Import GatheringItem
 import test from '@/assets/images/test.png';
+
 export default function GatheringSide() {
   const [activeTab, setActiveTab] = useState('my-gathering');
+
+  // Dummy data for demonstration
+  const myGatherings = [
+    {
+      profileUrl: test,
+      name: '힙스터 모임',
+      info: '2025.07.20 - 강남',
+      time: '2시간 전',
+    },
+    {
+      profileUrl: test,
+      name: '코딩 스터디',
+      info: '2025.07.22 - 온라인',
+      time: '1일 전',
+    },
+  ];
+
+  const chatItems = [
+    {
+      profileUrl: test,
+      name: '01힙스터',
+      lastMessage: '다들 뭐해?',
+      time: '2시간 전',
+    },
+    {
+      profileUrl: test,
+      name: '02힙스터',
+      lastMessage: '오늘 저녁 뭐 먹지?',
+      time: '1시간 전',
+    },
+  ];
 
   return (
     <>
@@ -46,24 +79,34 @@ export default function GatheringSide() {
             className="bg-gray-5 t3 placeholder-gray-disabled w-full rounded p-2 pl-10 text-white"
           />
         </div>
-        <ChatItem
-          profileUrl={test}
-          name="01힙스터"
-          lastMessage="다들 뭐해?"
-          time="2시간 전"
-        />
-        <ChatItem
-          profileUrl={test}
-          name="01힙스터"
-          lastMessage="다들 뭐해?"
-          time="2시간 전"
-        />
-        <ChatItem
-          profileUrl={test}
-          name="01힙스터"
-          lastMessage="다들 뭐해?"
-          time="2시간 전"
-        />
+        <div className="w-full flex-grow overflow-y-auto px-2">
+          {activeTab === 'my-gathering' && (
+            <>
+              {myGatherings.length > 0 ? (
+                myGatherings.map((gathering, index) => (
+                  <GatheringItem key={index} {...gathering} />
+                ))
+              ) : (
+                <div className="text-gray-5 py-10 text-center">
+                  참여 중인 모임이 없습니다
+                </div>
+              )}
+            </>
+          )}
+          {activeTab === 'chat' && (
+            <>
+              {chatItems.length > 0 ? (
+                chatItems.map((chat, index) => (
+                  <ChatItem key={index} {...chat} />
+                ))
+              ) : (
+                <div className="text-gray-5 py-10 text-center">
+                  진행 중인 채팅이 없습니다
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </>
   );

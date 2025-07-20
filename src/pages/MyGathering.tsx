@@ -14,7 +14,6 @@ export default function MyGathering() {
         {/* 유동 너비 메인 */}
         <div className="max-w-[1050px] flex-grow lg:ml-5 lg:h-[740px]">
           {/* <GatheringMain /> */}
-
           <GatheringChatting />
         </div>
       </div>
