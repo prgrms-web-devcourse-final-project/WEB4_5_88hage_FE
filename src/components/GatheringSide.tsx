@@ -10,6 +10,7 @@ import test from '@/assets/images/test.png';
 
 export default function GatheringSide() {
   const [activeTab, setActiveTab] = useState('my-gathering');
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Dummy data for demonstration
   const myGatherings = [
@@ -41,6 +42,18 @@ export default function GatheringSide() {
       time: '1시간 전',
     },
   ];
+
+  const filteredMyGatherings = myGatherings.filter(
+    (gathering) =>
+      gathering.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      gathering.info.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const filteredChatItems = chatItems.filter(
+    (chat) =>
+      chat.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      chat.lastMessage.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <>
@@ -77,13 +90,15 @@ export default function GatheringSide() {
             type="text"
             placeholder="검색어를 입력하세요"
             className="bg-gray-5 t3 placeholder-gray-disabled w-full rounded p-2 pl-10 text-white"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <div className="w-full flex-grow overflow-y-auto px-2">
           {activeTab === 'my-gathering' && (
             <>
-              {myGatherings.length > 0 ? (
-                myGatherings.map((gathering, index) => (
+              {filteredMyGatherings.length > 0 ? (
+                filteredMyGatherings.map((gathering, index) => (
                   <GatheringItem key={index} {...gathering} />
                 ))
               ) : (
@@ -95,8 +110,8 @@ export default function GatheringSide() {
           )}
           {activeTab === 'chat' && (
             <>
-              {chatItems.length > 0 ? (
-                chatItems.map((chat, index) => (
+              {filteredChatItems.length > 0 ? (
+                filteredChatItems.map((chat, index) => (
                   <ChatItem key={index} {...chat} />
                 ))
               ) : (
