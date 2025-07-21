@@ -7,8 +7,8 @@ import SearchBar from "@/components/common/SearchBar";
 import { ChevronDown } from "lucide-react";
 
 const SORT_OPTIONS = [
-  { label: "최신순", value: "recent" },
-  { label: "조회순", value: "viewCount" },
+  { label: "인기순", value: "bookmarkCount" },
+  { label: "마감일순", value: "endDate" },
   { label: "거리순", value: "distance" },
 ];
 
@@ -37,7 +37,7 @@ function mapEventToCard(event: EventApiResponse) {
 export default function EventPage() {
   const [search, setSearch] = useState("");
   const [data, setData] = useState<EventApiResponse[]>([]);
-  const [sortBy, setSortBy] = useState("recent");
+  const [sortBy, setSortBy] = useState("endDate");
   const [showSort, setShowSort] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -64,8 +64,10 @@ export default function EventPage() {
     const fetchData = async () => {
       setLoading(true);
       const url = getApiUrl();
+      console.log("⭐️ 요청되는 API 주소:", url);
       const res = await fetch(url).then(r => r.json());
       const list = res.data?.content || res.data?.contents || [];
+      console.log("⭐️ 받아온 데이터(정렬값 확인):", list);
       setData(prev => (page === 0 ? list : [...prev, ...list]));
       setHasMore(!(res.data.last ?? true));
       setLoading(false);
