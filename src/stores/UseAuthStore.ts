@@ -30,8 +30,20 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       isAuthenticated: false,
       login: async (email, pw, remember) => {
-        const { data } = await apiLogin(email, pw, remember);
-        const token = data.data.accessToken as string;
+        const result = await apiLogin(email, pw, remember);
+        console.log('apiLogin 응답:', result);
+
+        // accessToken 안전하게 파싱
+        const token =
+          result?.data?.data?.accessToken ||
+          result?.data?.accessToken ||
+          result?.accessToken ||
+          null;
+
+        if (!token) {
+          alert('로그인 실패: accessToken 없음');
+          return;
+        }
 
         const [, payload] = token.split('.');
         const padded = payload
@@ -46,15 +58,13 @@ export const useAuthStore = create<AuthState>()(
           user: { email: sub, nickname },
           isAuthenticated: true,
         });
-        console.log('user set 직후:', get().user);
         await get().fetchCoordinate();
-        console.log('fetchCoordinate 후:', get().user);
       },
 
       fetchCoordinate: async () => {
         const { token, user } = get();
         if (!token || !user) return;
-        const { data } = await axios.get(`${API}users/coordinate`, {
+        const { data } = await axios.get(`${API}/users/coordinate`, {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         });
@@ -79,6 +89,6 @@ export const useAuthStore = create<AuthState>()(
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
-    },
-  ),
+    }
+  )
 );
