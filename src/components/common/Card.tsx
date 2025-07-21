@@ -2,6 +2,15 @@
 
 import Image from 'next/image';
 
+function formatDuration(minutes) {
+  if (!minutes && minutes !== 0) return '-';
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  if (h === 0) return `${m}분`;
+  if (m === 0) return `${h}시간`;
+  return `${h}시간 ${m}분`;
+}
+
 export default function PostCard({ group }) {
   if (!group) return null;
 
@@ -25,7 +34,7 @@ export default function PostCard({ group }) {
       <div className="h-[120px] bg-[#1b1b1b] p-3">
         <h2 className="t3 mb-1">{group.title}</h2>
         <p className="mb-5 text-[14px] text-[#ffffff]">{group.simpleExplain}</p>
-        <p className="text-[14px] text-[#bdbdbd]">모임 시간 ({group.during})</p>
+        <p className="text-[14px] text-[#bdbdbd]">모임 시간 ({formatDuration(group.during)})</p>
       </div>
     </div>
   );
