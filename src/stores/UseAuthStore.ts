@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Buffer } from 'buffer';
-import axios from 'axios';
+import { get as fetchGet } from '@/lib/api/fetchInstance';
 import { login as apiLogin } from '@/lib/api/auth';
 
 interface User {
@@ -30,8 +30,8 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       isAuthenticated: false,
       login: async (email, pw, remember) => {
-        const { data } = await apiLogin(email, pw, remember);
-        const token = data.data.accessToken as string;
+        const data = await apiLogin(email, pw, remember);
+        const token = data.accessToken as string;
 
         const [, payload] = token.split('.');
         const padded = payload
@@ -54,18 +54,21 @@ export const useAuthStore = create<AuthState>()(
       fetchCoordinate: async () => {
         const { token, user } = get();
         if (!token || !user) return;
-        const { data } = await axios.get(`${API}users/coordinate`, {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
-        });
-        const { latitude, longitude } = data.data;
-        set((state) => ({
+        const data = await fetchGet<{ latitude: number; longitude: number }>(
+          `${API}users/coordinate`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            credentials: 'include',
+          },
+        );
+        const { latitude, longitude } = data;
+        set({
           user: {
-            ...state.user,
+            ...user,
             latitude,
             longitude,
           },
-        }));
+        });
       },
 
       logout: () => {
