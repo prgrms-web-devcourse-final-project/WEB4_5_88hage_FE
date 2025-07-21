@@ -14,6 +14,19 @@ export interface UserProfile {
   followerCount: number;
   followingCount: number;
 }
+export interface UserHashtag {
+  id: number;
+  info_id: string | null;
+  tag: string | null;
+}
+export interface UserInfo {
+  activated: boolean;
+  created_at: string;
+  modified_at: string;
+  email: string;
+  image_url: string | null;
+  introduction: string | null;
+}
 
 export interface Following {
   email: string;
@@ -36,13 +49,13 @@ export interface UserCoordinate {
   longitude: number;
 }
 
-export interface UserInfo {
-  email: string;
-  nickname: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  isMarketingAgreed: boolean;
+export interface UserPreference {
+  id: number;
+  activated: boolean;
+  created_at: string;
+  modified_at: string;
+  category: string;
+  user_id: string;
 }
 
 export interface NicknameChangeRequest {
@@ -50,7 +63,23 @@ export interface NicknameChangeRequest {
 }
 
 export interface User {
+  activated: boolean;
+  due_date: string | null;
+  is_marketing_agreed: boolean;
+  is_verified: boolean;
+  latitude: number | null;
+  longitude: number | null;
+  suspend_duration: number | null;
+  created_at: string;
+  modified_at: string;
+  address: string | null;
+  birth_date: string | null;
+  due_reason: string | null;
   email: string;
-  nickname: string;
-  // ... 기타 사용자 정보 필드
+  gender: 'MALE' | 'FEMALE' | null;
+  info_id: string | null;
+  nickname: string | null;
+  password: string;
+  role: 'ROLE_USER' | 'ROLE_ADMIN' | 'ROLE_GUEST';
+  status: 'ACTIVE' | 'SUSPENDED' | 'BANNED';
 }

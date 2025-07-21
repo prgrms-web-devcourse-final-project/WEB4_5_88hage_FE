@@ -1,14 +1,8 @@
-export interface FaqUpdateRequest {
-  question: string;
-  answer: string;
-}
-
-export interface FaqCreateRequest {
-  question: string;
-}
-
-export interface FAQ {
+export interface Faq {
   id: number;
-  question: string;
+  activated: boolean;
+  created_at: string;
+  modified_at: string;
   answer: string;
+  question: string;
 }
