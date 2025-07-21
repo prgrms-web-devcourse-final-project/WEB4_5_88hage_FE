@@ -90,8 +90,48 @@ export interface GroupCreateRequest {
   image?: File;
   hashTags: string[];
   during: number;
-  leaderId: number;
-  currentPeople: number;
-  viewCount: number;
-  status: 'ACTIVE' | 'COMPLETED' | 'CANCELED';
+}
+
+export interface GroupBookmark {
+  id: number;
+  activated: boolean;
+  created_at: string;
+  group_id: number;
+  modified_at: string;
+  email: string;
+}
+
+export interface GroupMember {
+  id: number;
+  activated: boolean;
+  created_at: string;
+  group_id: number;
+  modified_at: string;
+  email: string;
+}
+
+export interface GroupHashtag {
+  id: number;
+  activated: boolean;
+  created_at: string;
+  group_id: number;
+  modified_at: string;
+  tag: string;
+}
+
+export interface GroupPreference {
+  id: number;
+  activated: boolean;
+  created_at: string;
+  modified_at: string;
+  category:
+    | 'ART'
+    | 'TRAVEL'
+    | 'FOOD'
+    | 'GAME'
+    | 'CULTURE'
+    | 'SPORT'
+    | 'STUDY'
+    | 'MOVIE';
+  user_id: string;
 }

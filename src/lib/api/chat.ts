@@ -38,3 +38,14 @@ export const getLastChatHistory = async (
   );
   return res;
 };
+
+// 마지막 채팅 조회
+export const getLastChatHistory = async (
+  roomId: number,
+  type: 'GROUP_CHAT' | 'PERSONAL_CHAT',
+): Promise<LastChatHistory> => {
+  const res = await get<LastChatHistory>(
+    `/api/chats/${roomId}/${type}/lastHistory`,
+  );
+  return res;
+};
