@@ -1,8 +1,8 @@
-export interface GroupHashtag {
+export interface Follow {
   id: number;
   activated: boolean;
   created_at: string;
-  group_id: number;
   modified_at: string;
-  tag: string;
+  followee_id: string;
+  follower_id: string;
 }
