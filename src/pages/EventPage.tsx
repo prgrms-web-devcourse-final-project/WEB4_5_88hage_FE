@@ -4,12 +4,54 @@ import AIrecommendButton from '@/components/common/AIrecommendButton';
 import PostCard from '@/components/common/Card';
 import SearchBar from '@/components/common/SearchBar';
 import { ChevronDown } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+function mapEventToCard(event) {
+  return {
+    title: event.contentTitle,
+    simpleExplain: event.fee,
+    during: `${event.startDate} ~ ${event.endDate}`,
+    imageUrl: event.poster,
+    address: event.address
+  };
+}
 
 export default function EventPage() {
+  const [events, setEvents] = useState([]);
+  // const [guname, setGuname] = useState('');
+  // const [startDate, setStartDate] = useState('');
+  // const [endDate, setEndDate] = useState('');
+  useEffect(() => {
+  const url = 'https://funfun.cloud/api/contents?page=0&size=20';
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      setEvents(data?.data?.content ?? []);
+      console.log(data?.data?.content);
+    });
+}, []);
+
   return (
     <div className="w-full">
       <div className="meetingPage-gradient h-[200px] pt-[65px] lg:pt-0 lg:h-[400px] flex items-center justify-center">
         <SearchBar />
+        {/* <input
+  placeholder="지역구"
+  value={guname}
+  onChange={e => setGuname(e.target.value)}
+/>
+<input
+  type="date"
+  value={startDate}
+  onChange={e => setStartDate(e.target.value)}
+/>
+<input
+  type="date"
+  value={endDate}
+  onChange={e => setEndDate(e.target.value)}
+/> */}
+
       </div>
       <div className="mx-auto max-w-[1440px] px-[20px]">
         <div className="flex items-center justify-between my-[20px] lg:my-[32px]">
@@ -20,15 +62,11 @@ export default function EventPage() {
           </button>
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          {/* <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard /> */}
-        </div>
+  {events.map(event => (
+    <PostCard group={mapEventToCard(event)} key={event.id} />
+  ))}
+</div>
+
         <div className="gradient-box mt-[51.45px] mb-[100px] flex flex-col rounded-[5px] px-[40px] text-white">
           <div className="mt-[33px] mb-[29px] text-[24px] font-semibold">
             추천 이유👍
