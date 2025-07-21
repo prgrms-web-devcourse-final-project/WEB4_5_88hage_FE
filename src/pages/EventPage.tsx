@@ -88,7 +88,7 @@ export default function EventPage() {
       const list = res.data?.content || res.data?.contents || [];
       console.log("받아온 데이터(정렬값 확인):", list);
       setData(prev => (page === 0 ? list : [...prev, ...list]));
-      setHasMore(!(res.data.last ?? true));
+      setHasMore(res.data && typeof res.data.last !== "undefined" ? !res.data.last : false);
       setLoading(false);
     };
     fetchData();
