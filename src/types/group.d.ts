@@ -1,76 +1,137 @@
-export type GroupCategory =
-  | 'ART'
-  | 'TRAVEL'
-  | 'FOOD'
-  | 'GAME'
-  | 'CULTURE'
-  | 'SPORT'
-  | 'STUDY'
-  | 'MOVIE';
-
-export type GroupSortType = 'recent' | 'viewCount' | 'distance';
-
-export interface GroupSearchQueryParams {
-  category?: GroupCategory;
-  keyword?: string | null;
-  sortBy?: GroupSortType;
-  distance?: number;
-  page?: number;
-  size?: number;
-  sort?: string[];
-}
-
-export interface GroupHashtag {
+export interface Group {
   id: number;
-  tag: string;
-  group: number;
+  activated: boolean;
+  during: number;
+  latitude: number;
+  longitude: number;
+  max_people: number;
+  now_people: number;
+  view_count: number;
+  created_at: string;
+  group_date: string;
+  modified_at: string;
+  address: string;
+  category:
+    | 'ART'
+    | 'TRAVEL'
+    | 'FOOD'
+    | 'GAME'
+    | 'CULTURE'
+    | 'SPORT'
+    | 'STUDY'
+    | 'MOVIE';
+  explain: string;
+  image_url: string;
+  leader_id: string;
+  place_name: string;
+  simple_explain: string;
+  status: 'RECRUITING' | 'FULL' | 'COMPLETED' | 'CANCELED' | 'DELETE';
+  title: string;
 }
-
-export interface GroupRequest {
+export interface GroupUpdateRequest {
   title: string;
   explain: string;
   simpleExplain: string;
   placeName: string | null;
   groupDate: string;
   address: string;
-  category: string;
+  category:
+    | 'ART'
+    | 'TRAVEL'
+    | 'FOOD'
+    | 'GAME'
+    | 'CULTURE'
+    | 'SPORT'
+    | 'STUDY'
+    | 'MOVIE';
   maxPeople: number;
   latitude: number;
   longitude: number;
-  image?: File; // binary
+  image?: File;
   hashTags: string[];
   during?: number;
 }
-
-export interface GroupHashtagDTO {
-  id: number;
-  tag: string;
-  group: number;
+export interface GroupSearchQueryParams {
+  category?:
+    | 'ART'
+    | 'TRAVEL'
+    | 'FOOD'
+    | 'GAME'
+    | 'CULTURE'
+    | 'SPORT'
+    | 'STUDY'
+    | 'MOVIE';
+  keyword?: string;
+  sortBy?: 'recent' | 'viewCount' | 'distance';
+  page?: number;
+  size?: number;
+  sort?: string[];
 }
 
-export interface GroupBookmarkDTO {
-  id: number;
-  email: string;
-  group: number;
-}
-
-export interface Group {
-  id: number;
+export interface GroupCreateRequest {
   title: string;
   explain: string;
   simpleExplain: string;
   placeName: string;
   groupDate: string;
   address: string;
-  category: GroupCategory;
+  category:
+    | 'ART'
+    | 'TRAVEL'
+    | 'FOOD'
+    | 'GAME'
+    | 'CULTURE'
+    | 'SPORT'
+    | 'STUDY'
+    | 'MOVIE';
   maxPeople: number;
   latitude: number;
   longitude: number;
-  image?: string;
-  hashTags: GroupHashtag[];
+  image?: File;
+  hashTags: string[];
   during: number;
-  leaderId: number;
-  currentPeople: number;
-  viewCount: number;
-  status: 'ACTIVE' | 'COMPLETED' | 'CANCELED';
+}
+
+export interface GroupBookmark {
+  id: number;
+  activated: boolean;
+  created_at: string;
+  group_id: number;
+  modified_at: string;
+  email: string;
+}
+
+export interface GroupMember {
+  id: number;
+  activated: boolean;
+  created_at: string;
+  group_id: number;
+  modified_at: string;
+  email: string;
+}
+
+export interface GroupHashtag {
+  id: number;
+  activated: boolean;
+  created_at: string;
+  group_id: number;
+  modified_at: string;
+  tag: string;
+}
+
+export interface GroupPreference {
+  id: number;
+  activated: boolean;
+  created_at: string;
+  modified_at: string;
+  category:
+    | 'ART'
+    | 'TRAVEL'
+    | 'FOOD'
+    | 'GAME'
+    | 'CULTURE'
+    | 'SPORT'
+    | 'STUDY'
+    | 'MOVIE';
+  user_id: string;
 }

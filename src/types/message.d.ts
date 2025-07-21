@@ -1,16 +1,11 @@
 export interface Message {
   id: number;
+  activated: boolean;
+  is_read: boolean;
+  created_at: string;
+  modified_at: string;
+  read_at: string | null;
   content: string;
-  readAt: string | null;
-  sender: string;
-  receiver: string;
-  isRead: boolean;
-}
-
-export interface MessageCreateRequest {
-  content: string;
-  sender: string;
-  receiver: string;
-  readAt?: string | null; // 선택적으로 보냄
-  isRead?: boolean; // 기본
+  receiver_id: string;
+  sender_id: string;
 }

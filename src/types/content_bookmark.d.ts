@@ -1,7 +1,8 @@
-export interface Notice {
+export interface ContentBookmark {
   id: number;
   activated: boolean;
+  content_id: number;
   created_at: string;
   modified_at: string;
-  message: string;
+  user_email: string;
 }
