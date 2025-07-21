@@ -1,4 +1,4 @@
-import { ChatRoom } from '@/types/chat';
+import { ChatRoom } from '@/types/chat_room';
 import { get, post } from './fetchInstance';
 import { LastChatHistory } from '@/types/last_chat_history';
 
@@ -15,28 +15,6 @@ export const createPersonalChatRoom = async (userEmail: string) => {
 // 개인 채팅방 조회
 export const getMyPersonalChatRooms = async (): Promise<ChatRoom[]> => {
   return get<ChatRoom[]>('/api/chatRooms/rooms/my');
-};
-
-// 마지막 채팅 조회
-export const getLastChatHistory = async (
-  roomId: number,
-  type: 'GROUP_CHAT' | 'PERSONAL_CHAT',
-): Promise<LastChatHistory> => {
-  const res = await get<LastChatHistory>(
-    `/api/chats/${roomId}/${type}/lastHistory`,
-  );
-  return res;
-};
-
-// 마지막 채팅 조회
-export const getLastChatHistory = async (
-  roomId: number,
-  type: 'GROUP_CHAT' | 'PERSONAL_CHAT',
-): Promise<LastChatHistory> => {
-  const res = await get<LastChatHistory>(
-    `/api/chats/${roomId}/${type}/lastHistory`,
-  );
-  return res;
 };
 
 // 마지막 채팅 조회

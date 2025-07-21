@@ -1,30 +1,37 @@
-import { get } from './fetchInstance';
 import { GetContentsParams } from '@/types/content';
+import { get } from './fetchInstance';
 
-// 컨텐츠 목록 조회
-export const getAllContents = async (params: GetContentsParams = {}) => {
-  const defaultParams = {
-    page: 0,
-    size: 10,
-    sort: ['selectedDate,DESC'], // 명세에 따라 기본 정렬 기준 추가
-  };
-  const mergedParams = { ...defaultParams, ...params };
+export async function getContents(params: GetContentsParams) {
+  const baseUrl = '/api/contents';
+  const queryParams = new URLSearchParams();
 
-  const stringifiedParams = Object.entries(mergedParams).reduce(
-    (acc, [key, value]) => {
-      if (Array.isArray(value)) {
-        acc[key] = value.join(','); // 배열인 경우 쉼표로 조인
-      } else {
-        acc[key] = String(value);
-      }
-      return acc;
-    },
-    {} as Record<string, string>,
-  );
+  if (params.category) queryParams.append('category', params.category);
+  if (params.gugunName) queryParams.append('gugunName', params.gugunName);
+  if (params.startDate) queryParams.append('startDate', params.startDate);
+  if (params.endDate) queryParams.append('endDate', params.endDate);
+  if (params.keyword) queryParams.append('keyword', params.keyword);
+  if (params.sortBy) queryParams.append('sortBy', params.sortBy);
+  if (params.page !== undefined)
+    queryParams.append('page', params.page.toString());
+  if (params.size !== undefined)
+    queryParams.append('size', params.size.toString());
+  if (params.sort) {
+    params.sort.forEach((s) => queryParams.append('sort', s));
+  }
 
-  const queryString = new URLSearchParams(stringifiedParams).toString();
-  return get(`/api/contents?${queryString}`);
-};
+  const url = `${baseUrl}?${queryParams.toString()}`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching contents:', error);
+    throw error;
+  }
+}
 
 // 컨텐츠 상세 조회
 export const getContent = async (id: number) => {
