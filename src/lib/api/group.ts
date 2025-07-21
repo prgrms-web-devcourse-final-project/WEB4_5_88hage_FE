@@ -1,9 +1,15 @@
 import {
   Group,
+  GroupCreateRequest,
   GroupHashtag,
   GroupSearchQueryParams,
-  GroupRequest,
+  GroupUpdateRequest,
 } from '@/types/group';
+import { MyGroupData, MyGroupResponse } from '@/types/my_group';
+import {
+  LeaderMyGroupData,
+  LeaderMyGroupResponse,
+} from '@/types/leader_my_group';
 import { get, post, put, del } from './fetchInstance';
 
 // 모임 상세 조회
@@ -13,8 +19,28 @@ export const getGroupById = async (groupId: number): Promise<Group> => {
 };
 
 // 모임 수정
-export const updateGroup = async (groupId: number, data: GroupRequest) => {
-  await put(`/api/groups/${groupId}`, data);
+export const updateGroup = async (
+  groupId: number,
+  data: GroupUpdateRequest,
+) => {
+  const formData = new FormData();
+  formData.append('title', data.title);
+  formData.append('explain', data.explain);
+  formData.append('simpleExplain', data.simpleExplain);
+  formData.append('placeName', data.placeName);
+  formData.append('groupDate', data.groupDate);
+  formData.append('address', data.address);
+  formData.append('category', data.category);
+  formData.append('maxPeople', data.maxPeople.toString());
+  formData.append('latitude', data.latitude.toString());
+  formData.append('longitude', data.longitude.toString());
+  if (data.image) {
+    formData.append('image', data.image);
+  }
+  data.hashTags.forEach((tag) => formData.append('hashTags', tag));
+  formData.append('during', data.during.toString());
+
+  await put(`/api/groups/${groupId}`, formData);
 };
 
 // 모임 삭제
@@ -23,8 +49,27 @@ export const deleteGroup = async (groupId: number): Promise<void> => {
 };
 
 // 모임 생성
-export const createGroup = async (data: GroupRequest): Promise<number> => {
-  const res = await post<number>('/api/groups/create', data);
+export const createGroup = async (
+  data: GroupCreateRequest,
+): Promise<number> => {
+  const formData = new FormData();
+  formData.append('title', data.title);
+  formData.append('explain', data.explain);
+  formData.append('simpleExplain', data.simpleExplain);
+  formData.append('placeName', data.placeName);
+  formData.append('groupDate', data.groupDate);
+  formData.append('address', data.address);
+  formData.append('category', data.category);
+  formData.append('maxPeople', data.maxPeople.toString());
+  formData.append('latitude', data.latitude.toString());
+  formData.append('longitude', data.longitude.toString());
+  if (data.image) {
+    formData.append('image', data.image);
+  }
+  data.hashTags.forEach((tag) => formData.append('hashTags', tag));
+  formData.append('during', data.during.toString());
+
+  const res = await post<number>('/api/groups/create', formData);
   return res;
 };
 
@@ -59,15 +104,15 @@ export const searchGroups = async (
 };
 
 // 내가 속한 모임 조회
-export const getMyGroups = async (): Promise<Group[]> => {
-  const res = await get<Group[]>('/api/groups/my-groups');
-  return res;
+export const getMyGroups = async (): Promise<MyGroupData[]> => {
+  const res = await get<MyGroupResponse>('/api/groups/getMy');
+  return res.data;
 };
 
 // 내가 리더 역할인 모임 조회
-export const getLeaderMyGroups = async (): Promise<Group[]> => {
-  const res = await get<Group[]>('/api/groups/my-leader-groups');
-  return res;
+export const getLeaderMyGroups = async (): Promise<LeaderMyGroupData[]> => {
+  const res = await get<LeaderMyGroupResponse>('/api/groups/getLeaderMy');
+  return res.data;
 };
 
 // 모임에 해시태그 추가
