@@ -1,10 +1,15 @@
+'use client';
 import GrayButton from '@/components/button/GrayButton';
 import Tag from '@/components/common/Tag';
 import CategorySelect from '@/components/layout/CategorySelect';
 import WritingForm from '@/components/layout/WritingForm';
+import WritingFormTags from '@/components/layout/WritingFormTags';
 import AddPhotoButton from '@/components/ui/AddPhotoButton';
+import { useState } from 'react';
 
 export default function GatheringCreatePage() {
+  const [tags, setTags] = useState<string[]>([]);
+
   return (
     <>
       <div className="bg-gray-7 mb-[50px] flex h-[200px] w-full items-center justify-center">
@@ -66,18 +71,19 @@ export default function GatheringCreatePage() {
         <div className="flex w-full flex-col items-baseline gap-[20px] lg:flex-row lg:gap-6">
           {/* 태그 입력 영역 */}
           <div className="w-full lg:w-1/2">
-            <WritingForm
+            <WritingFormTags
               // name='hashTags'
               title="태그"
               placeholder="태그를 작성 해주세요."
-              isRequired={false}
-              isLongForm={false}
+              onTagsChange={(newTags) => setTags(newTags)}
             />
             <div className="mt-[10px] flex flex-wrap justify-start gap-2 lg:mt-[20px]">
+              {tags.map((tag) => (
+                <Tag name={tag} key={tag} />
+              ))}
+              {/* <Tag name="태그" />
               <Tag name="태그" />
-              <Tag name="태그" />
-              <Tag name="태그" />
-              <Tag name="태그" />
+              <Tag name="태그" /> */}
             </div>
           </div>
 
