@@ -1,10 +1,10 @@
-export interface ProfileRequest {
+declare interface ProfileRequest {
   image?: string; // binary
   imageChanged: boolean;
   introduction: string;
 }
 
-export interface UserProfile {
+declare interface UserProfile {
   email: string;
   nickname: string;
   introduction: string;
@@ -15,7 +15,7 @@ export interface UserProfile {
   followingCount: number;
 }
 
-export interface Following {
+declare interface Following {
   email: string;
   nickname: string;
   introduction: string;
@@ -23,7 +23,7 @@ export interface Following {
   followedAt: string; // 팔로우한 시간
 }
 
-export interface Follower {
+declare interface Follower {
   email: string;
   nickname: string;
   introduction: string;
@@ -31,12 +31,12 @@ export interface Follower {
   followedAt: string; // 팔로우된 시간
 }
 
-export interface UserCoordinate {
+declare interface UserCoordinate {
   latitude: number;
   longitude: number;
 }
 
-export interface UserInfo {
+declare interface UserInfo {
   email: string;
   nickname: string;
   address: string;
@@ -45,11 +45,11 @@ export interface UserInfo {
   isMarketingAgreed: boolean;
 }
 
-export interface NicknameChangeRequest {
+declare interface NicknameChangeRequest {
   nickname: string;
 }
 
-export interface User {
+declare interface User {
   email: string;
   nickname: string;
   // ... 기타 사용자 정보 필드

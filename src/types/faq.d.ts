@@ -1,13 +1,13 @@
-export interface FaqUpdateRequest {
+declare interface FaqUpdateRequest {
   question: string;
   answer: string;
 }
 
-export interface FaqCreateRequest {
+declare interface FaqCreateRequest {
   question: string;
 }
 
-export interface FAQ {
+declare interface FAQ {
   id: number;
   question: string;
   answer: string;

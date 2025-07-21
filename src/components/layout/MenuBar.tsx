@@ -6,20 +6,36 @@ import { useEffect, useState } from 'react';
 import DarkModeToggle from '../DarkModeToggle';
 import cloud from '@/assets/images/cloud-face.png.png';
 import getWeather from '@/lib/api/weather';
+import Link from 'next/link';
+import { useAuthStore } from '@/stores/UseAuthStore';
+
+const logoutItem = [
+  { label: '로그인', value: 'login' },
+  { label: '회원가입', value: 'signup' },
+  { label: '알림', value: 'signup' },
+  { label: '행사', value: 'event' },
+  { label: '모임', value: 'gathering' },
+  { label: '고객지원', value: 'notice' },
+  { label: '모임 글 작성', value: 'gathering/create' },
+  { label: '문의 글 작성', value: 'inquiry/create' },
+]
+
+const loginItem = [
+  { label: '로그아웃' },
+  { label: '내 프로필', value: 'user/profile' },
+  { label: '행사', value: 'event' },
+  { label: '모임', value: 'gathering' },
+  { label: '고객지원', value: 'notice' },
+]
 
 
-const NAV_ITEMS = [
-  '로그아웃',
-  '내 프로필',
-  '알람',
-  '컨텐츠',
-  '모임',
-  '고객 센터',
-];
 
 export default function MenuBar() {
   const [active, setActive] = useState('');
   const [weather,setWeather] = useState<number|undefined>(undefined);
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated);
+
+  const NAV_ITEMS = isAuthenticated ? loginItem : logoutItem;
 
   useEffect(()=>{
     const getNowWeather = async ()=>{
@@ -56,24 +72,24 @@ export default function MenuBar() {
 
         <nav className="flex flex-col gap-2">
           {NAV_ITEMS.map((item) => (
-            <div key={item}>
+            <div key={item.label}>
               <button
                 className={`h2 group ml-[-15px] flex w-full items-center py-1 text-left font-semibold transition ${
-                  active === item ? 'text-main font-bold' : 'text-white'
+                  active === item.label ? 'text-main font-bold' : 'text-white'
                 } hover:text-main`}
-                onClick={() => setActive(item)}
+                onClick={() => setActive(item.label)}
                 type="button"
               >
                 <span
                   className={`mr-2 h-1 w-1 rounded-full transition-all ${
-                    active === item ? 'bg-main' : 'bg-transparent'
+                    active === item.label ? 'bg-main' : 'bg-transparent'
                   }`}
                 />
-                {item}
+                <Link href={`/${item.value}`}>{item.label}</Link>
               </button>
 
               {/* '알람' 다음에만 줄 추가 */}
-              {item === '알람' && (
+              {item.label === '알람' && (
                 <div className="my-6 w-[60px] border text-white" />
               )}
             </div>

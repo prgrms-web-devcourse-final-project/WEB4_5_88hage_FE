@@ -1,4 +1,4 @@
-export type GroupCategory =
+declare type GroupCategory =
   | 'ART'
   | 'TRAVEL'
   | 'FOOD'
@@ -8,9 +8,9 @@ export type GroupCategory =
   | 'STUDY'
   | 'MOVIE';
 
-export type GroupSortType = 'recent' | 'viewCount' | 'distance';
+declare type GroupSortType = 'recent' | 'viewCount' | 'distance';
 
-export interface GroupSearchQueryParams {
+declare interface GroupSearchQueryParams {
   category?: GroupCategory;
   keyword?: string | null;
   sortBy?: GroupSortType;
@@ -20,13 +20,13 @@ export interface GroupSearchQueryParams {
   sort?: string[];
 }
 
-export interface GroupHashtag {
+declare interface GroupHashtag {
   id: number;
   tag: string;
   group: number;
 }
 
-export interface GroupRequest {
+declare interface GroupRequest {
   title: string;
   explain: string;
   simpleExplain: string;
@@ -42,19 +42,19 @@ export interface GroupRequest {
   during: number;
 }
 
-export interface GroupHashtagDTO {
+declare interface GroupHashtagDTO {
   id: number;
   tag: string;
   group: number;
 }
 
-export interface GroupBookmarkDTO {
+declare interface GroupBookmarkDTO {
   id: number;
   email: string;
   group: number;
 }
 
-export interface Group {
+declare interface Group {
   id: number;
   title: string;
   explain: string;

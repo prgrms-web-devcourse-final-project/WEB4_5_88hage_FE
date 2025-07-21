@@ -1,4 +1,4 @@
-export interface Message {
+declare interface Message {
   id: number;
   content: string;
   readAt: string | null;
@@ -6,8 +6,7 @@ export interface Message {
   receiver: string;
   isRead: boolean;
 }
-
-export interface MessageCreateRequest {
+declare interface MessageCreateRequest {
   content: string;
   sender: string;
   receiver: string;

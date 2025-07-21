@@ -1,4 +1,4 @@
-export type ContentCategory =
+declare type ContentCategory =
   | 'THEATER'
   | 'DANCE'
   | 'POP_DANCE'
@@ -12,9 +12,9 @@ export type ContentCategory =
   | 'CULTURE'
   | 'SPORTS';
 
-export type ContentSortBy = 'bookmarkCount' | 'endDate' | 'distance';
+declare type ContentSortBy = 'bookmarkCount' | 'endDate' | 'distance';
 
-export interface GetContentsParams {
+declare interface GetContentsParams {
   category?: ContentCategory;
   gugunName?: string;
   startDate?: string; // YYYY-MM-DD

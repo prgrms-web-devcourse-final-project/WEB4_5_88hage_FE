@@ -1,4 +1,4 @@
-export interface Notification {
+declare interface Notification {
   id: number;
   email: string;
   message: string;
@@ -6,14 +6,14 @@ export interface Notification {
   isRead: boolean;
 }
 
-export interface NotificationCreateRequest {
+declare interface NotificationCreateRequest {
   email: string;
   message: string;
   link?: string;
   isRead?: boolean;
 }
 
-export interface NotificationDTO {
+declare interface NotificationDTO {
   id: number;
   email: string;
   message: string;
