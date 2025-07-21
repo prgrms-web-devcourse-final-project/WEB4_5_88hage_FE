@@ -2,8 +2,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Buffer } from 'buffer';
-import { get as fetchGet } from '@/lib/api/fetchInstance';
 import { login as apiLogin } from '@/lib/api/auth';
+import axios from 'axios';
 
 interface User {
   email: string;
@@ -71,11 +71,11 @@ export const useAuthStore = create<AuthState>()(
         const { latitude, longitude } = data.data;
         set((state) => ({
           user: {
-            ...user,
+            ...state.user,
             latitude,
             longitude,
           },
-        });
+        }));
       },
 
       logout: () => {
