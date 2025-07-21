@@ -6,7 +6,7 @@ import CategorySelect from '@/components/layout/CategorySelect';
 import WritingForm from '@/components/layout/WritingForm';
 import WritingFormTags from '@/components/layout/WritingFormTags';
 import AddPhotoButton from '@/components/ui/AddPhotoButton';
-import { GroupRequest } from '@/types/group';
+import { GroupCreateRequest } from '@/types/group';
 import { useState } from 'react';
 
 export default function GatheringCreatePage() {
@@ -14,11 +14,25 @@ export default function GatheringCreatePage() {
   const [images, setImages] = useState<File[]>([]);
   const [showModal, setShowModal] = useState(false);
 
+  const [groupDate, setGroupDate] = useState('');
   const [address, setAddress] = useState('');
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
 
   const handleDataChange = (data: File[]) => setImages(data);
+  const convertDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month =
+      date.getMonth() + 1 < 10
+        ? '0' + (date.getMonth() + 1)
+        : date.getMonth() + 1;
+    const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+    const hour = date.getHours() < 12 ? date.getHours() : date.getHours() - 12;
+    const ampm = date.getHours() < 12 ? '오전' : '오후';
+    const minute =
+      date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+    return `${year}-${month}-${day} ${ampm} ${hour}:${minute}`;
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,14 +46,14 @@ export default function GatheringCreatePage() {
     miniData.forEach((value, key) => {
       newFormData[key] = value;
     });
-    const newData: GroupRequest = {
+    const newData: GroupCreateRequest = {
       title: '',
       explain: '',
       simpleExplain: '',
-      placeName: null,
+      placeName: '',
       groupDate: '',
       address: '',
-      category: '',
+      category: 'ART',
       maxPeople: 0,
       latitude: 0,
       longitude: 0,
@@ -53,8 +67,8 @@ export default function GatheringCreatePage() {
     newData.latitude = +latitude.toFixed(4);
     newData.longitude = +longitude.toFixed(4);
     newData.maxPeople = +newFormData.maxPeople;
-    newData.groupDate = newFormData.groupDate;
     newData.category = newFormData.category;
+    newData.groupDate = groupDate;
     newData.hashTags = tags;
     if (!!newFormData.during) newData.during = +newFormData.during;
     if (images.length > 0) newData.image = images[0];
@@ -113,6 +127,7 @@ export default function GatheringCreatePage() {
               title="모임 날짜"
               placeholder="모임 위치를 정해주세요."
               isRequired
+              sendDate={(date) => setGroupDate(convertDate(date))}
               isLongForm={false}
             />
           </div>
@@ -121,7 +136,7 @@ export default function GatheringCreatePage() {
               name="during"
               title="소요 시간"
               isRequired={false}
-              placeholder="소요 시간을 작성해주세요."
+              placeholder="모임의 소요 시간을 작성해주세요."
               isLongForm={false}
             />
           </div>

@@ -89,7 +89,7 @@ export interface GroupCreateRequest {
   longitude: number;
   image?: File;
   hashTags: string[];
-  during: number;
+  during?: number;
 }
 
 export interface GroupBookmark {

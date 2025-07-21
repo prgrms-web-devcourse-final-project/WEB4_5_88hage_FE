@@ -2,8 +2,9 @@
 import { useState } from 'react';
 import { Calendar, Search } from 'lucide-react';
 
-import DatePicker from 'react-datepicker';
+import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { ko } from 'date-fns/locale/ko';
 
 export default function WritingForm({
   title,
@@ -11,26 +12,35 @@ export default function WritingForm({
   isRequired,
   placeholder,
   isLongForm,
-  handleModal,
   addressValue,
+  handleModal,
+  sendDate,
 }: {
   title: string;
   name?: string;
   isRequired: boolean;
   placeholder: string;
   isLongForm: boolean;
-  handleModal?: (showModal: boolean) => void;
   addressValue?: string;
+  handleModal?: (showModal: boolean) => void;
+  sendDate?: (date: Date) => void;
 }) {
   const [value, setValue] = useState('');
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setValue(e.target.value);
   };
+
+  const handleDate = (date: Date | null) => {
+    setSelectedDate(date);
+    if (date && sendDate) sendDate(date);
+  };
+
+  registerLocale('ko', ko);
 
   return (
     <>
@@ -88,13 +98,15 @@ export default function WritingForm({
           )}
           {!isLongForm && title === '모임 날짜' && (
             <DatePicker
-              dateFormat="yyyy-MM-dd hh:mm TT"
+              locale="ko"
+              dateFormat="yyyy-MM-dd a h:mm"
               shouldCloseOnSelect
               showTimeSelect
               minDate={new Date()}
               selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
-              className="placeholder-gray-disabled t3 mt-3 w-full rounded border border-[#343434] p-4 text-white"
+              onChange={(date) => handleDate(date)}
+              placeholderText="모임 시작일을 알려주세요"
+              className="placeholder-gray-disabled t3 mt-3 w-full cursor-pointer rounded border border-[#343434] p-4 text-white"
             />
           )}
           {isLongForm && (
