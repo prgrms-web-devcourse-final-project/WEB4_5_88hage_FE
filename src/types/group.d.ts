@@ -28,6 +28,69 @@ export interface Group {
   status: 'RECRUITING' | 'FULL' | 'COMPLETED' | 'CANCELED' | 'DELETE';
   title: string;
 }
+export interface GroupUpdateRequest {
+  title: string;
+  explain: string;
+  simpleExplain: string;
+  placeName: string;
+  groupDate: string;
+  address: string;
+  category:
+    | 'ART'
+    | 'TRAVEL'
+    | 'FOOD'
+    | 'GAME'
+    | 'CULTURE'
+    | 'SPORT'
+    | 'STUDY'
+    | 'MOVIE';
+  maxPeople: number;
+  latitude: number;
+  longitude: number;
+  image?: File;
+  hashTags: string[];
+  during: number;
+}
+export interface GroupSearchQueryParams {
+  category?:
+    | 'ART'
+    | 'TRAVEL'
+    | 'FOOD'
+    | 'GAME'
+    | 'CULTURE'
+    | 'SPORT'
+    | 'STUDY'
+    | 'MOVIE';
+  keyword?: string;
+  sortBy?: 'recent' | 'viewCount' | 'distance';
+  page?: number;
+  size?: number;
+  sort?: string[];
+}
+
+export interface GroupCreateRequest {
+  title: string;
+  explain: string;
+  simpleExplain: string;
+  placeName: string;
+  groupDate: string;
+  address: string;
+  category:
+    | 'ART'
+    | 'TRAVEL'
+    | 'FOOD'
+    | 'GAME'
+    | 'CULTURE'
+    | 'SPORT'
+    | 'STUDY'
+    | 'MOVIE';
+  maxPeople: number;
+  latitude: number;
+  longitude: number;
+  image?: File;
+  hashTags: string[];
+  during: number;
+}
 
 export interface GroupBookmark {
   id: number;
