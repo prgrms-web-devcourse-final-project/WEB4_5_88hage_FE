@@ -21,16 +21,15 @@ export default function Login() {
   } = useForm<LoginRequest>();
   const router = useRouter();
   const [loginError, setLoginError] = useState('');
-  const user = useAuthStore((s) => s.user);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const login = useAuthStore((s) => s.login);
-  //const setAuth = useAuthStore((s) => s.setAuth);
-  //const API = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
-    if (user) {
+    if (isAuthenticated) {
       router.replace('/');
+      console.log('로그인된 상태이므로 메인으로 리다이렉트합니다.');
     }
-  }, [user, router]);
+  }, [isAuthenticated, router]);
 
   const onSubmit = async (data: LoginRequest) => {
     try {
