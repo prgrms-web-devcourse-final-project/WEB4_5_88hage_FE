@@ -19,3 +19,10 @@ button {
     @apply lg:bg-gray-7 flex min-h-screen w-full flex-col items-center bg-[#121212] px-4 pt-8 text-[#8d8d8d] lg:w-1/2 lg:justify-center;
   }
 }
+
+/* React Datepicker */
+
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
+  width: 100%;
+}

@@ -30,16 +30,16 @@ export interface GroupRequest {
   title: string;
   explain: string;
   simpleExplain: string;
-  placeName: string;
+  placeName: string | null;
   groupDate: string;
   address: string;
   category: string;
   maxPeople: number;
   latitude: number;
   longitude: number;
-  image?: string; // binary
+  image?: File; // binary
   hashTags: string[];
-  during: number;
+  during?: number;
 }
 
 export interface GroupHashtagDTO {

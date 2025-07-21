@@ -1,14 +1,68 @@
 'use client';
+import SearchAddressModal from '@/components/auth/SearchAddressModal';
 import GrayButton from '@/components/button/GrayButton';
 import Tag from '@/components/common/Tag';
 import CategorySelect from '@/components/layout/CategorySelect';
 import WritingForm from '@/components/layout/WritingForm';
 import WritingFormTags from '@/components/layout/WritingFormTags';
 import AddPhotoButton from '@/components/ui/AddPhotoButton';
+import { GroupRequest } from '@/types/group';
 import { useState } from 'react';
 
 export default function GatheringCreatePage() {
   const [tags, setTags] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
+  const [showModal, setShowModal] = useState(false);
+
+  const [address, setAddress] = useState('');
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
+
+  const handleDataChange = (data: File[]) => setImages(data);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // formData
+    const miniData = new FormData(e.currentTarget);
+    miniData.delete('images');
+
+    // 데이터 변환
+    const newFormData: { [key: string]: any } = {};
+    miniData.forEach((value, key) => {
+      newFormData[key] = value;
+    });
+    const newData: GroupRequest = {
+      title: '',
+      explain: '',
+      simpleExplain: '',
+      placeName: null,
+      groupDate: '',
+      address: '',
+      category: '',
+      maxPeople: 0,
+      latitude: 0,
+      longitude: 0,
+      hashTags: [],
+      // during: 0, 선택 항목
+    };
+    newData.title = newFormData.title;
+    newData.explain = newFormData.explain;
+    newData.simpleExplain = newFormData.explain;
+    newData.address = newFormData.address;
+    newData.latitude = +latitude.toFixed(4);
+    newData.longitude = +longitude.toFixed(4);
+    newData.maxPeople = +newFormData.maxPeople;
+    newData.groupDate = newFormData.groupDate;
+    newData.category = newFormData.category;
+    newData.hashTags = tags;
+    if (!!newFormData.during) newData.during = +newFormData.during;
+    if (images.length > 0) newData.image = images[0];
+
+    console.log(newData);
+
+    // API
+  };
 
   return (
     <>
@@ -17,10 +71,13 @@ export default function GatheringCreatePage() {
           모임글 작성
         </div>
       </div>
-      <div className="mx-auto mb-10 flex w-full max-w-[1220px] flex-col gap-[20px] px-6">
+      <form
+        onSubmit={handleSubmit}
+        className="mx-auto mb-10 flex w-full max-w-[1220px] flex-col gap-[20px] px-6"
+      >
         <WritingForm
           name="title"
-          title="제목"
+          title="모임 이름"
           placeholder="제목을 입력해 주세요."
           isRequired
           isLongForm={false}
@@ -34,6 +91,8 @@ export default function GatheringCreatePage() {
               placeholder="모임 위치를 정해주세요."
               isRequired
               isLongForm={false}
+              addressValue={address}
+              handleModal={(bool) => setShowModal(bool)}
             />
           </div>
           <div className="w-full lg:w-1/2">
@@ -61,8 +120,8 @@ export default function GatheringCreatePage() {
             <WritingForm
               name="during"
               title="소요 시간"
-              placeholder="최대 인원을 작성해주세요."
-              isRequired
+              isRequired={false}
+              placeholder="소요 시간을 작성해주세요."
               isLongForm={false}
             />
           </div>
@@ -74,16 +133,23 @@ export default function GatheringCreatePage() {
             <WritingFormTags
               // name='hashTags'
               title="태그"
+              isRequired
               placeholder="태그를 작성 해주세요."
-              onTagsChange={(newTags) => setTags(newTags)}
+              onTagsAdd={(newTag) => setTags((prev) => [...prev, newTag])}
             />
             <div className="mt-[10px] flex flex-wrap justify-start gap-2 lg:mt-[20px]">
-              {tags.map((tag) => (
-                <Tag name={tag} key={tag} />
+              {tags.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  className="t3 rounded-2xl bg-[#393939] px-2.5 py-1 text-white"
+                  onClick={() =>
+                    setTags((prev) => prev.filter((v) => v !== item))
+                  }
+                >
+                  #{item}
+                </button>
               ))}
-              {/* <Tag name="태그" />
-              <Tag name="태그" />
-              <Tag name="태그" /> */}
             </div>
           </div>
 
@@ -113,12 +179,23 @@ export default function GatheringCreatePage() {
           isLongForm
         />
 
-        <AddPhotoButton className="mb-[60px] lg:mt-0" />
+        <AddPhotoButton
+          className="mb-[60px] lg:mt-0"
+          onDataChange={handleDataChange}
+        />
 
         <GrayButton className="text-gray-disabled bg-gray-6 hover:bg-main hover:text-gray-8 fixed bottom-[20px] left-[20px] h-[52px] w-[calc(100%-40px)] text-[20px] font-medium hover:font-semibold lg:static lg:bottom-0 lg:left-0 lg:mt-10 lg:mb-[70px] lg:h-[80px] lg:w-full lg:text-[32px] lg:font-semibold">
           작성하기
         </GrayButton>
-      </div>
+      </form>
+      {showModal && (
+        <SearchAddressModal
+          setShowModal={setShowModal}
+          setAddress={setAddress}
+          setLatitude={setLatitude}
+          setLongitude={setLongitude}
+        />
+      )}
     </>
   );
 }

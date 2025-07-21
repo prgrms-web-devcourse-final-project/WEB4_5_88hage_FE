@@ -23,8 +23,8 @@ export const deleteGroup = async (groupId: number): Promise<void> => {
 };
 
 // 모임 생성
-export const createGroup = async (data: GroupRequest): Promise<number> => {
-  const res = await post<number>('/api/groups/create', data);
+export const createGroup = async (data: GroupRequest): Promise<any> => {
+  const res = await post<any>('/api/groups/create', data);
   return res;
 };
 

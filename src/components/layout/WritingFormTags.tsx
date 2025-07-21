@@ -4,44 +4,45 @@ import { useEffect, useState } from 'react';
 export default function WritingFormTags({
   title,
   name,
+  isRequired,
   placeholder,
-  onTagsChange,
+  onTagsAdd,
 }: {
   title: string;
   name?: string;
+  isRequired: boolean;
   placeholder: string;
-  onTagsChange: (tags: string[]) => void;
+  onTagsAdd: (tags: string) => void;
 }) {
   const [value, setValue] = useState('');
-  const [tags, setTags] = useState<string[]>([]);
 
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      setTags((prev) => [...prev, value]);
-      setValue('');
+      e.preventDefault();
+      if (value.length > 0) {
+        onTagsAdd(value);
+        setValue('');
+      }
     }
   };
-
-  useEffect(() => {
-    onTagsChange(tags);
-  }, [tags]);
 
   return (
     <div className="w-full">
       <div className="text-main text-[16px] font-semibold lg:text-[24px]">
         {title}
+        {isRequired && (
+          <span className="t5 t4 ml-2 font-medium text-[#cecece]">필수</span>
+        )}
       </div>
       <div className="relative">
         <input
           type="text"
           name={name}
-          className={`placeholder-gray-disabled t3 mt-3 w-full rounded border border-[#343434] p-4 text-white ${
-            title === '모임 위치' ? 'pr-12' : ''
-          }`}
+          className="placeholder-gray-disabled t3 mt-3 w-full rounded border border-[#343434] p-4 text-white"
           placeholder={placeholder}
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          onKeyUp={handleEnter}
+          onKeyDown={handleEnter}
         />
       </div>
     </div>
