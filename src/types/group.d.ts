@@ -32,7 +32,7 @@ export interface GroupUpdateRequest {
   title: string;
   explain: string;
   simpleExplain: string;
-  placeName: string | null;
+  placeName: string;
   groupDate: string;
   address: string;
   category:

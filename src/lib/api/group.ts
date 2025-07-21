@@ -38,7 +38,7 @@ export const updateGroup = async (
     formData.append('image', data.image);
   }
   data.hashTags.forEach((tag) => formData.append('hashTags', tag));
-  formData.append('during', data.during.toString());
+  if (data.during) formData.append('during', data.during.toString());
 
   await put(`/api/groups/${groupId}`, formData);
 };
@@ -49,9 +49,7 @@ export const deleteGroup = async (groupId: number): Promise<void> => {
 };
 
 // 모임 생성
-export const createGroup = async (
-  data: GroupCreateRequest,
-): Promise<number> => {
+export const createGroup = async (data: GroupCreateRequest): Promise<any> => {
   const formData = new FormData();
   formData.append('title', data.title);
   formData.append('explain', data.explain);
@@ -67,9 +65,9 @@ export const createGroup = async (
     formData.append('image', data.image);
   }
   data.hashTags.forEach((tag) => formData.append('hashTags', tag));
-  formData.append('during', data.during.toString());
+  if (data.during) formData.append('during', data.during.toString());
 
-  const res = await post<number>('/api/groups/create', formData);
+  const res = await post('/api/groups/create', formData);
   return res;
 };
 

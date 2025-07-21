@@ -6,6 +6,7 @@ import CategorySelect from '@/components/layout/CategorySelect';
 import WritingForm from '@/components/layout/WritingForm';
 import WritingFormTags from '@/components/layout/WritingFormTags';
 import AddPhotoButton from '@/components/ui/AddPhotoButton';
+import { createGroup } from '@/lib/api/group';
 import { GroupCreateRequest } from '@/types/group';
 import { useState } from 'react';
 
@@ -20,19 +21,6 @@ export default function GatheringCreatePage() {
   const [longitude, setLongitude] = useState(0);
 
   const handleDataChange = (data: File[]) => setImages(data);
-  const convertDate = (date: Date) => {
-    const year = date.getFullYear();
-    const month =
-      date.getMonth() + 1 < 10
-        ? '0' + (date.getMonth() + 1)
-        : date.getMonth() + 1;
-    const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
-    const hour = date.getHours() < 12 ? date.getHours() : date.getHours() - 12;
-    const ampm = date.getHours() < 12 ? '오전' : '오후';
-    const minute =
-      date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
-    return `${year}-${month}-${day} ${ampm} ${hour}:${minute}`;
-  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,7 +38,7 @@ export default function GatheringCreatePage() {
       title: '',
       explain: '',
       simpleExplain: '',
-      placeName: '',
+      placeName: 'NULL',
       groupDate: '',
       address: '',
       category: 'ART',
@@ -76,6 +64,7 @@ export default function GatheringCreatePage() {
     console.log(newData);
 
     // API
+    createGroup(newData).then((res) => console.log(res.data));
   };
 
   return (
@@ -127,7 +116,7 @@ export default function GatheringCreatePage() {
               title="모임 날짜"
               placeholder="모임 위치를 정해주세요."
               isRequired
-              sendDate={(date) => setGroupDate(convertDate(date))}
+              sendDate={(date) => setGroupDate(date.toISOString())}
               isLongForm={false}
             />
           </div>
