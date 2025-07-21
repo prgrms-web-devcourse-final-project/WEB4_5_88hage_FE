@@ -1,4 +1,4 @@
-import { CalendarContentRequest } from '@/types/global';
+// import { CalendarContentRequest } from '@/types/global';
 import { get, post, del, patch } from './fetchInstance';
 
 // 캘린더 일정 등록 - 예약하기

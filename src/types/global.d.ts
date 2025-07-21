@@ -71,7 +71,7 @@ declare interface ChatBotRequest {
   userMessage: string;
 }
 
-export interface CalendarContentRequest {
+declare interface CalendarContentRequest {
   title: string;
   content: string;
   startDate: string;

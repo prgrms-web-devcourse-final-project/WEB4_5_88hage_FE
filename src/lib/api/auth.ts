@@ -7,6 +7,6 @@ export const login = async (
   rememberMe = false,
 ) => {
 
-  return post('/auth/login', { email, password, rememberMe });
+  return post('/api/auth/login', { email, password, rememberMe });
 
 };

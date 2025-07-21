@@ -31,7 +31,8 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       login: async (email, pw, remember) => {
         const { data } = await apiLogin(email, pw, remember);
-        const token = data.data.accessToken as string;
+        console.log(data);
+        const token = data.accessToken as string;
 
         const [, payload] = token.split('.');
         const padded = payload
