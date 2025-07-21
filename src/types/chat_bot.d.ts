@@ -1,11 +1,10 @@
-export interface Calendar {
+export interface ChatBot {
   id: number;
   activated: boolean;
-  content_id: number | null;
   created_at: string;
-  group_id: number | null;
   modified_at: string;
-  selected_date: string;
+  content_summary: string | null;
   email: string | null;
+  group_summary: string | null;
   type: 'CONTENT' | 'GROUP';
 }

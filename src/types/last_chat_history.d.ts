@@ -1,0 +1,11 @@
+export interface LastChatHistory {
+  id: number;
+  activated: boolean;
+  created_at: string;
+  modified_at: string;
+  room_id: number;
+  message: string;
+  room_type: 'GROUP_CHAT' | 'PERSONAL_CHAT';
+  sender_email: string;
+  sender_nickname: string;
+}
