@@ -66,7 +66,10 @@ export default function GatheringCreatePage() {
     console.log(newData);
 
     // API
-    createGroup(newData).then(() => router.push('/gathering'));
+    createGroup(newData).then(() => {
+      alert('게시글이 등록되었습니다.');
+      router.push('/gathering');
+    });
   };
 
   return (
