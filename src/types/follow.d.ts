@@ -1,4 +1,4 @@
-export interface Follow {
+declare interface Follow {
   id: number;
   activated: boolean;
   created_at: string;

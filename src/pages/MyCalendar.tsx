@@ -6,6 +6,9 @@ import { useEffect, useState } from 'react';
 
 export default function MyCalendar() {
   const date = new Date();
+  const [calendarData,setCalendarData] = useState<CalendarData[]>([]);
+
+  const [selectListData,setSelectListData] = useState<CalendarData[]>([]);
 
   const [selectDate,setSelectDate] = useState<SelectDate>({
     date: date.getDate(),
@@ -16,13 +19,27 @@ export default function MyCalendar() {
   useEffect(()=>{
     const getMonthCalendarDate = async () => {
       try{
-        const data = await getMonthlyCalendar(selectDate.year,selectDate.month);
-        console.log(data);
+        const {data}    = await getMonthlyCalendar(selectDate.year,selectDate.month);
+        console.log(data)
+        const temp = data.map(data => {
+          const start = new Date(data.selectedDate);
+          const end = new Date(start.getTime() + 60 * 60 * 1000)
+          return {
+          activityId:data.activityId.toString(),
+          calendarId:data.calendarId.toString(),
+          title: data.title,
+          start,
+          end,
+          type: data.type
+        }
+      });
+      console.log(temp);
+      setCalendarData(temp);
       }catch(error){
         console.log('캘린더 정보를 불러오는데 실패 했습니다.',error)
       }
     }
-    getMonthCalendarDate()
+    getMonthCalendarDate();
 
   },[selectDate]);
 
@@ -33,8 +50,8 @@ export default function MyCalendar() {
             일정관리
           </h2>
           <div className="flex w-full flex-col lg:flex lg:flex-row lg:gap-[20px]">
-            <CalendarSidebar selectDate={selectDate} />
-            <CalendarContainer selectDate={selectDate} setSelectDate={setSelectDate}/>
+            <CalendarSidebar selectDate={selectDate} selectListData={selectListData} setSelectListData={setSelectListData} />
+            <CalendarContainer setSelectDate={setSelectDate} setSelectListData={setSelectListData} calendarData={calendarData}/>
           </div>
         </div>
     </>

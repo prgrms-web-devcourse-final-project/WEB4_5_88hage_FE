@@ -1,23 +1,4 @@
-<<<<<<< HEAD
-declare type GroupCategory =
-  | 'ART'
-  | 'TRAVEL'
-  | 'FOOD'
-  | 'GAME'
-  | 'CULTURE'
-  | 'SPORT'
-  | 'STUDY'
-  | 'MOVIE';
-
-declare type GroupSortType = 'recent' | 'viewCount' | 'distance';
-
-declare interface GroupSearchQueryParams {
-  category?: GroupCategory;
-  keyword?: string | null;
-  sortBy?: GroupSortType;
-  distance?: number;
-=======
-export interface Group {
+declare interface Group {
   id: number;
   activated: boolean;
   during: number;
@@ -47,7 +28,7 @@ export interface Group {
   status: 'RECRUITING' | 'FULL' | 'COMPLETED' | 'CANCELED' | 'DELETE';
   title: string;
 }
-export interface GroupUpdateRequest {
+declare interface GroupUpdateRequest {
   title: string;
   explain: string;
   simpleExplain: string;
@@ -70,7 +51,7 @@ export interface GroupUpdateRequest {
   hashTags: string[];
   during: number;
 }
-export interface GroupSearchQueryParams {
+declare interface GroupSearchQueryParams {
   category?:
     | 'ART'
     | 'TRAVEL'
@@ -82,23 +63,12 @@ export interface GroupSearchQueryParams {
     | 'MOVIE';
   keyword?: string;
   sortBy?: 'recent' | 'viewCount' | 'distance';
->>>>>>> 45499223a61c508f1315bed163fb415c001b49fb
   page?: number;
   size?: number;
   sort?: string[];
 }
 
-<<<<<<< HEAD
-declare interface GroupHashtag {
-  id: number;
-  tag: string;
-  group: number;
-}
-
-declare interface GroupRequest {
-=======
-export interface GroupCreateRequest {
->>>>>>> 45499223a61c508f1315bed163fb415c001b49fb
+declare interface GroupCreateRequest {
   title: string;
   explain: string;
   simpleExplain: string;
@@ -122,17 +92,7 @@ export interface GroupCreateRequest {
   during: number;
 }
 
-<<<<<<< HEAD
-declare interface GroupHashtagDTO {
-  id: number;
-  tag: string;
-  group: number;
-}
-
-declare interface GroupBookmarkDTO {
-=======
-export interface GroupBookmark {
->>>>>>> 45499223a61c508f1315bed163fb415c001b49fb
+declare interface GroupBookmark {
   id: number;
   activated: boolean;
   created_at: string;
@@ -141,11 +101,7 @@ export interface GroupBookmark {
   email: string;
 }
 
-<<<<<<< HEAD
-declare interface Group {
-=======
-export interface GroupMember {
->>>>>>> 45499223a61c508f1315bed163fb415c001b49fb
+declare interface GroupMember {
   id: number;
   activated: boolean;
   created_at: string;
@@ -154,7 +110,7 @@ export interface GroupMember {
   email: string;
 }
 
-export interface GroupHashtag {
+declare interface GroupHashtag {
   id: number;
   activated: boolean;
   created_at: string;
@@ -163,7 +119,7 @@ export interface GroupHashtag {
   tag: string;
 }
 
-export interface GroupPreference {
+declare interface GroupPreference {
   id: number;
   activated: boolean;
   created_at: string;

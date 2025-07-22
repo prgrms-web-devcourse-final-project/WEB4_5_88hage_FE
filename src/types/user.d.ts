@@ -14,12 +14,12 @@ declare interface UserProfile {
   followerCount: number;
   followingCount: number;
 }
-export interface UserHashtag {
+declare interface UserHashtag {
   id: number;
   info_id: string | null;
   tag: string | null;
 }
-export interface UserInfo {
+declare interface UserInfo {
   activated: boolean;
   created_at: string;
   modified_at: string;
@@ -49,33 +49,20 @@ declare interface UserCoordinate {
   longitude: number;
 }
 
-<<<<<<< HEAD
-declare interface UserInfo {
-  email: string;
-  nickname: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  isMarketingAgreed: boolean;
-=======
-export interface UserPreference {
+declare interface UserPreference {
   id: number;
   activated: boolean;
   created_at: string;
   modified_at: string;
   category: string;
   user_id: string;
->>>>>>> 45499223a61c508f1315bed163fb415c001b49fb
 }
 
 declare interface NicknameChangeRequest {
   nickname: string;
 }
 
-<<<<<<< HEAD
 declare interface User {
-=======
-export interface User {
   activated: boolean;
   due_date: string | null;
   is_marketing_agreed: boolean;
@@ -88,7 +75,6 @@ export interface User {
   address: string | null;
   birth_date: string | null;
   due_reason: string | null;
->>>>>>> 45499223a61c508f1315bed163fb415c001b49fb
   email: string;
   gender: 'MALE' | 'FEMALE' | null;
   info_id: string | null;

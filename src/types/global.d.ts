@@ -47,7 +47,7 @@ declare interface RecommendRequest {
   address: string;
 }
 
-type WeatherInfo = {
+declare type WeatherInfo = {
   baseDate: string;
   baseTime: string;
   category: string;
