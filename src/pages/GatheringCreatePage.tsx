@@ -8,6 +8,7 @@ import WritingFormTags from '@/components/layout/WritingFormTags';
 import AddPhotoButton from '@/components/ui/AddPhotoButton';
 import { createGroup } from '@/lib/api/group';
 import { GroupCreateRequest } from '@/types/group';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function GatheringCreatePage() {
@@ -20,6 +21,7 @@ export default function GatheringCreatePage() {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
 
+  const router = useRouter();
   const handleDataChange = (data: File[]) => setImages(data);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -64,7 +66,7 @@ export default function GatheringCreatePage() {
     console.log(newData);
 
     // API
-    createGroup(newData).then((res) => console.log(res.data));
+    createGroup(newData).finally(() => router.push('/gathering'));
   };
 
   return (
@@ -139,7 +141,9 @@ export default function GatheringCreatePage() {
               title="태그"
               isRequired
               placeholder="태그를 작성 해주세요."
-              onTagsAdd={(newTag) => setTags((prev) => [...prev, newTag])}
+              onTagsAdd={(newTag) =>
+                setTags((prev) => [...new Set([...prev, newTag])])
+              }
             />
             <div className="mt-[10px] flex flex-wrap justify-start gap-2 lg:mt-[20px]">
               {tags.map((item) => (

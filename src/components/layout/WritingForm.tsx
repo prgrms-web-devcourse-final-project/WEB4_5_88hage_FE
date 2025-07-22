@@ -1,9 +1,10 @@
 'use client';
 import { useState } from 'react';
-import { Calendar, Search } from 'lucide-react';
+import { Calendar, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 
 import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import '@/assets/styles/datepicker.css';
 import { ko } from 'date-fns/locale/ko';
 
 export default function WritingForm({
@@ -26,6 +27,20 @@ export default function WritingForm({
   sendDate?: (date: Date) => void;
 }) {
   const [value, setValue] = useState('');
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
@@ -107,6 +122,19 @@ export default function WritingForm({
               onChange={(date) => handleDate(date)}
               placeholderText="모임 시작일을 알려주세요"
               className="placeholder-gray-disabled t3 mt-3 w-full cursor-pointer rounded border border-[#343434] p-4 text-white"
+              renderCustomHeader={({ date, decreaseMonth, increaseMonth }) => (
+                <div className="flex items-center justify-center gap-2">
+                  <button type="button" onClick={decreaseMonth}>
+                    <ChevronLeft color="#a8a8a8" size={16} />
+                  </button>
+                  <div className="w-30 font-bold text-[#a8a8a8]">
+                    {`${months[date.getMonth()]}, ${date.getFullYear()}`}
+                  </div>
+                  <button type="button" onClick={increaseMonth}>
+                    <ChevronRight color="#a8a8a8" size={16} />
+                  </button>
+                </div>
+              )}
             />
           )}
           {isLongForm && (
