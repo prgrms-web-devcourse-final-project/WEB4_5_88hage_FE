@@ -22,7 +22,7 @@ export default function WritingFormTags({
 
   const fetchHashtags = async () => {
     const response = await fetch(
-      `${URL}/api/groupHashtags/complete?prefix=${value}`,
+      `${URL}/groupHashtags/complete?prefix=${value}`,
     );
     const { data } = await response.json();
     setHashTagsList(data);
