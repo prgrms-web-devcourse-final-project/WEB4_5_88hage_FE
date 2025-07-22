@@ -104,7 +104,6 @@ export const searchGroups = async (
 };
 
 // 내가 속한 모임 조회
-
 export const getMyGroups = async (): Promise<MyGroupData[]> => {
   const res = await get<MyGroupResponse>('/api/groups/getMy');
   return res.data;

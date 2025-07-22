@@ -8,6 +8,7 @@ export interface MyGroupData {
   participantCount: number;
   status: string;
   type: string;
+  simpleExplain: string;
 }
 
 export interface MyGroupResponse {

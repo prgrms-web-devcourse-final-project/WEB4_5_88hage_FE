@@ -69,7 +69,7 @@ export const useAuthStore = create<AuthState>()(
         }
 
         const response = await fetchGet<CoordinateResponse>(
-          `${API}/users/coordinate`,
+          `/api/users/coordinate`,
           {
             headers: { Authorization: `Bearer ${token}` },
             credentials: 'include',

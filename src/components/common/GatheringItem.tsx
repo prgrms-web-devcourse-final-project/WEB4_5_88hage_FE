@@ -1,36 +1,33 @@
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
+import { Group } from '@/types/group';
 
-type gatheringProps = {
-  profileUrl: string | StaticImageData;
-  name: string;
-  info: string;
-  time: string;
-};
+interface GatheringItemProps {
+  gathering: Group;
+  onClick: () => void;
+}
 
 export default function GatheringItem({
-  profileUrl,
-  name,
-  info,
-  time,
-}: gatheringProps) {
+  gathering,
+  onClick,
+}: GatheringItemProps) {
   return (
-    <div className="hover:bg-gray-5 flex w-full items-start justify-between rounded-[4px] px-3 py-3 transition">
-      {/* 프로필 사진 */}
-      <div className="flex items-center gap-3">
-        <Image
-          src={profileUrl}
-          alt={'모임 정보'}
-          width={40}
-          height={40}
-          className="rounded-full object-cover"
-        />
-        <div className="flex flex-col">
-          <span className="text-sm font-semibold text-white">{name}</span>
-          <span className="t4 text-gray-disabled mt-1">{info}</span>
-        </div>
+    <div
+      className="border-gray-6 flex items-center space-x-3 border-b p-2 last:border-b-0 cursor-pointer"
+      onClick={onClick}
+    >
+      <div className="relative h-12 w-12 overflow-hidden rounded-full">
+        {gathering.image_url ? (
+          <Image src={gathering.image_url} alt={gathering.title} layout="fill" objectFit="cover" />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-gray-500 text-xs text-white">
+            No Image
+          </div>
+        )}
       </div>
-      {/* 시간 */}
-      <span className="t4 text-gray-disabled">{time}</span>
+      <div className="flex-1">
+        <h3 className="text-sm font-semibold text-white">{gathering.title}</h3>
+        <p className="text-gray-disabled t4 mt-1 truncate">{gathering.simple_explain}</p>
+      </div>
     </div>
   );
 }

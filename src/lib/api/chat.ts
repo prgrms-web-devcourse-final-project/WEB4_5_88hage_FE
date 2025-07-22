@@ -14,7 +14,7 @@ export const createPersonalChatRoom = async (userEmail: string) => {
 
 // 개인 채팅방 조회
 export const getMyPersonalChatRooms = async (): Promise<ChatRoom[]> => {
-  return get<ChatRoom[]>('/api/chatRooms/rooms/my');
+  return get<ChatRoom[]>('/api/chatRooms/my');
 };
 
 // 마지막 채팅 조회

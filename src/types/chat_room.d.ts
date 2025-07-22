@@ -6,3 +6,4 @@ export interface ChatRoom {
   modified_at: string;
   name: string;
 }
+
