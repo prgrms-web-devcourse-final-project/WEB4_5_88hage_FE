@@ -1,7 +1,7 @@
 'use client';
 import SearchAddressModal from '@/components/auth/SearchAddressModal';
 import GrayButton from '@/components/button/GrayButton';
-import Tag from '@/components/common/Tag';
+// import Tag from '@/components/common/Tag';
 import CategorySelect from '@/components/layout/CategorySelect';
 import WritingForm from '@/components/layout/WritingForm';
 import WritingFormTags from '@/components/layout/WritingFormTags';
@@ -66,7 +66,7 @@ export default function GatheringCreatePage() {
     console.log(newData);
 
     // API
-    createGroup(newData).finally(() => router.push('/gathering'));
+    createGroup(newData).then(() => router.push('/gathering'));
   };
 
   return (
