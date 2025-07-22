@@ -1,3 +1,4 @@
+"use client"
 import AIrecommendButton from '@/components/common/AIrecommendButton';
 import PostCard from '@/components/common/Card';
 import SearchBar from '@/components/common/SearchBar';
@@ -11,7 +12,7 @@ export default function EventPage() {
       </div>
       <div className="mx-auto max-w-[1440px] px-[20px]">
         <div className="flex items-center justify-between my-[20px] lg:my-[32px]">
-          <AIrecommendButton className="fixed bottom-[15px] left-1/2 translate-x-[-50%] lg:translate-x-0 w-[calc(100%-40px)] z-100 lg:static h2 h-[60px]" />
+          <AIrecommendButton className="mr-4" />
           <button className="t2 flex items-center text-[#CECECE]">
             최신순
             <ChevronDown className="ml-2 h-5 w-5" />
