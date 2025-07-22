@@ -1,17 +1,17 @@
 export interface Group {
   id: number;
-  activated: boolean;
-  during: number;
-  latitude: number;
-  longitude: number;
-  max_people: number;
-  now_people: number;
-  view_count: number;
-  created_at: string;
-  group_date: string;
-  modified_at: string;
-  address: string;
-  category:
+  activated?: boolean;
+  during?: number;
+  latitude?: number;
+  longitude?: number;
+  max_people?: number;
+  now_people?: number;
+  view_count?: number;
+  created_at?: string;
+  group_date?: string;
+  modified_at?: string;
+  address?: string;
+  category?:
     | 'ART'
     | 'TRAVEL'
     | 'FOOD'
@@ -20,13 +20,13 @@ export interface Group {
     | 'SPORT'
     | 'STUDY'
     | 'MOVIE';
-  explain: string;
-  image_url: string;
+  explain?: string;
+  image_url?: string;
   leader_id: string;
-  place_name: string;
-  simple_explain: string;
-  status: 'RECRUITING' | 'FULL' | 'COMPLETED' | 'CANCELED' | 'DELETE';
-  title: string;
+  place_name?: string;
+  simple_explain?: string;
+  status?: 'RECRUITING' | 'FULL' | 'COMPLETED' | 'CANCELED' | 'DELETE';
+  title?: string;
 }
 export interface GroupUpdateRequest {
   title: string;

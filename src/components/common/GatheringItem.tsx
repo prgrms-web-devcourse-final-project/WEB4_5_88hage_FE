@@ -1,23 +1,26 @@
 import Image from 'next/image';
-import { Group } from '@/types/group';
 
 interface GatheringItemProps {
-  gathering: Group;
+  name: string;
+  description: string;
+  imageUrl: string;
   onClick: () => void;
 }
 
 export default function GatheringItem({
-  gathering,
+  name,
+  description,
+  imageUrl,
   onClick,
 }: GatheringItemProps) {
   return (
     <div
-      className="border-gray-6 flex items-center space-x-3 border-b p-2 last:border-b-0 cursor-pointer"
+      className="border-gray-6 flex cursor-pointer items-center space-x-3 border-b p-2 last:border-b-0"
       onClick={onClick}
     >
       <div className="relative h-12 w-12 overflow-hidden rounded-full">
-        {gathering.image_url ? (
-          <Image src={gathering.image_url} alt={gathering.title} layout="fill" objectFit="cover" />
+        {imageUrl ? (
+          <Image src={imageUrl} alt={name} layout="fill" objectFit="cover" />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gray-500 text-xs text-white">
             No Image
@@ -25,8 +28,8 @@ export default function GatheringItem({
         )}
       </div>
       <div className="flex-1">
-        <h3 className="text-sm font-semibold text-white">{gathering.title}</h3>
-        <p className="text-gray-disabled t4 mt-1 truncate">{gathering.simple_explain}</p>
+        <h3 className="text-sm font-semibold text-white">{name}</h3>
+        <p className="text-gray-disabled t4 mt-1 truncate">{description}</p>
       </div>
     </div>
   );

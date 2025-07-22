@@ -32,7 +32,13 @@ export default function GatheringMain({
         <p className="t3 mt-5 text-white">{selectedGathering.explain}</p>
 
         <div className="mt-5 flex">
-          <Image src={mapIcon} alt="mapicon" width={51} height={50} />
+          <Image
+            src={mapIcon}
+            alt="mapicon"
+            width={51}
+            height={50}
+            className="cursor-pointer"
+          />
           <div className="h-[50px] rounded-r border border-[#393939] px-2 text-white">
             <div className="t2">{selectedGathering.address}</div>
             <div className="t3 text-[#a3a3a3]">

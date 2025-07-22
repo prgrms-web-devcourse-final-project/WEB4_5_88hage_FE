@@ -12,8 +12,15 @@ import { MyGroupData } from '@/types/my_group';
 import { LeaderMyGroupData } from '@/types/leader_my_group';
 import { ChatRoom } from '@/types/chat_room';
 import { LastChatHistory } from '@/types/last_chat_history';
+import { Group } from '@/types/group'; // Import Group type
 
-export default function GatheringSide() {
+interface GatheringSideProps {
+  onSelectGathering: (gathering: Group) => void;
+}
+
+export default function GatheringSide({
+  onSelectGathering,
+}: GatheringSideProps) {
   const [activeTab, setActiveTab] = useState('my-gathering');
   const [myGatherings, setMyGatherings] = useState<MyGroupData[]>([]);
   const [leaderGatherings, setLeaderGatherings] = useState<LeaderMyGroupData[]>(
@@ -74,12 +81,14 @@ export default function GatheringSide() {
       title: g.groupTitle,
       description: g.simpleExplain,
       imageUrl: g.groupImageUrl,
+      fullGroup: g, // Add the full group object
     })),
     ...leaderGatherings.map((g) => ({
       id: `leader-${g.id}`,
       title: g.title,
       description: g.simpleExplain,
       imageUrl: g.imageUrl,
+      fullGroup: g, // Add the full group object
     })),
   ];
 
@@ -150,6 +159,7 @@ export default function GatheringSide() {
                     name={gathering.title}
                     description={gathering.description}
                     imageUrl={gathering.imageUrl}
+                    onClick={() => onSelectGathering(gathering.fullGroup)}
                   />
                 ))
               ) : (
