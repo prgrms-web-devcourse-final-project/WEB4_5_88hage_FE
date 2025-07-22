@@ -14,6 +14,64 @@ import { ChatRoom } from '@/types/chat_room';
 import { LastChatHistory } from '@/types/last_chat_history';
 import { Group } from '@/types/group'; // Import Group type
 
+interface GatheringDisplayItem {
+  id: string;
+  title: string;
+  description: string | undefined;
+  imageUrl: string | undefined;
+  fullGroup: Group;
+}
+
+const mapToGatheringDisplayItem = (item: MyGroupData | LeaderMyGroupData): GatheringDisplayItem => {
+  if ('groupId' in item) {
+    // MyGroupData
+    return {
+      id: `my-${item.groupId}`,
+      title: item.groupTitle,
+      description: item.simpleExplain,
+      imageUrl: item.groupImageUrl,
+      fullGroup: {
+        id: item.groupId,
+        leader_id: item.userEmail,
+        title: item.groupTitle,
+        simple_explain: item.simpleExplain,
+        image_url: item.groupImageUrl,
+        status: item.status,
+        // Add other properties from MyGroupData if they map to Group, or leave as undefined
+      } as Group,
+    };
+  } else {
+    // LeaderMyGroupData
+    return {
+      id: `leader-${item.id}`,
+      title: item.title,
+      description: item.simpleExplain,
+      imageUrl: item.imageUrl,
+      fullGroup: {
+        id: item.id,
+        leader_id: item.leaderEmail,
+        title: item.title,
+        explain: item.explain,
+        simple_explain: item.simpleExplain,
+        image_url: item.imageUrl,
+        place_name: item.placeName,
+        address: item.address,
+        group_date: item.groupDate,
+        created_at: item.createdAt,
+        max_people: item.maxPeople,
+        now_people: item.nowPeople,
+        status: item.status,
+        latitude: item.latitude,
+        longitude: item.longitude,
+        during: item.during,
+        category: item.category,
+        view_count: item.viewCount,
+        activated: item.activated,
+      } as Group,
+    };
+  }
+};
+
 interface GatheringSideProps {
   onSelectGathering: (gathering: Group) => void;
 }
@@ -76,20 +134,8 @@ export default function GatheringSide({
   }, []);
 
   const allGatherings = [
-    ...myGatherings.map((g) => ({
-      id: `my-${g.groupId}`,
-      title: g.groupTitle,
-      description: g.simpleExplain,
-      imageUrl: g.groupImageUrl,
-      fullGroup: g, // Add the full group object
-    })),
-    ...leaderGatherings.map((g) => ({
-      id: `leader-${g.id}`,
-      title: g.title,
-      description: g.simpleExplain,
-      imageUrl: g.imageUrl,
-      fullGroup: g, // Add the full group object
-    })),
+    ...myGatherings.map(mapToGatheringDisplayItem),
+    ...leaderGatherings.map(mapToGatheringDisplayItem),
   ];
 
   if (loading) {
