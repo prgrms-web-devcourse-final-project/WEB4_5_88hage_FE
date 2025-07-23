@@ -32,8 +32,13 @@ export default function MeetingPage() {
 
   // AI 추천 관련
   const [groups, setGroups] = useState<Group[]>([]);
-  const [reason, setReason] = useState("");
+  //const [reason, setReason] = useState("");
   const [recommendClick, setRecommendClick] = useState(0);
+//const [visibleCount, setVisibleCount] = useState(4);
+
+const startIdx = recommendClick * 4;
+const endIdx = startIdx + 4;
+const currentGroups = groups.slice(startIdx, endIdx);
 
   const handleRecommend = async (address: string, start: string, end: string) => {
     console.log("AI 추천 요청:", address, start, end);
@@ -43,38 +48,44 @@ export default function MeetingPage() {
     }
     setLoading(true);
     try {
-      const res = await fetch("https://funfun.cloud/api/chatBots/group", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          eventType: "GROUP",
-          startTime: `${start}T00:00:00`,
-          endTime: `${end}T23:59:59`,
-          address,
-        }),
-      });
-      if (!res.ok) {
-        alert("추천 결과를 불러오지 못했습니다.");
-        setLoading(false);
-        return;
-      }
-      const json = await res.json();
-      setGroups(json.data.groups ?? []);
-      setReason(json.data.groups?.[0]?.reason ?? "");
-      setRecommendClick(prev => prev + 1);
-      setUserAddress(address);
-    setUserStart(start);
-    setUserEnd(end);
-    } catch {
-      alert("에러가 발생했습니다.");
-    }
+  const res = await fetch("https://funfun.cloud/api/chatBots/group", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({
+      startTime: `${start}T00:00:00`,
+      endTime: `${end}T23:59:59`,
+      address,
+    }),
+  });
+  console.log('응답상태:', res.status);
+  const text = await res.text();
+  console.log('응답 본문:', text);
+  if (!res.ok) {
+    alert("추천 결과를 불러오지 못했습니다.");
     setLoading(false);
+    return;
+  }
+  const json = JSON.parse(text);
+  console.log("groups 응답:", json.data.groups);
+  setGroups(json.data.groups ?? []);
+  //setVisibleCount(4);
+  //setReason(json.data.groups?.[0]?.reason ?? "");
+  setRecommendClick(0);
+  //setUserAddress(address);
+  //setUserStart(start);
+  //setUserEnd(end);
+} catch (e) {
+  console.error("AI 추천 fetch error:", e);
+  alert("에러가 발생했습니다.");
+}
+setLoading(false);
+
   };
 
   const resetRecommend = () => {
     setGroups([]);
-    setReason("");
+    //setReason("");
     setRecommendClick(0);
   };
 
@@ -139,6 +150,11 @@ export default function MeetingPage() {
     if (node) observer.current.observe(node);
   }, [loading, hasMore]);
 
+  const allReasons = currentGroups
+  .map((g, idx) => `${idx + 1}. ${g.reason}`)
+  .filter(Boolean)
+  .join('\n\n');
+
   return (
     <div className="w-full">
       {loading && (
@@ -187,20 +203,25 @@ export default function MeetingPage() {
         {groups.length > 0 ? (
           <>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {groups.slice(0, 4).map((group) => (
-                <PostCard key={group.id} group={group} />
-              ))}
-            </div>
-            <div className="gradient-box mt-[51.45px] mb-[100px] flex flex-col rounded-[5px] px-[40px] py-[33px] text-white relative">
-              <div className="mb-[29px] text-[24px] font-semibold">
-                추천 이유👍
-              </div>
-              <div className="mb-[24px] min-h-[44px]">{reason || "추천 이유 없음"}</div>
-              {recommendClick < 3 && (
-        <div className="w-[153px] text-[16px] text-white self-start">
+      {currentGroups.map((group) => (
+        <PostCard key={group.id} group={group} />
+      ))}
+    </div>
+    <div className="gradient-box mt-[51.45px] mb-[100px] flex flex-col rounded-[5px] px-[40px] text-white">
+      <div className="mt-[33px] mb-[29px] text-[24px] font-semibold">
+        추천 이유👍
+      </div>
+      <div className="mb-[24px] min-h-[44px] whitespace-pre-line">
+        {allReasons || "추천 이유 없음"}
+      </div>
+      {recommendClick < Math.ceil(groups.length / 4) && (
+        <div className="w-[153px] text-[16px] text-white self-start mb-[30px]">
           <MoreRecommendButton
   onRecommend={() => {
-    console.log("클릭됨!");
+    if ((recommendClick + 1) * 4 >= groups.length) {
+      alert("AI추천 결과는 여기까지입니다.");
+      return;
+    }
     setRecommendClick(prev => prev + 1);
   }}
   disabled={loading}
