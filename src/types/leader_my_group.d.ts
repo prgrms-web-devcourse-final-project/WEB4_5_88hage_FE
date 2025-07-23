@@ -1,4 +1,4 @@
-export interface LeaderMyGroupData {
+declare interface LeaderMyGroupData {
   id: number;
   title: string;
   explain: string;
@@ -22,7 +22,7 @@ export interface LeaderMyGroupData {
   activated: boolean;
 }
 
-export interface LeaderMyGroupResponse {
+declare interface LeaderMyGroupResponse {
   code: string;
   message: string;
   reason: string | null;

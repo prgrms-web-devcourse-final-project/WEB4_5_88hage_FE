@@ -124,7 +124,7 @@ export default function EventPage() {
         <SearchBar value={search} onChange={setSearch} />
       </div>
       <div className="mx-auto max-w-[1440px] lg:my-[30px] px-[20px]">
-        <div className="flex items-center justify-between my-[20px] lg:my-[32px]">
+        <div className="text-white flex items-center justify-between my-[20px] lg:my-[32px]">
   <AIrecommendButton className="mr-4" />
   <div className="flex items-center gap-5">
     <CategoryDropdown

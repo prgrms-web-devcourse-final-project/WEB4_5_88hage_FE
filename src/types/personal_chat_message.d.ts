@@ -1,4 +1,4 @@
-export interface PersonalChatMessage {
+declare interface PersonalChatMessage {
   id: number;
   activated: boolean;
   created_at: string;

@@ -1,10 +1,10 @@
-export interface ProfileRequest {
+declare interface ProfileRequest {
   image?: string; // binary
   imageChanged: boolean;
   introduction: string;
 }
 
-export interface UserProfile {
+declare interface UserProfile {
   email: string;
   nickname: string;
   introduction: string;
@@ -14,12 +14,12 @@ export interface UserProfile {
   followerCount: number;
   followingCount: number;
 }
-export interface UserHashtag {
+declare interface UserHashtag {
   id: number;
   info_id: string | null;
   tag: string | null;
 }
-export interface UserInfo {
+declare interface UserInfo {
   activated: boolean;
   created_at: string;
   modified_at: string;
@@ -28,7 +28,7 @@ export interface UserInfo {
   introduction: string | null;
 }
 
-export interface Following {
+declare interface Following {
   email: string;
   nickname: string;
   introduction: string;
@@ -36,7 +36,7 @@ export interface Following {
   followedAt: string; // 팔로우한 시간
 }
 
-export interface Follower {
+declare interface Follower {
   email: string;
   nickname: string;
   introduction: string;
@@ -44,12 +44,12 @@ export interface Follower {
   followedAt: string; // 팔로우된 시간
 }
 
-export interface UserCoordinate {
+declare interface UserCoordinate {
   latitude: number;
   longitude: number;
 }
 
-export interface UserPreference {
+declare interface UserPreference {
   id: number;
   activated: boolean;
   created_at: string;
@@ -58,11 +58,11 @@ export interface UserPreference {
   user_id: string;
 }
 
-export interface NicknameChangeRequest {
+declare interface NicknameChangeRequest {
   nickname: string;
 }
 
-export interface User {
+declare interface User {
   activated: boolean;
   due_date: string | null;
   is_marketing_agreed: boolean;
