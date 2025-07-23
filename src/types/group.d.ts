@@ -49,7 +49,7 @@ declare interface GroupUpdateRequest {
   longitude: number;
   image?: File;
   hashTags: string[];
-  during: number;
+  during?: number;
 }
 declare interface GroupSearchQueryParams {
   category?:
@@ -89,7 +89,7 @@ declare interface GroupCreateRequest {
   longitude: number;
   image?: File;
   hashTags: string[];
-  during: number;
+  during?: number;
 }
 
 declare interface GroupBookmark {

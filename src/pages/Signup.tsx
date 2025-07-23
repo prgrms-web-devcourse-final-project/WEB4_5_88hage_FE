@@ -11,6 +11,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSignupStore } from '@/stores/signupStore';
 import SearchAddressModal from '@/components/auth/SearchAddressModal';
+import { SignupRequest } from '@/types/auth';
 
 export default function Signup() {
   const [nickname, setNickname] = useState('');
@@ -22,9 +23,9 @@ export default function Signup() {
   const [maleSelected, setMaleSelected] = useState(true);
   const [checkedList, setCheckedList] = useState<string[]>([]);
   const [duplicationCheck, setDuplicationCheck] = useState(false);
-  const [showModal,setShowModal] = useState(false);
-  const [latitude,setLatitude] = useState(0);
-  const [longitude,setLongitude] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
 
   const [requiredAlert, setRequiredAlert] = useState(false);
   const { userData, setData } = useSignupStore((state) => state);
@@ -76,14 +77,14 @@ export default function Signup() {
       setRequiredAlert(true);
     } else {
       setRequiredAlert(false);
-      const newUserData: SignupUserData = {
+      const newUserData: SignupRequest = {
         email: email,
         password: password,
         confirmPassword: confirmPassword,
         nickname: nickname,
         address: address,
-        latitude : latitude,
-        longitude:longitude,
+        latitude: latitude,
+        longitude: longitude,
         birthDate: birthDate,
         gender: maleSelected ? 'MALE' : 'FEMALE',
         isMarketingAgreed: checkedList.includes('marketing'),
@@ -201,7 +202,7 @@ export default function Signup() {
             placeholder="주소를 작성해 주세요."
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            onClick={()=> setShowModal((prev) => !prev)}
+            onClick={() => setShowModal((prev) => !prev)}
             className="rounded-[10px] px-4 py-4 lg:py-5"
           />
           <Input
@@ -273,7 +274,14 @@ export default function Signup() {
           {requiredAlert && '필수 항목을 확인해주세요.'}
         </div>
       </form>
-      {showModal && <SearchAddressModal setShowModal={setShowModal}  setAddress={setAddress} setLatitude={setLatitude}  setLongitude={setLongitude}/>}
+      {showModal && (
+        <SearchAddressModal
+          setShowModal={setShowModal}
+          setAddress={setAddress}
+          setLatitude={setLatitude}
+          setLongitude={setLongitude}
+        />
+      )}
     </div>
   );
 }
