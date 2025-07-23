@@ -1,7 +1,7 @@
 import {
   Group,
   GroupCreateRequest,
-  GroupHashtag,
+  GroupDetail,
   GroupSearchQueryParams,
   GroupUpdateRequest,
 } from '@/types/group';
@@ -13,8 +13,8 @@ import {
 import { get, post, put, del } from './fetchInstance';
 
 // 모임 상세 조회
-export const getGroupById = async (groupId: number): Promise<Group> => {
-  const res = await get<Group>(`/api/groups/${groupId}`);
+export const getGroupById = async (groupId: number): Promise<GroupDetail> => {
+  const res = await get<GroupDetail>(`/api/groups/${groupId}`);
   return res;
 };
 
@@ -113,42 +113,6 @@ export const getMyGroups = async (): Promise<MyGroupData[]> => {
 export const getLeaderMyGroups = async (): Promise<LeaderMyGroupData[]> => {
   const res = await get<LeaderMyGroupResponse>('/api/groups/getLeaderMy');
   return res.data;
-};
-
-// 모임에 해시태그 추가
-export const createGroupHashtag = async (
-  data: GroupHashtag,
-): Promise<GroupHashtag> => {
-  const res = await post<GroupHashtag>('/api/group-hashtags', data);
-  return res;
-};
-
-// 모든 해시태그 목록 조회
-export const getAllGroupHashtags = async (): Promise<GroupHashtag[]> => {
-  const res = await get<GroupHashtag[]>('/api/group-hashtags');
-  return res;
-};
-
-// 해시태그 삭제
-export const deleteGroupHashtag = async (id: number): Promise<void> => {
-  await del(`/api/group-hashtags/${id}`);
-};
-
-// 특정 모임 해시태그 정보 수정
-export const updateGroupHashtag = async (
-  id: number,
-  data: GroupHashtag,
-): Promise<GroupHashtag> => {
-  const response = await put<GroupHashtag>(`/api/group-hashtags/${id}`, data);
-  return response;
-};
-
-// 특정 모임 해시태그 조회
-export const getGroupHashtagById = async (
-  id: number,
-): Promise<GroupHashtag> => {
-  const response = await get<GroupHashtag>(`/api/group-hashtags/${id}`);
-  return response;
 };
 
 // 자동 완성을 위한 단어 저장 (모임 해시태그)

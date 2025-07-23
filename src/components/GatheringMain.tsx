@@ -3,16 +3,17 @@ import Tag from './common/Tag';
 import mapIcon from '@/assets/images/map_icon.svg';
 import testMap from '@/assets/images/testmap.png';
 import MainPostHeader from './common/MainPostHeader';
-import { Group } from '@/types/group';
+import { GroupDetail } from '@/types/group';
 import { getCategoryDisplayName } from '@/lib/utils/categoryMapping';
 
 interface GatheringMainProps {
-  selectedGathering: Group | null;
+  selectedGathering: GroupDetail | null;
 }
 
 export default function GatheringMain({
   selectedGathering,
 }: GatheringMainProps) {
+  console.log('🔍 selectedGathering:', selectedGathering);
   if (!selectedGathering) {
     return (
       <div className="bg-gray-7 lg:border-gray-5 mt-5 flex h-full w-full flex-col items-center justify-center rounded-[15px] p-5 lg:border">
@@ -27,12 +28,14 @@ export default function GatheringMain({
         <MainPostHeader
           title={selectedGathering.title || ''}
           category={getCategoryDisplayName(selectedGathering.category) || ''}
-          memberCount={selectedGathering.now_people || 0}
-          groupImageUrl={selectedGathering.image_url || ''}
+          memberCount={selectedGathering.nowPeople || 0}
+          groupImageUrl={selectedGathering.imageUrl || ''}
         />
         <div className="mt-5 flex gap-5">
-          <Tag name="힙한" />
-          <Tag name="젊은" />
+          {selectedGathering.hashTags &&
+            selectedGathering.hashTags.map((tag, index) => (
+              <Tag key={index} name={tag} />
+            ))}
         </div>
 
         <p className="t3 mt-5 text-white">{selectedGathering.explain}</p>
@@ -48,7 +51,7 @@ export default function GatheringMain({
           <div className="h-[50px] rounded-r border border-[#393939] px-2 text-white">
             <div className="t2">{selectedGathering.address}</div>
             <div className="t3 text-[#a3a3a3]">
-              {selectedGathering.place_name}
+              {selectedGathering.placeName}
             </div>
           </div>
         </div>

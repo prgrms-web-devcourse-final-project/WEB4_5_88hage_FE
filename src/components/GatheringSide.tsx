@@ -12,14 +12,14 @@ import { MyGroupData } from '@/types/my_group';
 import { LeaderMyGroupData } from '@/types/leader_my_group';
 import { ChatRoom } from '@/types/chat_room';
 import { LastChatHistory } from '@/types/last_chat_history';
-import { Group } from '@/types/group'; // Import Group type
+import { GroupDetail } from '@/types/group'; // Import Group and GroupDetail types
 
 interface GatheringDisplayItem {
   id: string;
   title: string;
   description: string | undefined;
   imageUrl: string | undefined;
-  fullGroup: Group;
+  fullGroup: GroupDetail;
 }
 
 const mapToGatheringDisplayItem = (
@@ -34,13 +34,27 @@ const mapToGatheringDisplayItem = (
       imageUrl: item.groupImageUrl,
       fullGroup: {
         id: item.groupId,
-        leader_id: item.userEmail,
         title: item.groupTitle,
-        simple_explain: item.simpleExplain,
-        image_url: item.groupImageUrl,
-        status: item.status,
-        // Add other properties from MyGroupData if they map to Group, or leave as undefined
-      } as Group,
+        explain: item.simpleExplain || '',
+        simpleExplain: item.simpleExplain,
+        imageUrl: item.groupImageUrl,
+        placeName: '',
+        address: '',
+        viewCount: 0,
+        groupDate: '',
+        createdAt: '',
+        maxPeople: 0,
+        nowPeople: 0,
+        status: item.status || 'RECRUITING',
+        latitude: 0,
+        longitude: 0,
+        during: 0,
+        category: 'ART',
+        leaderNickname: '',
+        leaderEmail: item.userEmail,
+        hashTags: [],
+        activated: false,
+      } as GroupDetail,
     };
   } else {
     // LeaderMyGroupData
@@ -51,31 +65,33 @@ const mapToGatheringDisplayItem = (
       imageUrl: item.imageUrl,
       fullGroup: {
         id: item.id,
-        leader_id: item.leaderEmail,
         title: item.title,
         explain: item.explain,
-        simple_explain: item.simpleExplain,
-        image_url: item.imageUrl,
-        place_name: item.placeName,
+        simpleExplain: item.simpleExplain,
+        imageUrl: item.imageUrl,
+        placeName: item.placeName,
         address: item.address,
-        group_date: item.groupDate,
-        created_at: item.createdAt,
-        max_people: item.maxPeople,
-        now_people: item.nowPeople,
+        viewCount: item.viewCount,
+        groupDate: item.groupDate,
+        createdAt: item.createdAt,
+        maxPeople: item.maxPeople,
+        nowPeople: item.nowPeople,
         status: item.status,
         latitude: item.latitude,
         longitude: item.longitude,
         during: item.during,
         category: item.category,
-        view_count: item.viewCount,
+        leaderNickname: item.leaderNickname,
+        leaderEmail: item.leaderEmail,
+        hashTags: item.hashTags,
         activated: item.activated,
-      } as Group,
+      } as GroupDetail,
     };
   }
 };
 
 interface GatheringSideProps {
-  onSelectGathering: (gathering: Group) => void;
+  onSelectGathering: (gathering: GroupDetail) => void;
 }
 
 export default function GatheringSide({

@@ -28,6 +28,38 @@ export interface Group {
   status?: 'RECRUITING' | 'FULL' | 'COMPLETED' | 'CANCELED' | 'DELETE';
   title?: string;
 }
+
+export interface GroupDetail {
+  id: number;
+  title: string;
+  explain: string;
+  simpleExplain: string;
+  imageUrl: string;
+  placeName: string;
+  address: string;
+  viewCount: number;
+  groupDate: string;
+  createdAt: string;
+  maxPeople: number;
+  nowPeople: number;
+  status: 'RECRUITING' | 'FULL' | 'COMPLETED' | 'CANCELED' | 'DELETE';
+  latitude: number;
+  longitude: number;
+  during: number;
+  category:
+    | 'ART'
+    | 'TRAVEL'
+    | 'FOOD'
+    | 'GAME'
+    | 'CULTURE'
+    | 'SPORT'
+    | 'STUDY'
+    | 'MOVIE';
+  leaderNickname: string;
+  leaderEmail: string;
+  hashTags: string[];
+  activated: boolean;
+}
 export interface GroupUpdateRequest {
   title: string;
   explain: string;
