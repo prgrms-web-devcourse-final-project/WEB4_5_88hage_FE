@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation'; // ⬅️ App router는 이거!
+import { useRouter } from 'next/navigation';
 
 function formatDuration(minutes) {
   if (!minutes && minutes !== 0) return '-';
