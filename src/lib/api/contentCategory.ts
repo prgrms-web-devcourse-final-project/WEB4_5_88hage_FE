@@ -1,4 +1,3 @@
-import { ContentCategory } from '@/types/global';
 import { get, post, put, del } from './fetchInstance';
 
 //새로운 콘텐츠 카테고리 등록
@@ -25,7 +24,10 @@ export const updateContentCategory = async (
   id: number,
   data: Omit<ContentCategory, 'id'>, // id는 URL에 있으므로 body에서는 제외 가능
 ): Promise<ContentCategory> => {
-  const response = await put<ContentCategory>(`/api/contentCategories/${id}`, data);
+  const response = await put<ContentCategory>(
+    `/api/contentCategories/${id}`,
+    data,
+  );
   return response;
 };
 

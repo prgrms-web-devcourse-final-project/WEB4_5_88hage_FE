@@ -13,7 +13,7 @@ export default function DashboardLayout({
   return (
     <div className="flex min-h-screen">
       <Sidebar />
-      <div className="flex flex-1 flex-col lg:ml-[270px]">
+      <div className="flex flex-1 flex-col lg:ml-[220px]">
         <DashboardHeader />
         <main
           className={twMerge(

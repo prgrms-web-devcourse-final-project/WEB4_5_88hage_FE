@@ -1,4 +1,3 @@
-import { GroupBookmark } from '@/types/global';
 import { get, post, del } from './fetchInstance';
 
 // 사용자가 북마크한 모임 목록 조회

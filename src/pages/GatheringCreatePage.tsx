@@ -7,7 +7,6 @@ import WritingForm from '@/components/layout/WritingForm';
 import WritingFormTags from '@/components/layout/WritingFormTags';
 import AddPhotoButton from '@/components/ui/AddPhotoButton';
 import { createGroup } from '@/lib/api/group';
-import { GroupCreateRequest } from '@/types/group';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 

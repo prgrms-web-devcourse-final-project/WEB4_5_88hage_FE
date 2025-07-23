@@ -1,7 +1,7 @@
 import Image, { StaticImageData } from 'next/image';
 
 type ChatItemProps = {
-  profileUrl: StaticImageData;
+  profileUrl: string | StaticImageData;
   name: string;
   lastMessage: string;
   time: string;

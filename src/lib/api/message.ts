@@ -1,4 +1,3 @@
-import { Message, MessageCreateRequest } from '@/types/message';
 import { get, post, put, del } from './fetchInstance';
 
 export const getMessage = async (id: number): Promise<Message> => {

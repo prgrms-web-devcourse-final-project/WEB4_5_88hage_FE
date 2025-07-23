@@ -49,7 +49,7 @@ export default function GatheringChatting() {
 
             return msg.type === 'sent' ? (
               <div
-                key={msg.id}
+                key={msg.id || `sent-${index}`}
                 className={`flex items-end justify-end ${
                   shouldShowProfilePic ? 'mt-4' : ''
                 }`}
@@ -61,7 +61,7 @@ export default function GatheringChatting() {
               </div>
             ) : (
               <div
-                key={msg.id}
+                key={msg.id || `received-${index}`}
                 className={`flex items-start gap-2 ${
                   shouldShowProfilePic ? 'mt-4' : ''
                 }`}
@@ -94,7 +94,7 @@ export default function GatheringChatting() {
             );
           })}
         </div>
-        {/* 입력창 */}
+
         {/* 입력창 */}
         <div className="relative w-full lg:mt-auto">
           {/* 왼쪽 아이콘 */}
