@@ -1,4 +1,3 @@
-import { ChatBotRequest, RecommendRequest } from '@/types/global';
 import { post } from './fetchInstance';
 
 // AI 빠른 추천 기능 (모임)

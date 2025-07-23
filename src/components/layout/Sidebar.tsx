@@ -42,7 +42,7 @@ export default function Sidebar() {
       </div>
 
       {/* PC 사이드바 */}
-      <div className="bg-gray-7 hidden w-[270px] lg:fixed lg:top-0 lg:left-0 lg:flex lg:h-screen lg:flex-col lg:justify-start">
+      <div className="bg-gray-7 hidden w-[220px] lg:fixed lg:top-0 lg:left-0 lg:flex lg:h-screen lg:flex-col lg:justify-start">
         <div className="py-30">
           <nav className="flex flex-col">
             {NAV_ITEMS.map(({ icon: Icon, label }, idx) => (

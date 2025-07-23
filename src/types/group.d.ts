@@ -1,16 +1,51 @@
 declare interface Group {
   id: number;
-  activated: boolean;
-  during: number;
+  activated?: boolean;
+  during?: number;
+  latitude?: number;
+  longitude?: number;
+  max_people?: number;
+  now_people?: number;
+  view_count?: number;
+  created_at?: string;
+  group_date?: string;
+  modified_at?: string;
+  address?: string;
+  category?:
+    | 'ART'
+    | 'TRAVEL'
+    | 'FOOD'
+    | 'GAME'
+    | 'CULTURE'
+    | 'SPORT'
+    | 'STUDY'
+    | 'MOVIE';
+  explain?: string;
+  image_url?: string;
+  leader_id: string;
+  place_name?: string;
+  simple_explain?: string;
+  status?: 'RECRUITING' | 'FULL' | 'COMPLETED' | 'CANCELED' | 'DELETE';
+  title?: string;
+}
+
+declare interface GroupDetail {
+  id: number;
+  title: string;
+  explain: string;
+  simpleExplain: string;
+  imageUrl: string;
+  placeName: string;
+  address: string;
+  viewCount: number;
+  groupDate: string;
+  createdAt: string;
+  maxPeople: number;
+  nowPeople: number;
+  status: 'RECRUITING' | 'FULL' | 'COMPLETED' | 'CANCELED' | 'DELETE';
   latitude: number;
   longitude: number;
-  max_people: number;
-  now_people: number;
-  view_count: number;
-  created_at: string;
-  group_date: string;
-  modified_at: string;
-  address: string;
+  during: number;
   category:
     | 'ART'
     | 'TRAVEL'
@@ -20,13 +55,10 @@ declare interface Group {
     | 'SPORT'
     | 'STUDY'
     | 'MOVIE';
-  explain: string;
-  image_url: string;
-  leader_id: string;
-  place_name: string;
-  simple_explain: string;
-  status: 'RECRUITING' | 'FULL' | 'COMPLETED' | 'CANCELED' | 'DELETE';
-  title: string;
+  leaderNickname: string;
+  leaderEmail: string;
+  hashTags: string[];
+  activated: boolean;
 }
 declare interface GroupUpdateRequest {
   title: string;

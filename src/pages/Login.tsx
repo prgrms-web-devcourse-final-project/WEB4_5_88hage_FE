@@ -21,16 +21,15 @@ export default function Login() {
   } = useForm<LoginRequest>();
   const router = useRouter();
   const [loginError, setLoginError] = useState('');
-  const user = useAuthStore((s) => s.user);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const login = useAuthStore((s) => s.login);
-  //const setAuth = useAuthStore((s) => s.setAuth);
-  //const API = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
-    if (user) {
+    if (isAuthenticated) {
       router.replace('/');
+      console.log('로그인된 상태이므로 메인으로 리다이렉트합니다.');
     }
-  }, [user, router]);
+  }, [isAuthenticated, router]);
 
   const onSubmit = async (data: LoginRequest) => {
     try {
@@ -75,7 +74,9 @@ export default function Login() {
               className="h-[60px] w-full rounded-[5px] lg:h-[80px] lg:rounded-[10px]"
             />
             {errors.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
+              <p className="t4 mt-[-15px] mb-3 text-red-500">
+                {errors.email.message}
+              </p>
             )}
 
             <Input
@@ -87,7 +88,7 @@ export default function Login() {
               className="h-[60px] w-full rounded-[5px] lg:h-[80px] lg:rounded-[10px]"
             />
             {errors.password && (
-              <p className="t4 mt-[-10px] mb-3 text-red-500">
+              <p className="t4 mt-[-15px] mb-3 text-red-500">
                 {errors.password.message}
               </p>
             )}
