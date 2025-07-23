@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import AIrecommendButton from "@/components/common/AIrecommendButton";
-import PostCard from "@/components/common/Card";
+import EventCard from "@/components/common/EventCard";
 import SearchBar from "@/components/common/SearchBar";
 import { ChevronDown } from "lucide-react";
 import CategoryDropdown from "@/components/ui/CategoryDropdown";
@@ -165,10 +165,10 @@ export default function EventPage() {
           {data.map((event, idx) =>
             idx === data.length - 1 ? (
               <div key={`${event.id}-${idx}`} ref={lastCardRef}>
-                <PostCard group={mapEventToCard(event)} />
+                <EventCard event={mapEventToCard(event)} />
               </div>
             ) : (
-              <PostCard key={`${event.id}-${idx}`} group={mapEventToCard(event)} />
+              <EventCard key={`${event.id}-${idx}`} event={mapEventToCard(event)} />
             )
           )}
         </div>
