@@ -1,22 +1,23 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
 import AIrecommendButton from '@/components/common/AIrecommendButton';
+import MoreRecommendButton from '@/components/common/MoreRecommendButton';
 import PostCard from '@/components/common/Card';
 import RelatedTags from '@/components/common/RelatedTags';
 import SearchBar from '@/components/common/SearchBar';
 import { ChevronDown } from 'lucide-react';
-
-type Group = {
-  id: number;
-  title: string;
-  simpleExplain: string;
-};
 
 const SORT_OPTIONS = [
   { label: "최신순", value: "recent" },
   { label: "조회순", value: "viewCount" },
   { label: "거리순", value: "distance" }
 ];
+
+type Group = {
+  id: number;
+  title: string;
+  simpleExplain: string;
+};
 
 export default function MeetingPage() {
   const [search, setSearch] = useState("");
@@ -29,38 +30,63 @@ export default function MeetingPage() {
   const [loading, setLoading] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
 
-  const [aiGroups, setAIGroups] = useState<Group[]>([]);
-  const [aiShowCount, setAIShowCount] = useState(4);
-  const [aiClick, setAIClick] = useState(0);
-  const [aiReason, setAIReason] = useState("");
+  // AI 추천 관련
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [reason, setReason] = useState("");
+  const [recommendClick, setRecommendClick] = useState(0);
 
-  const handleAIRecommend = (groups: Group[], reason?: string) => {
-    setAIGroups(groups);
-    setAIReason(reason || "");
-    setAIShowCount(4);
-    setAIClick(prev => prev + 1);
+  const handleRecommend = async (address: string, start: string, end: string) => {
+    console.log("AI 추천 요청:", address, start, end);
+    if (recommendClick >= 3) {
+      alert("AI 추천 기능은 총 3번만 가능합니다.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch("https://funfun.cloud/api/chatBots/group", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          eventType: "GROUP",
+          startTime: `${start}T00:00:00`,
+          endTime: `${end}T23:59:59`,
+          address,
+        }),
+      });
+      if (!res.ok) {
+        alert("추천 결과를 불러오지 못했습니다.");
+        setLoading(false);
+        return;
+      }
+      const json = await res.json();
+      setGroups(json.data.groups ?? []);
+      setReason(json.data.groups?.[0]?.reason ?? "");
+      setRecommendClick(prev => prev + 1);
+      setUserAddress(address);
+    setUserStart(start);
+    setUserEnd(end);
+    } catch {
+      alert("에러가 발생했습니다.");
+    }
+    setLoading(false);
   };
 
-  const handleShowMore = () => {
-    if (aiShowCount + 4 <= 12) setAIShowCount(aiShowCount + 4);
-    else alert("최대 3번(12개)까지만 추천됩니다!");
-  };
-
-  const resetAI = () => {
-    setAIGroups([]);
-    setAIReason("");
-    setAIShowCount(4);
-    setAIClick(0);
+  const resetRecommend = () => {
+    setGroups([]);
+    setReason("");
+    setRecommendClick(0);
   };
 
   useEffect(() => {
+    resetRecommend();
     setData([]);
     setPage(0);
     setHasMore(true);
   }, [selectedCategory, sortBy]);
 
   useEffect(() => {
-    if (aiGroups.length > 0) return;
+    if (groups.length > 0) return;
     const fetchData = async () => {
       setLoading(true);
       let url = `https://funfun.cloud/api/groups/search?sortBy=${sortBy}&page=${page}&size=16`;
@@ -78,7 +104,7 @@ export default function MeetingPage() {
       setLoading(false);
     };
     fetchData();
-  }, [selectedCategory, sortBy, page, aiGroups.length]);
+  }, [selectedCategory, sortBy, page, groups.length]);
 
   useEffect(() => {
     setSearch("");
@@ -115,6 +141,11 @@ export default function MeetingPage() {
 
   return (
     <div className="w-full">
+      {loading && (
+  <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-[9999]">
+    <span className="text-white text-2xl font-bold">로딩중...</span>
+  </div>
+)}
       <div className="meetingPage-gradient lg:h-[450px] lg:pt-[115px] h-fit pt-[70px] pb-[25px]">
         <SearchBar value={search} onChange={setSearch} />
         <RelatedTags selected={selectedCategory} onSelect={setSelectedCategory} />
@@ -122,9 +153,8 @@ export default function MeetingPage() {
       <div className="mx-auto max-w-[1440px] lg:my-[30px] px-[20px]">
         <div className="flex items-center justify-between my-[20px] lg:my-[32px]">
           <AIrecommendButton
-            className="mr-4"
-            onRecommend={(groups, reason) => handleAIRecommend(groups, reason)}
-            recommendClick={aiClick}
+            onRecommend={handleRecommend}
+            disabled={recommendClick > 0}
           />
           <div className="relative" ref={sortRef}>
             <button
@@ -154,36 +184,30 @@ export default function MeetingPage() {
           </div>
         </div>
 
-        {aiGroups.length > 0 ? (
+        {groups.length > 0 ? (
           <>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {aiGroups.slice(0, aiShowCount).map((group) => (
+              {groups.slice(0, 4).map((group) => (
                 <PostCard key={group.id} group={group} />
               ))}
             </div>
-            {aiGroups.length > aiShowCount && (
-              <div className="flex justify-center my-5">
-                <button
-                  onClick={handleShowMore}
-                  className="rounded bg-[#383838] px-8 py-2 text-white"
-                >
-                  더 추천 보기
-                </button>
-              </div>
-            )}
-            <div className="gradient-box mt-[51.45px] mb-[100px] flex flex-col rounded-[5px] px-[40px] text-white">
-              <div className="mt-[33px] mb-[29px] text-[24px] font-semibold">
+            <div className="gradient-box mt-[51.45px] mb-[100px] flex flex-col rounded-[5px] px-[40px] py-[33px] text-white relative">
+              <div className="mb-[29px] text-[24px] font-semibold">
                 추천 이유👍
               </div>
-              <div className="mb-[39px]">{aiReason || "추천 이유 없음"}</div>
-              <div>
-                <button
-                  className="from-main to-text mb-[30px] rounded-[3px] bg-gradient-to-r px-[16px] py-[10px] font-semibold"
-                  onClick={resetAI}
-                >
-                  다른 추천 받기 ✨
-                </button>
-              </div>
+              <div className="mb-[24px] min-h-[44px]">{reason || "추천 이유 없음"}</div>
+              {recommendClick < 3 && (
+        <div className="w-[153px] text-[16px] text-white self-start">
+          <MoreRecommendButton
+  onRecommend={() => {
+    console.log("클릭됨!");
+    setRecommendClick(prev => prev + 1);
+  }}
+  disabled={loading}
+  loading={loading}
+/>
+        </div>
+      )}
             </div>
           </>
         ) : (
