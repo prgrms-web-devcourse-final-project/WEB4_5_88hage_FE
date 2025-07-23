@@ -22,7 +22,9 @@ interface GatheringDisplayItem {
   fullGroup: Group;
 }
 
-const mapToGatheringDisplayItem = (item: MyGroupData | LeaderMyGroupData): GatheringDisplayItem => {
+const mapToGatheringDisplayItem = (
+  item: MyGroupData | LeaderMyGroupData,
+): GatheringDisplayItem => {
   if ('groupId' in item) {
     // MyGroupData
     return {
@@ -90,6 +92,11 @@ export default function GatheringSide({
   >({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -137,6 +144,10 @@ export default function GatheringSide({
     ...myGatherings.map(mapToGatheringDisplayItem),
     ...leaderGatherings.map(mapToGatheringDisplayItem),
   ];
+
+  const filteredGatherings = allGatherings.filter((gathering) =>
+    gathering.title.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
 
   if (loading) {
     return (
@@ -193,13 +204,15 @@ export default function GatheringSide({
             type="text"
             placeholder="검색어를 입력하세요"
             className="bg-gray-5 t3 placeholder-gray-disabled w-full rounded p-2 pl-10 text-white"
+            value={searchTerm}
+            onChange={handleSearchChange}
           />
         </div>
         <div className="w-full flex-grow overflow-y-auto px-2">
           {activeTab === 'my-gathering' ? (
             <div className="space-y-2">
-              {allGatherings.length > 0 ? (
-                allGatherings.map((gathering) => (
+              {filteredGatherings.length > 0 ? (
+                filteredGatherings.map((gathering) => (
                   <GatheringItem
                     key={gathering.id}
                     name={gathering.title}

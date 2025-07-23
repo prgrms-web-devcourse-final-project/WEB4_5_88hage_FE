@@ -2,8 +2,8 @@ import Image from 'next/image';
 
 interface GatheringItemProps {
   name: string;
-  description: string;
-  imageUrl: string;
+  description: string | undefined;
+  imageUrl: string | undefined;
   onClick: () => void;
 }
 
