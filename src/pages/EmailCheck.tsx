@@ -95,7 +95,7 @@ export default function EmailCheck({
                 {...register('c1')}
                 maxLength={1}
                 id="codeInputBox1"
-                className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center focus:outline-2 focus:outline-[#1cebb9b3]"
+                className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center text-xl focus:outline-2 focus:outline-[#1cebb9b3] lg:text-2xl"
                 onChange={(e) => {
                   if (e.target.value.length > 0) {
                     document.getElementById('codeInputBox2')?.focus();
@@ -107,7 +107,7 @@ export default function EmailCheck({
                 {...register('c2')}
                 maxLength={1}
                 id="codeInputBox2"
-                className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center focus:outline-2 focus:outline-[#1cebb9b3]"
+                className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center text-xl focus:outline-2 focus:outline-[#1cebb9b3] lg:text-2xl"
                 onChange={(e) => {
                   if (e.target.value.length > 0) {
                     document.getElementById('codeInputBox3')?.focus();
@@ -119,7 +119,7 @@ export default function EmailCheck({
                 {...register('c3')}
                 maxLength={1}
                 id="codeInputBox3"
-                className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center focus:outline-2 focus:outline-[#1cebb9b3]"
+                className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center text-xl focus:outline-2 focus:outline-[#1cebb9b3] lg:text-2xl"
                 onChange={(e) => {
                   if (e.target.value.length > 0) {
                     document.getElementById('codeInputBox4')?.focus();
@@ -131,7 +131,7 @@ export default function EmailCheck({
                 {...register('c4')}
                 maxLength={1}
                 id="codeInputBox4"
-                className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center focus:outline-2 focus:outline-[#1cebb9b3]"
+                className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center text-xl focus:outline-2 focus:outline-[#1cebb9b3] lg:text-2xl"
                 onChange={(e) => {
                   if (e.target.value.length > 0) {
                     document.getElementById('codeInputBox5')?.focus();
@@ -143,7 +143,7 @@ export default function EmailCheck({
                 {...register('c5')}
                 maxLength={1}
                 id="codeInputBox5"
-                className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center focus:outline-2 focus:outline-[#1cebb9b3]"
+                className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center text-xl focus:outline-2 focus:outline-[#1cebb9b3] lg:text-2xl"
                 onChange={(e) => {
                   if (e.target.value.length > 0) {
                     document.getElementById('codeInputBox6')?.focus();
@@ -155,7 +155,7 @@ export default function EmailCheck({
                 {...register('c6')}
                 maxLength={1}
                 id="codeInputBox6"
-                className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center focus:outline-2 focus:outline-[#1cebb9b3]"
+                className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center text-xl focus:outline-2 focus:outline-[#1cebb9b3] lg:text-2xl"
                 // onChange={(e) => {
                 //   if (e.target.value.length > 0) {
                 //     document.getElementById('codeInputBox2')?.focus();
