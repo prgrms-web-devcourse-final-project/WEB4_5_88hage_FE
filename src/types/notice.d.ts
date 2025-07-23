@@ -1,4 +1,4 @@
-export interface Notice {
+declare interface Notice {
   id: number;
   activated: boolean;
   created_at: string;

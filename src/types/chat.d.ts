@@ -1,4 +1,4 @@
-export interface Chat {
+declare interface Chat {
   id: number;
   activated: boolean;
   created_at: string;

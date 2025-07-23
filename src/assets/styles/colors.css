@@ -81,6 +81,29 @@
     linear-gradient(#2a2a2a, #2a2a2a) padding-box,
     linear-gradient(#1cebb9, #7f74ff) border-box;
 }
+.button-gradient-border {
+  border: 2px solid transparent;
+  border-radius: 3px;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(to right, #1cebb9,#FF58D8, #7f74ff) border-box;
+}
+.solve-gradient-border {
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background:
+    linear-gradient(rgba(255,255,255,.4)) padding-box,
+    linear-gradient(to right, #1cebb9,#FF58D8, #7f74ff) border-box;
+}
+.solve-gradient {
+  border: 1px solid transparent; /* 테두리 */
+  border-radius: 5px; /* 이미지와 비슷한 라운드 */
+  background:
+    linear-gradient(135deg, #1cebb955, #7f74ff55) border-box, /* 테두리 그라디언트 */
+    linear-gradient(135deg, #1f2435, #1a1f2f) padding-box; /* 내부 배경 */
+  padding: 20px 25px;
+  color: #fff;
+}
 
 .gradient-text {
   background-image: linear-gradient(to right, #1cebb9, #7f74ff);
@@ -106,6 +129,16 @@
       90deg,
       rgba(28, 235, 185, 0.33) 0%,
       rgba(127, 116, 255, 0.33) 100%
+    ),
+    black;
+}
+
+.gradient-background {
+  background:
+    linear-gradient(
+      90deg,
+      rgb(28, 235, 185) 0%,
+      rgb(127, 116, 255) 100%
     ),
     black;
 }

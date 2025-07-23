@@ -1,4 +1,4 @@
-export enum ContentPreference {
+declare enum ContentPreference {
   THEATER = "THEATER",
   DANCE = "DANCE",
   POP_DANCE = "POP_DANCE",
@@ -13,7 +13,7 @@ export enum ContentPreference {
   SPORTS = "SPORTS",
 }
 
-export enum GroupPreference {
+declare enum GroupPreference {
   ART = "ART",
   TRAVEL = "TRAVEL",
   FOOD = "FOOD",
@@ -24,7 +24,7 @@ export enum GroupPreference {
   MOVIE = "MOVIE",
 }
 
-export interface PreferenceRequest {
+declare interface PreferenceRequest {
   contentPreferences: ContentPreference[];
   groupPreferences: GroupPreference[];
 }

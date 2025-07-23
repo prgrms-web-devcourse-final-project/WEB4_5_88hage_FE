@@ -1,4 +1,4 @@
-export interface GroupChatMessageRead {
+declare interface GroupChatMessageRead {
   id: number;
   activated: boolean;
   created_at: string;
@@ -6,7 +6,7 @@ export interface GroupChatMessageRead {
   reader_email: string;
   modified_at: string;
 }
-export interface GroupChatMessage {
+declare interface GroupChatMessage {
   id: number;
   activated: boolean;
   created_at: string;
@@ -15,7 +15,7 @@ export interface GroupChatMessage {
   message: string;
   sender_email: string;
 }
-export interface GroupChatRoom {
+declare interface GroupChatRoom {
   id: number;
   activated: boolean;
   created_at: string;
