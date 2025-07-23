@@ -1,4 +1,4 @@
-export interface Content {
+declare interface Content {
   id: number;
   activated: boolean;
   bookmark_count: number;

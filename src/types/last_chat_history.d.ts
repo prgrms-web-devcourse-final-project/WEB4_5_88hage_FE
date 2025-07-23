@@ -1,4 +1,4 @@
-export interface LastChatHistory {
+declare interface LastChatHistory {
   id: number;
   activated: boolean;
   created_at: string;

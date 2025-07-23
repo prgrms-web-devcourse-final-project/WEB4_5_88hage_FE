@@ -1,4 +1,4 @@
-export interface Group {
+declare interface Group {
   id: number;
   activated: boolean;
   during: number;
@@ -28,7 +28,7 @@ export interface Group {
   status: 'RECRUITING' | 'FULL' | 'COMPLETED' | 'CANCELED' | 'DELETE';
   title: string;
 }
-export interface GroupUpdateRequest {
+declare interface GroupUpdateRequest {
   title: string;
   explain: string;
   simpleExplain: string;
@@ -49,9 +49,9 @@ export interface GroupUpdateRequest {
   longitude: number;
   image?: File;
   hashTags: string[];
-  during: number;
+  during?: number;
 }
-export interface GroupSearchQueryParams {
+declare interface GroupSearchQueryParams {
   category?:
     | 'ART'
     | 'TRAVEL'
@@ -68,7 +68,7 @@ export interface GroupSearchQueryParams {
   sort?: string[];
 }
 
-export interface GroupCreateRequest {
+declare interface GroupCreateRequest {
   title: string;
   explain: string;
   simpleExplain: string;
@@ -89,10 +89,10 @@ export interface GroupCreateRequest {
   longitude: number;
   image?: File;
   hashTags: string[];
-  during: number;
+  during?: number;
 }
 
-export interface GroupBookmark {
+declare interface GroupBookmark {
   id: number;
   activated: boolean;
   created_at: string;
@@ -101,7 +101,7 @@ export interface GroupBookmark {
   email: string;
 }
 
-export interface GroupMember {
+declare interface GroupMember {
   id: number;
   activated: boolean;
   created_at: string;
@@ -110,7 +110,7 @@ export interface GroupMember {
   email: string;
 }
 
-export interface GroupHashtag {
+declare interface GroupHashtag {
   id: number;
   activated: boolean;
   created_at: string;
@@ -119,7 +119,7 @@ export interface GroupHashtag {
   tag: string;
 }
 
-export interface GroupPreference {
+declare interface GroupPreference {
   id: number;
   activated: boolean;
   created_at: string;
