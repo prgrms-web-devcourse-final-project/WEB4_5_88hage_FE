@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import Input from '@/components/common/Input';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import logo from '@/assets/images/logo.svg';
 
 export default function PasswordChangePage({ email }: { email: string }) {
   const [password, setPassword] = useState('');
@@ -38,10 +40,11 @@ export default function PasswordChangePage({ email }: { email: string }) {
     <div className="flex min-h-screen flex-col px-4 text-white md:px-0">
       <div className="flex flex-1 flex-col items-center justify-center">
         <div className="flex w-full max-w-150 flex-col items-center gap-6">
-          <h1 className="text-main text-3xl font-bold">
+          {/* <h1 className="text-main text-3xl font-bold">
             <span className="text-white">FU</span>N
             <span className="text-white">FU</span>N
-          </h1>
+          </h1> */}
+          <Image src={logo} alt="logo" />
 
           <div className="flex w-full flex-col gap-4">
             <Input

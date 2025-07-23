@@ -29,7 +29,19 @@ export default function EmailCheck({
     }
   };
 
-  const sendMailAgain = async () => {};
+  const sendMailAgain = async () => {
+    const response = await fetch(`${API}/users/send/code/${emailInput}`, {
+      method: 'POST',
+    });
+    const data = await response.json();
+
+    if (data.code !== '0000') {
+      alert(data.message);
+    } else {
+      alert(data.data);
+      // setIsCodeInput(true);
+    }
+  };
 
   const codeEvent = async (c: string) => {
     const response = await fetch(`${API}/users/verify/code/${emailInput}`, {
@@ -82,37 +94,73 @@ export default function EmailCheck({
                 type="text"
                 {...register('c1')}
                 maxLength={1}
+                id="codeInputBox1"
                 className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center focus:outline-2 focus:outline-[#1cebb9b3]"
+                onChange={(e) => {
+                  if (e.target.value.length > 0) {
+                    document.getElementById('codeInputBox2')?.focus();
+                  }
+                }}
               />
               <input
                 type="text"
                 {...register('c2')}
                 maxLength={1}
+                id="codeInputBox2"
                 className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center focus:outline-2 focus:outline-[#1cebb9b3]"
+                onChange={(e) => {
+                  if (e.target.value.length > 0) {
+                    document.getElementById('codeInputBox3')?.focus();
+                  }
+                }}
               />
               <input
                 type="text"
                 {...register('c3')}
                 maxLength={1}
+                id="codeInputBox3"
                 className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center focus:outline-2 focus:outline-[#1cebb9b3]"
+                onChange={(e) => {
+                  if (e.target.value.length > 0) {
+                    document.getElementById('codeInputBox4')?.focus();
+                  }
+                }}
               />
               <input
                 type="text"
                 {...register('c4')}
                 maxLength={1}
+                id="codeInputBox4"
                 className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center focus:outline-2 focus:outline-[#1cebb9b3]"
+                onChange={(e) => {
+                  if (e.target.value.length > 0) {
+                    document.getElementById('codeInputBox5')?.focus();
+                  }
+                }}
               />
               <input
                 type="text"
                 {...register('c5')}
                 maxLength={1}
+                id="codeInputBox5"
                 className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center focus:outline-2 focus:outline-[#1cebb9b3]"
+                onChange={(e) => {
+                  if (e.target.value.length > 0) {
+                    document.getElementById('codeInputBox6')?.focus();
+                  }
+                }}
               />
               <input
                 type="text"
                 {...register('c6')}
                 maxLength={1}
+                id="codeInputBox6"
                 className="bg-gray-5 aspect-square w-full max-w-20 rounded-[5px] text-center focus:outline-2 focus:outline-[#1cebb9b3]"
+                // onChange={(e) => {
+                //   if (e.target.value.length > 0) {
+                //     document.getElementById('codeInputBox2')?.focus();
+                //   }
+                // }}
               />
             </div>
           )}
@@ -136,7 +184,11 @@ export default function EmailCheck({
         {isCodeInput && (
           <div className="mt-5 flex h-5 items-center gap-2 text-[14px] font-semibold">
             <span>이메일 전송이 안 됐나요?</span>
-            <button className="cursor-pointer text-[#1CEBB9]">
+            <button
+              type="button"
+              onClick={sendMailAgain}
+              className="cursor-pointer text-[#1CEBB9]"
+            >
               이메일 재전송
             </button>
           </div>
