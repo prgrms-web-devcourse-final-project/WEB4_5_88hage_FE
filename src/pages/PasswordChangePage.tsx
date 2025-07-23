@@ -5,6 +5,7 @@ import Input from '@/components/common/Input';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import logo from '@/assets/images/logo.svg';
+import { changePassword } from '@/lib/api/user';
 
 export default function PasswordChangePage({ email }: { email: string }) {
   const [password, setPassword] = useState('');
@@ -14,18 +15,20 @@ export default function PasswordChangePage({ email }: { email: string }) {
   const router = useRouter();
 
   const handleChangeClick = async () => {
-    const response = await fetch(`${API}/users/change/password/${email}`, {
+    const newData: ChangePasswordRequest = {
+      password: password,
+      confirmPassword: confirmPassword,
+    };
+    const response = await fetch(`${API}/api/users/change/password/${email}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        password: password,
-        confirmPassword: confirmPassword,
-      }),
+      body: JSON.stringify(newData),
     });
     const data = await response.json();
     console.log(data);
+    if (data.code === '4027') alert(data.message);
     if (data.code !== '0000') {
       if (data.data.password) alert(data.data.password);
       else if (data.data.confirmPassword) alert(data.data.confirmPassword);
