@@ -98,7 +98,7 @@ export default function InquiryCreatePage() {
           isLongForm
         />
 
-        <AddPhotoButton onDataChange={handleDataChange} />
+        <AddPhotoButton multiple onDataChange={handleDataChange} />
 
         <div className="h-[1px] w-full bg-[#343434]"></div>
 

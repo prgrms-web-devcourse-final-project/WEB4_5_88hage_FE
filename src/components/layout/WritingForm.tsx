@@ -1,6 +1,11 @@
 'use client';
 import { useState } from 'react';
-import { Search } from 'lucide-react';
+import { Calendar, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+
+import DatePicker, { registerLocale } from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import '@/assets/styles/datepicker.css';
+import { ko } from 'date-fns/locale/ko';
 
 export default function WritingForm({
   title,
@@ -8,20 +13,49 @@ export default function WritingForm({
   isRequired,
   placeholder,
   isLongForm,
+  addressValue,
+  handleModal,
+  sendDate,
 }: {
   title: string;
   name?: string;
   isRequired: boolean;
   placeholder: string;
   isLongForm: boolean;
+  addressValue?: string;
+  handleModal?: (showModal: boolean) => void;
+  sendDate?: (date: Date) => void;
 }) {
   const [value, setValue] = useState('');
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setValue(e.target.value);
   };
+
+  const handleDate = (date: Date | null) => {
+    setSelectedDate(date);
+    if (date && sendDate) sendDate(date);
+  };
+
+  registerLocale('ko', ko);
 
   return (
     <>
@@ -34,11 +68,25 @@ export default function WritingForm({
         </div>
         <div className="relative">
           {!isLongForm && title === '모임 위치' && (
-            <button className="absolute inset-y-0 right-0 flex items-center pt-2 pr-4">
+            <button
+              type="button"
+              onClick={() => {
+                if (handleModal) handleModal(true);
+              }}
+              className="absolute inset-y-0 right-0 flex items-center pt-2 pr-4"
+            >
               <Search size={20} color="#5e5e5e" />
             </button>
           )}
-          {isLongForm ? (
+          {!isLongForm && title === '모임 날짜' && (
+            <button
+              type="button"
+              className="absolute inset-y-0 right-0 flex items-center pt-2 pr-4"
+            >
+              <Calendar size={20} color="#5e5e5e" />
+            </button>
+          )}
+          {isLongForm && (
             <textarea
               name={name}
               className="placeholder-gray-disabled t3 mt-3 h-64 w-full resize-none rounded border border-[#343434] p-4 text-white"
@@ -47,7 +95,8 @@ export default function WritingForm({
               onChange={handleChange}
               maxLength={1000}
             />
-          ) : (
+          )}
+          {!isLongForm && title !== '모임 날짜' && (
             <input
               type="text"
               name={name}
@@ -55,8 +104,37 @@ export default function WritingForm({
                 title === '모임 위치' ? 'pr-12' : ''
               }`}
               placeholder={placeholder}
-              value={value}
+              value={addressValue || addressValue === '' ? addressValue : value}
               onChange={handleChange}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') e.preventDefault();
+              }}
+            />
+          )}
+          {!isLongForm && title === '모임 날짜' && (
+            <DatePicker
+              locale="ko"
+              dateFormat="yyyy-MM-dd a h:mm"
+              shouldCloseOnSelect
+              showTimeSelect
+              minDate={new Date()}
+              selected={selectedDate}
+              onChange={(date) => handleDate(date)}
+              placeholderText="모임 시작일을 알려주세요"
+              className="placeholder-gray-disabled t3 mt-3 w-full cursor-pointer rounded border border-[#343434] p-4 text-white"
+              renderCustomHeader={({ date, decreaseMonth, increaseMonth }) => (
+                <div className="flex items-center justify-center gap-2">
+                  <button type="button" onClick={decreaseMonth}>
+                    <ChevronLeft color="#a8a8a8" size={16} />
+                  </button>
+                  <div className="w-30 font-bold text-[#a8a8a8]">
+                    {`${months[date.getMonth()]}, ${date.getFullYear()}`}
+                  </div>
+                  <button type="button" onClick={increaseMonth}>
+                    <ChevronRight color="#a8a8a8" size={16} />
+                  </button>
+                </div>
+              )}
             />
           )}
           {isLongForm && (
