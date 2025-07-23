@@ -5,6 +5,7 @@ import testMap from '@/assets/images/testmap.png';
 import MainPostHeader from './common/MainPostHeader';
 import { GroupDetail } from '@/types/group';
 import { getCategoryDisplayName } from '@/lib/utils/categoryMapping';
+import { completeGroup, deleteGroup } from '@/lib/api/group';
 
 interface GatheringMainProps {
   selectedGathering: GroupDetail | null;
@@ -26,10 +27,13 @@ export default function GatheringMain({
     <>
       <div className="bg-gray-7 lg:border-gray-5 mt-5 flex h-full w-full flex-col rounded-[15px] p-5 lg:border">
         <MainPostHeader
+          groupId={selectedGathering.id}
           title={selectedGathering.title || ''}
           category={getCategoryDisplayName(selectedGathering.category) || ''}
           memberCount={selectedGathering.nowPeople || 0}
           groupImageUrl={selectedGathering.imageUrl || ''}
+          onComplete={completeGroup}
+          onDelete={deleteGroup}
         />
         <div className="mt-5 flex gap-5">
           {selectedGathering.hashTags &&
