@@ -16,7 +16,7 @@ export default function EmailCheck({
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const sendMailToMe = async () => {
-    const response = await fetch(`${API}/users/send/code/${emailInput}`, {
+    const response = await fetch(`${API}/api/users/send/code/${emailInput}`, {
       method: 'POST',
     });
     const data = await response.json();
@@ -30,7 +30,7 @@ export default function EmailCheck({
   };
 
   const sendMailAgain = async () => {
-    const response = await fetch(`${API}/users/send/code/${emailInput}`, {
+    const response = await fetch(`${API}/api/users/send/code/${emailInput}`, {
       method: 'POST',
     });
     const data = await response.json();
@@ -44,7 +44,7 @@ export default function EmailCheck({
   };
 
   const codeEvent = async (c: string) => {
-    const response = await fetch(`${API}/users/verify/code/${emailInput}`, {
+    const response = await fetch(`${API}/api/users/verify/code/${emailInput}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

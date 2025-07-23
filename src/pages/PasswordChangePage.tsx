@@ -14,7 +14,7 @@ export default function PasswordChangePage({ email }: { email: string }) {
   const router = useRouter();
 
   const handleChangeClick = async () => {
-    const response = await fetch(`${API}/users/change/password/${email}`, {
+    const response = await fetch(`${API}/api/users/change/password/${email}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

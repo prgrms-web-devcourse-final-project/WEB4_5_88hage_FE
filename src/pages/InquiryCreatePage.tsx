@@ -4,7 +4,7 @@ import CategorySelect from '@/components/layout/CategorySelect';
 import WritingForm from '@/components/layout/WritingForm';
 import AddPhotoButton from '@/components/ui/AddPhotoButton';
 import { createInquiry } from '@/lib/api/inquiry';
-import { ContactRequest } from '@/types/inquiry';
+// import { ContactRequest } from '@/types/inquiry';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 
@@ -45,7 +45,7 @@ export default function InquiryCreatePage() {
 
     // API
     try {
-      const response = await createInquiry(newData);
+      const response: any = await createInquiry(newData);
       alert(response.data);
       router.push('/user/inquiry');
     } catch (error: any) {
