@@ -1,4 +1,4 @@
-export interface SignupRequest {
+declare interface SignupRequest {
   email: string;
   password: string;
   confirmPassword: string;
@@ -11,25 +11,25 @@ export interface SignupRequest {
   isMarketingAgreed: boolean;
 }
 
-export interface UserInfoRequest {
+declare interface UserInfoRequest {
   address: string;
   latitude: number;
   longitude: number;
   isMarketingAgreed: boolean;
 }
 
-export interface ChangePasswordRequest {
+declare interface ChangePasswordRequest {
   password: string;
   confirmPassword: string;
 }
 
-export interface LoginRequest {
+declare interface LoginRequest {
   email: string;
   password: string;
   rememberMe: boolean;
 }
 
-export interface OAuth2SignupRequest {
+declare interface OAuth2SignupRequest {
   nickname: string;
   address: string;
   latitude: number;
@@ -39,10 +39,16 @@ export interface OAuth2SignupRequest {
   isMarketingAgreed: boolean;
 }
 
-export interface VerifyCodeRequest {
+declare interface VerifyCodeRequest {
   code: string;
 }
 
-export interface NicknameRequest {
+declare interface NicknameRequest {
   nickname: string;
 }
+
+type GnbItem = {
+  label: string;
+  value?: string | undefined;
+}
+

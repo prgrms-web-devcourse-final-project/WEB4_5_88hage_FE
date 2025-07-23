@@ -1,4 +1,4 @@
-export interface Notification {
+declare interface Notification {
   id: number;
   activated: boolean;
   is_read: boolean;

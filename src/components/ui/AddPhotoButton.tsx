@@ -7,29 +7,21 @@ import { twMerge } from 'tailwind-merge';
 export default function AddPhotoButton({
   className,
   onDataChange,
+  multiple = false,
 }: {
   className?: string;
   onDataChange?: (data: File[]) => void;
+  multiple?: boolean;
 }) {
   const [imageList, setImageList] = useState<File[]>([]);
-  const [previewList, setPreviewList] = useState<string[]>([]);
-
-  // const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.files) {
-  //     setPostImgList([]);
-  //     for (let i = 0; i < e.target.files.length; i++) {
-  //       const currentImgUrl = URL.createObjectURL(e.target.files[i]);
-  //       setPostImgList((prev: any) => [...prev, currentImgUrl].slice(0, 5));
-  //     }
-  //     if (onDataChange) onDataChange(e.target.files);
-  //   }
-  // };
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
+    if (multiple && e.target.files) {
       for (let i = 0; i < e.target.files.length; i++) {
         setImageList((prev) => [...prev, e.target.files![i]].slice(0, 5));
       }
+    } else if (!multiple && e.target.files) {
+      setImageList([e.target.files[0]]);
     }
   };
 

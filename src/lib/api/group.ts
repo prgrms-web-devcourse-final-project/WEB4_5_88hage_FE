@@ -38,20 +38,18 @@ export const updateGroup = async (
     formData.append('image', data.image);
   }
   data.hashTags.forEach((tag) => formData.append('hashTags', tag));
-  formData.append('during', data.during.toString());
+  if (data.during) formData.append('during', data.during.toString());
 
-  await put(`/api/groups/${groupId}`, formData);
+  await put(`/groups/${groupId}`, formData);
 };
 
 // 모임 삭제
 export const deleteGroup = async (groupId: number): Promise<void> => {
-  await del(`/api/groups/${groupId}`);
+  await del(`/groups/${groupId}`);
 };
 
 // 모임 생성
-export const createGroup = async (
-  data: GroupCreateRequest,
-): Promise<number> => {
+export const createGroup = async (data: GroupCreateRequest): Promise<any> => {
   const formData = new FormData();
   formData.append('title', data.title);
   formData.append('explain', data.explain);
@@ -67,20 +65,20 @@ export const createGroup = async (
     formData.append('image', data.image);
   }
   data.hashTags.forEach((tag) => formData.append('hashTags', tag));
-  formData.append('during', data.during.toString());
+  if (data.during) formData.append('during', data.during.toString());
 
-  const res = await post<number>('/api/groups/create', formData);
+  const res = await post('/groups/create', formData);
   return res;
 };
 
 // 모임 완료
 export const completeGroup = async (groupId: number) => {
-  await post(`/api/groups/${groupId}/complete`, null);
+  await post(`/groups/${groupId}/complete`, null);
 };
 
 // 모임 취소
 export const cancelGroup = async (groupId: number) => {
-  await post(`/api/groups/${groupId}/cancel`, null);
+  await post(`/groups/${groupId}/cancel`, null);
 };
 
 // 모임 검색 및 조회
@@ -99,28 +97,28 @@ export const searchGroups = async (
     {} as Record<string, string>,
   );
   const queryString = new URLSearchParams(stringifiedParams).toString();
-  const res = await get<Group[]>(`/api/groups/search?${queryString}`);
+  const res = await get<Group[]>(`/groups/search?${queryString}`);
   return res;
 };
 
 // 내가 속한 모임 조회
 export const getMyGroups = async (): Promise<MyGroupData[]> => {
-  const res = await get<MyGroupResponse>('/api/groups/getMy');
+  const res = await get<MyGroupResponse>('/groups/getMy');
   return res.data;
 };
 
 // 내가 리더 역할인 모임 조회
 export const getLeaderMyGroups = async (): Promise<LeaderMyGroupData[]> => {
-  const res = await get<LeaderMyGroupResponse>('/api/groups/getLeaderMy');
+  const res = await get<LeaderMyGroupResponse>('/groups/getLeaderMy');
   return res.data;
 };
 
 // 자동 완성을 위한 단어 저장 (모임 해시태그)
 export const saveWord = async (word: string) => {
-  return post('/api/group-hashtags/save', { word });
+  return post('/group-hashtags/save', { word });
 };
 
 // 자동 완성을 위한 단어 불러오기 (모임 해시태그)
 export const completeWord = async () => {
-  return get('/api/group-hashtags/complete');
+  return get('/group-hashtags/complete');
 };

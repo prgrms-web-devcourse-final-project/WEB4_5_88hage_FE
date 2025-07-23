@@ -1,4 +1,4 @@
-export interface MyGroupData {
+declare interface MyGroupData {
   groupId: number;
   groupTitle: string;
   userEmail: string;
@@ -11,7 +11,7 @@ export interface MyGroupData {
   simpleExplain: string;
 }
 
-export interface MyGroupResponse {
+declare interface MyGroupResponse {
   code: string;
   message: string;
   reason: string | null;
