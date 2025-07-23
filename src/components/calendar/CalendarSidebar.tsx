@@ -19,7 +19,7 @@ export default function CalendarSidebar({selectDate,selectListData, setSelectLis
         <ul>
           {selectListData.map((info:CalendarData) =>
           <li className='mb-[10px]' key={Number(info.deleteId)}>
-            <CalendarCard info={info} setSelectListData={setSelectListData} selectListData={selectListData}/>
+            <CalendarCard info={info} setSelectListData={setSelectListData}/>
           </li>
           )}
         </ul>

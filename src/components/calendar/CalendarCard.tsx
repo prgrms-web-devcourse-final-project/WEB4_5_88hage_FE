@@ -4,10 +4,9 @@ import { X } from 'lucide-react';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 type Props ={
   info:CalendarData,
-  selectListData:CalendarData[],
   setSelectListData:Dispatch<SetStateAction<CalendarData[]>>,
 }
-export default function CalendarCard({info,selectListData,setSelectListData}:Props){
+export default function CalendarCard({info,setSelectListData}:Props){
 
   const timeFormatting = ()=> {
     const date = new Date(info.start)
