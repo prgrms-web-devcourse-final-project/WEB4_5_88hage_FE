@@ -1,4 +1,4 @@
-export interface UserInfo {
+declare interface UserInfo {
   activated: boolean;
   created_at: string;
   modified_at: string;

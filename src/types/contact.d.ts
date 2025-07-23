@@ -1,4 +1,4 @@
-export interface Contact {
+declare interface Contact {
   id: number;
   activated: boolean;
   answered_at: string | null;

@@ -20,7 +20,6 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
         {children}
-        {/* <Footer/> */}
         <ChatbotButton />
       </body>
     </html>
