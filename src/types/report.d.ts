@@ -1,4 +1,4 @@
-export interface Report {
+declare interface Report {
   id: number;
   activated: boolean;
   resolved: boolean;

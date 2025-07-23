@@ -1,4 +1,4 @@
-export interface Inquiry {
+declare interface Inquiry {
   id: number;
   activate: boolean;
   answered_at: string;
@@ -11,7 +11,7 @@ export interface Inquiry {
   user_id: string;
 }
 
-export interface ContactRequest {
+declare interface ContactRequest {
   title: string;
   content: string;
   category: string;
@@ -19,7 +19,7 @@ export interface ContactRequest {
   imagesChanged: boolean;
 }
 
-export interface GetContactsParams {
+declare interface GetContactsParams {
   status?: 'all' | 'pending' | 'complete';
   page?: number;
   size?: number;

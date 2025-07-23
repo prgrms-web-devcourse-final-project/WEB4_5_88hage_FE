@@ -1,24 +1,24 @@
 declare module 'react-big-calendar';
 
-export interface ContentCategory {
+declare interface ContentCategory {
   id: number;
   category: string;
 }
 
-export interface GroupBookmark {
+declare interface GroupBookmark {
   id: number;
   email: string;
   group: number;
 }
 
-export interface ApiResponse<T = any> {
+declare interface ApiResponse<T = any> {
   code: string;
   message: string;
   reason?: string;
   data: T;
 }
 
-export interface MessageDTO {
+declare interface MessageDTO {
   id: number;
   content: string;
   readAt?: string; // date-time
@@ -27,27 +27,27 @@ export interface MessageDTO {
   isRead: boolean;
 }
 
-export interface ReportRequest {
+declare interface ReportRequest {
   reportedUserEmail?: string;
   reason: string;
   reportType: 'CHAT' | 'POST';
   targetId: number;
 }
 
-export interface AdminReportProcessRequest {
+declare interface AdminReportProcessRequest {
   takeAction: boolean;
   suspendDays?: number;
   adminComment?: string;
 }
 
-export interface RecommendRequest {
+declare interface RecommendRequest {
   eventType: 'CONTENT' | 'GROUP';
   startTime: string;
   endTime: string;
   address: string;
 }
 
-type WeatherInfo = {
+declare type WeatherInfo = {
   baseDate: string;
   baseTime: string;
   category: string;
@@ -61,17 +61,17 @@ interface Window {
   kakao: any;
 }
 
-export interface ChatHistoryEntry {
+declare interface ChatHistoryEntry {
   user: string;
   ai: string;
 }
 
-export interface ChatBotRequest {
+declare interface ChatBotRequest {
   chatBotHistory: ChatHistoryEntry[];
   userMessage: string;
 }
 
-export interface CalendarContentRequest {
+declare interface CalendarContentRequest {
   title: string;
   content: string;
   startDate: string;

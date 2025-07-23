@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+'use client'
+=======
 "use client"
+>>>>>>> 45499223a61c508f1315bed163fb415c001b49fb
 
 import { Search, SlidersHorizontal } from 'lucide-react';
 import { useEffect, useState } from 'react';

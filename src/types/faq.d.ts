@@ -1,4 +1,4 @@
-export interface Faq {
+declare interface Faq {
   id: number;
   activated: boolean;
   created_at: string;

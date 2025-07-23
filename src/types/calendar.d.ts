@@ -1,4 +1,4 @@
-export interface Calendar {
+declare interface Calendar {
   id: number;
   activated: boolean;
   content_id: number | null;
@@ -8,4 +8,19 @@ export interface Calendar {
   selected_date: string;
   email: string | null;
   type: 'CONTENT' | 'GROUP';
+}
+
+declare type SelectDate = {
+  date:number,
+  month:number,
+  year:number,
+}
+
+declare type CalendarData = {
+  id:string,
+  deleteId:string,
+  title: string,
+  start:Date,
+  end:Date,
+  type:string
 }

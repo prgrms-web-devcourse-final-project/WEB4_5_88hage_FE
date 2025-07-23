@@ -1,0 +1,28 @@
+import Image, { StaticImageData } from "next/image";
+
+type TotalType= {
+    img:StaticImageData,
+    altText:string,
+    text:string,
+    strongText:string
+}
+
+export default function SolveTitle(
+    {img,altText,text,strongText}: TotalType
+){
+  return (
+    <>
+    <div className="w-[160px] min-w-[160px] lg:w-[279px] flex flex-col mb-[30px]">
+        <div className="w-[34px] h-[34px] lg:w-[68px] lg:h-[68px] relative">
+           <Image src={img} alt={altText} fill className="absolute"/>
+        </div>
+        <p className="text-[36px] lg:text-[64px] w-full text-gray-default leading-none">
+            {text}
+            <strong>
+                {strongText}
+            </strong>
+        </p>
+    </div>
+    </>
+  );
+};

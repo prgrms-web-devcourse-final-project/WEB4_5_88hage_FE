@@ -1,4 +1,4 @@
-export interface Participant {
+declare interface Participant {
   id: number;
   activated: boolean;
   created_at: string;

@@ -1,4 +1,4 @@
-export interface ContentBookmark {
+declare interface ContentBookmark {
   id: number;
   activated: boolean;
   content_id: number;

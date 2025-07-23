@@ -1,4 +1,4 @@
-export interface ContentPreference {
+declare interface ContentPreference {
   id: number;
   activated: boolean;
   created_at: string;
