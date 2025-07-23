@@ -53,8 +53,8 @@ const currentGroups = groups.slice(startIdx, endIdx);
     headers: { "Content-Type": "application/json" },
     credentials: "include",
     body: JSON.stringify({
-      startTime: `${start}T00:00:00`,
-      endTime: `${end}T23:59:59`,
+      startTime: start,
+      endTime: end,
       address,
     }),
   });

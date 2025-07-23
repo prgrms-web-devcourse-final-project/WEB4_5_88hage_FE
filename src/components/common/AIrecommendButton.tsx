@@ -26,12 +26,29 @@ export default function AIrecommendButton({
   const [startDate, setStartDate] = useState<Date | null>(null);
 const [endDate, setEndDate] = useState<Date | null>(null);
 
+function formatDate(date: Date | null) {
+  if (!date) return "";
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  return (
+    date.getFullYear() +
+    "-" +
+    pad(date.getMonth() + 1) +
+    "-" +
+    pad(date.getDate()) +
+    "T" +
+    pad(date.getHours()) +
+    ":" +
+    pad(date.getMinutes()) +
+    ":00"
+  );
+}
+
   const handleSubmit = () => {
     setShowModal(false);
     onRecommend(
       address,
-      startDate ? startDate.toISOString() : "",
-      endDate ? endDate.toISOString() : ""
+      formatDate(startDate),
+      formatDate(endDate)
     );
     setAddress("");
     setStartDate("");
