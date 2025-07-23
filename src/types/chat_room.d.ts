@@ -1,4 +1,4 @@
-export interface ChatRoom {
+declare interface ChatRoom {
   id: number;
   activated: boolean;
   created_at: string;

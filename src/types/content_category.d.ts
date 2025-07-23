@@ -1,4 +1,4 @@
-export interface ContentCategory {
+declare interface ContentCategory {
   id: number;
   activated: boolean;
   created_at: string;

@@ -1,4 +1,4 @@
-export interface ChatBot {
+declare interface ChatBot {
   id: number;
   activated: boolean;
   created_at: string;
