@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 'use client'
-=======
-"use client"
->>>>>>> 7e69aff5cbdafc457e390ae4b0cff6cf7a0851c0
 
 import { Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
