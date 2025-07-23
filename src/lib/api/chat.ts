@@ -1,6 +1,4 @@
-import { ChatRoom } from '@/types/chat_room';
 import { get, post } from './fetchInstance';
-import { LastChatHistory } from '@/types/last_chat_history';
 
 // 채팅 기록 조회
 export const getChatHistory = async (roomId: string, type: string) => {

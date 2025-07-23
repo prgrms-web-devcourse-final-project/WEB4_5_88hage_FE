@@ -1,5 +1,4 @@
 import { get, post, del } from './fetchInstance';
-import { Follower, Following } from '@/types/user';
 
 interface GetFollowParams {
   page?: number;
@@ -59,7 +58,9 @@ export const getFollowings = async (
     {} as Record<string, string>,
   );
   const queryString = new URLSearchParams(stringifiedParams).toString();
-  const response = await get<Following[]>(`/api/follows/followings?${queryString}`);
+  const response = await get<Following[]>(
+    `/api/follows/followings?${queryString}`,
+  );
   return response;
 };
 
@@ -85,7 +86,9 @@ export const getFollowers = async (
     {} as Record<string, string>,
   );
   const queryString = new URLSearchParams(stringifiedParams).toString();
-  const response = await get<Follower[]>(`/api/follows/followers?${queryString}`);
+  const response = await get<Follower[]>(
+    `/api/follows/followers?${queryString}`,
+  );
   return response;
 };
 
@@ -99,8 +102,6 @@ export const countFollowings = async (): Promise<number> => {
 
 // 팔로워 수 조회
 export const countFollowers = async (): Promise<number> => {
-  const response = await get<{ count: number }>(
-    '/api/follows/count/followers',
-  );
+  const response = await get<{ count: number }>('/api/follows/count/followers');
   return response.count;
 };

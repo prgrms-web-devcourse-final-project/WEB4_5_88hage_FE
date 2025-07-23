@@ -29,7 +29,7 @@ declare interface Group {
   title?: string;
 }
 
-export interface GroupDetail {
+declare interface GroupDetail {
   id: number;
   title: string;
   explain: string;

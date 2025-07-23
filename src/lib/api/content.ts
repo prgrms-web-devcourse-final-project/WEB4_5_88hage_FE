@@ -1,4 +1,3 @@
-import { GetContentsParams } from '@/types/content';
 import { get } from './fetchInstance';
 
 export async function getContents(params: GetContentsParams) {
