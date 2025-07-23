@@ -1,9 +1,4 @@
 import { get, post, put, patch } from './fetchInstance';
-import {
-  ContactRequest,
-  GetContactsParams,
-  Inquiry,
-} from '../../types/inquiry';
 
 // 문의 작성
 export const createInquiry = async (data: ContactRequest) => {
@@ -38,9 +33,10 @@ export const getContacts = async (params?: GetContactsParams) => {
       )
     : {};
 
-  const queryString = Object.keys(stringifiedParams).length > 0
-    ? `?${new URLSearchParams(stringifiedParams).toString()}`
-    : '';
+  const queryString =
+    Object.keys(stringifiedParams).length > 0
+      ? `?${new URLSearchParams(stringifiedParams).toString()}`
+      : '';
 
   return get(`/api/contacts${queryString}`);
 };
@@ -59,5 +55,4 @@ export const getContactDetail = async (contactId: number): Promise<Inquiry> => {
 // 문의 삭제
 export const deleteContact = async (contactId: number) => {
   await patch(`/api/contacts/${contactId}`, null);
-
 };

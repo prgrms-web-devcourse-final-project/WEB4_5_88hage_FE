@@ -22,3 +22,27 @@ declare interface Content {
   time: string | null;
   area: string | null;
 }
+
+interface GetContentsParams {
+  category?:
+    | 'THEATER'
+    | 'DANCE'
+    | 'POP_DANCE'
+    | 'CLASSIC'
+    | 'GUKAK'
+    | 'POP_MUSIC'
+    | 'MIX'
+    | 'MAGIC'
+    | 'MUSICAL'
+    | 'TOUR'
+    | 'CULTURE'
+    | 'SPORTS';
+  gugunName?: string;
+  startDate?: string;
+  endDate?: string;
+  keyword?: string;
+  sortBy?: 'bookmarkCount' | 'endDate' | 'distance';
+  page?: number;
+  size?: number;
+  sort?: string[];
+}

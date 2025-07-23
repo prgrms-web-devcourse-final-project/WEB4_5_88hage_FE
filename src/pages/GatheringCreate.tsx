@@ -6,19 +6,19 @@ import AddPhotoButton from '@/components/ui/AddPhotoButton';
 export default function GatheringCreate() {
   return (
     <>
-      <section className='w-full h-[145px] lg:h-[200px] bg-[#0D0D0D] flex justify-center items-center'>
-        <div className="bg-gradient-to-r from-[#1cebb9] to-[#7f74ff] bg-clip-text text-transparent text-[24px] font-semibold md:text-[30px] lg:text-[32px]">
+      <section className="flex h-[145px] w-full items-center justify-center bg-[#0D0D0D] lg:h-[200px]">
+        <div className="bg-gradient-to-r from-[#1cebb9] to-[#7f74ff] bg-clip-text text-[24px] font-semibold text-transparent md:text-[30px] lg:text-[32px]">
           모임글 작성
         </div>
       </section>
-      <section className="mx-auto w-full max-w-[950px] flex flex-col px-6 gap-[28px] mt-[32px] lg:mt-[36px] mb-[48px]">
+      <section className="mx-auto mt-[32px] mb-[48px] flex w-full max-w-[950px] flex-col gap-[28px] px-6 lg:mt-[36px]">
         <WritingForm
           title="제목"
           placeholder="제목을 입력해 주세요."
           isRequired
           isLongForm={false}
         />
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col gap-6 lg:flex-row">
           <WritingForm
             title="모임 위치"
             placeholder="모임 위치를 정해 주세요."
@@ -35,7 +35,7 @@ export default function GatheringCreate() {
             className="flex-1"
           />
         </div>
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col gap-6 lg:flex-row">
           <WritingForm
             title="모임 날짜"
             placeholder="모임 시작일을 알려주세요."
@@ -52,7 +52,7 @@ export default function GatheringCreate() {
             className="flex-1"
           />
         </div>
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col gap-6 lg:flex-row">
           <WritingForm
             title="태그"
             placeholder="태그를 작성해 주세요."
@@ -68,11 +68,13 @@ export default function GatheringCreate() {
           />
         </div>
         <div className="flex flex-wrap gap-2">
-          {['#태그1', '#태그2', '#태그3', '#태그4'].map(tag => (
+          {['#태그1', '#태그2', '#태그3', '#태그4'].map((tag) => (
             <span
               key={tag}
-              className="inline-block bg-[#232323] px-3 py-1 text-[#ababab] rounded-full text-[14px]"
-            >{tag}</span>
+              className="inline-block rounded-full bg-[#232323] px-3 py-1 text-[14px] text-[#ababab]"
+            >
+              {tag}
+            </span>
           ))}
         </div>
         <WritingForm
@@ -87,12 +89,17 @@ export default function GatheringCreate() {
         </div>
         <div className="h-[1px] w-full bg-[#343434]" />
         <div>
-          <h3 className='text-[#fff] font-semibold text-[16px] mb-1'>안내사항</h3>
-          <ul className="list-disc pl-5 text-[#959595] text-[15px] leading-relaxed">
+          <h3 className="mb-1 text-[16px] font-semibold text-[#fff]">
+            안내사항
+          </h3>
+          <ul className="list-disc pl-5 text-[15px] leading-relaxed text-[#959595]">
             <li>고객센터 운영시간은 10:00 ~ 19:00 예요.</li>
             <li>답변에는 시간이 소요됩니다. 조금만 기다려주세요.</li>
             <li>문의 내용을 자세하게 남겨주시면 빠른 답변에 도움이 됩니다.</li>
-            <li>문의하기 버튼을 누르시면 개인정보 수집에 동의하신 것으로 간주합니다.</li>
+            <li>
+              문의하기 버튼을 누르시면 개인정보 수집에 동의하신 것으로
+              간주합니다.
+            </li>
           </ul>
         </div>
         <GrayButton className="mt-[20px] h-[52px] text-[20px] font-semibold lg:text-[22px]">

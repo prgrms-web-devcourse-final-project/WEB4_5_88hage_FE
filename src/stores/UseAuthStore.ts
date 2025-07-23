@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Buffer } from 'buffer';
 import { login as apiLogin } from '@/lib/api/auth';
-import axios from 'axios';
+import { get as fetchGet } from '@/lib/api/fetchInstance';
 
 interface User {
   email: string;
@@ -21,8 +21,6 @@ interface AuthState {
   logout: () => void;
 }
 
-const API = process.env.NEXT_PUBLIC_API_URL;
-
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
@@ -34,11 +32,7 @@ export const useAuthStore = create<AuthState>()(
         console.log('apiLogin 응답:', result);
 
         // accessToken 안전하게 파싱
-        const token =
-          result?.data?.data?.accessToken ||
-          result?.data?.accessToken ||
-          result?.accessToken ||
-          null;
+        const token = result?.data?.accessToken || null;
 
         if (!token) {
           alert('로그인 실패: accessToken 없음');
@@ -64,14 +58,27 @@ export const useAuthStore = create<AuthState>()(
       fetchCoordinate: async () => {
         const { token, user } = get();
         if (!token || !user) return;
-        const { data } = await axios.get(`${API}/users/coordinate`, {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
-        });
-        const { latitude, longitude } = data.data;
+
+        interface CoordinateResponse {
+          data: {
+            latitude: number;
+            longitude: number;
+          };
+        }
+
+        const response = await fetchGet<CoordinateResponse>(
+          `/api/users/coordinate`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            credentials: 'include',
+          },
+        );
+        const { latitude, longitude } = response.data;
         set((state) => ({
           user: {
             ...state.user,
+            email: state.user?.email || '',
+            nickname: state.user?.nickname || '',
             latitude,
             longitude,
           },
@@ -89,6 +96,6 @@ export const useAuthStore = create<AuthState>()(
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
-    }
-  )
+    },
+  ),
 );
