@@ -81,13 +81,6 @@ export default function GatheringSide({
     fetchData();
   }, []);
 
-  console.log('3. allGatherings (from state):', myGatherings); // 추가
-  myGatherings.map((gathering) => {
-    console.log(gathering.id);
-    console.log(gathering.placeName);
-    console.log(gathering.explain);
-  });
-
   const filteredGatherings = Array.from(
     new Map(myGatherings.map((item) => [item.id, item])).values(),
   ).filter(

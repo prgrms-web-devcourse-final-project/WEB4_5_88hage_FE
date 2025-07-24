@@ -3,7 +3,6 @@
 import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { X } from 'lucide-react';
-import { ApprovedParticipantInfo } from '@/types/participant';
 import { kickoutParticipant } from '@/lib/api/participant';
 import { useAuthStore } from '@/stores/UseAuthStore';
 
@@ -23,6 +22,19 @@ export default function ParticipantListModal({
   const modalRef = useRef<HTMLDivElement>(null);
   const { user } = useAuthStore();
 
+  const handleKickout = async (targetEmail: string) => {
+    if (window.confirm(`${targetEmail} 님을 모임에서 추방하시겠습니까?`)) {
+      try {
+        await kickoutParticipant(groupId, targetEmail);
+        alert(`${targetEmail} 님이 모임에서 추방되었습니다.`);
+        onClose(); // Close modal after kickout                                                  │
+        // Optionally, refresh the participant list or the page
+      } catch (error) {
+        console.error('Failed to kick out participant:', error);
+        alert('참여자 추방에 실패했습니다.');
+      }
+    }
+  };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -98,7 +110,7 @@ export default function ParticipantListModal({
                   )}
                   {isLeader && user?.email !== participant.userEmail && (
                     <button
-                      className="bg-red-500 rounded px-3 py-1 text-sm text-white"
+                      className="rounded bg-red-500 px-3 py-1 text-sm text-white"
                       onClick={() => handleKickout(participant.userEmail)}
                     >
                       추방

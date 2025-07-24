@@ -21,4 +21,5 @@ declare interface ApprovedParticipantInfo {
   id: number;
   userNickname: string;
   userImageUrl: string;
+  userEmail: string;
 }

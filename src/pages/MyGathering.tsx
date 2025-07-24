@@ -4,7 +4,6 @@ import { useState } from 'react';
 import GatheringChatting from '@/components/GatheringChatting';
 import GatheringMain from '@/components/GatheringMain';
 import GatheringSide from '@/components/GatheringSide';
-import { GroupDetail } from '@/types/group';
 
 export default function MyGathering() {
   const [selectedGathering, setSelectedGathering] =
@@ -12,6 +11,7 @@ export default function MyGathering() {
 
   const handleSelectGathering = (gathering: GroupDetail) => {
     setSelectedGathering(gathering);
+    console.log(gathering.id);
   };
 
   return (
