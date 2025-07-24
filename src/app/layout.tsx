@@ -1,6 +1,6 @@
 import Script from "next/script";
 import '../assets/styles/globals.css';
-import ChatbotButton from '@/components/chatbot/ChatbotButton';
+import ChatbotButtonWrapper from "@/components/chatbot/ChatbotButtonWrapper";
 
 export const metadata = {
   title: 'Next.js',
@@ -20,7 +20,7 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
         {children}
-        <ChatbotButton />
+        <ChatbotButtonWrapper />
       </body>
     </html>
   );
