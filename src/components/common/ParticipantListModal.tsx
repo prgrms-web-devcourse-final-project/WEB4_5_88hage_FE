@@ -3,17 +3,25 @@
 import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { X } from 'lucide-react';
+import { ApprovedParticipantInfo } from '@/types/participant';
+import { kickoutParticipant } from '@/lib/api/participant';
+import { useAuthStore } from '@/stores/UseAuthStore';
 
 interface ParticipantListModalProps {
   participants: ApprovedParticipantInfo[];
   onClose: () => void;
+  isLeader?: boolean;
+  groupId: number;
 }
 
 export default function ParticipantListModal({
   participants,
   onClose,
+  isLeader,
+  groupId,
 }: ParticipantListModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuthStore();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -68,20 +76,34 @@ export default function ParticipantListModal({
                   </span>
                 </div>
                 <div className="flex gap-2">
-                  <button
-                    className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
-                    onClick={() =>
-                      alert(`메시지 보내기: ${participant.userNickname}`)
-                    }
-                  >
-                    메시지
-                  </button>
-                  <button
-                    className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
-                    onClick={() => alert(`팔로우: ${participant.userNickname}`)}
-                  >
-                    팔로우
-                  </button>
+                  {user?.email !== participant.userEmail && (
+                    <>
+                      <button
+                        className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
+                        onClick={() =>
+                          alert(`메시지 보내기: ${participant.userNickname}`)
+                        }
+                      >
+                        메시지
+                      </button>
+                      <button
+                        className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
+                        onClick={() =>
+                          alert(`팔로우: ${participant.userNickname}`)
+                        }
+                      >
+                        팔로우
+                      </button>
+                    </>
+                  )}
+                  {isLeader && user?.email !== participant.userEmail && (
+                    <button
+                      className="bg-red-500 rounded px-3 py-1 text-sm text-white"
+                      onClick={() => handleKickout(participant.userEmail)}
+                    >
+                      추방
+                    </button>
+                  )}
                 </div>
               </li>
             ))}

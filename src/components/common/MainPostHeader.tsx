@@ -2,7 +2,7 @@ import { EllipsisVertical, Users2 } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getApprovedParticipants } from '@/lib/api/participant';
+import { getApprovedParticipants, leaveGroup } from '@/lib/api/participant';
 import ParticipantListModal from './ParticipantListModal';
 
 interface MainPostHeaderProps {
@@ -13,6 +13,7 @@ interface MainPostHeaderProps {
   groupId: number;
   onComplete: (groupId: number) => Promise<void>;
   onDelete: (groupId: number) => Promise<void>;
+  isLeader?: boolean;
 }
 
 export default function MainPostHeader({
@@ -23,10 +24,13 @@ export default function MainPostHeader({
   groupId,
   onComplete,
   onDelete,
+  isLeader,
 }: MainPostHeaderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showParticipantsModal, setShowParticipantsModal] = useState(false);
-  const [participantsList, setParticipantsList] = useState<ApprovedParticipantInfo[]>([]);
+  const [participantsList, setParticipantsList] = useState<
+    ApprovedParticipantInfo[]
+  >([]);
   const router = useRouter();
 
   const toggleModal = () => {
@@ -64,6 +68,20 @@ export default function MainPostHeader({
     }
   };
 
+  const handleLeaveGroup = async () => {
+    if (window.confirm('모임을 정말 탈퇴하시겠습니까?')) {
+      try {
+        await leaveGroup(groupId);
+        alert('모임에서 탈퇴되었습니다.');
+        setIsModalOpen(false);
+        router.push('/user/gathering'); // Redirect to my gatherings page after leaving
+      } catch (error) {
+        console.error('Failed to leave group:', error);
+        alert('모임 탈퇴에 실패했습니다.');
+      }
+    }
+  };
+
   return (
     <>
       <div className="flex items-start lg:items-center">
@@ -94,18 +112,26 @@ export default function MainPostHeader({
           </button>
           {isModalOpen && (
             <div className="bg-gray-6 border-gray-disabled absolute top-full right-[-10px] z-10 mt-2 rounded-md border px-7">
-              <button className="py-2 text-white" onClick={handleComplete}>
-                완료
-              </button>
-              <button
-                className="py-2 text-white"
-                onClick={() => router.push(`/gathering/${groupId}/edit`)}
-              >
-                수정
-              </button>
-              <button className="py-2 text-white" onClick={handleDelete}>
-                삭제
-              </button>
+              {isLeader ? (
+                <>
+                  <button className="py-2 text-white" onClick={handleComplete}>
+                    완료
+                  </button>
+                  <button
+                    className="py-2 text-white"
+                    onClick={() => router.push(`/gathering/${groupId}/edit`)}
+                  >
+                    수정
+                  </button>
+                  <button className="py-2 text-white" onClick={handleDelete}>
+                    삭제
+                  </button>
+                </>
+              ) : (
+                <button className="py-2 text-white" onClick={handleLeaveGroup}>
+                  탈퇴
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -115,6 +141,8 @@ export default function MainPostHeader({
         <ParticipantListModal
           participants={participantsList}
           onClose={() => setShowParticipantsModal(false)}
+          isLeader={isLeader}
+          groupId={groupId}
         />
       )}
     </>

@@ -59,6 +59,7 @@ declare interface GroupDetail {
   leaderEmail: string;
   hashTags: string[];
   activated: boolean;
+  isLeader?: boolean; // Added for leader matching logic
 }
 
 declare interface GroupUpdateRequest {
@@ -84,6 +85,7 @@ declare interface GroupUpdateRequest {
   hashTags: string[];
   during?: number;
 }
+
 declare interface GroupSearchQueryParams {
   category?:
     | 'ART'
@@ -185,3 +187,18 @@ interface GetLeaderMyGroupsResponse {
   reason: string | null;
   data: LeaderGroup[];
 }
+
+declare interface MyGroupData {
+  groupId: number;
+  groupTitle: string;
+  groupLeaderEmail: string;
+  groupImageUrl: string;
+  currentUserEmail: string;
+  currenUserImageUrl: string;
+  currentUserNickname: string;
+  participantCount: number;
+  status: string;
+  type: string;
+}
+
+declare interface MyGroupResponse extends ApiResponse<MyGroupData[]> {}

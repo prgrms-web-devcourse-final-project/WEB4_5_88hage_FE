@@ -33,6 +33,7 @@ export default function GatheringMain({
           groupImageUrl={selectedGathering.imageUrl || ''}
           onComplete={completeGroup}
           onDelete={deleteGroup}
+          isLeader={selectedGathering.isLeader}
         />
         <div className="mt-5 flex gap-5">
           {selectedGathering.hashTags &&

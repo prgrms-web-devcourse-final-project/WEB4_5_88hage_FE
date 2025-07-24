@@ -43,10 +43,11 @@ export default function GatheringSide({
 
         const myGroupDetails = await Promise.all(
           MyGroupsResponse.map(async (group) => {
-            console.log('Processing group from myGroupsResponse:', group); // Debug log
             const detail = await getGroupById(group.groupId);
-            console.log('Detail fetched by getGroupById:', detail); // Debug log
-            return detail;
+            return {
+              ...detail,
+              isLeader: group.groupLeaderEmail === group.currentUserEmail,
+            };
           }),
         );
         setMyGatherings(myGroupDetails.filter(Boolean)); // Filter out any null/undefined details
