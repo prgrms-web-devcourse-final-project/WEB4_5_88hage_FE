@@ -10,7 +10,7 @@ type Props = {
 export default function AIrecommendButton({
   onRecommend,
   loading,
-  className,
+  //className,
   disabled,
 }: Props) {
   const [showModal, setShowModal] = useState(false);
@@ -29,7 +29,7 @@ export default function AIrecommendButton({
   return (
     <>
       <button
-        className={className || "h2 from-main to-text rounded-[4px] lg:text-[16px] bg-gradient-to-r font-semibold flex justify-center items-center w-[145px] h-[35px] text-white"}
+        className={"h2 from-main to-text rounded-[4px] lg:text-[16px] bg-gradient-to-r font-semibold flex justify-center items-center w-[145px] h-[35px] text-white"}
         onClick={() => setShowModal(true)}
         disabled={disabled || loading}
       >
@@ -41,7 +41,7 @@ export default function AIrecommendButton({
       <h2 className="mb-3 font-bold">추천 조건 입력</h2>
       <input
         className="mb-2 w-full p-2 border rounded"
-        placeholder="장소(예: 서울시 송파구 문정동)"
+        placeholder="장소(예: 서울시 서대문구 현저동)"
         value={address}
         onChange={e => setAddress(e.target.value)}
       />
