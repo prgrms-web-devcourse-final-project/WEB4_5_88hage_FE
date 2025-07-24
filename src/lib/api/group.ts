@@ -2,8 +2,8 @@ import { get, post, put, del } from './fetchInstance';
 
 // 모임 상세 조회
 export const getGroupById = async (groupId: number): Promise<GroupDetail> => {
-  const res = await get<GroupDetail>(`/api/groups/${groupId}`);
-  return res;
+  const res = await get<ApiResponse<GroupDetail>>(`/api/groups/${groupId}`);
+  return res.data;
 };
 
 // 모임 수정
@@ -97,7 +97,7 @@ export const getMyGroups = async (): Promise<MyGroupData[]> => {
 
 // 내가 리더 역할인 모임 조회
 export const getLeaderMyGroups = async (): Promise<LeaderMyGroupData[]> => {
-  const res = await get<LeaderMyGroupResponse>('/api/groups/getLeaderMy');
+  const res = await get<GetLeaderMyGroupsResponse>('/api/groups/getLeaderMy');
   return res.data;
 };
 

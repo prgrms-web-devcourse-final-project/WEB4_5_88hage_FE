@@ -60,6 +60,7 @@ declare interface GroupDetail {
   hashTags: string[];
   activated: boolean;
 }
+
 declare interface GroupUpdateRequest {
   title: string;
   explain: string;
@@ -79,7 +80,7 @@ declare interface GroupUpdateRequest {
   maxPeople: number;
   latitude: number;
   longitude: number;
-  image?: File;
+  image?: File | null;
   hashTags: string[];
   during?: number;
 }
@@ -119,7 +120,7 @@ declare interface GroupCreateRequest {
   maxPeople: number;
   latitude: number;
   longitude: number;
-  image?: File;
+  image?: File | null;
   hashTags: string[];
   during?: number;
 }
@@ -166,4 +167,21 @@ declare interface GroupPreference {
     | 'STUDY'
     | 'MOVIE';
   user_id: string;
+}
+
+interface LeaderGroup {
+  groupId: number;
+  groupTitle: string;
+  explain: string;
+  simpleExplain: string;
+  groupImageUrl: string;
+  groupStatus: 'RECRUITING' | 'COMPLETED' | 'IN_PROGRESS'; // Assuming these are the possible statuses
+  category: 'FOOD' | 'TRAVEL' | string; // Assuming these are some categories, and allowing for others
+}
+
+interface GetLeaderMyGroupsResponse {
+  code: string;
+  message: string;
+  reason: string | null;
+  data: LeaderGroup[];
 }

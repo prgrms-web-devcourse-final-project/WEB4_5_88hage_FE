@@ -3,7 +3,6 @@ import Tag from './common/Tag';
 import mapIcon from '@/assets/images/map_icon.svg';
 import testMap from '@/assets/images/testmap.png';
 import MainPostHeader from './common/MainPostHeader';
-import { GroupDetail } from '@/types/group';
 import { getCategoryDisplayName } from '@/lib/utils/categoryMapping';
 import { completeGroup, deleteGroup } from '@/lib/api/group';
 

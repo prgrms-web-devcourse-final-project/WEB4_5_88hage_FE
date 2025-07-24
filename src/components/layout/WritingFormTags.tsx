@@ -25,7 +25,7 @@ export default function WritingFormTags({
       `${URL}/groupHashtags/complete?prefix=${value}`,
     );
     const { data } = await response.json();
-    setHashTagsList(data);
+    setHashTagsList(Array.isArray(data) ? data : []);
   };
 
   useEffect(() => {

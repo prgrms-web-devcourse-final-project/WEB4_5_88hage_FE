@@ -82,7 +82,12 @@ export default function MainPostHeader({
               <button className="py-2 text-white" onClick={handleComplete}>
                 완료
               </button>
-              <button className="py-2 text-white">수정</button>
+              <button
+                className="py-2 text-white"
+                onClick={() => router.push(`/gathering/${groupId}/edit`)}
+              >
+                수정
+              </button>
               <button className="py-2 text-white" onClick={handleDelete}>
                 삭제
               </button>
