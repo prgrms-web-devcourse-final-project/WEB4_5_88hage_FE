@@ -24,7 +24,7 @@ export const kickoutParticipant = async (
 // groupID의 승인된 사용자 목록 확인
 export const getApprovedParticipants = async (
   groupId: number,
-): Promise<string[]> => {
+): Promise<ApiResponse<ApprovedParticipantInfo[]>> => {
   return await get(`/api/participants/${groupId}/approve`);
 };
 

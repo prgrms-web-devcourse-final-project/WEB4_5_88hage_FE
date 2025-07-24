@@ -4,15 +4,14 @@ import { useState } from 'react';
 import GatheringChatting from '@/components/GatheringChatting';
 import GatheringMain from '@/components/GatheringMain';
 import GatheringSide from '@/components/GatheringSide';
-import { Group } from '@/types/group';
 
 export default function MyGathering() {
-  const [selectedGathering, setSelectedGathering] = useState<Group | null>(
-    null,
-  );
+  const [selectedGathering, setSelectedGathering] =
+    useState<GroupDetail | null>(null);
 
-  const handleSelectGathering = (gathering: Group) => {
+  const handleSelectGathering = (gathering: GroupDetail) => {
     setSelectedGathering(gathering);
+    console.log(gathering.id);
   };
 
   return (
