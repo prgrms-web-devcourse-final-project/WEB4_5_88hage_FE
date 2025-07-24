@@ -101,14 +101,6 @@ export default function WritingForm({
               <Search size={20} color="#5e5e5e" />
             </button>
           )}
-          {!isLongForm && title === '모임 날짜' && (
-            <button
-              type="button"
-              className="absolute inset-y-0 right-0 flex items-center pt-2 pr-4"
-            >
-              <Calendar size={20} color="#5e5e5e" />
-            </button>
-          )}
           {isLongForm && (
             <textarea
               name={name}

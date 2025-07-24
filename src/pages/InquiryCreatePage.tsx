@@ -4,13 +4,14 @@ import CategorySelect from '@/components/layout/CategorySelect';
 import WritingForm from '@/components/layout/WritingForm';
 import AddPhotoButton from '@/components/ui/AddPhotoButton';
 import { createInquiry } from '@/lib/api/inquiry';
-import { ContactRequest } from '@/types/inquiry';
+// import { ContactRequest } from '@/types/inquiry';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 
 export default function InquiryCreatePage() {
-  let formData = new FormData();
+  // let formData = new FormData();
   const [images, setImages] = useState<File[]>([]);
+  const API = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
   const handleDataChange = (data: File[]) => setImages(data);
@@ -19,46 +20,26 @@ export default function InquiryCreatePage() {
     e.preventDefault();
 
     // formData 만들기
-    formData = new FormData();
-    const miniData = new FormData(e.currentTarget);
-    for (let [key, value] of miniData.entries()) {
-      if (key !== 'images') formData.append(key, value);
-    }
-
-    // 데이터 변환
-    const newFormData: { [key: string]: any } = {};
-    formData.forEach((value, key) => {
-      newFormData[key] = value;
-    });
-    const newData: ContactRequest = {
+    const formData = new FormData(e.currentTarget);
+    let formDataRequested: ContactRequest = {
       title: '',
       content: '',
       category: '',
       imagesChanged: true,
     };
-    newData.title = newFormData.title;
-    newData.content = newFormData.content;
-    newData.category = newFormData.category;
-    newData.images = images;
 
-    console.log(newData);
+    formDataRequested.title = String(formData.get('title'));
+    formDataRequested.content = String(formData.get('content'));
+    formDataRequested.category = String(formData.get('category'));
+    if (images.length > 0) formDataRequested.images = images;
 
     // API
-    try {
-      const response = await createInquiry(newData);
-      alert(response.data);
-      router.push('/user/inquiry');
-    } catch (error: any) {
-      console.error(error.response);
-      const ErrorKeyList = Object.keys(error.response.data.data);
-      if (ErrorKeyList.includes('title')) {
-        alert(error.response.data.data.title);
-      } else if (ErrorKeyList.includes('category')) {
-        alert('카테고리를 선정해주세요.');
-      } else if (ErrorKeyList.includes('content')) {
-        alert(error.response.data.data.content);
-      } else alert(error.response.data.message);
-    }
+    createInquiry(formDataRequested)
+      .then((response: any) => {
+        alert(response.data);
+        router.push('/inquiry');
+      })
+      .catch((error) => alert(error));
   };
 
   return (

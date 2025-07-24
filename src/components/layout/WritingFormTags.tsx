@@ -17,12 +17,12 @@ export default function WritingFormTags({
   const [value, setValue] = useState('');
   const [tagsDropMenu, setTagsDropMenu] = useState(false);
   const [hashTagsList, setHashTagsList] = useState<string[]>([]);
-  const URL = process.env.NEXT_PUBLIC_API_URL;
+  const API = process.env.NEXT_PUBLIC_API_URL;
   const inputRef = useRef<HTMLDivElement>(null);
 
   const fetchHashtags = async () => {
     const response = await fetch(
-      `${URL}/groupHashtags/complete?prefix=${value}`,
+      `${API}/api/groupHashtags/complete?prefix=${value}`,
     );
     const { data } = await response.json();
     setHashTagsList(Array.isArray(data) ? data : []);
