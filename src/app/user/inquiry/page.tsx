@@ -1,9 +1,9 @@
-import InquiryListPage from "@/pages/InquiryList";
+import InquiryListPage from '@/pages/InquiryList';
 
-export default function page(){
+export default function page() {
   return (
     <>
-    <InquiryListPage/>
+      <InquiryListPage />
     </>
   );
-};
+}
