@@ -13,12 +13,13 @@ import WritingFormTags from '@/components/layout/WritingFormTags';
 import AddPhotoButton from '@/components/ui/AddPhotoButton';
 
 interface GatheringEditPageProps {
-  params: { gatheringId: string };
+  params: Promise<{ gatheringId: number }>;
 }
 
 export default function GatheringEditPage({ params }: GatheringEditPageProps) {
   const router = useRouter();
-  const { gatheringId } = use(params);
+  const unwrappedParams = use(params);
+  const { gatheringId } = unwrappedParams;
   const [gathering, setGathering] = useState<GroupDetail | null>(null);
 
   // States for form fields, initialized with empty values
@@ -42,7 +43,7 @@ export default function GatheringEditPage({ params }: GatheringEditPageProps) {
   useEffect(() => {
     const fetchGathering = async () => {
       try {
-        const data = await getGroupById(Number(gatheringId));
+        const data = await getGroupById(gatheringId);
         setGathering(data);
         // Populate form fields with fetched data
         setTitle(data.title);
@@ -96,7 +97,7 @@ export default function GatheringEditPage({ params }: GatheringEditPageProps) {
     try {
       await updateGroup(Number(gatheringId), newData);
       alert('모임이 성공적으로 수정되었습니다!');
-      router.push(`/gathering/${gatheringId}`);
+      router.back();
     } catch (error) {
       console.error('Failed to update gathering:', error);
       alert('모임 수정에 실패했습니다.');
@@ -225,7 +226,9 @@ export default function GatheringEditPage({ params }: GatheringEditPageProps) {
                 { key: 'ART', value: '예술' },
               ]}
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) =>
+                setCategory(e.target.value as GroupUpdateRequest['category'])
+              }
             />
           </div>
         </div>
@@ -243,8 +246,6 @@ export default function GatheringEditPage({ params }: GatheringEditPageProps) {
         <AddPhotoButton
           className="mb-[60px] lg:mt-0"
           onDataChange={handleDataChange}
-          // If AddPhotoButton needs an initial image URL, it should have a prop for it.
-          // For now, assuming it handles its own internal state for display.
         />
 
         <GrayButton className="text-gray-disabled bg-gray-6 hover:bg-main hover:text-gray-8 fixed bottom-[20px] left-[20px] h-[52px] w-[calc(100%-40px)] text-[20px] font-medium hover:font-semibold lg:static lg:bottom-0 lg:left-0 lg:mt-10 lg:mb-[70px] lg:h-[80px] lg:w-full lg:text-[32px] lg:font-semibold">

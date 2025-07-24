@@ -28,8 +28,8 @@ export default function WritingForm({
   addressValue?: string;
   handleModal?: (showModal: boolean) => void;
   sendDate?: (date: Date) => void;
-  value: string | number;
-  onChange: (
+  value?: string | number;
+  onChange?: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,

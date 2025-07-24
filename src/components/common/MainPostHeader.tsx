@@ -2,6 +2,8 @@ import { EllipsisVertical, Users2 } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { getApprovedParticipants } from '@/lib/api/participant';
+import ParticipantListModal from './ParticipantListModal';
 
 interface MainPostHeaderProps {
   title: string;
@@ -23,10 +25,23 @@ export default function MainPostHeader({
   onDelete,
 }: MainPostHeaderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showParticipantsModal, setShowParticipantsModal] = useState(false);
+  const [participantsList, setParticipantsList] = useState<ApprovedParticipantInfo[]>([]);
   const router = useRouter();
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
+  };
+
+  const fetchApprovedParticipants = async () => {
+    try {
+      const response = await getApprovedParticipants(groupId);
+      setParticipantsList(response.data);
+      setShowParticipantsModal(true);
+    } catch (error) {
+      console.error('Failed to fetch participants:', error);
+      alert('참여자 정보를 불러오는 데 실패했습니다.');
+    }
   };
 
   const handleComplete = async () => {
@@ -70,7 +85,7 @@ export default function MainPostHeader({
         </div>
 
         <div className="text-gray-disabled relative ml-auto flex items-center gap-3">
-          <button className="flex gap-2">
+          <button className="flex gap-2" onClick={fetchApprovedParticipants}>
             <div className="t3 hidden lg:block">{memberCount}명</div>
             <Users2 className="h-[20px] w-[20px]" />
           </button>
@@ -96,6 +111,12 @@ export default function MainPostHeader({
         </div>
       </div>
       <hr className="text-gray-disabled mt-5" />
+      {showParticipantsModal && (
+        <ParticipantListModal
+          participants={participantsList}
+          onClose={() => setShowParticipantsModal(false)}
+        />
+      )}
     </>
   );
 }
