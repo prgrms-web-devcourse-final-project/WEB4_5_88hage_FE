@@ -3,6 +3,7 @@ import Image from 'next/image';
 import email from '../assets/images/email.svg';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { sendCodeEmail, verifyAuthCode } from '@/lib/api/user';
 
 export default function EmailCheck({
   next,
@@ -13,47 +14,35 @@ export default function EmailCheck({
   const [isCodeInput, setIsCodeInput] = useState(false);
   const [codeInput, setCodeInput] = useState('');
   const { register, handleSubmit } = useForm();
-  const API = process.env.NEXT_PUBLIC_API_URL;
 
-  const sendMailToMe = async () => {
-    const response = await fetch(`${API}/users/send/code/${emailInput}`, {
-      method: 'POST',
-    });
-    const data = await response.json();
-
-    if (data.code !== '0000') {
-      alert(data.message);
-    } else {
-      alert(data.data);
-      setIsCodeInput(true);
-    }
+  const sendMailToMe = () => {
+    sendCodeEmail(emailInput)
+      .then((response: any) => {
+        alert(response.data);
+        setIsCodeInput(true);
+      })
+      .catch((error) => alert(error));
   };
 
   const sendMailAgain = async () => {
-    const response = await fetch(`${API}/users/send/code/${emailInput}`, {
-      method: 'POST',
-    });
-    const data = await response.json();
-
-    if (data.code !== '0000') {
-      alert(data.message);
-    } else {
-      alert(data.data);
-      // setIsCodeInput(true);
-    }
+    sendCodeEmail(emailInput)
+      .then((response: any) => {
+        alert(response.data);
+        // setIsCodeInput(true);
+      })
+      .catch((error) => alert(error));
   };
 
   const codeEvent = async (c: string) => {
-    const response = await fetch(`${API}/users/verify/code/${emailInput}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ code: c }),
-    });
-    const data = await response.json();
-    alert(data.message);
-    if (data.code === '0000' && next) next(emailInput);
+    verifyAuthCode(c, emailInput)
+      .then((response: any) => {
+        console.log(response);
+        alert(response.message);
+        if (next) next(emailInput);
+      })
+      .catch((error) => {
+        alert(error);
+      });
   };
 
   const codeSubmit = (d: any) => {
