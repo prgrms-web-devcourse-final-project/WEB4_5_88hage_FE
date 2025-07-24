@@ -1,10 +1,3 @@
-import {
-  ChangePasswordRequest,
-  SignupRequest,
-  UserInfoRequest,
-  OAuth2SignupRequest,
-} from '@/types/auth';
-import { UserCoordinate } from '@/types/user';
 import { get, post, put, patch } from './fetchInstance';
 
 // 회원 정보 조회
@@ -28,8 +21,8 @@ export const verifyNickname = async (nickname: string) => {
 };
 
 // 인증 코드 검증
-export const verifyAuthCode = async (code: string) => {
-  return post('/api/users/verify/code', { code });
+export const verifyAuthCode = async (code: string, email: string) => {
+  return post(`/api/users/verify/code/${email}`, { code });
 };
 
 // 회원가입
@@ -43,8 +36,8 @@ export const resendSignupEmail = async (email: string) => {
 };
 
 // 인증 코드 메일 발송
-export const sendCodeEmail = async () => {
-  return post('/api/users/send/code', {});
+export const sendCodeEmail = async (email: string) => {
+  return post(`/api/users/send/code/${email}`, {});
 };
 
 // 회원 탈퇴
@@ -53,8 +46,11 @@ export const withdrawUser = async () => {
 };
 
 // 비밀번호 변경
-export const changePassword = async (data: ChangePasswordRequest) => {
-  return patch('/api/users/change/password', data);
+export const changePassword = async (
+  data: ChangePasswordRequest,
+  email: string,
+) => {
+  return patch(`/api/users/change/password/${email}`, data);
 };
 
 // 닉네임 변경
