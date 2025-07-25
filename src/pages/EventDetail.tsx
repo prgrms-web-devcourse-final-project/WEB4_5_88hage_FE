@@ -48,8 +48,9 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
               <div>행사 날짜 : {dateFormatting(content.startDate)} ~ {dateFormatting(content.endDate)}</div>
               <div>행사 장소 : {content.address}</div>
               <div>행사 시간 : {content.runTime}</div>
+              <div>이용 요금 : {content.fee}</div>
               <div>나이 제한 : {content.age}</div>
-              <div>시작 시간 : {content.startTime}</div>
+              <div>시작 시간 : {content.time}</div>
             </div>
             <div className="flex flex-col gap-[20px]">
               <div className="text-main text-[24px]">찾아 오시는 길</div>
