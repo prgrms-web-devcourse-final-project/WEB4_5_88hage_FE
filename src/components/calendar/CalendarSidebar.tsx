@@ -6,11 +6,11 @@ type Props = {
   selectDate:SelectDate,
   selectListData:CalendarData[],
   setSelectListData:Dispatch<SetStateAction<CalendarData[]>>,
-  setCalendarData:Dispatch<SetStateAction<CalendarData[]>>
+  setCalendarData:Dispatch<SetStateAction<CalendarData[]>>,
   
 }
 
-export default function CalendarSidebar({selectDate,selectListData, setSelectListData}:Props){
+export default function CalendarSidebar({selectDate, selectListData, setSelectListData, setCalendarData}:Props){
   return (
     <>
     <div className="bg-gray-7 w-full min-w-[335px] p-[10px] min-h-auto lg:w-[280px] lg:flex lg:items-center lg:flex-col lg:rounded-[5px] lg:min-w-[280px]">
@@ -21,7 +21,7 @@ export default function CalendarSidebar({selectDate,selectListData, setSelectLis
         <ul>
           {selectListData.map((info:CalendarData) =>
           <li className='mb-[10px]' key={Number(info.calendarId)}>
-            <CalendarCard info={info} setSelectListData={setSelectListData}/>
+            <CalendarCard info={info} setSelectListData={setSelectListData} setCalendarData={setCalendarData}/>
           </li>
           )}
         </ul>

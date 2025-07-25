@@ -5,7 +5,7 @@ import 'moment/locale/ko';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../../assets/styles/calendar/calendarCustom.css'
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction} from 'react';
 
 moment.locale('ko');
 const localizer = momentLocalizer(moment);
@@ -16,6 +16,60 @@ type Props = {
 }
 
 export default function CalendarContainer({setSelectDate,setSelectListData,calendarData}:Props){
+
+  const tempEvents = [
+  {
+    id: 0,
+    title: '전체공휴일',
+    allDay: true,
+    start: new Date(2025, 6, 26),
+    end:   new Date(2025, 6, 26),
+    desc: '월요일 휴무',
+  },
+  {
+    id: 1,
+    title: '오전 스크럼',
+    allDay: false,
+    start: new Date(2025, 6, 27, 9, 30),
+    end:   new Date(2025, 6, 27, 10, 0),
+    desc: '팀 진행 상황 공유',
+  },
+  {
+    id: 2,
+    title: '점심 식사',
+    allDay: false,
+    start: new Date(2025, 6, 27, 12, 0),
+    end:   new Date(2025, 6, 27, 13, 0),
+  },
+  {
+    id: 3,
+    title: '제품 리뷰 미팅',
+    allDay: false,
+    start: new Date(2025, 6, 28, 15, 0),
+    end:   new Date(2025, 6, 28, 16, 30),
+  },
+  {
+    id: 4,
+    title: '제품 리뷰 미팅',
+    allDay: false,
+    start: new Date(2025, 6, 29, 15, 0),
+    end:   new Date(2025, 6, 29, 16, 30),
+  },
+  {
+    id: 5,
+    title: '제품 리뷰 미팅',
+    allDay: false,
+    start: new Date(2025, 6, 30, 15, 0),
+    end:   new Date(2025, 6, 30, 16, 30),
+  },
+  {
+    id: 6,
+    title: '제품 리뷰 미팅',
+    allDay: false,
+    start: new Date(2025, 6, 31, 15, 0),
+    end:   new Date(2025, 6, 31, 16, 30),
+  },
+];
 
   const calenderGetDateInfo = (date:Date) => {
       const newDate = {
@@ -52,7 +106,8 @@ export default function CalendarContainer({setSelectDate,setSelectListData,calen
         localizer={localizer}
         views={['month']}
         defaultView="month" 
-        events={calendarData}
+        // events={calendarData}
+        events={tempEvents}
         startAccessor="start"
         endAccessor="end"
         titleAccessor="title"

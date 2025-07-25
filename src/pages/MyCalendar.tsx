@@ -9,10 +9,10 @@ import 'moment-timezone';
 export default function MyCalendar() {
   const date = new Date();
   
-  //해당 cell에 대한 데이터
+  //전체 일정 대한 이벤트
   const [calendarData,setCalendarData] = useState<CalendarData[]>([]);
 
-  //클릭한 데이터의 배열값
+  //클릭한 날의 이벤트
   const [selectListData,setSelectListData] = useState<CalendarData[]>([]);
 
   //사용자가 선택한 날짜
@@ -55,8 +55,8 @@ export default function MyCalendar() {
             일정관리
           </h2>
           <div className="flex w-full flex-col lg:flex lg:flex-row lg:gap-[20px]">
-            <CalendarSidebar selectDate={selectDate} selectListData={selectListData} setSelectListData={setSelectListData} />
-            <CalendarContainer setSelectDate={setSelectDate} setSelectListData={setSelectListData} calendarData={calendarData}/>
+            <CalendarSidebar selectDate={selectDate} selectListData={selectListData} setSelectListData={setSelectListData} setCalendarData={setCalendarData}/>
+            <CalendarContainer setSelectDate={setSelectDate} setSelectListData={setSelectListData} calendarData={calendarData} />
           </div>
         </div>
     </>
