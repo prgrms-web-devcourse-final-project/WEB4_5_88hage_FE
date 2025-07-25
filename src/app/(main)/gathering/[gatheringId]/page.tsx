@@ -10,7 +10,7 @@ export default async function page({params}: {params: Promise<{gatheringId: stri
         headers: {
           accept: 'application/json',
         },
-        cache: 'force-cache',
+        // cache: 'force-cache',
       });
       const {data} = await response.json();
       console.log(data)

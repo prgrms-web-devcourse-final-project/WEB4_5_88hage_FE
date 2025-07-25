@@ -1,28 +1,52 @@
-export default function GatheringHostBox({hostName,hostEmail}:{hostName:string,hostEmail:string}) {
+'use client'
+
+import { useAuthStore } from "@/stores/UseAuthStore";
+
+type Props = {
+  hostName:string,
+  hostEmail:string,
+  tags:string[],
+  hostExplain:string
+}
+export default function GatheringHostBox({hostName,hostEmail,tags,hostExplain}:Props) {
+  const user = useAuthStore(s => s.user);
+
+  //팔로우 기능 컴포넌트로 분리
+  const follow = async (email:string)=>{
+    try {
+      const response = await fetch(`https://funfun.cloud/api/follows/${email}`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    const data = response.json();
+    console.log('팔로우 성공 : ', data)
+    } catch(error){
+      console.log('팔로우 실패 : ', error)
+    }
+  }
+
   return (
     <div className="flex w-full gap-[20px] rounded-[5px] border border-[#393939] p-[20px]">
       <div className="bg-gray-3 size-[100px] rounded-full"></div>
       <div className="flex grow-1 flex-col">
         <div className="text-[18px] text-white">{hostName}</div>
         <div className="pt-[11.33px] pb-[14.33px] text-[#ababab]">
-          안녕하세요 홍길동 입니다. 반가워요!
+          {hostExplain}
         </div>
         <div className="flex gap-[10px] text-[14px]">
-          <div className="bg-gray-4 rounded-full px-[17px] py-[4px] text-white">
-            음식
-          </div>
-          <div className="bg-gray-4 rounded-full px-[17px] py-[4px] text-white">
-            운동
-          </div>
-          <div className="bg-gray-4 rounded-full px-[17px] py-[4px] text-white">
-            문화
-          </div>
+          {tags.map(data => <div key={data} className="bg-gray-4 rounded-full px-[17px] py-[4px] text-white">{data}</div>)}
         </div>
       </div>
       <div className="flex items-center justify-end">
-        <button className="bg-gray-4 rounded-full px-[16px] py-[6px] text-white">
+        {hostEmail === user?.email ? '':<button onClick={()=> follow(hostEmail)} className="bg-gray-4 rounded-full px-[16px] py-[6px] text-white">
           팔로우
-        </button>
+        </button>}
+        {/* <button className="bg-gray-4 rounded-full px-[16px] py-[6px] text-white">
+          팔로우
+        </button> */}
       </div>
     </div>
   );

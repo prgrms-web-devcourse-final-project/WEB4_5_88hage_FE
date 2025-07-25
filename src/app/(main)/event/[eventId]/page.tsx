@@ -1,4 +1,3 @@
-import { getContent } from '@/lib/api/content';
 import EventDetail from '@/pages/EventDetail';
 
 export default async function page({params}: {params: Promise<{eventId: string}>}) {
