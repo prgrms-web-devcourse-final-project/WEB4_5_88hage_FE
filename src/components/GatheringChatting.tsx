@@ -245,15 +245,22 @@ export default function GatheringChatting({
               }`}
             >
               {shouldShowProfilePic ? (
-                <Image
-                  src={msg.senderImageUrl || profileImg}
-                  width={28}
-                  height={28}
-                  alt="상대 프로필"
-                  className="rounded-full"
-                />
+                <div className="relative h-10 w-10 overflow-hidden rounded-full">
+                  {msg.senderImageUrl ? (
+                    <Image
+                      src={msg.senderImageUrl}
+                      alt={msg.name}
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-gray-500 text-xs text-white">
+                      No Image
+                    </div>
+                  )}
+                </div>
               ) : (
-                <div className="h-[28px] w-[28px]" />
+                <div className="h-10 w-10" />
               )}
               <div>
                 {shouldShowProfilePic && (
