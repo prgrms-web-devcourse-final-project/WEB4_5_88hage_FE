@@ -79,7 +79,7 @@ export default function EventPage() {
     setLoading(true)
     console.log("AI 행사 추천 요청:", address, start, end);
     try {
-      const res = await fetch("https://funfun.cloud/api/chatBots/content", {
+      const res = await fetch("https://funfun.cloud/api/recommend/content", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
