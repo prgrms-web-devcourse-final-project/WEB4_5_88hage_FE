@@ -1,5 +1,4 @@
 import { get, post } from './fetchInstance';
-import { LastChatHistory } from '@/types/last_chat_history';
 
 // 채팅 기록 조회
 export const getChatHistory = async (roomId: string, type: string) => {
@@ -12,8 +11,8 @@ export const createPersonalChatRoom = async (userEmail: string) => {
 };
 
 // 개인 채팅방 조회
-export const getMyPersonalChatRooms = async () => {
-  return get('/api/chatRooms/rooms/my');
+export const getMyPersonalChatRooms = async (): Promise<ChatRoom[]> => {
+  return get<ChatRoom[]>('/api/chatRooms/my');
 };
 
 // 마지막 채팅 조회

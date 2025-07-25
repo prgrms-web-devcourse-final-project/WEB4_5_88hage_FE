@@ -1,9 +1,9 @@
-export default function GatheringHostBox() {
+export default function GatheringHostBox({hostName,hostEmail}:{hostName:string,hostEmail:string}) {
   return (
     <div className="flex w-full gap-[20px] rounded-[5px] border border-[#393939] p-[20px]">
       <div className="bg-gray-3 size-[100px] rounded-full"></div>
       <div className="flex grow-1 flex-col">
-        <div className="text-[18px] text-white">홍길동</div>
+        <div className="text-[18px] text-white">{hostName}</div>
         <div className="pt-[11.33px] pb-[14.33px] text-[#ababab]">
           안녕하세요 홍길동 입니다. 반가워요!
         </div>

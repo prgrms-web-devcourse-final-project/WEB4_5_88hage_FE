@@ -1,30 +1,16 @@
-declare interface LeaderMyGroupData {
-  id: number;
-  title: string;
+interface LeaderMyGroupData {
+  groupId: number;
+  groupTitle: string;
   explain: string;
   simpleExplain: string;
-  imageUrl: string;
-  placeName: string;
-  address: string;
-  viewCount: number;
-  groupDate: string;
-  createdAt: string;
-  maxPeople: number;
-  nowPeople: number;
-  status: string;
-  latitude: number;
-  longitude: number;
-  during: number;
-  category: string;
-  leaderNickname: string;
-  leaderEmail: string;
-  hashTags: string[];
-  activated: boolean;
+  groupImageUrl: string;
+  groupStatus: 'RECRUITING' | 'COMPLETED' | 'IN_PROGRESS'; // Assuming these are the possible statuses
+  category: 'FOOD' | 'TRAVEL' | string; // Assuming these are some categories, and allowing for others
 }
 
-declare interface LeaderMyGroupResponse {
+interface GetLeaderMyGroupsResponse {
   code: string;
   message: string;
   reason: string | null;
-  data: LeaderMyGroupData[];
+  data: LeaderGroup[];
 }

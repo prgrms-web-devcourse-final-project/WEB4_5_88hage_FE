@@ -11,3 +11,14 @@ declare interface Notification {
   sent_at: string | null;
   type: 'NOTICE' | 'SCHEDULE';
 }
+
+export interface NotificationCreateRequest {
+  id?: number;
+  email: string;
+  message: string;
+  link: string;
+  type: string;
+  scheduledAt?: string;
+  sentAt?: string;
+  isRead?: boolean;
+}

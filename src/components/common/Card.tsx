@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 function formatDuration(minutes) {
   if (!minutes && minutes !== 0) return '-';
@@ -12,14 +13,21 @@ function formatDuration(minutes) {
 }
 
 export default function PostCard({ group }) {
+  const router = useRouter();
+
   if (!group) return null;
 
-  return (
-    <div className="hover-gradient relative w-full cursor-pointer overflow-hidden rounded-[5px] bg-black text-white">
-      {/* 카테고리 이모지 or 아이콘 자리 */}
-      {/* <div className="absolute top-3 left-3 z-10 text-[30px]">🍔</div> */}
-      {/* 나중에 <CategoryIcon category={group.category} /> 로 교체 */}
+  const handleClick = () => {
+    router.push(`/gathering/${group.id}`);
+  };
 
+  return (
+    <div
+      className="hover-gradient relative w-full cursor-pointer overflow-hidden rounded-[5px] bg-black text-white"
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+    >
       {/* 썸네일 */}
       <div className="relative h-[240px] w-full">
         <Image
@@ -34,7 +42,9 @@ export default function PostCard({ group }) {
       <div className="h-[120px] bg-[#1b1b1b] p-3">
         <h2 className="t3 mb-1">{group.title}</h2>
         <p className="mb-5 text-[14px] text-[#ffffff]">{group.simpleExplain}</p>
-        <p className="text-[14px] text-[#bdbdbd]">모임 시간 ({formatDuration(group.during)})</p>
+        <p className="text-[14px] text-[#bdbdbd]">
+          모임 시간 ({formatDuration(group.during)})
+        </p>
       </div>
     </div>
   );

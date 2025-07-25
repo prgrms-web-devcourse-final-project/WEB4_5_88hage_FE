@@ -8,6 +8,7 @@ declare interface MyGroupData {
   participantCount: number;
   status: string;
   type: string;
+  simpleExplain: string;
 }
 
 declare interface MyGroupResponse {
