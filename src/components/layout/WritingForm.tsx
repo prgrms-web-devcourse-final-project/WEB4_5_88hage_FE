@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 
 import DatePicker, { registerLocale } from 'react-datepicker';
@@ -16,6 +16,9 @@ export default function WritingForm({
   addressValue,
   handleModal,
   sendDate,
+  value,
+  onChange,
+  type = 'text',
 }: {
   title: string;
   name?: string;
@@ -25,8 +28,14 @@ export default function WritingForm({
   addressValue?: string;
   handleModal?: (showModal: boolean) => void;
   sendDate?: (date: Date) => void;
+  value?: string | number;
+  onChange?: (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => void;
+  type?: string;
 }) {
-  const [value, setValue] = useState('');
   const months = [
     'January',
     'February',
@@ -44,15 +53,29 @@ export default function WritingForm({
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
+  // Update selectedDate when value (groupDate) changes from parent
+  useEffect(() => {
+    if (type === 'date' && value) {
+      setSelectedDate(new Date(value));
+    }
+  }, [value, type]);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setValue(e.target.value);
+    onChange(e);
   };
 
   const handleDate = (date: Date | null) => {
     setSelectedDate(date);
     if (date && sendDate) sendDate(date);
+    // Also call the main onChange for consistency
+    onChange({
+      target: {
+        name: name,
+        value: date ? date.toISOString().split('T')[0] : '',
+      },
+    } as React.ChangeEvent<HTMLInputElement>);
   };
 
   registerLocale('ko', ko);
@@ -78,40 +101,32 @@ export default function WritingForm({
               <Search size={20} color="#5e5e5e" />
             </button>
           )}
-          {!isLongForm && title === '모임 날짜' && (
-            <button
-              type="button"
-              className="absolute inset-y-0 right-0 flex items-center pt-2 pr-4"
-            >
-              <Calendar size={20} color="#5e5e5e" />
-            </button>
-          )}
           {isLongForm && (
             <textarea
               name={name}
               className="placeholder-gray-disabled t3 mt-3 h-64 w-full resize-none rounded border border-[#343434] p-4 text-white"
               placeholder={placeholder}
-              value={value}
+              value={value as string}
               onChange={handleChange}
               maxLength={1000}
             />
           )}
-          {!isLongForm && title !== '모임 날짜' && (
+          {!isLongForm && type !== 'date' && (
             <input
-              type="text"
+              type={type}
               name={name}
               className={`placeholder-gray-disabled t3 mt-3 w-full rounded border border-[#343434] p-4 text-white ${
                 title === '모임 위치' ? 'pr-12' : ''
               }`}
               placeholder={placeholder}
-              value={addressValue || addressValue === '' ? addressValue : value}
+              value={value}
               onChange={handleChange}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') e.preventDefault();
               }}
             />
           )}
-          {!isLongForm && title === '모임 날짜' && (
+          {!isLongForm && type === 'date' && (
             <DatePicker
               locale="ko"
               dateFormat="yyyy-MM-dd a h:mm"
@@ -139,7 +154,7 @@ export default function WritingForm({
           )}
           {isLongForm && (
             <div className="t3 absolute right-3 bottom-3 text-[#595858]">
-              {value.length} / 1000
+              {String(value).length} / 1000
             </div>
           )}
         </div>
