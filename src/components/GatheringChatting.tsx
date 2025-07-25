@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { CompatClient, Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import { MdAddPhotoAlternate } from 'react-icons/md';
 import { LuSend } from 'react-icons/lu';
 
 import MainPostHeader from './common/MainPostHeader';
@@ -22,10 +21,13 @@ interface GroupDetail {
   nowPeople: number;
   groupImageUrl: string;
   isLeader?: boolean;
+  currentUserImageUrl?: string;
 }
 
 interface GatheringChattingProps {
   gathering: GroupDetail | null;
+  myGatherings: GroupDetail[];
+  lastMessages: Record<number, LastChatHistory>;
 }
 
 // Backend message format
@@ -51,6 +53,8 @@ interface DisplayMessage {
 
 export default function GatheringChatting({
   gathering,
+  myGatherings,
+  lastMessages,
 }: GatheringChattingProps) {
   const [messages, setMessages] = useState<DisplayMessage[]>([]);
   const [messageInput, setMessageInput] = useState('');
@@ -91,6 +95,7 @@ export default function GatheringChatting({
             };
           });
           setMessages(historyMessages);
+          console.log(`이전 채팅 ${historyMessages}`);
         }
       } catch (error) {
         console.error('Failed to fetch chat history:', error);
@@ -116,12 +121,27 @@ export default function GatheringChatting({
         const displayMessage: DisplayMessage = {
           type: received.senderEmail === user.email ? 'sent' : 'received',
           sender: received.senderEmail,
-          name: received.senderNickname,
+          name: received.senderNickname, // Use senderNickname from received message
           text: received.message,
           time: received.time,
-          senderImageUrl: received.senderImageUrl, // Add this line
+          senderImageUrl: received.senderImageUrl,
         };
-        setMessages((prevMessages) => [...prevMessages, displayMessage]);
+
+        // 중복 메시지 필터링: sender, message, time이 모두 동일한 메시지가 이미 있는지 확인
+        setMessages((prevMessages) => {
+          const isDuplicate = prevMessages.some(
+            (msg) =>
+              msg.sender === displayMessage.sender &&
+              msg.text === displayMessage.text &&
+              msg.time === displayMessage.time,
+          );
+          if (isDuplicate) {
+            console.log('중복 메시지 수신, 추가하지 않음:', displayMessage);
+            return prevMessages;
+          } else {
+            return [...prevMessages, displayMessage];
+          }
+        });
       });
     });
 
@@ -145,9 +165,11 @@ export default function GatheringChatting({
         senderEmail: user.email,
         senderNickname: user.nickname,
         message: messageInput.trim(),
+        senderImageUrl: gathering.currentUserImageUrl, // GetMyGroups()에서 받아온 currentUserImageUrl 사용
       };
 
       client.current.send('/send/message', {}, JSON.stringify(chatData));
+      console.log('보내는 채팅 데이터:', chatData);
       setMessageInput('');
     }
   };
@@ -253,7 +275,6 @@ export default function GatheringChatting({
 
       {/* 입력창 */}
       <div className="relative mt-auto w-full">
-        <MdAddPhotoAlternate className="text-gray-disabled absolute top-1/2 left-3 h-[20px] w-[20px] -translate-y-1/2" />
         <input
           type="text"
           placeholder="메세지를 입력해 주세요"

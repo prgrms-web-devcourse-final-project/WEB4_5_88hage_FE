@@ -1,86 +1,32 @@
-'use client';
-
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import GatheringTabButton from './button/GatheringTabButton';
 import { Search, Users } from 'lucide-react';
 import { BiSolidChat } from 'react-icons/bi';
 import ChatItem from './common/ChatItem';
 import GatheringItem from './common/GatheringItem';
-import { getGroupById, getMyGroups } from '@/lib/api/group';
-import { getLastChatHistory } from '@/lib/api/chat';
 import { useAuthStore } from '@/stores/UseAuthStore';
 
 interface GatheringSideProps {
   onSelectGathering: (gathering: GroupDetail) => void;
   activeTab: 'my-gathering' | 'chat';
   onTabChange: (tab: 'my-gathering' | 'chat') => void;
+  myGatherings: GroupDetail[];
+  lastMessages: Record<number, LastChatHistory>;
 }
 
 export default function GatheringSide({
   onSelectGathering,
   activeTab,
   onTabChange,
+  myGatherings,
+  lastMessages,
 }: GatheringSideProps) {
   const { user } = useAuthStore();
-  const [myGatherings, setMyGatherings] = useState<GroupDetail[]>([]);
-  const [lastMessages, setLastMessages] = useState<
-    Record<number, LastChatHistory>
-  >({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const myGroupsResponse = await getMyGroups();
-
-        const myGroupDetails = await Promise.all(
-          myGroupsResponse.map(async (group) => {
-            const detail = await getGroupById(group.groupId);
-            return {
-              ...detail,
-              isLeader: group.groupLeaderEmail === group.currentUserEmail,
-              type: group.type, // MyGroupData의 type 필드 추가
-              currentUserImageUrl: group.currentUserImageUrl, // MyGroupData의 currentUserImageUrl 필드 추가
-            };
-          }),
-        );
-        const validGroups = myGroupDetails.filter(Boolean);
-        setMyGatherings(validGroups);
-
-        if (validGroups.length > 0) {
-          const lastMessagesData = await Promise.all(
-            validGroups.map((group) =>
-              getLastChatHistory(group.id, 'GROUP_CHAT'),
-            ),
-          );
-          const lastMessagesMap = lastMessagesData.reduce(
-            (acc, msg, index) => {
-              if (msg) {
-                acc[validGroups[index].id] = msg;
-              }
-              return acc;
-            },
-            {} as Record<number, LastChatHistory>,
-          );
-          setLastMessages(lastMessagesMap);
-        }
-      } catch (err) {
-        setError('데이터를 불러오는 데 실패했습니다.');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const filteredGatherings = Array.from(
     new Map(myGatherings.map((item) => [item.id, item])).values(),
@@ -89,26 +35,6 @@ export default function GatheringSide({
       gathering.title &&
       gathering.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
-
-  if (loading) {
-    return (
-      <div
-        className={`bg-gray-7 lg:border-gray-5 mt-5 flex h-full w-full flex-col items-center rounded-[15px] p-2 lg:w-[330px] lg:border`}
-      >
-        <p>로딩 중...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div
-        className={`bg-gray-7 lg:border-gray-5 mt-5 flex h-full w-full flex-col items-center rounded-[15px] p-2 lg:w-[330px] lg:border`}
-      >
-        <p>에러: {error}</p>
-      </div>
-    );
-  }
 
   return (
     <>

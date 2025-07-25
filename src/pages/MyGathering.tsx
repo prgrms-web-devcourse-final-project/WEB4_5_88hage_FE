@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import GatheringChatting from '@/components/GatheringChatting';
 import GatheringMain from '@/components/GatheringMain';
 import GatheringSide from '@/components/GatheringSide';
+import { getGroupById, getMyGroups } from '@/lib/api/group';
+import { getLastChatHistory } from '@/lib/api/chat';
 
 export default function MyGathering() {
   const [selectedGathering, setSelectedGathering] =
@@ -11,9 +13,64 @@ export default function MyGathering() {
   const [activeTab, setActiveTab] = useState<'my-gathering' | 'chat'>(
     'my-gathering',
   ); // 'my-gathering' 또는 'chat'
+  const [myGatherings, setMyGatherings] = useState<GroupDetail[]>([]);
+  const [lastMessages, setLastMessages] = useState<
+    Record<number, LastChatHistory>
+  >({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const myGroupsResponse = await getMyGroups();
+
+        const myGroupDetails = await Promise.all(
+          myGroupsResponse.map(async (group) => {
+            const detail = await getGroupById(group.groupId);
+            return {
+              ...detail,
+              isLeader: group.groupLeaderEmail === group.currentUserEmail,
+              type: group.type, // MyGroupData의 type 필드 추가
+              currentUserImageUrl: group.currentUserImageUrl, // MyGroupData의 currentUserImageUrl 필드 추가
+            };
+          }),
+        );
+        const validGroups = myGroupDetails.filter(Boolean);
+        setMyGatherings(validGroups);
+
+        if (validGroups.length > 0) {
+          const lastMessagesData = await Promise.all(
+            validGroups.map((group) =>
+              getLastChatHistory(group.id, 'GROUP_CHAT'),
+            ),
+          );
+          const lastMessagesMap = lastMessagesData.reduce(
+            (acc, msg, index) => {
+              if (msg) {
+                acc[validGroups[index].id] = msg;
+              }
+              return acc;
+            },
+            {} as Record<number, LastChatHistory>,
+          );
+          setLastMessages(lastMessagesMap);
+        }
+      } catch (err) {
+        setError('데이터를 불러오는 데 실패했습니다.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleSelectGathering = (gathering: GroupDetail) => {
     setSelectedGathering(gathering);
+    console.log('MyGathering: selectedGathering', gathering);
     // 모임 아이템을 선택하면 해당 탭으로 자동 전환
     if (activeTab === 'my-gathering') {
       // GatheringMain을 보여줘야 함
@@ -28,6 +85,50 @@ export default function MyGathering() {
     setSelectedGathering(null); // 탭 변경 시 선택된 모임 초기화
   };
 
+  if (loading) {
+    return (
+      <div className="mb-50">
+        <h2 className="h3 text-white">모임</h2>
+        <div className="lg:flex lg:items-center lg:justify-center">
+          <div className="flex-shrink-0 lg:h-[740px] lg:w-[330px]">
+            <div
+              className={`bg-gray-7 lg:border-gray-5 mt-5 flex h-full w-full flex-col items-center rounded-[15px] p-2 lg:w-[330px] lg:border`}
+            >
+              <p>로딩 중...</p>
+            </div>
+          </div>
+          <div className="max-w-[1050px] flex-grow lg:ml-5 lg:h-[740px]">
+            <div className="bg-gray-7 lg:border-gray-5 flex h-full w-full items-center justify-center rounded-[15px] p-4 text-white lg:border lg:p-10">
+              <p>로딩 중...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mb-50">
+        <h2 className="h3 text-white">모임</h2>
+        <div className="lg:flex lg:items-center lg:justify-center">
+          <div className="flex-shrink-0 lg:h-[740px] lg:w-[330px]">
+            <div
+              className={`bg-gray-7 lg:border-gray-5 mt-5 flex h-full w-full flex-col items-center rounded-[15px] p-2 lg:w-[330px] lg:border`}
+            >
+              <p>에러: {error}</p>
+            </div>
+          </div>
+          <div className="max-w-[1050px] flex-grow lg:ml-5 lg:h-[740px]">
+            <div className="bg-gray-7 lg:border-gray-5 flex h-full w-full items-center justify-center rounded-[15px] p-4 text-white lg:border lg:p-10">
+              <p>에러: {error}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mb-50">
       <h2 className="h3 text-white">모임</h2>
@@ -38,6 +139,8 @@ export default function MyGathering() {
             onSelectGathering={handleSelectGathering}
             activeTab={activeTab}
             onTabChange={handleTabChange}
+            myGatherings={myGatherings}
+            lastMessages={lastMessages}
           />
         </div>
         {/* 유동 너비 메인 */}
@@ -45,7 +148,11 @@ export default function MyGathering() {
           {activeTab === 'my-gathering' && selectedGathering ? (
             <GatheringMain selectedGathering={selectedGathering} />
           ) : activeTab === 'chat' && selectedGathering ? (
-            <GatheringChatting gathering={selectedGathering} />
+            <GatheringChatting
+              gathering={selectedGathering}
+              myGatherings={myGatherings}
+              lastMessages={lastMessages}
+            />
           ) : (
             <div className="bg-gray-7 lg:border-gray-5 flex h-full w-full items-center justify-center rounded-[15px] p-4 text-white lg:border lg:p-10">
               <p>
