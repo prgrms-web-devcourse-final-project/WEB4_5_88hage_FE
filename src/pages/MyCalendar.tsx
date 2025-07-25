@@ -3,14 +3,19 @@ import CalendarContainer from '@/components/calendar/CalendarContainer';
 import CalendarSidebar from '@/components/calendar/CalendarSidebar';
 import { getMonthlyCalendar } from '@/lib/api/calendar';
 import { useEffect, useState } from 'react';
+import moment from 'moment';
+import 'moment-timezone';
 
 export default function MyCalendar() {
   const date = new Date();
   
+  //해당 cell에 대한 데이터
   const [calendarData,setCalendarData] = useState<CalendarData[]>([]);
 
+  //클릭한 데이터의 배열값
   const [selectListData,setSelectListData] = useState<CalendarData[]>([]);
 
+  //사용자가 선택한 날짜
   const [selectDate,setSelectDate] = useState<SelectDate>({
     date: date.getDate(),
     month: date.getMonth()+1,
@@ -21,17 +26,17 @@ export default function MyCalendar() {
     const getMonthCalendarDate = async () => {
       try{
         const {data} = await getMonthlyCalendar(selectDate.year,selectDate.month);
-        console.log(data);
+        
         const temp = data.map(data => {
-          const start = new Date(data.selectedDate);
-          const end = new Date(start.getTime() + 60 * 60 * 1000)
+          const start = moment.tz(data.selectedDate, 'Asia/Seoul').toDate();
+          const end = moment(start).add(1, 'hour').toDate();
           return {
           activityId:data.activityId.toString(),
           calendarId:data.calendarId.toString(),
           title: data.title,
           start,
           end,
-          type: data.type
+          type: data.type,
         }
       });
       console.log(temp);
@@ -41,8 +46,7 @@ export default function MyCalendar() {
       }
     }
     getMonthCalendarDate();
-
-  },[selectDate]);
+  },[selectDate.month,selectDate.year]);
 
   return (
     <>

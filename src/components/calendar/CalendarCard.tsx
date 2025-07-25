@@ -2,11 +2,17 @@
 import { deleteCalendar } from '@/lib/api/calendar';
 import { X } from 'lucide-react';
 import { Dispatch, SetStateAction, useEffect } from 'react';
+
 type Props ={
   info:CalendarData,
   setSelectListData:Dispatch<SetStateAction<CalendarData[]>>,
+  setCalendarData:Dispatch<SetStateAction<CalendarData[]>>
 }
-export default function CalendarCard({info,setSelectListData}:Props){
+
+const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+
+export default function CalendarCard({info,setSelectListData,setCalendarData}:Props){
+  console.log(info.calendarId)
 
   const timeFormatting = ()=> {
     const date = new Date(info.start)
@@ -15,19 +21,23 @@ export default function CalendarCard({info,setSelectListData}:Props){
     return `${houre}시 ${minute}분`
   }
 
-  const deleteEvent = async ()=>{
+  const deleteEvent = async (id:number)=>{
     try{
-     const response = await deleteCalendar(Number(info.deleteId));
-     setSelectListData((prev) => prev.filter(data => data.deleteId !== info.deleteId));
-     console.log(response);
-     console.log(selectListData);
+     const response = await fetch(`https://funfun.cloud/api/calendars/${Number(id)}`,{
+        method: 'DELETE',
+        credentials: 'include', 
+        headers: {
+          accept: 'application/json',
+        },
+    })
+     const data = await response.json();
+     setSelectListData((prev) => prev.filter(data => data.calendarId !== info.calendarId));
+     setCalendarData((prev) => prev.filter(data => data.calendarId !== info.calendarId));
+     console.log('삭제 성공 : ', data);
     } catch(error) {
       console.log('이벤트 삭제 실패: ', error)
     }
   }
-  useEffect(() => {
-  console.log("컴포넌트 렌더 시 전달된 selectListData:", selectListData);
-  }, [selectListData]);
 
   const redirectDetailPage = ()=>{
 
@@ -46,7 +56,7 @@ export default function CalendarCard({info,setSelectListData}:Props){
       </div>
       <div>
         <button className='mt-[8px] mr-[8px]'>
-          <X size={16} onClick={deleteEvent} className='text-[#e4e4e4]'/>
+          <X size={16} onClick={()=> deleteEvent(info.calendarId)} className='text-[#e4e4e4]'/>
         </button>
       </div>
     </div>

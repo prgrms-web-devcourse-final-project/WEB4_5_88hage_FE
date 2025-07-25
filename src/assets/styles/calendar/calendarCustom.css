@@ -76,6 +76,7 @@
     border: none;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    overflow: hidden;
 }
 .rbc-row-bg {
     grid-gap: 10px;
@@ -127,8 +128,11 @@
     height: 100%;
 }
 .rbc-row-segment{
+    flex: none !important;
+    max-width: unset !important;
+    flex-basis: unset !important;
+    grid-column: span 1;
     width: 100%;
-    max-width: 80% !important;
 }
 .rbc-event {
   color: #fff;

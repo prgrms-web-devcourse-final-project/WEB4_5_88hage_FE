@@ -23,17 +23,18 @@ export default function CalendarContainer({setSelectDate,setSelectListData,calen
           month: date.getMonth()+1,
           year: date.getFullYear()
       }
+      //컨트롤러에 사용에 따른 월 변화 캐치
       setSelectDate(prevDate => {
           return {...prevDate,...newDate}
       });
 
-      const selectDayEvents = calendarData.filter(data =>
-          data.start.toDateString() === date.toDateString()
+      const getEventsList = calendarData.filter(data =>{
+        return data.start.toDateString() === date.toDateString()}
       );
 
       console.log(calendarData);
-      console.log("해당 날짜의 이벤트:", selectDayEvents);
-      setSelectListData(selectDayEvents);
+      console.log("해당 날짜의 이벤트:", getEventsList);
+      setSelectListData(getEventsList);
     }
 
   const cellClickGetDateInfo = (slotInfo:any) => {
@@ -55,11 +56,10 @@ export default function CalendarContainer({setSelectDate,setSelectListData,calen
         startAccessor="start"
         endAccessor="end"
         titleAccessor="title"
-        style={{ height: '100%' }}
+        style={{ height: '900px' }}
         //달력 cell 클릭
         onSelectSlot={cellClickGetDateInfo}
         selectable={true}
-        // onSelectEvent={}
         //컨트롤러 클릭
         onNavigate={calenderGetDateInfo}
         messages={{
