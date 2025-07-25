@@ -196,7 +196,7 @@ declare interface MyGroupData {
   groupLeaderEmail: string;
   groupImageUrl: string;
   currentUserEmail: string;
-  currenUserImageUrl: string;
+  currentUserImageUrl: string;
   currentUserNickname: string;
   participantCount: number;
   status: string;

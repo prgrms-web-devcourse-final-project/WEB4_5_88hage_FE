@@ -46,6 +46,8 @@ export default function GatheringSide({
             return {
               ...detail,
               isLeader: group.groupLeaderEmail === group.currentUserEmail,
+              type: group.type, // MyGroupData의 type 필드 추가
+              currentUserImageUrl: group.currentUserImageUrl, // MyGroupData의 currentUserImageUrl 필드 추가
             };
           }),
         );

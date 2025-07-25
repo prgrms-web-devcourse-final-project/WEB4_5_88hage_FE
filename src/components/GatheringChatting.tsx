@@ -31,11 +31,12 @@ interface GatheringChattingProps {
 // Backend message format
 interface ChatMessage {
   roomId: number;
-  roomType: 'GROUP_CHAT' | 'PERSONAL_CHAT';
+  roomType: string; // Changed to string
   senderEmail: string;
   senderNickname: string;
   message: string;
   time: string;
+  senderImageUrl?: string; // Added
 }
 
 // UI message format
@@ -45,6 +46,7 @@ interface DisplayMessage {
   name: string; // senderNickname
   text: string;
   time?: string;
+  senderImageUrl?: string; // Added for sender's profile image
 }
 
 export default function GatheringChatting({
@@ -85,6 +87,7 @@ export default function GatheringChatting({
               name: msg.senderNickname,
               text: msg.message,
               time: msg.time,
+              senderImageUrl: msg.senderImageUrl, // Add this line
             };
           });
           setMessages(historyMessages);
@@ -116,6 +119,7 @@ export default function GatheringChatting({
           name: received.senderNickname,
           text: received.message,
           time: received.time,
+          senderImageUrl: received.senderImageUrl, // Add this line
         };
         setMessages((prevMessages) => [...prevMessages, displayMessage]);
       });
@@ -220,7 +224,7 @@ export default function GatheringChatting({
             >
               {shouldShowProfilePic ? (
                 <Image
-                  src={profileImg}
+                  src={msg.senderImageUrl || profileImg}
                   width={28}
                   height={28}
                   alt="상대 프로필"
