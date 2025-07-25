@@ -1,6 +1,7 @@
 //import Greeting from '@/components/common/Greeting';
 'use client';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -8,35 +9,49 @@ export default function InquiryListPage() {
   const [contacts, setContacts] = useState<any[]>([]);
   const [pending, setPending] = useState(true);
   const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalElements, setTotalElements] = useState(1);
+  const [pageNum, setPageNum] = useState<number[]>([]);
   const API = process.env.NEXT_PUBLIC_API_URL;
-  const params = `status=${pending ? 'pending' : 'complete'}&page=${page.toString()}&size=8&sort=createdAt,DESC`;
 
-  const fetchNotices = async () => {
+  const fetchData = async () => {
+    const params = `status=${pending ? 'pending' : 'complete'}&page=${page}&size=8&sort=createdAt,DESC`;
     try {
       const response = await fetch(`${API}/api/contacts?${params}`, {
         method: 'GET',
         credentials: 'include',
       });
       const { data } = await response.json();
-      console.log(data.content);
+      console.log(data);
       setContacts(data.content);
+      setTotalPages(data.totalPages);
+      setTotalElements(data.totalElements);
     } catch (error) {
       console.log(error);
     }
   };
 
   const convertTime = (createdAt: string) => {
-    let date = new Date(createdAt);
+    const date = new Date(createdAt);
+    date.setHours(date.getHours() + 9);
     return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
   };
 
   useEffect(() => {
-    fetchNotices();
-  }, []);
+    fetchData();
+  }, [page, pending]);
 
   useEffect(() => {
-    fetchNotices();
-  }, [pending]);
+    setPage(0);
+    setPageNum([]);
+    for (let i = 1; i <= totalPages; i++) {
+      setPageNum((prev) => [...prev, i]);
+    }
+  }, [totalPages]);
+
+  useEffect(() => {
+    console.log(pageNum);
+  }, [pageNum]);
 
   return (
     <>
@@ -84,18 +99,56 @@ export default function InquiryListPage() {
               ))}
             </div>
             <div className="flex items-center justify-center space-x-3 text-[#ffffff] lg:mt-[52px]">
-              <button className="p-2">&lt;</button>
-              {[1, 2, 3, 4, 5].map((p) => (
-                <button
-                  key={p}
-                  className={`h-[29px] w-[29px] rounded-full text-[15px] transition ${
-                    p === 1 ? 'bg-[#1CEBB9] font-bold text-black' : ''
-                  } `}
-                >
-                  {p}
-                </button>
-              ))}
-              <button className="p-2">&gt;</button>
+              <button
+                onClick={() => setPage((prev) => prev - 5)}
+                disabled={
+                  pageNum.slice(
+                    Math.floor(page / 5) * 5,
+                    Math.floor(page / 5) * 5 + 5,
+                  )[0] === 1
+                }
+                className="disabled:text-gray-disabled p-2 disabled:cursor-none"
+              >
+                <ChevronLeft />
+              </button>
+              {pageNum
+                .slice(Math.floor(page / 5) * 5, Math.floor(page / 5) * 5 + 5)
+                .map((p) => (
+                  <button
+                    key={p}
+                    className={`h-[29px] w-[29px] rounded-full text-[15px] transition ${
+                      page === p - 1 ? 'bg-[#1CEBB9] font-bold text-black' : ''
+                    } `}
+                    onClick={() => setPage(p - 1)}
+                  >
+                    {p}
+                  </button>
+                ))}
+              <button
+                onClick={() => {
+                  const arr = pageNum.slice(
+                    Math.floor((page + 5) / 5) * 5,
+                    Math.floor((page + 5) / 5) * 5 + 5,
+                  );
+                  if (!arr.includes(page + 6)) {
+                    setPage(pageNum[pageNum.length - 2]);
+                  } else setPage((prev) => prev + 5);
+                }}
+                disabled={
+                  pageNum.slice(
+                    Math.floor(page / 5) * 5,
+                    Math.floor(page / 5) * 5 + 5,
+                  )[
+                    pageNum.slice(
+                      Math.floor(page / 5) * 5,
+                      Math.floor(page / 5) * 5 + 5,
+                    ).length - 1
+                  ] === pageNum[pageNum.length - 1]
+                }
+                className="disabled:text-gray-disabled p-2 disabled:cursor-none"
+              >
+                <ChevronRight />
+              </button>
             </div>
           </main>
         </div>
