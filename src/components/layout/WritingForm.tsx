@@ -1,7 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Search } from 'lucide-react';
-import DatepickerComponent from '../common/DatepickerComponent';
+import { Calendar, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+
+import DatePicker, { registerLocale } from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import '@/assets/styles/datepicker.css';
+import { ko } from 'date-fns/locale/ko';
 
 export default function WritingForm({
   title,
@@ -12,6 +16,9 @@ export default function WritingForm({
   addressValue,
   handleModal,
   sendDate,
+  value,
+  onChange,
+  type = 'text',
 }: {
   title: string;
   name?: string;
@@ -21,19 +28,57 @@ export default function WritingForm({
   addressValue?: string;
   handleModal?: (showModal: boolean) => void;
   sendDate?: (date: Date) => void;
+  value?: string | number;
+  onChange?: (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => void;
+  type?: string;
 }) {
-  const [value, setValue] = useState('');
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+  // Update selectedDate when value (groupDate) changes from parent
+  useEffect(() => {
+    if (type === 'date' && value) {
+      setSelectedDate(new Date(value));
+    }
+  }, [value, type]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setValue(e.target.value);
+    onChange(e);
   };
 
-  useEffect(() => {
-    if (sendDate && selectedDate) sendDate(selectedDate);
-  }, [selectedDate]);
+  const handleDate = (date: Date | null) => {
+    setSelectedDate(date);
+    if (date && sendDate) sendDate(date);
+    // Also call the main onChange for consistency
+    onChange({
+      target: {
+        name: name,
+        value: date ? date.toISOString().split('T')[0] : '',
+      },
+    } as React.ChangeEvent<HTMLInputElement>);
+  };
+
+  registerLocale('ko', ko);
 
   return (
     <>
@@ -61,35 +106,55 @@ export default function WritingForm({
               name={name}
               className="placeholder-gray-disabled t3 mt-3 h-64 w-full resize-none rounded border border-[#343434] p-4 text-white"
               placeholder={placeholder}
-              value={value}
+              value={value as string}
               onChange={handleChange}
               maxLength={1000}
             />
           )}
-          {!isLongForm && title !== '모임 날짜' && (
+          {!isLongForm && type !== 'date' && (
             <input
-              type="text"
+              type={type}
               name={name}
               className={`placeholder-gray-disabled t3 mt-3 w-full rounded border border-[#343434] p-4 text-white ${
                 title === '모임 위치' ? 'pr-12' : ''
               }`}
               placeholder={placeholder}
-              value={addressValue || addressValue === '' ? addressValue : value}
+              value={value}
               onChange={handleChange}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') e.preventDefault();
               }}
             />
           )}
-          {!isLongForm && title === '모임 날짜' && (
-            <DatepickerComponent
-              placeholder="모임 시작일을 알려주세요"
-              sendDate={(date) => setSelectedDate(date)}
+          {!isLongForm && type === 'date' && (
+            <DatePicker
+              locale="ko"
+              dateFormat="yyyy-MM-dd a h:mm"
+              shouldCloseOnSelect
+              showTimeSelect
+              minDate={new Date()}
+              selected={selectedDate}
+              onChange={(date) => handleDate(date)}
+              placeholderText="모임 시작일을 알려주세요"
+              className="placeholder-gray-disabled t3 mt-3 w-full cursor-pointer rounded border border-[#343434] p-4 text-white"
+              renderCustomHeader={({ date, decreaseMonth, increaseMonth }) => (
+                <div className="flex items-center justify-center gap-2">
+                  <button type="button" onClick={decreaseMonth}>
+                    <ChevronLeft color="#a8a8a8" size={16} />
+                  </button>
+                  <div className="w-30 font-bold text-[#a8a8a8]">
+                    {`${months[date.getMonth()]}, ${date.getFullYear()}`}
+                  </div>
+                  <button type="button" onClick={increaseMonth}>
+                    <ChevronRight color="#a8a8a8" size={16} />
+                  </button>
+                </div>
+              )}
             />
           )}
           {isLongForm && (
             <div className="t3 absolute right-3 bottom-3 text-[#595858]">
-              {value.length} / 1000
+              {String(value).length} / 1000
             </div>
           )}
         </div>

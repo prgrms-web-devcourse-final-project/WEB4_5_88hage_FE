@@ -6,89 +6,9 @@ import { Search, Users } from 'lucide-react';
 import { BiSolidChat } from 'react-icons/bi';
 import ChatItem from './common/ChatItem';
 import GatheringItem from './common/GatheringItem';
-import { getMyGroups, getLeaderMyGroups } from '@/lib/api/group';
+import { getGroupById, getMyGroups } from '@/lib/api/group';
 import { getMyPersonalChatRooms, getLastChatHistory } from '@/lib/api/chat';
-import { MyGroupData } from '@/types/my_group';
-import { LeaderMyGroupData } from '@/types/leader_my_group';
-import { ChatRoom } from '@/types/chat_room';
-import { LastChatHistory } from '@/types/last_chat_history';
-import { GroupDetail } from '@/types/group'; // Import Group and GroupDetail types
-
-interface GatheringDisplayItem {
-  id: string;
-  title: string;
-  description: string | undefined;
-  imageUrl: string | undefined;
-  fullGroup: GroupDetail;
-}
-
-const mapToGatheringDisplayItem = (
-  item: MyGroupData | LeaderMyGroupData,
-): GatheringDisplayItem => {
-  if ('groupId' in item) {
-    // MyGroupData
-    return {
-      id: `my-${item.groupId}`,
-      title: item.groupTitle,
-      description: item.simpleExplain,
-      imageUrl: item.groupImageUrl,
-      fullGroup: {
-        id: item.groupId,
-        title: item.groupTitle,
-        explain: item.simpleExplain || '',
-        simpleExplain: item.simpleExplain,
-        imageUrl: item.groupImageUrl,
-        placeName: '',
-        address: '',
-        viewCount: 0,
-        groupDate: '',
-        createdAt: '',
-        maxPeople: 0,
-        nowPeople: 0,
-        status: item.status || 'RECRUITING',
-        latitude: 0,
-        longitude: 0,
-        during: 0,
-        category: 'ART',
-        leaderNickname: '',
-        leaderEmail: item.userEmail,
-        hashTags: [],
-        activated: false,
-      } as GroupDetail,
-    };
-  } else {
-    // LeaderMyGroupData
-    return {
-      id: `leader-${item.id}`,
-      title: item.title,
-      description: item.simpleExplain,
-      imageUrl: item.imageUrl,
-      fullGroup: {
-        id: item.id,
-        title: item.title,
-        explain: item.explain,
-        simpleExplain: item.simpleExplain,
-        imageUrl: item.imageUrl,
-        placeName: item.placeName,
-        address: item.address,
-        viewCount: item.viewCount,
-        groupDate: item.groupDate,
-        createdAt: item.createdAt,
-        maxPeople: item.maxPeople,
-        nowPeople: item.nowPeople,
-        status: item.status,
-        latitude: item.latitude,
-        longitude: item.longitude,
-        during: item.during,
-        category: item.category,
-        leaderNickname: item.leaderNickname,
-        leaderEmail: item.leaderEmail,
-        hashTags: item.hashTags,
-        activated: item.activated,
-      } as GroupDetail,
-    };
-  }
-};
+import { useAuthStore } from '@/stores/UseAuthStore';
 
 interface GatheringSideProps {
   onSelectGathering: (gathering: GroupDetail) => void;
@@ -97,11 +17,9 @@ interface GatheringSideProps {
 export default function GatheringSide({
   onSelectGathering,
 }: GatheringSideProps) {
+  const { user } = useAuthStore();
   const [activeTab, setActiveTab] = useState('my-gathering');
-  const [myGatherings, setMyGatherings] = useState<MyGroupData[]>([]);
-  const [leaderGatherings, setLeaderGatherings] = useState<LeaderMyGroupData[]>(
-    [],
-  );
+  const [myGatherings, setMyGatherings] = useState<GroupDetail[]>([]);
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [lastMessages, setLastMessages] = useState<
     Record<number, LastChatHistory>
@@ -118,14 +36,21 @@ export default function GatheringSide({
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [myGroupsData, leaderGroupsData, chatRoomsData] =
-          await Promise.all([
-            getMyGroups(),
-            getLeaderMyGroups(),
-            getMyPersonalChatRooms(),
-          ]);
-        setMyGatherings(myGroupsData);
-        setLeaderGatherings(leaderGroupsData);
+        const [MyGroupsResponse, chatRoomsData] = await Promise.all([
+          getMyGroups(),
+          getMyPersonalChatRooms(),
+        ]);
+
+        const myGroupDetails = await Promise.all(
+          MyGroupsResponse.map(async (group) => {
+            const detail = await getGroupById(group.groupId);
+            return {
+              ...detail,
+              isLeader: group.groupLeaderEmail === group.currentUserEmail,
+            };
+          }),
+        );
+        setMyGatherings(myGroupDetails.filter(Boolean)); // Filter out any null/undefined details
         setChatRooms(chatRoomsData);
 
         if (chatRoomsData && chatRoomsData.length > 0) {
@@ -156,13 +81,12 @@ export default function GatheringSide({
     fetchData();
   }, []);
 
-  const allGatherings = [
-    ...myGatherings.map(mapToGatheringDisplayItem),
-    ...leaderGatherings.map(mapToGatheringDisplayItem),
-  ];
-
-  const filteredGatherings = allGatherings.filter((gathering) =>
-    gathering.title.toLowerCase().includes(searchTerm.toLowerCase()),
+  const filteredGatherings = Array.from(
+    new Map(myGatherings.map((item) => [item.id, item])).values(),
+  ).filter(
+    (gathering) =>
+      gathering.title &&
+      gathering.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   if (loading) {
@@ -232,9 +156,9 @@ export default function GatheringSide({
                   <GatheringItem
                     key={gathering.id}
                     name={gathering.title}
-                    description={gathering.description}
+                    description={gathering.simpleExplain}
                     imageUrl={gathering.imageUrl}
-                    onClick={() => onSelectGathering(gathering.fullGroup)}
+                    onClick={() => onSelectGathering(gathering)}
                   />
                 ))
               ) : (
