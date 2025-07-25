@@ -8,7 +8,9 @@ import GatheringSide from '@/components/GatheringSide';
 export default function MyGathering() {
   const [selectedGathering, setSelectedGathering] =
     useState<GroupDetail | null>(null);
-  const [activeTab, setActiveTab] = useState<'my-gathering' | 'chat'>('my-gathering'); // 'my-gathering' 또는 'chat'
+  const [activeTab, setActiveTab] = useState<'my-gathering' | 'chat'>(
+    'my-gathering',
+  ); // 'my-gathering' 또는 'chat'
 
   const handleSelectGathering = (gathering: GroupDetail) => {
     setSelectedGathering(gathering);
