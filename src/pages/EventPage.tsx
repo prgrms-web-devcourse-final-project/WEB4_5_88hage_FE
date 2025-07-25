@@ -46,7 +46,7 @@ function mapEventToCard(event: EventApiResponse) {
     id: event.id,
     title: event.contentTitle,
     simpleExplain: event.fee,
-    during: `${event.startDate} ~ ${event.endDate}`,
+    during: `${event.startDate || "-"} ~ ${event.endDate || "-"}`,
     imageUrl: event.poster,
     address: event.address,
   };
@@ -84,8 +84,8 @@ export default function EventPage() {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          startTime: `${start}T00:00:00`,
-          endTime: `${end}T23:59:59`,
+          startTime: start,
+          endTime: end,
           address,
         }),
       });

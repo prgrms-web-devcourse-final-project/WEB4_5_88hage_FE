@@ -6,14 +6,17 @@ type CategorySelectProps = {
   name: string;
   isRequired?: boolean;
   options: { key: string; value: string }[];
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
 export default function CategorySelect({
   name,
   isRequired = false,
   options,
+  value,
+  onChange,
 }: CategorySelectProps) {
-  const [isOpen, setIsOpen] = useState(false);
   const componentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -22,7 +25,7 @@ export default function CategorySelect({
         componentRef.current &&
         !componentRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
+        // setIsOpen(false); // This was for the custom dropdown, not needed for native select
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -46,10 +49,11 @@ export default function CategorySelect({
         <select
           id={name}
           name={name}
-          defaultValue="default"
-          className="t3 bg-bg-color text-gray-disabled flex w-full appearance-none items-center justify-between rounded border border-[#343434] p-4 text-left"
+          value={value}
+          onChange={onChange}
+          className="t3 bg-bg-color text-gray-disabled flex w-full appearance-none items-center justify-between rounded border border-[#343434] bg-[url()] p-4 text-left"
         >
-          <option value="default" disabled className="hidden">
+          <option value="" disabled className="hidden">
             카테고리를 골라주세요
           </option>
 
