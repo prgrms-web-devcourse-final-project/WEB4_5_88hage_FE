@@ -7,20 +7,22 @@ import { BiSolidChat } from 'react-icons/bi';
 import ChatItem from './common/ChatItem';
 import GatheringItem from './common/GatheringItem';
 import { getGroupById, getMyGroups } from '@/lib/api/group';
-import { getMyPersonalChatRooms, getLastChatHistory } from '@/lib/api/chat';
+import { getLastChatHistory } from '@/lib/api/chat';
 import { useAuthStore } from '@/stores/UseAuthStore';
 
 interface GatheringSideProps {
   onSelectGathering: (gathering: GroupDetail) => void;
+  activeTab: 'my-gathering' | 'chat';
+  onTabChange: (tab: 'my-gathering' | 'chat') => void;
 }
 
 export default function GatheringSide({
   onSelectGathering,
+  activeTab,
+  onTabChange,
 }: GatheringSideProps) {
   const { user } = useAuthStore();
-  const [activeTab, setActiveTab] = useState('my-gathering');
   const [myGatherings, setMyGatherings] = useState<GroupDetail[]>([]);
-  const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [lastMessages, setLastMessages] = useState<
     Record<number, LastChatHistory>
   >({});
@@ -36,13 +38,10 @@ export default function GatheringSide({
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [MyGroupsResponse, chatRoomsData] = await Promise.all([
-          getMyGroups(),
-          getMyPersonalChatRooms(),
-        ]);
+        const myGroupsResponse = await getMyGroups();
 
         const myGroupDetails = await Promise.all(
-          MyGroupsResponse.map(async (group) => {
+          myGroupsResponse.map(async (group) => {
             const detail = await getGroupById(group.groupId);
             return {
               ...detail,
@@ -50,19 +49,19 @@ export default function GatheringSide({
             };
           }),
         );
-        setMyGatherings(myGroupDetails.filter(Boolean)); // Filter out any null/undefined details
-        setChatRooms(chatRoomsData);
+        const validGroups = myGroupDetails.filter(Boolean);
+        setMyGatherings(validGroups);
 
-        if (chatRoomsData && chatRoomsData.length > 0) {
+        if (validGroups.length > 0) {
           const lastMessagesData = await Promise.all(
-            chatRoomsData.map((room) =>
-              getLastChatHistory(room.id, 'PERSONAL_CHAT'),
+            validGroups.map((group) =>
+              getLastChatHistory(group.id, 'GROUP_CHAT'),
             ),
           );
           const lastMessagesMap = lastMessagesData.reduce(
             (acc, msg, index) => {
               if (msg) {
-                acc[chatRoomsData[index].id] = msg;
+                acc[validGroups[index].id] = msg;
               }
               return acc;
             },
@@ -119,13 +118,13 @@ export default function GatheringSide({
             icon={<Users />}
             label="내 모임"
             isActive={activeTab === 'my-gathering'}
-            onClick={() => setActiveTab('my-gathering')}
+            onClick={() => onTabChange('my-gathering')}
           />
           <GatheringTabButton
             icon={<BiSolidChat className="h-[19px] w-[19px]" />}
             label="모임 채팅"
             isActive={activeTab === 'chat'}
-            onClick={() => setActiveTab('chat')}
+            onClick={() => onTabChange('chat')}
           />
           <div
             className={`bg-main absolute bottom-0 h-0.5 w-[125px] transition-transform duration-300 ease-in-out ${
@@ -169,27 +168,18 @@ export default function GatheringSide({
             </div>
           ) : (
             <div className="space-y-2">
-              {chatRooms.length > 0 ? (
-                chatRooms.map((room) => (
+              {filteredGatherings.length > 0 ? (
+                filteredGatherings.map((gathering) => (
                   <ChatItem
-                    key={room.id}
+                    key={gathering.id}
                     lastMessage={
-                      lastMessages[room.id]?.message || '메시지 없음'
+                      lastMessages[gathering.id]?.message ||
+                      '아직 대화중이 아닌 채팅방입니다.'
                     }
-                    name={room.name || '알 수 없는 채팅방'}
-                    time={
-                      lastMessages[room.id]?.created_at
-                        ? new Date(
-                            lastMessages[room.id]?.created_at,
-                          ).toLocaleTimeString([], {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })
-                        : ''
-                    }
-                    profileUrl={
-                      room.chatRoomImageUrl || '/hip-girl-thinking.svg'
-                    }
+                    name={`${gathering.title}` || '알 수 없는 채팅방'}
+                    time={lastMessages[gathering.id]?.time}
+                    imageUrl={gathering.imageUrl}
+                    onClick={() => onSelectGathering(gathering)}
                   />
                 ))
               ) : (

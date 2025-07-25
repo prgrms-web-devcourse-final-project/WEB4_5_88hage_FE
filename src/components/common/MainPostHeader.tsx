@@ -104,7 +104,7 @@ export default function MainPostHeader({
 
         <div className="text-gray-disabled relative ml-auto flex items-center gap-3">
           <button className="flex gap-2" onClick={fetchApprovedParticipants}>
-            <div className="t3 hidden lg:block">{memberCount}명</div>
+            <div className="t3">{memberCount}명</div>
             <Users2 className="h-[20px] w-[20px]" />
           </button>
           <button onClick={toggleModal}>

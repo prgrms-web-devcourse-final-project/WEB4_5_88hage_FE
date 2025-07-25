@@ -1,29 +1,36 @@
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 
 type ChatItemProps = {
-  profileUrl: string | StaticImageData;
+  imageUrl: string | undefined;
   name: string;
   lastMessage: string;
-  time: string;
+  time: string | undefined;
+  onClick?: () => void;
 };
 
 export default function ChatItem({
-  profileUrl,
+  imageUrl,
   name,
   lastMessage,
   time,
+  onClick,
 }: ChatItemProps) {
   return (
-    <div className="hover:bg-gray-5 flex w-full items-start justify-between rounded-[4px] px-3 py-3 transition">
+    <div
+      className="hover:bg-gray-5 flex w-full cursor-pointer items-start justify-between rounded-[4px] px-3 py-3 transition"
+      onClick={onClick}
+    >
       {/* 프로필 사진 */}
       <div className="flex items-center gap-3">
-        <Image
-          src={profileUrl}
-          alt={`${name} 프로필`}
-          width={40}
-          height={40}
-          className="rounded-full object-cover"
-        />
+        <div className="relative h-12 w-12 overflow-hidden rounded-full">
+          {imageUrl ? (
+            <Image src={imageUrl} alt={name} layout="fill" objectFit="cover" />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-gray-500 text-xs text-white">
+              No Image
+            </div>
+          )}
+        </div>
         <div className="flex flex-col">
           <span className="text-sm font-semibold text-white">{name}</span>
           <span className="t4 text-gray-disabled mt-1">{lastMessage}</span>

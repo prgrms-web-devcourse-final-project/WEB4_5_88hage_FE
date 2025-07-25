@@ -19,7 +19,7 @@ interface GroupDetail {
   id: number;
   title: string;
   category: string;
-  memberCount: number;
+  nowPeople: number;
   groupImageUrl: string;
   isLeader?: boolean;
 }
@@ -75,25 +75,18 @@ export default function GatheringChatting({
       try {
         const response = await fetchGet<{ data: ChatMessage[] }>(
           `/api/chats/${gathering.id}/GROUP_CHAT/history`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
         );
 
         if (response.data) {
-          const historyMessages = response.data.map(
-            (msg): DisplayMessage => ({
+          const historyMessages = response.data.map((msg): DisplayMessage => {
+            return {
               type: msg.senderEmail === user.email ? 'sent' : 'received',
               sender: msg.senderEmail,
               name: msg.senderNickname,
               text: msg.message,
-              time: new Date(msg.time).toLocaleTimeString('ko-KR', {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false,
-              }),
-            }),
-          );
+              time: msg.time,
+            };
+          });
           setMessages(historyMessages);
         }
       } catch (error) {
@@ -116,16 +109,13 @@ export default function GatheringChatting({
       client.current = stompClient;
       stompClient.subscribe(`/group/${gathering.id}`, (message) => {
         const received: ChatMessage = JSON.parse(message.body);
+
         const displayMessage: DisplayMessage = {
           type: received.senderEmail === user.email ? 'sent' : 'received',
           sender: received.senderEmail,
           name: received.senderNickname,
           text: received.message,
-          time: new Date(received.time).toLocaleTimeString('ko-KR', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false,
-          }),
+          time: received.time,
         };
         setMessages((prevMessages) => [...prevMessages, displayMessage]);
       });
@@ -193,7 +183,7 @@ export default function GatheringChatting({
       <MainPostHeader
         title={gathering.title}
         category={getCategoryDisplayName(gathering.category)}
-        memberCount={gathering.memberCount}
+        memberCount={gathering.nowPeople}
         groupImageUrl={gathering.groupImageUrl}
         groupId={gathering.id}
         isLeader={gathering.isLeader}
