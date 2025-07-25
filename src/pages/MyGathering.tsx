@@ -24,8 +24,11 @@ export default function MyGathering() {
         </div>
         {/* 유동 너비 메인 */}
         <div className="max-w-[1050px] flex-grow lg:ml-5 lg:h-[740px]">
-          <GatheringMain selectedGathering={selectedGathering} />
-          {/* <GatheringChatting /> */}
+          {selectedGathering ? (
+            <GatheringChatting gathering={selectedGathering} />
+          ) : (
+            <GatheringMain selectedGathering={selectedGathering} />
+          )}
         </div>
       </div>
     </div>

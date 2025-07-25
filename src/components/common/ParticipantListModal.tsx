@@ -22,11 +22,11 @@ export default function ParticipantListModal({
   const modalRef = useRef<HTMLDivElement>(null);
   const { user } = useAuthStore();
 
-  const handleKickout = async (targetEmail: string) => {
-    if (window.confirm(`${targetEmail} 님을 모임에서 추방하시겠습니까?`)) {
+  const handleKickout = async (targetEmail: string, targetNickname: string) => {
+    if (window.confirm(`${targetNickname} 님을 모임에서 추방하시겠습니까?`)) {
       try {
         await kickoutParticipant(groupId, targetEmail);
-        alert(`${targetEmail} 님이 모임에서 추방되었습니다.`);
+        alert(`${targetNickname} 님이 모임에서 추방되었습니다.`);
         onClose(); // Close modal after kickout                                                  │
         // Optionally, refresh the participant list or the page
       } catch (error) {
@@ -111,7 +111,12 @@ export default function ParticipantListModal({
                   {isLeader && user?.email !== participant.userEmail && (
                     <button
                       className="rounded bg-red-500 px-3 py-1 text-sm text-white"
-                      onClick={() => handleKickout(participant.userEmail)}
+                      onClick={() =>
+                        handleKickout(
+                          participant.userEmail,
+                          participant.userNickname,
+                        )
+                      }
                     >
                       추방
                     </button>
