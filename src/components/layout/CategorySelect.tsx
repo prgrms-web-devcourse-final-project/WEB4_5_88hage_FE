@@ -47,7 +47,7 @@ export default function CategorySelect({
           id={name}
           name={name}
           defaultValue="default"
-          className="t3 bg-bg-color text-gray-disabled flex w-full appearance-none items-center justify-between rounded border border-[#343434] bg-[url()] p-4 text-left"
+          className="t3 bg-bg-color text-gray-disabled flex w-full appearance-none items-center justify-between rounded border border-[#343434] p-4 text-left"
         >
           <option value="default" disabled className="hidden">
             카테고리를 골라주세요
