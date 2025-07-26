@@ -1,7 +1,7 @@
 declare interface LastChatHistory {
   id: number;
   activated: boolean;
-  created_at: string;
+  time: string;
   modified_at: string;
   room_id: number;
   message: string;
