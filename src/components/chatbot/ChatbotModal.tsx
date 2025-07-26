@@ -29,7 +29,7 @@ export default function ChatbotModal({ onClose }) {
   const [recommendOffset, setRecommendOffset] = useState(2); // 몇 개까지 노출중인지
   const [hasRecommended, setHasRecommended] = useState(false); // 추천 한 번이라도 받았는지
 
-  // 1. 챗봇 대화 전송
+  // 챗봇 대화 전송
   const handleSend = async () => {
     const text = inputMessage.trim();
     if (!text) return;
@@ -68,7 +68,7 @@ export default function ChatbotModal({ onClose }) {
     }
   };
 
-  // 2. 요약 버튼 클릭 시: 요약API 호출 후 추천조건 모달 오픈
+  // 요약 버튼 클릭 시: 요약API 호출 후 추천조건 모달 오픈
   const handleSummary = async () => {
     const trimmedInput = inputMessage.trim();
 
@@ -99,7 +99,7 @@ export default function ChatbotModal({ onClose }) {
     }
   };
 
-  // 3. 추천조건 입력 후 추천API 호출
+  // 추천조건 입력 후 추천API 호출 (groups/contents 자동 분기!)
   const handleRecommend = async () => {
     if (!address || !startDate || !endDate) return;
     const recommendUrl =
@@ -123,8 +123,12 @@ export default function ChatbotModal({ onClose }) {
       const data = await res.json();
       setShowRecommendModal(false);
 
-      if (data.data && Array.isArray(data.data.groups) && data.data.groups.length > 0) {
-        setAllRecommendGroups(data.data.groups);
+      // 여기서 분기! (groups/contents)
+      const isGroup = eventType === "GROUP";
+      const resultArray = isGroup ? data.data?.groups : data.data?.contents;
+
+      if (data.data && Array.isArray(resultArray) && resultArray.length > 0) {
+        setAllRecommendGroups(resultArray);
         setRecommendOffset(2); // 항상 처음 2개부터!
         setHasRecommended(true); // 추천 버튼 → 더 받기로 변경
         setMessages((prev) => [
@@ -132,7 +136,7 @@ export default function ChatbotModal({ onClose }) {
           {
             type: "bot",
             text: "",
-            recommendGroups: data.data.groups.slice(0, 2),
+            recommendGroups: resultArray.slice(0, 2),
           },
         ]);
       } else {
@@ -150,7 +154,6 @@ export default function ChatbotModal({ onClose }) {
 
   // "추천 더 받기" 버튼 클릭 핸들러 (항상 2개씩 추가, 새 메시지로 쌓음)
   const handleShowMore = () => {
-    // 이미 마지막까지 본 상태에서 또 누르면 알럿만
     if (recommendOffset >= allRecommendGroups.length) {
       alert("챗봇추천은 여기까지입니다.");
       return;
@@ -165,11 +168,11 @@ export default function ChatbotModal({ onClose }) {
         recommendGroups: allRecommendGroups.slice(recommendOffset, nextOffset),
       },
     ]);
-    // 다음 클릭에 알럿 뜨도록, 버튼은 계속 보이게
   };
 
   useEffect(() => {
-    console.log("chatHistory state:", chatHistory);
+    // debug 용
+    // console.log("chatHistory state:", chatHistory);
   }, [chatHistory]);
 
   return (
@@ -202,27 +205,52 @@ export default function ChatbotModal({ onClose }) {
 
               {/* 추천 결과 카드 메시지 */}
               {msg.recommendGroups && (
-                <div className="flex flex-col gap-3 mt-2 ml-[15px] w-full">
-                  {msg.recommendGroups.map((group) => (
-                    <div
-                      key={group.id}
-                      onClick={() => router.push(`/gathering/${group.id}`)}
-                      className="w-[180px] rounded-[12px] overflow-hidden shadow-lg bg-white cursor-pointer"
-                    >
-                      <Image
-                        className="w-full h-32 object-cover"
-                        src={group.imageUrl}
-                        alt={group.title}
-                      />
-                      <div className="px-4 py-3">
-                        <div className="font-bold text-[16px] mb-1">{group.title}</div>
-                        <p className="text-gray-700 text-[14px] mb-1">{group.simpleExplain}</p>
-                        <p className="text-gray-400 text-[13px]">{group.placeName}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+  <div className="flex flex-col gap-3 mt-2 ml-[15px] w-full">
+    {msg.recommendGroups.map((item) => {
+      // 모임(GROUP)
+      if (item.title) {
+        return (
+          <div
+            key={item.id}
+            onClick={() => router.push(`/gathering/${item.id}`)}
+            className="w-[180px] rounded-[12px] overflow-hidden shadow-lg bg-white cursor-pointer hover:shadow-xl transition"
+          >
+            <Image
+              className="w-full h-32 object-cover"
+              src={item.imageUrl}
+              alt={item.title}
+            />
+            <div className="px-4 py-3">
+              <div className="font-bold text-[16px] mb-1">{item.title}</div>
+              <p className="text-gray-700 text-[14px] mb-1">{item.simpleExplain}</p>
+              <p className="text-gray-400 text-[13px]">{item.placeName}</p>
+            </div>
+          </div>
+        );
+      }
+      // 컨텐츠(CONTENT)
+      return (
+        <div
+          key={item.id}
+          onClick={() => router.push(`/event/${item.id}`)}
+          className="w-[180px] rounded-[12px] overflow-hidden shadow-lg bg-white cursor-pointer hover:shadow-xl transition"
+        >
+          <Image
+            className="w-full h-32 object-cover"
+            src={item.poster}
+            alt={item.contentTitle}
+          />
+          <div className="px-4 py-3">
+            <div className="font-bold text-[16px] mb-1">{item.contentTitle}</div>
+            {/* <p className="text-gray-700 text-[14px] mb-1">{item.reason}</p> */}
+            <p className="text-gray-400 text-[13px]">{item.address}</p>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+)}
+
             </div>
           ))}
 
