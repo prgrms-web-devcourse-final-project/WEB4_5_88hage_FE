@@ -77,3 +77,7 @@ declare interface CalendarContentRequest {
   startDate: string;
   endDate: string;
 }
+declare type AddCalendar = {
+  activityId: number,
+  selectedDate: string
+}

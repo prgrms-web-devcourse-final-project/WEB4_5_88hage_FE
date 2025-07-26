@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 
 export default function MyCalendar() {
   const date = new Date();
+  
   const [calendarData,setCalendarData] = useState<CalendarData[]>([]);
 
   const [selectListData,setSelectListData] = useState<CalendarData[]>([]);
@@ -19,8 +20,8 @@ export default function MyCalendar() {
   useEffect(()=>{
     const getMonthCalendarDate = async () => {
       try{
-        const {data}    = await getMonthlyCalendar(selectDate.year,selectDate.month);
-        console.log(data)
+        const {data} = await getMonthlyCalendar(selectDate.year,selectDate.month);
+        console.log(data);
         const temp = data.map(data => {
           const start = new Date(data.selectedDate);
           const end = new Date(start.getTime() + 60 * 60 * 1000)

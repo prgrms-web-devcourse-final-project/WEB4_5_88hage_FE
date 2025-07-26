@@ -19,9 +19,17 @@ export const getMyPersonalChatRooms = async (): Promise<ChatRoom[]> => {
 export const getLastChatHistory = async (
   roomId: number,
   type: 'GROUP_CHAT' | 'PERSONAL_CHAT',
-): Promise<LastChatHistory> => {
-  const res = await get<LastChatHistory>(
-    `/api/chats/${roomId}/${type}/lastHistory`,
-  );
-  return res;
+): Promise<LastChatHistory | null> => {
+  try {
+    const response = await get<{ data: LastChatHistory }>(
+      `/api/chats/${roomId}/${type}/lastHistory`,
+    );
+    return response.data; // data 객체를 반환
+  } catch (error) {
+    // 404 에러 (채팅 내역 없음) 처리
+    if (error.response && error.response.status === 404) {
+      return null; // 채팅 내역이 없으면 null 반환
+    }
+    throw error; // 다른 에러는 다시 던짐
+  }
 };

@@ -1,9 +1,11 @@
-import AdminInquiryDetail from "@/pages/AdminInquiryDetail";
+import Map from '@/components/kakao/Map'
+import SelectDate from '@/components/common/SelectDate'
+
 
 export default function page(){
   return (
     <>
-    <AdminInquiryDetail/>
+    <SelectDate/>
     </>
   );
 };

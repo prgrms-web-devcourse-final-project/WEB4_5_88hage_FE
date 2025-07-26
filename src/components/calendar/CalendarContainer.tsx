@@ -31,6 +31,7 @@ export default function CalendarContainer({setSelectDate,setSelectListData,calen
           data.start.toDateString() === date.toDateString()
       );
 
+      console.log(calendarData);
       console.log("해당 날짜의 이벤트:", selectDayEvents);
       setSelectListData(selectDayEvents);
     }
