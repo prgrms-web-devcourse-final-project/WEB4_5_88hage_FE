@@ -7,7 +7,6 @@ import SockJS from 'sockjs-client';
 import { LuSend } from 'react-icons/lu';
 
 import MainPostHeader from './common/MainPostHeader';
-import profileImg from '@/assets/images/thinking.svg';
 import { useAuthStore } from '@/stores/UseAuthStore';
 import { get as fetchGet } from '@/lib/api/fetchInstance';
 import { deleteGroup, completeGroup } from '@/lib/api/group';

@@ -1,4 +1,4 @@
-import Sidebar from '@/components/layout/Sidebar';
+'use client';
 import Image from 'next/image';
 import profileImg from '@/assets/images/profile_test.png';
 import mapIcon from '@/assets/images/map_icon_test.png';
@@ -8,9 +8,144 @@ import {
   LucideUsers2,
 } from 'lucide-react';
 import 'swiper/css';
-import Greeting from '@/components/common/Greeting';
+import { useEffect, useState } from 'react';
+import { getUserInfo, getUserDetailInfoByEmail } from '@/lib/api/user';
+import { getGroupCompletedStats } from '@/lib/api/participant'; // Import the new API call
+import { getLeaderMyGroups } from '@/lib/api/group'; // Import getLeaderMyGroups
+import { getDailyCalendar, getCalendarForContent } from '@/lib/api/calendar'; // Import getDailyCalendar
+import { getContacts } from '@/lib/api/inquiry'; // Import getContacts
+import basicProfileImg from '../assets/images/basicProfile.png';
+
+interface UserInfo {
+  nickname: string;
+  followerCount: number;
+  followingCount: number;
+  imageUrl: string;
+}
+
+interface GroupStat {
+  category: string;
+  count: number;
+}
+
+interface DailyCalender {
+  calendarId: 2;
+  type: string;
+  activityId: 1;
+  title: string;
+  selectedDate: string;
+  address: string;
+}
 
 export default function Profile() {
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [groupStats, setGroupStats] = useState<GroupStat[]>([]); // New state for group stats
+  const [leaderGroups, setLeaderGroups] = useState<LeaderMyGroupData[]>([]); // New state for leader groups
+  const [dailyEvents, setDailyEvents] = useState<DailyCalender[]>([]); // New state for daily events
+  const [myInquiries, setMyInquiries] = useState<Inquiry[]>([]); // New state for inquiries
+  const [bookedEvents, setBookedEvents] = useState<any[]>([]); // New state for booked events
+  const [activeTab, setActiveTab] = useState('myPosts'); // 'myPosts', 'myInquiries', 'bookedEvents'
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const currentUserInfo = await getUserInfo();
+        const userEmail = currentUserInfo.data.email;
+        const userData = await getUserDetailInfoByEmail(userEmail);
+        setUserInfo(userData.data as UserInfo);
+
+        const statsData = await getGroupCompletedStats(); // Fetch group stats
+        setGroupStats(statsData.data); // Set group stats
+        console.log(statsData.data); // Log the stats data
+
+        const leaderGroupsData = await getLeaderMyGroups(); // Fetch leader groups
+        setLeaderGroups(leaderGroupsData);
+
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth() + 1; // Month is 0-indexed
+        const day = today.getDate();
+        const dailyCalendarData = await getDailyCalendar(year, month, day);
+        setDailyEvents(dailyCalendarData.data); // Assuming data is directly in .data
+        console.log(dailyCalendarData.data); // Log daily calendar data
+
+        const inquiriesData = await getContacts();
+        setMyInquiries(inquiriesData.data.content); // Assuming data is directly in .data
+        console.log(inquiriesData.data.content); // Log inquiries data
+
+        const bookedEventsData = await getCalendarForContent();
+        setBookedEvents(bookedEventsData.data.content); // Assuming data is directly in .data
+        console.log(bookedEventsData.data.content); // Log booked events data
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div>Loading profile...</div>;
+  }
+
+  if (!userInfo) {
+    return <div>Failed to load profile.</div>;
+  }
+
+  // Helper function to map category names and assign colors
+  const getCategoryDisplayInfo = (category: string) => {
+    switch (category) {
+      case 'ART':
+        return { name: '예술', color: 'bg-main' };
+      case 'TRAVEL':
+        return { name: '여행', color: 'bg-[#bd3aff]' };
+      case 'FOOD':
+        return { name: '음식', color: 'bg-[#ffd042]' };
+      case 'GAME':
+        return { name: '게임', color: 'bg-[#60c2ff]' };
+      case 'CULTURE':
+        return { name: '문화', color: 'bg-[#ff5457]' };
+      case 'SPORT':
+        return { name: '운동', color: 'bg-[#546bff]' };
+      case 'STUDY':
+        return { name: '자기 계발', color: 'bg-[#ff4bcc]' };
+      case 'MOVIE':
+        return { name: '영화', color: 'bg-[#62ff57]' };
+      default:
+        return { name: category, color: 'bg-gray-disabled' }; // Default color for unknown categories
+    }
+  };
+
+  // Helper function to map inquiry category names to Korean
+  const getInquiryCategoryDisplayName = (category: string) => {
+    switch (category) {
+      case 'GENERAL':
+        return '일반 문의';
+      case 'REPORT':
+        return '신고 문의';
+      default:
+        return category;
+    }
+  };
+
+  // Helper function to map inquiry status names to Korean
+  const getInquiryStatusDisplayName = (status: string) => {
+    switch (status) {
+      case 'COMPLETE':
+        return '답변 완료';
+      case 'PENDING':
+        return '답변 대기';
+      default:
+        return status;
+    }
+  };
+
+  // Calculate max count for bar chart scaling
+  const maxCount = Math.max(...groupStats.map((stat) => stat.count), 1); // Ensure at least 1 to avoid division by zero
+
   return (
     <>
       <div className="hidden w-full flex-col gap-5 text-white lg:flex">
@@ -18,18 +153,34 @@ export default function Profile() {
           <div className="mb-6 text-[28px] font-semibold">내 프로필</div>
           <div className="mb-[34px] flex gap-[calc(100%*(30/1440))]">
             <div className="bg-gray-7 flex h-90 w-[calc(100%*(400/1440))] flex-col items-center justify-center gap-2.5 rounded-[5px] p-[31px] font-medium">
-              <Image
-                src={profileImg}
-                alt="profile"
-                className="rounded-full bg-black"
-              />
-              <div className="text-xl">홍길동 님</div>
+              <div className="relative h-30 w-30 overflow-hidden rounded-full">
+                {userInfo.imageUrl ? (
+                  <Image
+                    src={userInfo.imageUrl}
+                    alt={userInfo.nickname}
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-gray-500 text-xs text-white">
+                    <Image
+                      src={basicProfileImg}
+                      alt={userInfo.nickname}
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="text-xl">{userInfo.nickname} 님</div>
               <div className="flex gap-5">
                 <span className="text-[#999999]">
-                  팔로워 <span className="text-white">27</span>
+                  팔로워{' '}
+                  <span className="text-white">{userInfo.followerCount}</span>
                 </span>
                 <span className="text-[#999999]">
-                  팔로잉 <span className="text-white">27</span>
+                  팔로잉{' '}
+                  <span className="text-white">{userInfo.followingCount}</span>
                 </span>
               </div>
               <button className="mt-[17px] w-45 rounded-[5px] bg-[#323232] p-3">
@@ -38,68 +189,33 @@ export default function Profile() {
             </div>
             <div className="bg-gray-7 h-90 w-[calc(100%*(513/1440))] rounded-[5px] p-5 font-semibold">
               <div className="mb-[21px]">👍 즐겨 찾는 여가 생활</div>
-              <div className="mb-8 flex flex-col gap-[9px] text-[12px]">
-                <div className="flex gap-2.5">
-                  <div className="flex items-center gap-2.5">
-                    <div className="bg-main size-3 rounded-full"></div> 예술
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    <div className="size-3 rounded-full bg-[#60c2ff]"></div>{' '}
-                    게임
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    <div className="size-3 rounded-full bg-[#bd3aff]"></div>{' '}
-                    여행
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    <div className="size-3 rounded-full bg-[#ff4bcc]"></div>{' '}
-                    자기 개발
-                  </div>
-                </div>
-                <div className="flex gap-2.5">
-                  <div className="flex items-center gap-2.5">
-                    <div className="size-3 rounded-full bg-[#62ff57]"></div>{' '}
-                    영화
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    <div className="size-3 rounded-full bg-[#ffd042]"></div>{' '}
-                    음식
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    <div className="size-3 rounded-full bg-[#ff5457]"></div>{' '}
-                    문화
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    <div className="size-3 rounded-full bg-[#546bff]"></div>{' '}
-                    운동
-                  </div>
-                </div>
+              <div className="mb-8 flex flex-wrap gap-x-2.5 gap-y-[9px] text-[12px]">
+                {groupStats.map((stat, index) => {
+                  const { name, color } = getCategoryDisplayInfo(stat.category);
+                  return (
+                    <div key={index} className="flex items-center gap-2.5">
+                      <div className={`${color} size-3 rounded-full`}></div>{' '}
+                      {name} ({stat.count})
+                    </div>
+                  );
+                })}
               </div>
               <div className="flex justify-between">
-                <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
-                  <div className="bg-main h-10 w-5 rounded-[10px]"></div>
-                </div>
-                <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
-                  <div className="h-13 w-5 rounded-[10px] bg-[#60c2ff]"></div>
-                </div>
-                <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
-                  <div className="h-16 w-5 rounded-[10px] bg-[#bd3aff]"></div>
-                </div>
-                <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
-                  <div className="h-19 w-5 rounded-[10px] bg-[#ff4bcc]"></div>
-                </div>
-                <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
-                  <div className="h-22 w-5 rounded-[10px] bg-[#62ff57]"></div>
-                </div>
-                <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
-                  <div className="h-25 w-5 rounded-[10px] bg-[#ffd042]"></div>
-                </div>
-                <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
-                  <div className="h-28 w-5 rounded-[10px] bg-[#ff5457]"></div>
-                </div>
-                <div className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]">
-                  <div className="h-30 w-5 rounded-[10px] bg-[#546bff]"></div>
-                </div>
+                {groupStats.map((stat, index) => {
+                  const { color } = getCategoryDisplayInfo(stat.category);
+                  const barHeight = (stat.count / maxCount) * 50; // Scale height to max 50px
+                  return (
+                    <div
+                      key={index}
+                      className="flex h-50 w-5 items-end rounded-[10px] bg-[#393939]"
+                    >
+                      <div
+                        className={`${color} w-5 rounded-[10px]`}
+                        style={{ height: `${barHeight}px` }}
+                      ></div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
             <div className="bg-gray-7 h-90 w-[calc(100%*(467/1440))] rounded-[5px] px-9 py-3">
@@ -175,53 +291,94 @@ export default function Profile() {
           <div className="flex h-[356px] gap-[30px]">
             <div className="flex w-[calc(100%*(943/1440))] flex-col gap-[30px]">
               <div className="flex h-[50px] w-full gap-8">
-                <button className="bg-gray-7 text-main t2 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 font-semibold">
+                <button
+                  className={`bg-gray-7 t2 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 ${activeTab === 'myPosts' ? 'text-main font-semibold' : ''}`}
+                  onClick={() => setActiveTab('myPosts')}
+                >
                   <div className="bg-gray-4 size-[31px] rounded-full"></div>
                   내가 작성한 모임 글<div />
                 </button>
-                <button className="bg-gray-7 t2 flex h-full w-full items-center justify-between rounded-[5px] px-2.5">
+                <button
+                  className={`bg-gray-7 t2 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 ${activeTab === 'myInquiries' ? 'text-main font-semibold' : ''}`}
+                  onClick={() => setActiveTab('myInquiries')}
+                >
                   <div className="bg-gray-4 size-[31px] rounded-full"></div>
                   내 문의 내역
                   <div />
                 </button>
-                <button className="bg-gray-7 t2 flex h-full w-full items-center justify-between rounded-[5px] px-2.5">
+                <button
+                  className={`bg-gray-7 t2 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 ${activeTab === 'bookedEvents' ? 'text-main font-semibold' : ''}`}
+                  onClick={() => setActiveTab('bookedEvents')}
+                >
                   <div className="bg-gray-4 size-[31px] rounded-full"></div>
                   예약한 행사
                   <div />
                 </button>
               </div>
               <div className="bg-gray-7 h-[276px] w-full rounded-[5px] px-5 py-[15px]">
-                <div className="mb-5 flex items-center justify-between border-b-1 border-[#4d4d4d] pb-4 text-[#a8a8a8]">
-                  <div>내가 작성한 모임 글</div>
+                <div className="mb-3 flex items-center justify-between border-b-1 border-[#4d4d4d] pb-4 text-[#a8a8a8]">
+                  <div>
+                    {activeTab === 'myPosts' && '내가 작성한 모임 글'}
+                    {activeTab === 'myInquiries' && '내 문의 내역'}
+                    {activeTab === 'bookedEvents' && '예약한 행사'}
+                  </div>
                   <button>
                     <LucideArrowUpRight />
                   </button>
                 </div>
                 <div className="flex flex-col gap-3">
-                  <div className="bg-gray-6 flex rounded-[5px] px-5 py-4">
-                    <div className="w-[25%] truncate">같이 꽃놀이 가실 분</div>
-                    <div className="w-[60%] truncate">
-                      4월 9일에 벚꽃놀이 멤버 구합니다. 같이 돗자리 펴고
-                      꽃놀이...
-                    </div>
-                    <div className="w-[15%] text-right">20250401</div>
-                  </div>
-                  <div className="bg-gray-6 flex rounded-[5px] px-5 py-4">
-                    <div className="w-[25%] truncate">같이 꽃놀이 가실 분</div>
-                    <div className="w-[60%] truncate">
-                      4월 9일에 벚꽃놀이 멤버 구합니다. 같이 돗자리 펴고
-                      꽃놀이...
-                    </div>
-                    <div className="w-[15%] text-right">20250401</div>
-                  </div>
-                  <div className="bg-gray-6 flex rounded-[5px] px-5 py-4">
-                    <div className="w-[25%] truncate">같이 꽃놀이 가실 분</div>
-                    <div className="w-[60%] truncate">
-                      4월 9일에 벚꽃놀이 멤버 구합니다. 같이 돗자리 펴고
-                      꽃놀이...
-                    </div>
-                    <div className="w-[15%] text-right">20250401</div>
-                  </div>
+                  {activeTab === 'myPosts' &&
+                    leaderGroups.slice(0, 3).map((group) => (
+                      <div
+                        key={group.groupId}
+                        className="bg-gray-6 flex rounded-[5px] px-5 py-4"
+                      >
+                        <div className="w-[25%] truncate font-semibold">
+                          {group.groupTitle}
+                        </div>
+                        <div className="w-[60%] truncate">{group.explain}</div>
+                        <div className="w-[15%] text-right">
+                          {group.groupDate.split('T')[0].replace(/-/g, '')}
+                        </div>
+                      </div>
+                    ))}
+                  {activeTab === 'myInquiries' &&
+                    myInquiries.slice(0, 3).map((inquiry) => (
+                      <div
+                        key={inquiry.id}
+                        className="bg-gray-6 flex rounded-[5px] px-5 py-4"
+                      >
+                        <div className="w-[25%] truncate font-semibold">
+                          {getInquiryCategoryDisplayName(inquiry.category)}
+                        </div>
+                        <div className="w-[60%] truncate">{inquiry.title}</div>
+                        <div className="w-[15%] text-right">
+                          {getInquiryStatusDisplayName(inquiry.status)}
+                        </div>
+                      </div>
+                    ))}
+                  {activeTab === 'bookedEvents' &&
+                    bookedEvents.slice(0, 3).map((event) => (
+                      <div
+                        key={event.id}
+                        className="bg-gray-6 flex rounded-[5px] px-5 py-4"
+                      >
+                        <div className="w-[25%] truncate font-semibold">
+                          {event.title}
+                        </div>
+                        <div className="w-[60%] truncate">{event.type}</div>
+                        <div className="w-[15%] text-right">
+                          {new Date(event.selected_date).toLocaleDateString(
+                            'ko-KR',
+                            {
+                              year: 'numeric',
+                              month: 'numeric',
+                              day: 'numeric',
+                            },
+                          )}
+                        </div>
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>
@@ -233,58 +390,28 @@ export default function Profile() {
                 </button>
               </div>
               <div className="flex flex-col gap-[15px]">
-                <div>
-                  <div className="flex items-center gap-5">
-                    <Image src={mapIcon} alt="icon" />
-                    <div className="flex flex-col items-baseline gap-[3px]">
-                      <div className="text-gray-1 font-semibold">
-                        경주월드 3인 팟
-                      </div>
-                      <div className="text-sm font-medium text-[#7e7e7e]">
-                        2025년 7월 21일
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center gap-5">
-                    <Image src={mapIcon} alt="icon" />
-                    <div className="flex flex-col items-baseline gap-[3px]">
-                      <div className="text-gray-1 font-semibold">
-                        경주월드 3인 팟
-                      </div>
-                      <div className="text-sm font-medium text-[#7e7e7e]">
-                        2025년 7월 21일
+                {dailyEvents.map((event) => (
+                  <div key={event.activityId}>
+                    <div className="flex items-center gap-5">
+                      <Image src={mapIcon} alt="icon" />
+                      <div className="flex flex-col items-baseline gap-[3px]">
+                        <div className="text-gray-1 font-semibold">
+                          {event.title}
+                        </div>
+                        <div className="text-sm font-medium text-[#7e7e7e]">
+                          {new Date(event.selectedDate).toLocaleDateString(
+                            'ko-KR',
+                            {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                            },
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div>
-                  <div className="flex items-center gap-5">
-                    <Image src={mapIcon} alt="icon" />
-                    <div className="flex flex-col items-baseline gap-[3px]">
-                      <div className="text-gray-1 font-semibold">
-                        경주월드 3인 팟
-                      </div>
-                      <div className="text-sm font-medium text-[#7e7e7e]">
-                        2025년 7월 21일
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center gap-5">
-                    <Image src={mapIcon} alt="icon" />
-                    <div className="flex flex-col items-baseline gap-[3px]">
-                      <div className="text-gray-1 font-semibold">
-                        경주월드 3인 팟
-                      </div>
-                      <div className="text-sm font-medium text-[#7e7e7e]">
-                        2025년 7월 21일
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
@@ -298,17 +425,21 @@ export default function Profile() {
           <div className="text-medium mb-[17px] text-xl">내 프로필</div>
           <div className="bg-gray-6 flex w-full flex-col items-center justify-center gap-2.5 rounded-[5px] p-[31px] font-medium">
             <Image
-              src={profileImg}
+              src={userInfo.profileImageUrl || profileImg}
               alt="profile"
               className="rounded-full bg-black"
+              width={100} // 적절한 width와 height를 지정해주세요
+              height={100} // 적절한 width와 height를 지정해주세요
             />
-            <div className="text-xl">홍길동 님</div>
+            <div className="text-xl">{userInfo.nickname} 님</div>
             <div className="flex gap-5">
               <span className="text-[#999999]">
-                팔로워 <span className="text-white">27</span>
+                팔로워{' '}
+                <span className="text-white">{userInfo.followerCount}</span>
               </span>
               <span className="text-[#999999]">
-                팔로잉 <span className="text-white">27</span>
+                팔로잉{' '}
+                <span className="text-white">{userInfo.followingCount}</span>
               </span>
             </div>
             <button className="mt-[17px] w-45 rounded-[5px] bg-[#323232] p-3">

@@ -22,6 +22,29 @@ export default function GatheringMain({
     );
   }
 
+  const handleCompleteGroup = async (groupId: number) => {
+    try {
+      await completeGroup(groupId);
+      alert('모임이 완료 처리되었습니다.');
+
+      // Optionally, refresh or redirect
+    } catch (error) {
+      console.error('Failed to complete group:', error);
+      alert('모임 완료 처리에 실패했습니다.');
+    }
+  };
+
+  const handleDeleteGroup = async (groupId: number) => {
+    try {
+      await deleteGroup(groupId);
+      alert('모임이 삭제되었습니다.');
+      // Optionally, refresh or redirect
+    } catch (error) {
+      console.error('Failed to delete group:', error);
+      alert('모임 삭제에 실패했습니다.');
+    }
+  };
+
   return (
     <>
       <div className="bg-gray-7 lg:border-gray-5 mt-5 flex h-full w-full flex-col rounded-[15px] p-5 lg:border">
@@ -31,8 +54,8 @@ export default function GatheringMain({
           category={getCategoryDisplayName(selectedGathering.category) || ''}
           memberCount={selectedGathering.nowPeople || 0}
           groupImageUrl={selectedGathering.imageUrl || ''}
-          onComplete={completeGroup}
-          onDelete={deleteGroup}
+          onComplete={handleCompleteGroup}
+          onDelete={handleDeleteGroup}
           isLeader={selectedGathering.isLeader}
         />
         <div className="mt-5 flex gap-5">
