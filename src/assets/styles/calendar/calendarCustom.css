@@ -257,7 +257,7 @@
     justify-content: space-between;
     margin-bottom: 0;
     border-bottom: 1px solid #313131;
-    padding: 15px 0;
+    padding: 15px 5px;
 }
 .rbc-toolbar-label {
     font-weight: bold ;
@@ -265,6 +265,12 @@
     background-clip: text !important;
     -webkit-background-clip: text !important;
     color: transparent !important;
+    text-align: start;
+    flex-grow: unset !important;
+    padding: 0 !important;
+}
+.rbc-btn-group:last-child {
+    display: none;
 }
 .rbc-toolbar .rbc-toolbar-label {
     text-align: start;
@@ -322,7 +328,6 @@
     border-radius: 5px;
 }
 .rbc-day-bg.rbc-today {
-    /* border: 2px solid rgba(0,230,174,.4) !important; */
     color: #1CEBB9 !important;
 }
 .rbc-day-bg + .rbc-day-bg {
