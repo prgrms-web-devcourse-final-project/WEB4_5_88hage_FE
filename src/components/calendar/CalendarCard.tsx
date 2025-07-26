@@ -1,7 +1,7 @@
 'use client'
-import { deleteCalendar } from '@/lib/api/calendar';
 import { X } from 'lucide-react';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
+import SelectDate from '../common/SelectDate';
 
 type Props ={
   info:CalendarData,
@@ -12,6 +12,7 @@ type Props ={
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function CalendarCard({info,setSelectListData,setCalendarData}:Props){
+  const[show,setShow] = useState(false);
   console.log(info.calendarId)
 
   const timeFormatting = ()=> {
@@ -23,7 +24,7 @@ export default function CalendarCard({info,setSelectListData,setCalendarData}:Pr
 
   const deleteEvent = async (id:number)=>{
     try{
-     const response = await fetch(`https://funfun.cloud/api/calendars/${Number(id)}`,{
+     const response = await fetch(`${baseUrl}/api/calendars/${Number(id)}`,{
         method: 'DELETE',
         credentials: 'include', 
         headers: {
@@ -38,6 +39,27 @@ export default function CalendarCard({info,setSelectListData,setCalendarData}:Pr
       console.log('이벤트 삭제 실패: ', error)
     }
   }
+
+  // const modifyEvent = async (id:number)=>{
+  //   try{
+  //    const response = await fetch(`${baseUrl}/api/calendars/${Number(id)}`,{
+  //       method: 'PATCH',
+  //       credentials: 'include', 
+  //       headers: {
+  //         accept: 'application/json',
+  //       },
+  //       body: {
+  //          "selectedDate": "2025-07-25T20:17:41.152Z"
+  //       }
+  //   })
+  //    const data = await response.json();
+  //    setSelectListData((prev) => prev.filter(data => data.calendarId !== info.calendarId));
+  //    setCalendarData((prev) => prev.filter(data => data.calendarId !== info.calendarId));
+  //    console.log('수정 성공 : ', data);
+  //   } catch(error) {
+  //     console.log('이벤트 수정 실패: ', error)
+  //   }
+  // }
 
   const redirectDetailPage = ()=>{
 
@@ -60,6 +82,7 @@ export default function CalendarCard({info,setSelectListData,setCalendarData}:Pr
         </button>
       </div>
     </div>
+    {show && <SelectDate title={info.title} id={info.calendarId} setShow={setShow} callbackFc={}/>}
     </>
   );
 };
