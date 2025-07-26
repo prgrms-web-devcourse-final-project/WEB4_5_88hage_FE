@@ -18,9 +18,10 @@ declare type SelectDate = {
 
 declare type CalendarData = {
   id:string,
-  deleteId:string,
+  calendarId:string,
+  activityId:string,
   title: string,
   start:Date,
   end:Date,
-  type:string
+  type:string,
 }

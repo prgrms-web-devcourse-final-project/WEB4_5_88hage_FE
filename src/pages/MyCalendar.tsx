@@ -1,4 +1,5 @@
 'use client'
+
 import CalendarContainer from '@/components/calendar/CalendarContainer';
 import CalendarSidebar from '@/components/calendar/CalendarSidebar';
 import { getMonthlyCalendar } from '@/lib/api/calendar';
