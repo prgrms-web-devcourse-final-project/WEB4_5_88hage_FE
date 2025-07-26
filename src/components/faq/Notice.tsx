@@ -1,11 +1,24 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function NoticeContent() {
+
   const notices = Array.from({ length: 6 }).map(() => ({
     category: "특정 사용자 신고",
     content: "안녕하세요. 특정 악질 사용자 신고 문의 넣었는데 대응이 잘될까요?",
     date: "2025년06월28일",
   }));
+
+  const getNoticeList = async ()=>{
+    try{
+      const response = await fetch(`https://funfun.cloud/api/admin/notices`);
+      const data = await response.json();
+      console.log(data)
+    } catch(error){
+      console.log('공지사항 정보를 불러오는데 실패했습니다 :', error);
+    }
+  }
+  
+  getNoticeList();
 
   return (
     <section className="bg-[#121212] text-white px-6 lg:px-24 pt-10 lg:pt-12 pb-32">

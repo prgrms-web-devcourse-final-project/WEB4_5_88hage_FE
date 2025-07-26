@@ -1,8 +1,8 @@
-import MockupCalendar from '@/pages/MockupCalendar'
+import MyCalendar from '@/pages/MyCalendar';
 export default function page(){
   return (
     <>
-    <MockupCalendar/>
+      <MyCalendar/>
     </>
   );
 };

@@ -2,7 +2,7 @@
 import { get, post, del, patch } from './fetchInstance';
 
 // 캘린더 일정 등록 - 예약하기
-export const addCalendar = async (data: CalendarContentRequest) => {
+export const addCalendar = async (data: AddCalendar) => {
   return post('/api/calendars', data);
 };
 
