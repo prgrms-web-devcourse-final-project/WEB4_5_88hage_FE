@@ -14,7 +14,9 @@ import { getGroupCompletedStats } from '@/lib/api/participant'; // Import the ne
 import { getLeaderMyGroups } from '@/lib/api/group'; // Import getLeaderMyGroups
 import { getDailyCalendar, getCalendarForContent } from '@/lib/api/calendar'; // Import getDailyCalendar
 import { getContacts } from '@/lib/api/inquiry'; // Import getContacts
+import { getFollowers, getFollowings } from '@/lib/api/follow';
 import basicProfileImg from '../assets/images/basicProfile.png';
+import FollowListModal from '@/components/common/FollowListModal';
 
 interface UserInfo {
   nickname: string;
@@ -45,19 +47,48 @@ export default function Profile() {
   const [myInquiries, setMyInquiries] = useState<Inquiry[]>([]); // New state for inquiries
   const [bookedEvents, setBookedEvents] = useState<any[]>([]); // New state for booked events
   const [activeTab, setActiveTab] = useState('myPosts'); // 'myPosts', 'myInquiries', 'bookedEvents'
+  const [showFollowerModal, setShowFollowerModal] = useState(false);
+  const [showFollowingModal, setShowFollowingModal] = useState(false);
+  const [followers, setFollowers] = useState<{ nickname: string; imageUrl: string; email: string }[]>([]);
+  const [followings, setFollowings] = useState<{ nickname: string; imageUrl: string; email: string }[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const fetchFollowData = async () => {
+    try {
+      const followersData = await getFollowers();
+      setFollowers(
+        followersData.data.content.map((f: any) => ({
+          nickname: f.nickname,
+          imageUrl: f.imageUrl,
+          email: f.email,
+        })),
+      );
+
+      const followingsData = await getFollowings();
+      setFollowings(
+        followingsData.data.content.map((f: any) => ({
+          nickname: f.nickname,
+          imageUrl: f.imageUrl,
+          email: f.email,
+        })),
+      );
+    } catch (error) {
+      console.error('Failed to fetch follow data:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const currentUserInfo = await getUserInfo();
+        console.log('currentUserInfo:', currentUserInfo);
         const userEmail = currentUserInfo.data.email;
         const userData = await getUserDetailInfoByEmail(userEmail);
         setUserInfo(userData.data as UserInfo);
+        console.log('userData:', userData);
 
         const statsData = await getGroupCompletedStats(); // Fetch group stats
         setGroupStats(statsData.data); // Set group stats
-        console.log(statsData.data); // Log the stats data
 
         const leaderGroupsData = await getLeaderMyGroups(); // Fetch leader groups
         setLeaderGroups(leaderGroupsData);
@@ -67,16 +98,16 @@ export default function Profile() {
         const month = today.getMonth() + 1; // Month is 0-indexed
         const day = today.getDate();
         const dailyCalendarData = await getDailyCalendar(year, month, day);
-        setDailyEvents(dailyCalendarData.data); // Assuming data is directly in .data
-        console.log(dailyCalendarData.data); // Log daily calendar data
+        setDailyEvents(dailyCalendarData.data);
 
         const inquiriesData = await getContacts();
-        setMyInquiries(inquiriesData.data.content); // Assuming data is directly in .data
-        console.log(inquiriesData.data.content); // Log inquiries data
+        setMyInquiries(inquiriesData.data.content);
 
         const bookedEventsData = await getCalendarForContent();
-        setBookedEvents(bookedEventsData.data.content); // Assuming data is directly in .data
-        console.log(bookedEventsData.data.content); // Log booked events data
+        setBookedEvents(bookedEventsData.data.content);
+
+        await fetchFollowData(); // Initial fetch of follow data
+
       } catch (error) {
         console.error('Failed to fetch data:', error);
       } finally {
@@ -174,14 +205,20 @@ export default function Profile() {
               </div>
               <div className="text-xl">{userInfo.nickname} 님</div>
               <div className="flex gap-5">
-                <span className="text-[#999999]">
+                <button
+                  onClick={() => setShowFollowerModal(true)}
+                  className="text-[#999999]"
+                >
                   팔로워{' '}
                   <span className="text-white">{userInfo.followerCount}</span>
-                </span>
-                <span className="text-[#999999]">
+                </button>
+                <button
+                  onClick={() => setShowFollowingModal(true)}
+                  className="text-[#999999]"
+                >
                   팔로잉{' '}
                   <span className="text-white">{userInfo.followingCount}</span>
-                </span>
+                </button>
               </div>
               <button className="mt-[17px] w-45 rounded-[5px] bg-[#323232] p-3">
                 정보 수정
@@ -360,15 +397,17 @@ export default function Profile() {
                   {activeTab === 'bookedEvents' &&
                     bookedEvents.slice(0, 3).map((event) => (
                       <div
-                        key={event.id}
+                        key={event.calendarId}
                         className="bg-gray-6 flex rounded-[5px] px-5 py-4"
                       >
                         <div className="w-[25%] truncate font-semibold">
-                          {event.title}
+                          {event.category}
                         </div>
-                        <div className="w-[60%] truncate">{event.type}</div>
+                        <div className="w-[60%] truncate">
+                          {event.contentTitle}
+                        </div>
                         <div className="w-[15%] text-right">
-                          {new Date(event.selected_date).toLocaleDateString(
+                          {new Date(event.selectedDate).toLocaleDateString(
                             'ko-KR',
                             {
                               year: 'numeric',
@@ -561,6 +600,22 @@ export default function Profile() {
           </div>
         </div>
       </div>
+      {showFollowerModal && (
+        <FollowListModal
+          users={followers}
+          onClose={() => setShowFollowerModal(false)}
+          title="팔로워"
+          onUnfollowSuccess={fetchFollowData}
+        />
+      )}
+      {showFollowingModal && (
+        <FollowListModal
+          users={followings}
+          onClose={() => setShowFollowingModal(false)}
+          title="팔로잉"
+          onUnfollowSuccess={fetchFollowData}
+        />
+      )}
     </>
   );
 }
