@@ -27,20 +27,20 @@ export default function MyCalendar() {
     const getMonthCalendarDate = async () => {
       try{
         const {data} = await getMonthlyCalendar(selectDate.year,selectDate.month);
-        
+        console.log(data)
         const temp = data.map(data => {
           const start = moment.tz(data.selectedDate, 'Asia/Seoul').toDate();
           const end = moment(start).add(1, 'hour').toDate();
           return {
           activityId:data.activityId.toString(),
           calendarId:data.calendarId.toString(),
+          address: data.address,
           title: data.title,
           start,
           end,
           type: data.type,
         }
       });
-      console.log(temp);
       setCalendarData(temp);
       }catch(error){
         console.log('캘린더 정보를 불러오는데 실패 했습니다.',error)

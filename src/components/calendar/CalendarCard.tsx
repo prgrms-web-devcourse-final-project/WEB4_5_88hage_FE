@@ -53,8 +53,8 @@ export default function CalendarCard({info,setSelectListData,setCalendarData}:Pr
         <div className={`w-[4px] min-h-auto rounded-tl-[5px] rounded-bl-[5px] ${info.type === "CONTENT" ?'bg-[#4BFF69]':'bg-[#FF8A4B]'}`}></div>
         <div className="pl-[15px] pt-[15px] pb-[15px] flex gap-[15px] text-gray-sub flex-col">
             <h3>{info.title}</h3>
-            <p>일정 위치</p>
-            <p>{timeFormatting()}</p>
+            <p className='text-[#A19F9F]'>{info.address}</p>
+            <p className='text-[#A19F9F]'>{timeFormatting()}</p>
         </div>
       </div>
       <div className='relative'>

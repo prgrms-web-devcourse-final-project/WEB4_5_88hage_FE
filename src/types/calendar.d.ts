@@ -20,6 +20,7 @@ declare type CalendarData = {
   id:string,
   calendarId:string,
   activityId:string,
+  address:string,
   title: string,
   start:Date,
   end:Date,
