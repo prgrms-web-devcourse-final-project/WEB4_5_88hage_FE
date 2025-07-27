@@ -6,8 +6,8 @@ type CategorySelectProps = {
   name: string;
   isRequired?: boolean;
   options: { key: string; value: string }[];
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
 export default function CategorySelect({
