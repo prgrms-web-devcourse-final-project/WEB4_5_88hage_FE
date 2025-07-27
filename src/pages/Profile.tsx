@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 import 'swiper/css';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { FadeLoader, HashLoader } from 'react-spinners';
 import { getUserInfo, getUserDetailInfoByEmail } from '@/lib/api/user';
 import { getGroupCompletedStats } from '@/lib/api/participant'; // Import the new API call
 import { getLeaderMyGroups } from '@/lib/api/group'; // Import getLeaderMyGroups
@@ -17,6 +19,7 @@ import { getContacts } from '@/lib/api/inquiry'; // Import getContacts
 import { getFollowers, getFollowings } from '@/lib/api/follow';
 import basicProfileImg from '../assets/images/basicProfile.png';
 import FollowListModal from '@/components/common/FollowListModal';
+import DetailListModal from '@/components/common/DetailListModal';
 
 interface UserInfo {
   nickname: string;
@@ -40,6 +43,7 @@ interface DailyCalender {
 }
 
 export default function Profile() {
+  const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [groupStats, setGroupStats] = useState<GroupStat[]>([]); // New state for group stats
   const [leaderGroups, setLeaderGroups] = useState<LeaderMyGroupData[]>([]); // New state for leader groups
@@ -49,8 +53,16 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState('myPosts'); // 'myPosts', 'myInquiries', 'bookedEvents'
   const [showFollowerModal, setShowFollowerModal] = useState(false);
   const [showFollowingModal, setShowFollowingModal] = useState(false);
-  const [followers, setFollowers] = useState<{ nickname: string; imageUrl: string; email: string }[]>([]);
-  const [followings, setFollowings] = useState<{ nickname: string; imageUrl: string; email: string }[]>([]);
+  const [showMyPostsModal, setShowMyPostsModal] = useState(false);
+  const [showMyInquiriesModal, setShowMyInquiriesModal] = useState(false);
+  const [showBookedEventsModal, setShowBookedEventsModal] = useState(false);
+  const [showDailyEventsModal, setShowDailyEventsModal] = useState(false);
+  const [followers, setFollowers] = useState<
+    { nickname: string; imageUrl: string; email: string }[]
+  >([]);
+  const [followings, setFollowings] = useState<
+    { nickname: string; imageUrl: string; email: string }[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   const fetchFollowData = async () => {
@@ -107,7 +119,6 @@ export default function Profile() {
         setBookedEvents(bookedEventsData.data.content);
 
         await fetchFollowData(); // Initial fetch of follow data
-
       } catch (error) {
         console.error('Failed to fetch data:', error);
       } finally {
@@ -119,7 +130,11 @@ export default function Profile() {
   }, []);
 
   if (loading) {
-    return <div>Loading profile...</div>;
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <HashLoader color="#36d7b7" size={50} />
+      </div>
+    );
   }
 
   if (!userInfo) {
@@ -150,7 +165,6 @@ export default function Profile() {
     }
   };
 
-  // Helper function to map inquiry category names to Korean
   const getInquiryCategoryDisplayName = (category: string) => {
     switch (category) {
       case 'GENERAL':
@@ -162,7 +176,6 @@ export default function Profile() {
     }
   };
 
-  // Helper function to map inquiry status names to Korean
   const getInquiryStatusDisplayName = (status: string) => {
     switch (status) {
       case 'COMPLETE':
@@ -174,8 +187,7 @@ export default function Profile() {
     }
   };
 
-  // Calculate max count for bar chart scaling
-  const maxCount = Math.max(...groupStats.map((stat) => stat.count), 1); // Ensure at least 1 to avoid division by zero
+  const maxCount = Math.max(...groupStats.map((stat) => stat.count), 1);
 
   return (
     <>
@@ -240,7 +252,7 @@ export default function Profile() {
               <div className="flex justify-between">
                 {groupStats.map((stat, index) => {
                   const { color } = getCategoryDisplayInfo(stat.category);
-                  const barHeight = (stat.count / maxCount) * 50; // Scale height to max 50px
+                  const barHeight = (stat.count / maxCount) * 50;
                   return (
                     <div
                       key={index}
@@ -359,7 +371,17 @@ export default function Profile() {
                     {activeTab === 'myInquiries' && '내 문의 내역'}
                     {activeTab === 'bookedEvents' && '예약한 행사'}
                   </div>
-                  <button>
+                  <button
+                    onClick={() => {
+                      if (activeTab === 'myPosts') {
+                        setShowMyPostsModal(true);
+                      } else if (activeTab === 'myInquiries') {
+                        setShowMyInquiriesModal(true);
+                      } else if (activeTab === 'bookedEvents') {
+                        setShowBookedEventsModal(true);
+                      }
+                    }}
+                  >
                     <LucideArrowUpRight />
                   </button>
                 </div>
@@ -424,7 +446,7 @@ export default function Profile() {
             <div className="bg-gray-7 h-full w-[calc(100%*(467/1440))] rounded-[5px] px-5 py-[26px]">
               <div className="mb-5 flex justify-between border-b-1 border-[#4d4d4d] pb-4 text-[#a8a8a8]">
                 <div>오늘의 일정</div>
-                <button>
+                <button onClick={() => setShowDailyEventsModal(true)}>
                   <LucideArrowUpRight />
                 </button>
               </div>
@@ -614,6 +636,101 @@ export default function Profile() {
           onClose={() => setShowFollowingModal(false)}
           title="팔로잉"
           onUnfollowSuccess={fetchFollowData}
+        />
+      )}
+      {showMyPostsModal && (
+        <DetailListModal
+          title="내가 작성한 모임 글"
+          data={leaderGroups}
+          onClose={() => setShowMyPostsModal(false)}
+          renderItem={(group) => (
+            <div
+              key={group.groupId}
+              className="bg-gray-6 flex cursor-pointer rounded-[5px] px-5 py-4"
+              onClick={() => {
+                router.push(`/user/gathering?groupId=${group.groupId}`);
+                setShowMyPostsModal(false);
+              }}
+            >
+              <div className="w-[25%] truncate font-semibold">
+                {group.groupTitle}
+              </div>
+              <div className="w-[60%] truncate">{group.explain}</div>
+              <div className="w-[15%] text-right">
+                {group.groupDate.split('T')[0].replace(/-/g, '')}
+              </div>
+            </div>
+          )}
+        />
+      )}
+      {showMyInquiriesModal && (
+        <DetailListModal
+          title="내 문의 내역"
+          data={myInquiries}
+          onClose={() => setShowMyInquiriesModal(false)}
+          renderItem={(inquiry) => (
+            <div
+              key={inquiry.id}
+              className="bg-gray-6 flex rounded-[5px] px-5 py-4"
+            >
+              <div className="w-[25%] truncate font-semibold">
+                {getInquiryCategoryDisplayName(inquiry.category)}
+              </div>
+              <div className="w-[60%] truncate">{inquiry.title}</div>
+              <div className="w-[15%] text-right">
+                {getInquiryStatusDisplayName(inquiry.status)}
+              </div>
+            </div>
+          )}
+        />
+      )}
+      {showBookedEventsModal && (
+        <DetailListModal
+          title="예약한 행사"
+          data={bookedEvents}
+          onClose={() => setShowBookedEventsModal(false)}
+          renderItem={(event) => (
+            <div
+              key={event.calendarId}
+              className="bg-gray-6 flex rounded-[5px] px-5 py-4"
+            >
+              <div className="w-[25%] truncate font-semibold">
+                {event.category}
+              </div>
+              <div className="w-[60%] truncate">{event.contentTitle}</div>
+              <div className="w-[15%] text-right">
+                {new Date(event.selectedDate).toLocaleDateString('ko-KR', {
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                })}
+              </div>
+            </div>
+          )}
+        />
+      )}
+      {showDailyEventsModal && (
+        <DetailListModal
+          title="오늘의 일정"
+          data={dailyEvents}
+          onClose={() => setShowDailyEventsModal(false)}
+          renderItem={(event) => (
+            <div key={event.activityId}>
+              <div className="flex items-center gap-5">
+                <Image src={mapIcon} alt="icon" />
+                <div className="flex flex-col items-baseline gap-[3px]">
+                  <div className="text-gray-1 font-semibold">{event.title}</div>
+                  <div className="text-sm font-medium text-[#7e7e7e]">
+                    {new Date(event.selectedDate).toLocaleDateString('ko-KR', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         />
       )}
     </>

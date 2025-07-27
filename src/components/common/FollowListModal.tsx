@@ -95,7 +95,7 @@ export default function FollowListModal({
                     메시지
                   </button>
                   <button
-                    className="rounded bg-red-500 px-3 py-1 text-sm text-white"
+                    className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
                     onClick={() => handleUnfollow(user.email, user.nickname)}
                   >
                     언팔로우

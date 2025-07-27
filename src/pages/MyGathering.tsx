@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import GatheringChatting from '@/components/GatheringChatting';
 import GatheringMain from '@/components/GatheringMain';
 import GatheringSide from '@/components/GatheringSide';
@@ -8,6 +9,7 @@ import { getGroupById, getMyGroups } from '@/lib/api/group';
 import { getLastChatHistory } from '@/lib/api/chat';
 
 export default function MyGathering() {
+  const router = useRouter();
   const [selectedGathering, setSelectedGathering] =
     useState<GroupDetail | null>(null);
   const [activeTab, setActiveTab] = useState<'my-gathering' | 'chat'>(
@@ -67,6 +69,26 @@ export default function MyGathering() {
 
     fetchData();
   }, []);
+
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (!searchParams) {
+      return;
+    }
+    const groupId = searchParams.get('groupId');
+    if (groupId) {
+      const fetchSpecificGroup = async () => {
+        try {
+          const groupDetail = await getGroupById(Number(groupId));
+          setSelectedGathering(groupDetail);
+        } catch (err) {
+          console.error('Failed to fetch specific group:', err);
+        }
+      };
+      fetchSpecificGroup();
+    }
+  }, [searchParams]);
 
   const handleSelectGathering = (gathering: GroupDetail) => {
     setSelectedGathering(gathering);
