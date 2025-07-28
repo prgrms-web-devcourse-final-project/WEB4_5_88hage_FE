@@ -63,19 +63,20 @@ export default function WritingForm({
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    onChange(e);
+    if (onChange) onChange(e);
   };
 
   const handleDate = (date: Date | null) => {
     setSelectedDate(date);
     if (date && sendDate) sendDate(date);
     // Also call the main onChange for consistency
-    onChange({
-      target: {
-        name: name,
-        value: date ? date.toISOString().split('T')[0] : '',
-      },
-    } as React.ChangeEvent<HTMLInputElement>);
+    if (onChange)
+      onChange({
+        target: {
+          name: name,
+          value: date ? date.toISOString().split('T')[0] : '',
+        },
+      } as React.ChangeEvent<HTMLInputElement>);
   };
 
   registerLocale('ko', ko);
@@ -111,7 +112,7 @@ export default function WritingForm({
               maxLength={1000}
             />
           )}
-          {!isLongForm && type !== 'date' && (
+          {!isLongForm && type !== 'date' && title !== '모임 날짜' && (
             <input
               type={type}
               name={name}
@@ -119,14 +120,14 @@ export default function WritingForm({
                 title === '모임 위치' ? 'pr-12' : ''
               }`}
               placeholder={placeholder}
-              value={value}
+              value={value || addressValue}
               onChange={handleChange}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') e.preventDefault();
               }}
             />
           )}
-          {!isLongForm && type === 'date' && (
+          {!isLongForm && (type === 'date' || title === '모임 날짜') && (
             <DatePicker
               locale="ko"
               dateFormat="yyyy-MM-dd a h:mm"
