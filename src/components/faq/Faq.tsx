@@ -2,8 +2,8 @@ import FaqAccordion from "./FaqAccordion";
 
 export default function FaqContent() {
   return (
-    <section className="bg-[#151515] text-white px-6 lg:px-24 pt-12 lg:pt-20 pb-32">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-x-20">
+    <section className="bg-[#151515] text-white px-6 lg:px-24 pt-12 lg:pt-20 pb-32 w-full flex justify-center py-10">
+      <div className="w-full max-w-[1440px] mx-auto flex flex-col lg:flex-row gap-x-20">
         <div className="lg:w-1/3">
           <p className="hidden lg:block text-[16px] font-semibold text-[#06CE9E] mb-2">
             빠른 해결
