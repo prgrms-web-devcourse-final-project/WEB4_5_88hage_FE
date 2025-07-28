@@ -3,30 +3,84 @@
 import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { X } from 'lucide-react';
-import { unfollowUser } from '@/lib/api/follow';
+
+import {
+  followUser,
+  unfollowUser,
+  checkFollowingStatus,
+} from '@/lib/api/follow';
+import { useAuthStore } from '@/stores/UseAuthStore';
+
+interface UserData {
+  nickname: string;
+  imageUrl: string;
+  email: string;
+  isFollowing?: boolean; // Add isFollowing property
+}
 
 interface FollowListModalProps {
-  users: { nickname: string; imageUrl: string; email: string }[];
+  users: UserData[];
   onClose: () => void;
   title: string;
-  onUnfollowSuccess?: () => void;
+  onUpdate?: () => void; // Callback for when follow/unfollow happens
 }
 
 export default function FollowListModal({
-  users,
+  users: initialUsers,
   onClose,
   title,
-  onUnfollowSuccess,
+  onUpdate,
 }: FollowListModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuthStore();
+  const [users, setUsers] = React.useState<UserData[]>(initialUsers);
+
+  useEffect(() => {
+    const fetchFollowingStatus = async () => {
+      const updatedUsers = await Promise.all(
+        initialUsers.map(async (u) => {
+          if (user?.email && u.email !== user.email) {
+            const isFollowing = await checkFollowingStatus(u.email);
+            return { ...u, isFollowing };
+          }
+          return u;
+        }),
+      );
+      setUsers(updatedUsers);
+    };
+
+    fetchFollowingStatus();
+  }, [initialUsers, user?.email]);
+
+  const handleFollow = async (email: string, nickname: string) => {
+    try {
+      await followUser(email);
+      alert(`${nickname} 님을 팔로우했습니다.`);
+      setUsers((prevUsers) =>
+        prevUsers.map((u) =>
+          u.email === email ? { ...u, isFollowing: true } : u,
+        ),
+      );
+      if (onUpdate) {
+        onUpdate();
+      }
+    } catch (error) {
+      console.error('Failed to follow user:', error);
+      alert('팔로우에 실패했습니다.');
+    }
+  };
 
   const handleUnfollow = async (email: string, nickname: string) => {
     if (window.confirm(`${nickname} 님을 언팔로우하시겠습니까?`)) {
       try {
         await unfollowUser(email);
-        alert(`${nickname} 님이 언팔로우되었습니다.`);
-        if (onUnfollowSuccess) {
-          onUnfollowSuccess();
+        setUsers((prevUsers) =>
+          prevUsers.map((u) =>
+            u.email === email ? { ...u, isFollowing: false } : u,
+          ),
+        );
+        if (onUpdate) {
+          onUpdate();
         }
       } catch (error) {
         console.error('Failed to unfollow user:', error);
@@ -69,7 +123,7 @@ export default function FollowListModal({
           <p className="text-gray-4">목록이 비어있습니다.</p>
         ) : (
           <ul className="max-h-80 space-y-5 overflow-y-auto">
-            {users.map((user, index) => (
+            {users.map((listUser, index) => (
               <li
                 key={index}
                 className="flex items-center justify-between gap-3"
@@ -77,29 +131,48 @@ export default function FollowListModal({
                 <div className="flex items-center gap-3">
                   <div className="relative h-12 w-12 overflow-hidden rounded-full">
                     <Image
-                      src={user.imageUrl || '/hip-girl-thinking.svg'}
-                      alt={user.nickname}
+                      src={listUser.imageUrl || '/hip-girl-thinking.svg'}
+                      alt={listUser.nickname}
                       layout="fill"
                       objectFit="cover"
                     />
                   </div>
                   <span className="text-[16px] text-white">
-                    {user.nickname}
+                    {listUser.nickname}
                   </span>
                 </div>
                 <div className="flex gap-2">
-                  <button
-                    className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
-                    onClick={() => alert(`메시지 보내기: ${user.nickname}`)}
-                  >
-                    메시지
-                  </button>
-                  <button
-                    className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
-                    onClick={() => handleUnfollow(user.email, user.nickname)}
-                  >
-                    언팔로우
-                  </button>
+                  {user?.email !== listUser.email && (
+                    <>
+                      <button
+                        className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
+                        onClick={() =>
+                          alert(`메시지 보내기: ${listUser.nickname}`)
+                        }
+                      >
+                        메시지
+                      </button>
+                      {listUser.isFollowing ? (
+                        <button
+                          className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
+                          onClick={() =>
+                            handleUnfollow(listUser.email, listUser.nickname)
+                          }
+                        >
+                          언팔로우
+                        </button>
+                      ) : (
+                        <button
+                          className="bg-gray-4 ml-3.5 rounded px-3 py-1 text-sm text-white"
+                          onClick={() =>
+                            handleFollow(listUser.email, listUser.nickname)
+                          }
+                        >
+                          팔로우
+                        </button>
+                      )}
+                    </>
+                  )}
                 </div>
               </li>
             ))}
