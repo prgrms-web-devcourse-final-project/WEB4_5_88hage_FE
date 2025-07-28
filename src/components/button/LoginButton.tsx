@@ -11,11 +11,11 @@ export default function LoginButton({ type }: { type: string }) {
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const handleNaverLogin = () => {
-    const url = `${API}oauth2/authorization/naver`;
+    const url = `${API}/oauth2/authorization/naver`;
     window.location.href = url;
   };
   const handleGoogleLogin = () => {
-    const url = `${API}oauth2/authorization/google`;
+    const url = `${API}/oauth2/authorization/google`;
     window.location.href = url;
   };
 

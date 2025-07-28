@@ -11,7 +11,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/stores/UseAuthStore';
-import { LoginRequest } from '@/types/auth';
 
 export default function Login() {
   const {
@@ -123,7 +122,7 @@ export default function Login() {
           <hr className="my-[16px] border-t border-[#434343] lg:my-[25px]" />
           <div className="space-y-4 lg:space-y-6">
             <LoginButton type="naver" />
-            <LoginButton type="google" />
+            <LoginButton type="google" href={`${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/google`} />
           </div>
           <div className="t4 text-gray-6 mt-[14px] text-center font-semibold lg:mt-[25px]">
             <span className="text-[#8D8D8D]">아직 회원이 아니신가요? </span>
