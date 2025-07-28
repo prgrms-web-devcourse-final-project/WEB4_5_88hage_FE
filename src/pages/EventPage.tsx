@@ -7,6 +7,7 @@ import SearchBar from "@/components/common/SearchBar";
 import { ChevronDown } from "lucide-react";
 import CategoryDropdown from "@/components/ui/CategoryDropdown";
 import MoreRecommendButton from "@/components/common/MoreRecommendButton";
+import { toast } from "react-toastify";
 
 const SORT_OPTIONS = [
   { label: "인기순", value: "bookmarkCount" },
@@ -90,7 +91,7 @@ export default function EventPage() {
         }),
       });
       if (!res.ok) {
-        alert("추천 결과를 불러오지 못했습니다.");
+        toast.error("추천 결과를 불러오지 못했습니다.");
         setLoading(false)
         return;
       }
@@ -104,7 +105,7 @@ export default function EventPage() {
       console.log("행사 추천 응답:", json);
     } catch (e) {
       console.error("AI 행사 추천 fetch error:", e);
-      alert("에러가 발생했습니다.");
+      toast.error("에러가 발생했습니다.");
     }
     setLoading(false)
   };
@@ -242,7 +243,7 @@ export default function EventPage() {
                 <MoreRecommendButton
                   onRecommend={() => {
                     if ((recommendClick + 1) * 4 >= recommendedEvents.length) {
-                      alert("AI추천 결과는 여기까지입니다.");
+                      toast.info("AI추천 결과는 여기까지입니다.");
                       return;
                     }
                     setRecommendClick(prev => prev + 1);
