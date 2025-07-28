@@ -23,11 +23,13 @@ interface ParticipantListModalProps {
   onClose: () => void;
   isLeader?: boolean;
   groupId: number;
+  onUpdate?: () => void;
 }
 
 export default function ParticipantListModal({
   participants,
   onClose,
+  onUpdate,
   isLeader,
   groupId,
 }: ParticipantListModalProps) {
@@ -42,7 +44,9 @@ export default function ParticipantListModal({
         await kickoutParticipant(groupId, targetEmail);
         alert(`${targetNickname} 님이 모임에서 추방되었습니다.`);
         onClose(); // Close modal after kickout
-        // Optionally, refresh the participant list or the page
+        if (onUpdate) {
+          onUpdate();
+        }
       } catch (error) {
         console.error('Failed to kick out participant:', error);
         alert('참여자 추방에 실패했습니다.');
@@ -175,7 +179,7 @@ export default function ParticipantListModal({
                         </button>
                       ) : (
                         <button
-                          className="bg-primary-600 rounded px-3 py-1 text-sm text-white"
+                          className="bg-gray-4 mr-2 ml-1.5 rounded px-3 py-1 text-sm text-white"
                           onClick={() =>
                             handleFollow(
                               participant.userEmail,

@@ -14,6 +14,8 @@ interface MainPostHeaderProps {
   onComplete: (groupId: number) => Promise<void>;
   onDelete: (groupId: number) => Promise<void>;
   isLeader?: boolean;
+  onParticipantUpdate?: () => void;
+  onGroupUpdate?: () => void;
 }
 
 export default function MainPostHeader({
@@ -25,6 +27,8 @@ export default function MainPostHeader({
   onComplete,
   onDelete,
   isLeader,
+  onParticipantUpdate,
+  onGroupUpdate,
 }: MainPostHeaderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showParticipantsModal, setShowParticipantsModal] = useState(false);
@@ -53,6 +57,9 @@ export default function MainPostHeader({
       await onComplete(groupId);
       setIsModalOpen(false);
       router.refresh();
+      if (onGroupUpdate) {
+        onGroupUpdate();
+      }
     }
   };
 
@@ -65,6 +72,9 @@ export default function MainPostHeader({
       await onDelete(groupId);
       setIsModalOpen(false);
       router.refresh();
+      if (onGroupUpdate) {
+        onGroupUpdate();
+      }
     }
   };
 
@@ -75,6 +85,9 @@ export default function MainPostHeader({
         alert('모임에서 탈퇴되었습니다.');
         setIsModalOpen(false);
         router.push('/user/gathering'); // Redirect to my gatherings page after leaving
+        if (onGroupUpdate) {
+          onGroupUpdate();
+        }
       } catch (error) {
         console.error('Failed to leave group:', error);
         alert('모임 탈퇴에 실패했습니다.');
@@ -143,6 +156,7 @@ export default function MainPostHeader({
           onClose={() => setShowParticipantsModal(false)}
           isLeader={isLeader}
           groupId={groupId}
+          onUpdate={onParticipantUpdate}
         />
       )}
     </>
