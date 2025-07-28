@@ -224,7 +224,7 @@ const API = process.env.NEXT_PUBLIC_API_URL;
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 min-h-[600px]">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 min-h-[300px]">
   {loading ? null : recommendedEvents.length > 0 ? (
     recommendedEvents
       .slice(recommendClick * 4, recommendClick * 4 + 4)

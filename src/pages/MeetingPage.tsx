@@ -160,7 +160,7 @@ setLoading(false);
   const filtered = data.filter(
     group =>
       group.title.includes(search) ||
-      group.simpleExplain.includes(search)
+      group.simpleExplain?.includes(search)
   );
 
   const currentSortLabel =
@@ -260,7 +260,7 @@ setLoading(false);
             </div>
           </>
         ) : (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 min-h-[600px]">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 min-h-[300px]">
     {filtered.length > 0 ? (
       filtered.map((group, idx) =>
         idx === filtered.length - 1 ? (
