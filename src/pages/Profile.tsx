@@ -34,9 +34,9 @@ interface GroupStat {
 }
 
 interface DailyCalender {
-  calendarId: number;
+  calendarId: 2;
   type: string;
-  activityId: number;
+  activityId: 1;
   title: string;
   selectedDate: string;
   address: string;
@@ -49,7 +49,7 @@ export default function Profile() {
   const [leaderGroups, setLeaderGroups] = useState<LeaderMyGroupData[]>([]); // New state for leader groups
   const [dailyEvents, setDailyEvents] = useState<DailyCalender[]>([]); // New state for daily events
   const [myInquiries, setMyInquiries] = useState<Inquiry[]>([]); // New state for inquiries
-  const [bookedEvents, setBookedEvents] = useState<any[]>([]); // New state for booked events
+  const [bookedEvents, setBookedEvents] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState('myPosts'); // 'myPosts', 'myInquiries', 'bookedEvents'
   const [showFollowerModal, setShowFollowerModal] = useState(false);
   const [showFollowingModal, setShowFollowingModal] = useState(false);
@@ -117,12 +117,10 @@ export default function Profile() {
         const day = today.getDate();
         const dailyCalendarData = await getDailyCalendar(year, month, day);
         setDailyEvents(
-          Array.from(
-            new Map(
-              dailyCalendarData.data
-                .filter((item: DailyCalender) => item.activityId !== undefined && item.activityId !== null)
-                .map((item: DailyCalender) => [item.activityId, item]),
-            ).values(),
+          dailyCalendarData.data.filter(
+            (event: DailyCalender, index: number, self: DailyCalender[]) =>
+              index ===
+              self.findIndex((e) => e.activityId === event.activityId),
           ),
         );
 
@@ -130,7 +128,13 @@ export default function Profile() {
         setMyInquiries(inquiriesData.data.content);
 
         const bookedEventsData = await getCalendarForContent();
-        setBookedEvents(bookedEventsData.data.content);
+        console.log(bookedEventsData);
+        setBookedEvents(
+          bookedEventsData.data.content.filter(
+            (event: any, index: number, self: any[]) =>
+              index === self.findIndex((e) => e.contentId === event.contentId),
+          ),
+        );
 
         await fetchFollowData(); // Initial fetch of follow data
       } catch (error) {
@@ -402,39 +406,52 @@ export default function Profile() {
                 <div className="flex flex-col gap-3">
                   {activeTab === 'myPosts' &&
                     leaderGroups.slice(0, 3).map((group) => (
-                      <div
+                      <button
+                        onClick={() => {
+                          router.push(`/gathering/${group.groupId}`);
+                        }}
                         key={group.groupId}
                         className="bg-gray-6 flex rounded-[5px] px-5 py-4"
                       >
-                        <div className="w-[25%] truncate font-semibold">
+                        <div className="w-[25%] truncate text-left font-semibold">
                           {group.groupTitle}
                         </div>
-                        <div className="w-[60%] truncate">{group.explain}</div>
+                        <div className="w-[60%] truncate text-left">
+                          {group.explain}
+                        </div>
                         <div className="w-[15%] text-right">
                           {group.groupDate.split('T')[0].replace(/-/g, '')}
                         </div>
-                      </div>
+                      </button>
                     ))}
                   {activeTab === 'myInquiries' &&
                     myInquiries.slice(0, 3).map((inquiry) => (
-                      <div
+                      <button
                         key={inquiry.id}
-                        className="bg-gray-6 flex rounded-[5px] px-5 py-4"
+                        className="bg-gray-6 flex w-full rounded-[5px] px-5 py-4"
+                        onClick={() => {
+                          router.push(`/inquiry/${inquiry.id}`);
+                        }}
                       >
-                        <div className="w-[25%] truncate font-semibold">
+                        <div className="w-[25%] truncate text-left font-semibold">
                           {getInquiryCategoryDisplayName(inquiry.category)}
                         </div>
-                        <div className="w-[60%] truncate">{inquiry.title}</div>
+                        <div className="w-[60%] truncate text-left">
+                          {inquiry.title}
+                        </div>
                         <div className="w-[15%] text-right">
                           {getInquiryStatusDisplayName(inquiry.status)}
                         </div>
-                      </div>
+                      </button>
                     ))}
                   {activeTab === 'bookedEvents' &&
                     bookedEvents.slice(0, 3).map((event) => (
                       <div
-                        key={event.calendarId}
+                        key={event.contentId}
                         className="bg-gray-6 flex rounded-[5px] px-5 py-4"
+                        onClick={() => {
+                          router.push(`/event/${event.contentId}`);
+                        }}
                       >
                         <div className="w-[25%] truncate font-semibold">
                           {event.category}
@@ -466,7 +483,7 @@ export default function Profile() {
               </div>
               <div className="flex flex-col gap-[15px]">
                 {dailyEvents.map((event) => (
-                  <div key={event.activityId}>
+                  <div key={event.calendarId}>
                     <div className="flex items-center gap-5">
                       <Image src={mapIcon} alt="icon" />
                       <div className="flex flex-col items-baseline gap-[3px]">
@@ -662,7 +679,7 @@ export default function Profile() {
               key={group.groupId}
               className="bg-gray-6 flex cursor-pointer rounded-[5px] px-5 py-4"
               onClick={() => {
-                router.push(`/user/gathering?groupId=${group.groupId}`);
+                router.push(`/gathering/${group.groupId}`);
                 setShowMyPostsModal(false);
               }}
             >
@@ -683,18 +700,22 @@ export default function Profile() {
           data={myInquiries}
           onClose={() => setShowMyInquiriesModal(false)}
           renderItem={(inquiry) => (
-            <div
+            <button
               key={inquiry.id}
-              className="bg-gray-6 flex rounded-[5px] px-5 py-4"
+              className="bg-gray-6 flex cursor-pointer rounded-[5px] px-5 py-4"
+              onClick={() => {
+                router.push(`/inquiry/${inquiry.id}`);
+                setShowMyInquiriesModal(false);
+              }}
             >
-              <div className="w-[25%] truncate font-semibold">
+              <div className="w-[25%] truncate text-left font-semibold">
                 {getInquiryCategoryDisplayName(inquiry.category)}
               </div>
-              <div className="w-[60%] truncate">{inquiry.title}</div>
+              <div className="w-[60%] truncate text-left">{inquiry.title}</div>
               <div className="w-[15%] text-right">
                 {getInquiryStatusDisplayName(inquiry.status)}
               </div>
-            </div>
+            </button>
           )}
         />
       )}
@@ -705,8 +726,12 @@ export default function Profile() {
           onClose={() => setShowBookedEventsModal(false)}
           renderItem={(event) => (
             <div
-              key={event.calendarId}
-              className="bg-gray-6 flex rounded-[5px] px-5 py-4"
+              key={event.contentId}
+              className="bg-gray-6 flex cursor-pointer rounded-[5px] px-5 py-4"
+              onClick={() => {
+                router.push(`/event/${event.contentId}`);
+                setShowBookedEventsModal(false);
+              }}
             >
               <div className="w-[25%] truncate font-semibold">
                 {event.category}
@@ -729,7 +754,7 @@ export default function Profile() {
           data={dailyEvents}
           onClose={() => setShowDailyEventsModal(false)}
           renderItem={(event) => (
-            <div key={event.activityId}>
+            <div key={event.calendarId}>
               <div className="flex items-center gap-5">
                 <Image src={mapIcon} alt="icon" />
                 <div className="flex flex-col items-baseline gap-[3px]">
