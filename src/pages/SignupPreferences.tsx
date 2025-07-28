@@ -6,6 +6,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useSignupStore } from '@/stores/signupStore';
+import { toast } from "react-toastify";
 
 function Tag({
   type,
@@ -234,9 +235,9 @@ export default function SignupPreferences() {
                 if (error.response.data.code === '4000') {
                   console.log(error.response.data.data);
                   if (error.response.data.data.groupPreferences) {
-                    alert(error.response.data.data.groupPreferences);
+                    toast.error(error.response.data.data.groupPreferences);
                   } else if (error.response.data.data.contentPreferences) {
-                    alert(error.response.data.data.contentPreferences);
+                    toast.error(error.response.data.data.contentPreferences);
                   }
                 } else console.log(error);
               });

@@ -7,6 +7,7 @@ import {
   checkFollowingStatus,
 } from '@/lib/api/follow';
 import { useEffect, useState } from 'react';
+import { toast } from "react-toastify";
 
 type Props = {
   hostName: string;
@@ -36,11 +37,11 @@ export default function GatheringHostBox({
   const handleFollow = async () => {
     try {
       await followUser(hostEmail);
-      alert(`${hostName} 님을 팔로우했습니다.`);
+      toast.success(`${hostName} 님을 팔로우했습니다.`);
       setIsFollowing(true);
     } catch (error) {
       console.error('Failed to follow user:', error);
-      alert('팔로우에 실패했습니다.');
+      toast.error('팔로우에 실패했습니다.');
     }
   };
 
@@ -48,11 +49,11 @@ export default function GatheringHostBox({
     if (window.confirm(`${hostName} 님을 언팔로우하시겠습니까?`)) {
       try {
         await unfollowUser(hostEmail);
-        alert(`${hostName} 님이 언팔로우되었습니다.`);
+        toast.success(`${hostName} 님이 언팔로우되었습니다.`);
         setIsFollowing(false);
       } catch (error) {
         console.error('Failed to unfollow user:', error);
-        alert('언팔로우에 실패했습니다.');
+        aletoast.errorrt('언팔로우에 실패했습니다.');
       }
     }
   };

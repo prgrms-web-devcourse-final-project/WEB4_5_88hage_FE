@@ -11,6 +11,7 @@ import { useAuthStore } from '@/stores/UseAuthStore';
 import { get as fetchGet } from '@/lib/api/fetchInstance';
 import { deleteGroup, completeGroup } from '@/lib/api/group';
 import { getCategoryDisplayName } from '@/lib/utils/categoryMapping';
+import { toast } from "react-toastify";
 
 // Type for the full gathering object
 interface GroupDetail {
@@ -176,22 +177,22 @@ export default function GatheringChatting({
   const handleCompleteGroup = async (groupId: number) => {
     try {
       await completeGroup(groupId);
-      alert('모임이 완료 처리되었습니다.');
+      toast.success('모임이 완료 처리되었습니다.');
       // Optionally, refresh or redirect
     } catch (error) {
       console.error('Failed to complete group:', error);
-      alert('모임 완료 처리에 실패했습니다.');
+      toast.error('모임 완료 처리에 실패했습니다.');
     }
   };
 
   const handleDeleteGroup = async (groupId: number) => {
     try {
       await deleteGroup(groupId);
-      alert('모임이 삭제되었습니다.');
+      toast.success('모임이 삭제되었습니다.');
       // Optionally, refresh or redirect
     } catch (error) {
       console.error('Failed to delete group:', error);
-      alert('모임 삭제에 실패했습니다.');
+      toast.error('모임 삭제에 실패했습니다.');
     }
   };
 

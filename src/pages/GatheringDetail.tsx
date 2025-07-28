@@ -9,6 +9,9 @@ import Map from '@/components/kakao/Map'
 import { useState } from 'react';
 
 export default function GatheringDetail({data}:{data:any}) {
+  if (!data) {
+    return <div className="text-white">데이터가 없습니다.</div>;
+  }
   const{relatedGroups} = data
   const [showMore,setShowMore] = useState(false);
 

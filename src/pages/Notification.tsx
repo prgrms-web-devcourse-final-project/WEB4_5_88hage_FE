@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { toast } from "react-toastify";
 
 type NotificationData = {
   id: number;
@@ -36,7 +37,7 @@ export default function Notification() {
       );
       const { code, message, data } = await response.json();
       if (code === '0000') setNotiList(data);
-      else alert(message);
+      else toast.info(message);
     }
   };
 
@@ -48,9 +49,9 @@ export default function Notification() {
     });
     const { code, message } = await response.json();
     if (code === '0000') {
-      alert('읽음 처리되었습니다.');
+      toast.info('읽음 처리되었습니다.');
       fetchNotification(activeTab);
-    } else alert(message);
+    } else toast.info(message);
   };
 
   const convertTime = (createdAt: string) => {
