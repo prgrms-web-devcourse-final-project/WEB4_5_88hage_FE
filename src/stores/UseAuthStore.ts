@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 import { Buffer } from 'buffer';
 import { login as apiLogin } from '@/lib/api/auth';
 import { get as fetchGet } from '@/lib/api/fetchInstance';
+import { toast } from "react-toastify";
 
 interface User {
   email: string;
@@ -35,7 +36,7 @@ export const useAuthStore = create<AuthState>()(
         const token = result?.data?.accessToken || null;
 
         if (!token) {
-          alert('로그인 실패: accessToken 없음');
+          toast.error('로그인 실패: accessToken 없음');
           return;
         }
 

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 //import Greeting from '@/components/common/Greeting';
+import { toast } from "react-toastify";
 
 export default function InquiryDetail({ id }: { id: string }) {
   type InquiryData = {
@@ -29,7 +30,7 @@ export default function InquiryDetail({ id }: { id: string }) {
       console.log(data);
       if (data.code === '0000') setInquiryData(data.data);
       else {
-        alert(data.reason);
+        toast.info(data.reason);
         router.push('/user/inquiry');
       }
     } catch (error) {

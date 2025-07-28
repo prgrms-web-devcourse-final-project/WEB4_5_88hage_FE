@@ -10,6 +10,7 @@ import {
   checkFollowingStatus,
 } from '@/lib/api/follow';
 import { useAuthStore } from '@/stores/UseAuthStore';
+import { toast } from "react-toastify";
 
 interface UserData {
   nickname: string;
@@ -55,7 +56,7 @@ export default function FollowListModal({
   const handleFollow = async (email: string, nickname: string) => {
     try {
       await followUser(email);
-      alert(`${nickname} 님을 팔로우했습니다.`);
+      toast.success(`${nickname} 님을 팔로우했습니다.`);
       setUsers((prevUsers) =>
         prevUsers.map((u) =>
           u.email === email ? { ...u, isFollowing: true } : u,
@@ -66,7 +67,7 @@ export default function FollowListModal({
       }
     } catch (error) {
       console.error('Failed to follow user:', error);
-      alert('팔로우에 실패했습니다.');
+      toast.error('팔로우에 실패했습니다.');
     }
   };
 
@@ -84,7 +85,7 @@ export default function FollowListModal({
         }
       } catch (error) {
         console.error('Failed to unfollow user:', error);
-        alert('언팔로우에 실패했습니다.');
+        toast.error('언팔로우에 실패했습니다.');
       }
     }
   };
@@ -147,7 +148,7 @@ export default function FollowListModal({
                       <button
                         className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
                         onClick={() =>
-                          alert(`메시지 보내기: ${listUser.nickname}`)
+                          toast.info(`메시지 보내기: ${listUser.nickname}`)
                         }
                       >
                         메시지

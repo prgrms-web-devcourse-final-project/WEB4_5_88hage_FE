@@ -1,8 +1,8 @@
 // import { getContent } from '@/lib/api/content';
 import GatheringDetail from '@/pages/GatheringDetail';
 
-export default async function page({params}: {params: Promise<{gatheringId: string}>}) {
-  const {gatheringId} = await params;
+export default async function page({ params }: { params: { gatheringId: string } }) {
+  const { gatheringId } = params;
   const getGatheringDetail = async () => {
     try {
       const response = await fetch(`https://funfun.cloud/api/groups/${gatheringId}`,{

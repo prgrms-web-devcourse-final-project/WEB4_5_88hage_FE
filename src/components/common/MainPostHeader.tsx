@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getApprovedParticipants, leaveGroup } from '@/lib/api/participant';
 import ParticipantListModal from './ParticipantListModal';
+import { toast } from "react-toastify";
 
 interface MainPostHeaderProps {
   title: string;
@@ -48,7 +49,7 @@ export default function MainPostHeader({
       setShowParticipantsModal(true);
     } catch (error) {
       console.error('Failed to fetch participants:', error);
-      alert('참여자 정보를 불러오는 데 실패했습니다.');
+      toast.error('참여자 정보를 불러오는 데 실패했습니다.');
     }
   };
 
@@ -82,7 +83,7 @@ export default function MainPostHeader({
     if (window.confirm('모임을 정말 탈퇴하시겠습니까?')) {
       try {
         await leaveGroup(groupId);
-        alert('모임에서 탈퇴되었습니다.');
+        toast.success('모임에서 탈퇴되었습니다.');
         setIsModalOpen(false);
         router.push('/user/gathering'); // Redirect to my gatherings page after leaving
         if (onGroupUpdate) {
@@ -90,7 +91,7 @@ export default function MainPostHeader({
         }
       } catch (error) {
         console.error('Failed to leave group:', error);
-        alert('모임 탈퇴에 실패했습니다.');
+        toast.error('모임 탈퇴에 실패했습니다.');
       }
     }
   };

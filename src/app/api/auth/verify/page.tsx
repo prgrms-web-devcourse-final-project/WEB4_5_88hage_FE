@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSignupStore } from '@/stores/signupStore';
 import { useEffect } from 'react';
+import { toast } from "react-toastify";
 
 export default function page() {
   const searchParams = useSearchParams();
@@ -29,7 +30,7 @@ export default function page() {
       .catch((error) => {
         console.log(error.response.data);
         setVerified(false);
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
       });
   }, []);
 

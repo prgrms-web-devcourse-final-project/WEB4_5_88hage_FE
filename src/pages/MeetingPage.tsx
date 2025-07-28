@@ -6,6 +6,8 @@ import PostCard from '@/components/common/Card';
 import RelatedTags from '@/components/common/RelatedTags';
 import SearchBar from '@/components/common/SearchBar';
 import { ChevronDown } from 'lucide-react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SORT_OPTIONS = [
   { label: "최신순", value: "recent" },
@@ -43,7 +45,7 @@ const currentGroups = groups.slice(startIdx, endIdx);
   const handleRecommend = async (address: string, start: string, end: string) => {
     console.log("AI 추천 요청:", address, start, end);
     if (recommendClick >= 3) {
-      alert("AI 추천 기능은 총 3번만 가능합니다.");
+      toast.warning("AI 추천 기능은 총 3번만 가능합니다.");
       return;
     }
     setLoading(true);
@@ -62,7 +64,7 @@ const currentGroups = groups.slice(startIdx, endIdx);
   const text = await res.text();
   console.log('응답 본문:', text);
   if (!res.ok) {
-    alert("추천 결과를 불러오지 못했습니다.");
+    toast.error("추천 결과를 불러오지 못했습니다.");
     setLoading(false);
     return;
   }
@@ -77,7 +79,7 @@ const currentGroups = groups.slice(startIdx, endIdx);
   //setUserEnd(end);
 } catch (e) {
   console.error("AI 추천 fetch error:", e);
-  alert("에러가 발생했습니다.");
+  toast.error("에러가 발생했습니다.");
 }
 setLoading(false);
 
@@ -219,7 +221,7 @@ setLoading(false);
           <MoreRecommendButton
   onRecommend={() => {
     if ((recommendClick + 1) * 4 >= groups.length) {
-      alert("AI추천 결과는 여기까지입니다.");
+      toast.info("AI추천 결과는 여기까지입니다.");
       return;
     }
     setRecommendClick(prev => prev + 1);

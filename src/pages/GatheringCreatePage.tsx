@@ -9,6 +9,7 @@ import AddPhotoButton from '@/components/ui/AddPhotoButton';
 import { createGroup } from '@/lib/api/group';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from "react-toastify";
 
 export default function GatheringCreatePage() {
   const [tags, setTags] = useState<string[]>([]);
@@ -66,7 +67,7 @@ export default function GatheringCreatePage() {
 
     // API
     createGroup(newData).then(() => {
-      alert('게시글이 등록되었습니다.');
+      toast.success('게시글이 등록되었습니다.');
       router.push('/gathering');
     });
   };
