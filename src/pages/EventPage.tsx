@@ -39,16 +39,34 @@ type EventApiResponse = {
   poster: string;
   address?: string;
   reason?: string;
+  eventType?: string;
 };
+
+function formatDate(dateStr: string) {
+  if (!dateStr) return "-";
+  const [, month, day] = dateStr.split("-");
+  return `${month}.${day}`;
+}
+
+function extractPlaceName(address: string = "") {
+  const arr = address.trim().split(" ");
+  let last = arr[arr.length - 1] || "정보 없음";
+  if (/^\(.+\)$/.test(last)) {
+    last = last.replace(/^\((.+)\)$/, "$1");
+  }
+  last = last.replace(/([가-힣]+)(\d+[가-힣]*)$/, "$1 $2");
+  return last;
+}
 
 function mapEventToCard(event: EventApiResponse) {
   return {
     id: event.id,
     title: event.contentTitle,
-    simpleExplain: event.fee,
-    during: `${event.startDate || "-"} ~ ${event.endDate || "-"}`,
+    simpleExplain: extractPlaceName(event.address || ""),
+    during: `${formatDate(event.startDate)} ~ ${formatDate(event.endDate)}`,
     imageUrl: event.poster,
-    //address: event.address,
+    address: event.address,
+    eventType: event.eventType
   };
 }
 
