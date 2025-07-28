@@ -34,9 +34,9 @@ interface GroupStat {
 }
 
 interface DailyCalender {
-  calendarId: 2;
+  calendarId: number;
   type: string;
-  activityId: 1;
+  activityId: number;
   title: string;
   selectedDate: string;
   address: string;
@@ -116,7 +116,15 @@ export default function Profile() {
         const month = today.getMonth() + 1; // Month is 0-indexed
         const day = today.getDate();
         const dailyCalendarData = await getDailyCalendar(year, month, day);
-        setDailyEvents(dailyCalendarData.data);
+        setDailyEvents(
+          Array.from(
+            new Map(
+              dailyCalendarData.data
+                .filter((item: DailyCalender) => item.activityId !== undefined && item.activityId !== null)
+                .map((item: DailyCalender) => [item.activityId, item]),
+            ).values(),
+          ),
+        );
 
         const inquiriesData = await getContacts();
         setMyInquiries(inquiriesData.data.content);

@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import Tag from './common/Tag';
 import mapIcon from '@/assets/images/map_icon.svg';
-import testMap from '@/assets/images/testmap.png';
 import MainPostHeader from './common/MainPostHeader';
 import { getCategoryDisplayName } from '@/lib/utils/categoryMapping';
 import { completeGroup, deleteGroup } from '@/lib/api/group';
 import { toast } from 'react-toastify';
+import Map from '@/components/kakao/Map';
 
 interface GatheringMainProps {
   selectedGathering: GroupDetail | null;
@@ -89,7 +89,12 @@ export default function GatheringMain({
             </div>
           </div>
         </div>
-        <Image src={testMap} alt="map" className="mt-5" />
+        <Map
+          lat={selectedGathering.latitude}
+          lng={selectedGathering.longitude}
+          width="50%"
+          height="280px"
+        />
       </div>
     </>
   );

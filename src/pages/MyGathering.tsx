@@ -171,10 +171,10 @@ export default function MyGathering() {
 
   return (
     <div className="mb-50">
-      <h2 className="h3 text-white">모임</h2>
       <div className="lg:flex lg:items-center lg:justify-center">
         {/* 고정 너비 사이드 */}
         <div className="flex-shrink-0 lg:h-[740px] lg:w-[330px]">
+          <h2 className="h3 text-white">모임</h2>
           <GatheringSide
             onSelectGathering={handleSelectGathering}
             activeTab={activeTab}
@@ -184,7 +184,7 @@ export default function MyGathering() {
           />
         </div>
         {/* 유동 너비 메인 */}
-        <div className="max-w-[1050px] flex-grow lg:ml-5 lg:h-[740px]">
+        <div className="mt-15 max-w-[1050px] flex-grow lg:ml-5 lg:h-[740px]">
           {activeTab === 'my-gathering' && selectedGathering ? (
             <GatheringMain
               selectedGathering={selectedGathering}
@@ -198,7 +198,7 @@ export default function MyGathering() {
               lastMessages={lastMessages}
             />
           ) : (
-            <div className="bg-gray-7 lg:border-gray-5 mt-5 flex h-full w-full items-center justify-center rounded-[15px] p-4 text-white lg:border lg:p-10">
+            <div className="bg-gray-7 lg:border-gray-5 mt-12.5 flex h-full w-full items-center justify-center rounded-[15px] p-4 text-white lg:border lg:p-10">
               <p className="">
                 {activeTab === 'my-gathering'
                   ? '왼쪽에서 모임을 선택해주세요.'
