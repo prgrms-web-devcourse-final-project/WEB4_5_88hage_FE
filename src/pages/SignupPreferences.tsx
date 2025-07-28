@@ -43,30 +43,35 @@ function Tag({
   );
 }
 
-export default function SignupPreferences() {
+export default function SignupPreferences({ isOAuth }: { isOAuth?: boolean }) {
   const [newUserPreferences, setNewUserPreferences] = useState<
     { category: string; type: string }[]
   >([]);
   const router = useRouter();
   const { userData, clearAll } = useSignupStore();
+  const API = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
-    axios
-      .post(
-        'https://funfun.cloud/api/auth/login',
-        {
-          email: userData?.email,
-          password: userData?.password,
+    if (userData && !isOAuth) {
+      fetch(`${API}/api/auth/login`, {
+        method: 'POST',
+        body: JSON.stringify({
+          email: userData.email,
+          password: userData.password,
           rememberMe: true,
-        },
-        { withCredentials: true },
-      )
-      .then((response) => {
-        console.log(response.data);
-        clearAll();
-        localStorage.removeItem('signup-store');
+        }),
+        headers: { 'Content-Type': 'application/json' },
       })
-      .catch((error) => console.log(error.response.data));
+        .then((response) => {
+          console.log(response);
+          clearAll();
+          localStorage.removeItem('signup-store');
+        })
+        .catch((error) => console.log(error.response.data));
+    } else if (userData && isOAuth) {
+      clearAll();
+      localStorage.removeItem('signup-store');
+    }
   }, [userData]);
 
   const tagSelectHandler = (
