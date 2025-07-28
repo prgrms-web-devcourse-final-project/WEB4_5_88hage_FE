@@ -130,6 +130,7 @@ type AddressData = {
           dateFormat="yyyy-MM-dd a h:mm"
           shouldCloseOnSelect
           showTimeSelect
+           timeIntervals={60}
           minDate={new Date()}
           selected={startDate}
           onChange={setStartDate}
@@ -144,6 +145,7 @@ type AddressData = {
           dateFormat="yyyy-MM-dd a h:mm"
           shouldCloseOnSelect
           showTimeSelect
+           timeIntervals={60}
           minDate={startDate || new Date()}
           selected={endDate}
           onChange={setEndDate}

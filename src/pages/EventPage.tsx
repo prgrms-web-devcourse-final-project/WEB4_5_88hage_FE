@@ -48,7 +48,7 @@ function mapEventToCard(event: EventApiResponse) {
     simpleExplain: event.fee,
     during: `${event.startDate || "-"} ~ ${event.endDate || "-"}`,
     imageUrl: event.poster,
-    address: event.address,
+    //address: event.address,
   };
 }
 
@@ -122,7 +122,9 @@ export default function EventPage() {
     const fetchData = async () => {
       setLoading(true);
       const url = getApiUrl();
-      const res = await fetch(url).then(r => r.json());
+      const res = await fetch(url, {
+    credentials: "include",
+  }).then(r => r.json());
       const list = res.data?.content || res.data?.contents || [];
       setData(prev => (page === 0 ? list : [...prev, ...list]));
       setHasMore(res.data && typeof res.data.last !== "undefined" ? !res.data.last : false);
