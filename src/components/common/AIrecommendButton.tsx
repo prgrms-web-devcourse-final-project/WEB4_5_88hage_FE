@@ -160,6 +160,12 @@ type AddressData = {
       >
         추천받기
       </button>
+      <button
+        className="mt-3 text-sm text-gray-500 underline"
+        onClick={() => setShowModal(false)}
+      >
+        취소
+      </button>
     </div>
   </div>
 )}

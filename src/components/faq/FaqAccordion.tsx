@@ -35,12 +35,12 @@ export default function FaqAccordion() {
         return (
           <div
             key={idx}
-            className="relative bg-[#1C1C1C] rounded-xl overflow-hidden w-[327px] mx-auto lg:w-[657px]"
+            className="relative bg-[#1C1C1C] rounded-xl overflow-hidden w-[327px] mx-auto lg:w-[900px]"
           >
             <span className="absolute inset-y-0 left-0 w-[5px] bg-[#06c29e]" />
             <button
               onClick={() => setOpenIndex(isOpen ? null : idx)}
-              className="flex items-center justify-between pl-10 pr-6 py-5 w-[327px] mx-auto lg:w-[657px]"
+              className="flex items-center justify-between pl-10 pr-6 py-5 w-[327px] mx-auto lg:w-[900px]"
             >
               <span className="text-white text-[16px] lg:text-[24px] font-semibold">
                 {item.title}

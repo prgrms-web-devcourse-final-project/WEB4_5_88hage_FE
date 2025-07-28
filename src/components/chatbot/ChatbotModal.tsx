@@ -339,7 +339,7 @@ export default function ChatbotModal({ onClose }) {
             <input
               className="w-full mb-4 p-3 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-main text-gray-700 placeholder:text-[14px]"
               value={address}
-              placeholder="서울시 ㅇㅇ구 ㅇㅇ동 형태로 입력해주세요"
+              placeholder="서울특별시 ㅇㅇ구 ㅇㅇ동 형태로 입력해주세요"
               onChange={(e) => setAddress(e.target.value)}
             />
             <div className="w-full mb-3">
