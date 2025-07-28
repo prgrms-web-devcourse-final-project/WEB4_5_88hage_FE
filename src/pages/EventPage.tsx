@@ -39,16 +39,34 @@ type EventApiResponse = {
   poster: string;
   address?: string;
   reason?: string;
+  eventType?: string;
 };
+
+function formatDate(dateStr: string) {
+  if (!dateStr) return "-";
+  const [, month, day] = dateStr.split("-");
+  return `${month}.${day}`;
+}
+
+function extractPlaceName(address: string = "") {
+  const arr = address.trim().split(" ");
+  let last = arr[arr.length - 1] || "정보 없음";
+  if (/^\(.+\)$/.test(last)) {
+    last = last.replace(/^\((.+)\)$/, "$1");
+  }
+  last = last.replace(/([가-힣]+)(\d+[가-힣]*)$/, "$1 $2");
+  return last;
+}
 
 function mapEventToCard(event: EventApiResponse) {
   return {
     id: event.id,
     title: event.contentTitle,
-    simpleExplain: event.fee,
-    during: `${event.startDate || "-"} ~ ${event.endDate || "-"}`,
+    simpleExplain: extractPlaceName(event.address || ""),
+    during: `${formatDate(event.startDate)} ~ ${formatDate(event.endDate)}`,
     imageUrl: event.poster,
-    //address: event.address,
+    address: event.address,
+    eventType: event.eventType
   };
 }
 
@@ -205,25 +223,31 @@ export default function EventPage() {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {recommendedEvents.length > 0 ? (
-            recommendedEvents
-              .slice(recommendClick * 4, recommendClick * 4 + 4)
-              .map((event) => (
-                <EventCard key={event.id} event={mapEventToCard(event)} />
-              ))
-          ) : (
-            data.map((event, idx) =>
-              idx === data.length - 1 ? (
-                <div key={`${event.id}-${idx}`} ref={lastCardRef}>
-                  <EventCard event={mapEventToCard(event)} />
-                </div>
-              ) : (
-                <EventCard key={`${event.id}-${idx}`} event={mapEventToCard(event)} />
-              )
-            )
-          )}
-        </div>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 min-h-[600px]">
+  {loading ? null : recommendedEvents.length > 0 ? (
+    recommendedEvents
+      .slice(recommendClick * 4, recommendClick * 4 + 4)
+      .map((event) => (
+        <EventCard key={event.id} event={mapEventToCard(event)} />
+      ))
+  ) : (
+    data.length > 0 ? (
+      data.map((event, idx) =>
+        idx === data.length - 1 ? (
+          <div key={`${event.id}-${idx}`} ref={lastCardRef}>
+            <EventCard event={mapEventToCard(event)} />
+          </div>
+        ) : (
+          <EventCard key={`${event.id}-${idx}`} event={mapEventToCard(event)} />
+        )
+      )
+    ) : (
+      <div className="col-span-4 text-center text-[#aaa] py-10">
+        검색 결과가 없습니다.
+      </div>
+    )
+  )}
+</div>
         {recommendedEvents.length > 0 && (
           <div className="gradient-box mt-[51.45px] mb-[100px] flex flex-col rounded-[5px] px-[40px] text-white">
             <div className="mt-[33px] mb-[29px] text-[24px] font-semibold">

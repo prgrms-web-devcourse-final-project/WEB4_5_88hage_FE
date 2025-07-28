@@ -10,7 +10,6 @@ import Image from "next/image";
 export default function ProblemSolving(){
   return (
     <>
-    <section className="py-[100px] px-[10px] lg:flex lg:items-center lg:justify-around lg:h-screen snap-start">
     <SolveTitle img={solveTitleImg1} altText="손으로 막는 이미지" text="심심할 때 고민은" strongText="STOP!"/>
     <div className='w-full flex justify-center pb-[calc(100px+40px) relative lg:w-fit'>
         <Image src={solvePhoneTopRightImg1} alt="하품하는 이미지" className="w-[115px] h-[115px] absolute top-[30px] right-[-10px] lg:right-[-60px]" />
@@ -31,7 +30,6 @@ export default function ProblemSolving(){
     <div className="w-full flex justify-center mt-[40px] lg:mt-0 lg:w-[160px]">
        <p className="w-[335px] min-w-[310px] text-[#AEAEAE] leading-[26px] break-keep ">더 이상 뭐 할지 검색하며 시간 보내지 마세요. AI 큐큐를 활용해서 지금 바로 즐길 수 있는 컨텐츠를 추천 해드릴게요!</p>
     </div>
-    </section>
     </>
   );
 };
