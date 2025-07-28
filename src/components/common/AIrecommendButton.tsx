@@ -130,6 +130,7 @@ type AddressData = {
           dateFormat="yyyy-MM-dd a h:mm"
           shouldCloseOnSelect
           showTimeSelect
+           timeIntervals={60}
           minDate={new Date()}
           selected={startDate}
           onChange={setStartDate}
@@ -144,6 +145,7 @@ type AddressData = {
           dateFormat="yyyy-MM-dd a h:mm"
           shouldCloseOnSelect
           showTimeSelect
+           timeIntervals={60}
           minDate={startDate || new Date()}
           selected={endDate}
           onChange={setEndDate}
@@ -157,6 +159,12 @@ type AddressData = {
         disabled={!address || !startDate || !endDate}
       >
         추천받기
+      </button>
+      <button
+        className="mt-3 text-sm text-gray-500 underline"
+        onClick={() => setShowModal(false)}
+      >
+        취소
       </button>
     </div>
   </div>

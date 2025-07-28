@@ -1,19 +1,25 @@
-//import Greeting from '@/components/common/Greeting';
 'use client';
-import DashboardLayout from '@/components/layout/DashboardLayout';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+// 문의 타입 명확하게 지정!
+type Contact = {
+  id: number;
+  category: 'GENERAL' | 'REPORT';
+  title: string;
+  createdAt: string;
+};
+
 export default function InquiryListPage() {
-  const [contacts, setContacts] = useState<any[]>([]);
+  const [contacts, setContacts] = useState<Contact[]>([]);
   const [pending, setPending] = useState(true);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalElements, setTotalElements] = useState(1);
   const [pageNum, setPageNum] = useState<number[]>([]);
   const API = process.env.NEXT_PUBLIC_API_URL;
 
+  // 데이터 패칭
   const fetchData = async () => {
     const params = `status=${pending ? 'pending' : 'complete'}&page=${page}&size=8&sort=createdAt,DESC`;
     try {
@@ -22,15 +28,15 @@ export default function InquiryListPage() {
         credentials: 'include',
       });
       const { data } = await response.json();
-      console.log(data);
       setContacts(data.content);
       setTotalPages(data.totalPages);
-      setTotalElements(data.totalElements);
     } catch (error) {
       console.log(error);
+      setContacts([]);
     }
   };
 
+  // 날짜 포맷
   const convertTime = (createdAt: string) => {
     const date = new Date(createdAt);
     date.setHours(date.getHours() + 9);
@@ -39,49 +45,48 @@ export default function InquiryListPage() {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line
   }, [page, pending]);
 
   useEffect(() => {
     setPage(0);
-    setPageNum([]);
-    for (let i = 1; i <= totalPages; i++) {
-      setPageNum((prev) => [...prev, i]);
-    }
+    const nums: number[] = [];
+    for (let i = 1; i <= totalPages; i++) nums.push(i);
+    setPageNum(nums);
   }, [totalPages]);
 
-  useEffect(() => {
-    console.log(pageNum);
-  }, [pageNum]);
-
   return (
-    <>
-      <DashboardLayout mainCss="px-[105px]">
-        <div className="min-h-screen w-full bg-[#121212]">
-          <main className="flex w-full max-w-[1440px] flex-col bg-[#121212] lg:pt-[29px]">
-            <div className="relative flex w-full flex-col">
-              <div className="flex gap-[4px]">
-                <button
-                  disabled={pending}
-                  onClick={() => setPending(true)}
-                  className="disbled:border-[#1CEBB9] z-5 border-b-2 pr-2 pb-[14px] text-[18px] text-[#949494] disabled:z-7 disabled:font-semibold disabled:text-[#1CEBB9] lg:text-[24px]"
-                >
-                  문의 내역
-                </button>
-                <button
-                  disabled={!pending}
-                  onClick={() => setPending(false)}
-                  className="disbled:border-[#1CEBB9] z-5 border-b-2 px-2 pb-[14px] text-[18px] text-[#949494] disabled:z-7 disabled:font-semibold disabled:text-[#1CEBB9] lg:text-[24px]"
-                >
-                  답변이 완료 된 문의
-                </button>
+    <div className="min-h-screen w-full">
+      <div className="max-w-[1440px] mx-auto w-full">
+        <main className="flex flex-col lg:pt-[29px] w-full">
+          {/* 상단 탭 & border */}
+          <div className="flex gap-[4px] border-b-2 border-[#949494] w-full mb-[4px]">
+            <button
+              disabled={pending}
+              onClick={() => setPending(true)}
+              className="z-5 pr-2 pb-[14px] text-[18px] text-[#949494] disabled:font-semibold disabled:text-[#1CEBB9] border-b-2 border-transparent disabled:border-[#1CEBB9] lg:text-[24px] transition"
+            >
+              문의 내역
+            </button>
+            <button
+              disabled={!pending}
+              onClick={() => setPending(false)}
+              className="z-5 px-2 pb-[14px] text-[18px] text-[#949494] disabled:font-semibold disabled:text-[#1CEBB9] border-b-2 border-transparent disabled:border-[#1CEBB9] lg:text-[24px] transition"
+            >
+              답변이 완료 된 문의
+            </button>
+          </div>
+          {/* 문의 내역 리스트 */}
+          <div className="w-full">
+            {contacts.length === 0 ? (
+              <div className="text-center text-[#888] py-10">
+                {pending ? '문의 내역이 없습니다.' : '답변이 완료 된 문의가 없습니다.'}
               </div>
-              <div className="absolute bottom-0 z-6 w-full border-b-2 border-[#949494]"></div>
-            </div>
-            <div className="w-full">
-              {contacts.map((n, idx) => (
+            ) : (
+              contacts.map((n) => (
                 <div
-                  key={idx}
-                  className="flex items-center border-b border-[#383838] pt-[24px] pb-[24px] text-[15px]"
+                  key={n.id}
+                  className="flex items-center border-b border-[#383838] pt-[24px] pb-[24px] text-[15px] w-full"
                 >
                   <span className="w-[120px] font-semibold text-[#ffffff]">
                     {n.category === 'GENERAL' ? '일반' : '신고'}
@@ -96,63 +101,53 @@ export default function InquiryListPage() {
                     {convertTime(n.createdAt)}
                   </span>
                 </div>
+              ))
+            )}
+          </div>
+          {/* 페이지네이션 */}
+          <div className="flex items-center justify-center space-x-3 text-[#ffffff] lg:mt-[52px]">
+            <button
+              onClick={() => setPage((prev) => prev - 5)}
+              disabled={pageNum.slice(Math.floor(page / 5) * 5, Math.floor(page / 5) * 5 + 5)[0] === 1}
+              className="disabled:text-gray-disabled p-2 disabled:cursor-none"
+            >
+              <ChevronLeft />
+            </button>
+            {pageNum
+              .slice(Math.floor(page / 5) * 5, Math.floor(page / 5) * 5 + 5)
+              .map((p) => (
+                <button
+                  key={p}
+                  className={`h-[29px] w-[29px] rounded-full text-[15px] transition ${
+                    page === p - 1 ? 'bg-[#1CEBB9] font-bold text-black' : ''
+                  } `}
+                  onClick={() => setPage(p - 1)}
+                >
+                  {p}
+                </button>
               ))}
-            </div>
-            <div className="flex items-center justify-center space-x-3 text-[#ffffff] lg:mt-[52px]">
-              <button
-                onClick={() => setPage((prev) => prev - 5)}
-                disabled={
-                  pageNum.slice(
-                    Math.floor(page / 5) * 5,
-                    Math.floor(page / 5) * 5 + 5,
-                  )[0] === 1
-                }
-                className="disabled:text-gray-disabled p-2 disabled:cursor-none"
-              >
-                <ChevronLeft />
-              </button>
-              {pageNum
-                .slice(Math.floor(page / 5) * 5, Math.floor(page / 5) * 5 + 5)
-                .map((p) => (
-                  <button
-                    key={p}
-                    className={`h-[29px] w-[29px] rounded-full text-[15px] transition ${
-                      page === p - 1 ? 'bg-[#1CEBB9] font-bold text-black' : ''
-                    } `}
-                    onClick={() => setPage(p - 1)}
-                  >
-                    {p}
-                  </button>
-                ))}
-              <button
-                onClick={() => {
-                  const arr = pageNum.slice(
-                    Math.floor((page + 5) / 5) * 5,
-                    Math.floor((page + 5) / 5) * 5 + 5,
-                  );
-                  if (!arr.includes(page + 6)) {
-                    setPage(pageNum[pageNum.length - 2]);
-                  } else setPage((prev) => prev + 5);
-                }}
-                disabled={
-                  pageNum.slice(
-                    Math.floor(page / 5) * 5,
-                    Math.floor(page / 5) * 5 + 5,
-                  )[
-                    pageNum.slice(
-                      Math.floor(page / 5) * 5,
-                      Math.floor(page / 5) * 5 + 5,
-                    ).length - 1
-                  ] === pageNum[pageNum.length - 1]
-                }
-                className="disabled:text-gray-disabled p-2 disabled:cursor-none"
-              >
-                <ChevronRight />
-              </button>
-            </div>
-          </main>
-        </div>
-      </DashboardLayout>
-    </>
+            <button
+              onClick={() => {
+                const arr = pageNum.slice(
+                  Math.floor((page + 5) / 5) * 5,
+                  Math.floor((page + 5) / 5) * 5 + 5,
+                );
+                if (!arr.includes(page + 6)) {
+                  setPage(pageNum[pageNum.length - 2]);
+                } else setPage((prev) => prev + 5);
+              }}
+              disabled={
+                pageNum.slice(Math.floor(page / 5) * 5, Math.floor(page / 5) * 5 + 5)[
+                  pageNum.slice(Math.floor(page / 5) * 5, Math.floor(page / 5) * 5 + 5).length - 1
+                ] === pageNum[pageNum.length - 1]
+              }
+              className="disabled:text-gray-disabled p-2 disabled:cursor-none"
+            >
+              <ChevronRight />
+            </button>
+          </div>
+        </main>
+      </div>
+    </div>
   );
 }

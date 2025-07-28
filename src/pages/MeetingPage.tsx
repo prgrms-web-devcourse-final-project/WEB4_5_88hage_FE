@@ -234,17 +234,23 @@ setLoading(false);
             </div>
           </>
         ) : (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {filtered.map((group, idx) =>
-              idx === filtered.length - 1 ? (
-                <div key={`${group.id}-${idx}`} ref={lastCardRef}>
-                  <PostCard group={group} />
-                </div>
-              ) : (
-                <PostCard key={`${group.id}-${idx}`} group={group} />
-              )
-            )}
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 min-h-[600px]">
+    {filtered.length > 0 ? (
+      filtered.map((group, idx) =>
+        idx === filtered.length - 1 ? (
+          <div key={`${group.id}-${idx}`} ref={lastCardRef}>
+            <PostCard group={group} />
           </div>
+        ) : (
+          <PostCard key={`${group.id}-${idx}`} group={group} />
+        )
+      )
+    ) : (
+      <div className="col-span-4 text-center text-[#aaa] py-10">
+        검색 결과가 없습니다.
+      </div>
+    )}
+  </div>
         )}
       </div>
     </div>

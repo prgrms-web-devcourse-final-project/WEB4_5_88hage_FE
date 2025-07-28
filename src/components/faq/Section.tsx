@@ -1,18 +1,12 @@
 'use client'
 
-import { useState } from "react";
-import TabToggle from "./TabToggle";
 import FaqContent from "./Faq";
 import NoticeContent from "./Notice";
 
-type Tab = "FAQ" | "공지사항";
-
 export default function FaqSection() {
-  const [activeTab, setActiveTab] = useState<Tab>("FAQ");
-
   return (
     <>
-    <div className="flex flex-col items-center pt-8 pb-3 bg-[#1d1d1d]">
+      <div className="flex flex-col items-center pt-8 pb-3 bg-[#1d1d1d]">
         <span className="text-[14px] lg:text-[24px] font-semibold text-white mb-1 tracking-tight">
           고객지원
         </span>
@@ -22,10 +16,14 @@ export default function FaqSection() {
           </span>
         </h1>
       </div>
-      <div className="flex justify-center pt-2 pb-8 bg-[#1d1d1d]">
-        <TabToggle active={activeTab} onChange={setActiveTab} />
+      <div className="bg-[#1d1d1d] py-8 flex flex-col">
+        <section>
+          <FaqContent />
+        </section>
+        <section>
+          <NoticeContent />
+        </section>
       </div>
-      {activeTab === "FAQ" ? <FaqContent /> : <NoticeContent />}
     </>
   );
 }
