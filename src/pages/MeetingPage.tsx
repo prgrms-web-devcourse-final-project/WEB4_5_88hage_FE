@@ -18,7 +18,10 @@ const SORT_OPTIONS = [
 type Group = {
   id: number;
   title: string;
-  simpleExplain: string;
+  imageUrl: string;
+  leaderNickname: string;
+  groupDate: string;
+  //simpleExplain: string;
 };
 
 export default function MeetingPage() {
@@ -99,25 +102,48 @@ setLoading(false);
   }, [selectedCategory, sortBy]);
 
   useEffect(() => {
-    if (groups.length > 0) return;
-    const fetchData = async () => {
-      setLoading(true);
-      let url = `${API}/api/groups/search?sortBy=${sortBy}&page=${page}&size=16`;
-      if (selectedCategory) {
-        url += `&category=${selectedCategory}`;
-      }
-      const res = await fetch(url, { credentials: 'include' }).then(r => r.json());
-      const list: Group[] = res.data.content || [];
-      setData(prev => {
-        if (page === 0) return list;
-        const newUnique = list.filter(newItem => !prev.some(prevItem => prevItem.id === newItem.id));
-        return [...prev, ...newUnique];
-      });
-      setHasMore(!res.data.last);
-      setLoading(false);
-    };
-    fetchData();
-  }, [selectedCategory, sortBy, page, groups.length]);
+  if (groups.length > 0) return;
+  const fetchData = async () => {
+    setLoading(true);
+    let url = `${API}/api/groups/search?sortBy=${sortBy}&page=${page}&size=16`;
+    if (selectedCategory) {
+      url += `&category=${selectedCategory}`;
+    }
+    const res = await fetch(url, { credentials: 'include' }).then(r => r.json());
+    const list = res.data.content || [];
+
+    // 각 group.id로 상세조회
+    const withDetails = await Promise.all(
+      list.map(async (g) => {
+        try {
+          const res = await fetch(`${API}/api/groups/${g.id}`, { credentials: "include" });
+          const detail = await res.json();
+          const d = detail.data;
+          console.log("상세조회 groupId", g.id, "상세 data:", d);
+          return {
+            id: d.id,
+            title: d.title,
+            imageUrl: d.imageUrl,
+            leaderNickname: d.leaderNickname,
+            groupDate: d.groupDate,
+          };
+        } catch {
+          console.log("상세조회 실패", g.id, err);
+          return g;
+        }
+      })
+    );
+
+    setData(prev => {
+      if (page === 0) return withDetails;
+      const newUnique = withDetails.filter(newItem => !prev.some(prevItem => prevItem.id === newItem.id));
+      return [...prev, ...newUnique];
+    });
+    setHasMore(!res.data.last);
+    setLoading(false);
+  };
+  fetchData();
+}, [selectedCategory, sortBy, page, groups.length]);
 
   useEffect(() => {
     setSearch("");

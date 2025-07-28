@@ -108,3 +108,22 @@ div.react-datepicker__day--today {
   background-color: transparent;
   border: none;
 }
+
+.react-datepicker__month-wrapper::-webkit-scrollbar {
+  display: none;
+}
+.react-datepicker__month-wrapper {
+  scrollbar-width: none;
+}
+.react-datepicker__month-wrapper {
+  -ms-overflow-style: none;
+}
+
+ul.react-datepicker__time-list::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+}
+/* ul.react-datepicker__time-list::-webkit-scrollbar-thumb {
+  background: #B3E5C2;
+  border-radius: 6px;
+} */
