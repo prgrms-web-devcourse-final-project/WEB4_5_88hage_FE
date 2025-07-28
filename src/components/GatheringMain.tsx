@@ -5,7 +5,7 @@ import testMap from '@/assets/images/testmap.png';
 import MainPostHeader from './common/MainPostHeader';
 import { getCategoryDisplayName } from '@/lib/utils/categoryMapping';
 import { completeGroup, deleteGroup } from '@/lib/api/group';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 interface GatheringMainProps {
   selectedGathering: GroupDetail | null;
