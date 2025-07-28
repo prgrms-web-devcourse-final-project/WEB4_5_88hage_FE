@@ -2,6 +2,7 @@
 import NotiCheckbox from '@/components/NotiCheckbox';
 import { useAuthStore } from '@/stores/UseAuthStore';
 import { Check, ChevronLeft } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -66,9 +67,9 @@ export default function Notification() {
     <>
       <header className="flex flex-col text-[#fff]">
         <div className="mx-[14px] mt-[13px] mb-[23px] flex justify-between">
-          <button type="button">
+          <Link href="/" type="button">
             <ChevronLeft />
-          </button>
+          </Link>
           <div className="text-xl font-semibold">알림 센터</div>
           <ChevronLeft color="transparent" />
         </div>
