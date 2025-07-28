@@ -16,6 +16,7 @@
     "base-64": "^1.0.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "framer-motion": "^12.23.9",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.525.0",
     "moment": "^2.30.1",
