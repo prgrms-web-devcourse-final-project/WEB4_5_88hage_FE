@@ -44,8 +44,8 @@ export default function NoticeContent() {
   }
 
   return (
-    <section className="bg-[#121212] text-white px-6 lg:px-24 pt-10 lg:pt-12 pb-32">
-      <div className="max-w-7xl mx-auto">
+    <section className="bg-[#121212] text-white px-6 lg:px-24 pt-10 lg:pt-12 pb-32 w-full flex justify-center py-10">
+      <div className="w-full max-w-[1440px] mx-auto">
         {/* 제목 */}
         <h2 className="text-xl lg:text-2xl text-white text-center mb-8">
           공지사항
