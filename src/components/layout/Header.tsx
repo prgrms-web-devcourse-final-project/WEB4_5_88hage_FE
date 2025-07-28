@@ -12,7 +12,7 @@ export default function Header() {
   return (
     <>
       {/* 헤더 전체 컨테이너 */}
-      <header className="flex flex-col fixed z-30 top-0 w-full">
+      <header className="fixed top-0 z-30 flex w-full flex-col">
         {/* 네비게이션 영역 */}
         <div className="flex h-[50px] items-center justify-between px-6 lg:h-[65px]">
           {/* 로고 */}
@@ -53,7 +53,7 @@ export default function Header() {
           />
           {/* 실제 사이드바 */}
           <aside className="relative z-50">
-            <MenuBar />
+            <MenuBar close={() => setSidebarOpen(false)} />
           </aside>
         </div>
       )}
