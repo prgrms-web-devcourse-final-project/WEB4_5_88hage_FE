@@ -27,13 +27,15 @@ export default function EventCard({ event }) {
           priority
         />
       </div>
+
       <div className="h-[120px] bg-[#1b1b1b] p-3">
         <h2 className="t3 mb-1">{event.title}</h2>
-        <p className="mb-5 text-[14px] text-[#ffffff]">{event.simpleExplain}</p>
-        <p className="text-[14px] text-[#bdbdbd]">
-  행사 기간 {event.during !== "- ~ -" ? `(${event.during})` : "(정보 없음)"}
-</p>
-
+        <p className="mb-5 text-[14px] text-[#ffffff] whitespace-pre-line">
+          {event.simpleExplain}
+        </p>
+        {event.during !== '- ~ -' && (
+          <p className="text-[14px] text-[#bdbdbd]">{event.during}</p>
+        )}
       </div>
     </div>
   );
