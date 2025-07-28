@@ -1,21 +1,30 @@
 //import Greeting from '@/components/common/Greeting';
+'use client';
 
-import DashboardLayout from '@/components/layout/DashboardLayout';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { getLeaderMyGroups } from '@/lib/api/group';
 
 export default function MyGatheringList() {
-  const notices = Array.from({ length: 7 }).map(() => ({
-    category: '특정 사용자 신고',
-    content: '안녕하세요. 특정 악질 사용자 신고 문의 넣었는데 대응이 잘될까요?',
-    date: '2025년06월28일',
-  }));
+  const [myGatherings, setMyGatherings] = useState<LeaderMyGroupData[]>([]);
+
+  useEffect(() => {
+    const fetchMyGatherings = async () => {
+      try {
+        const data = await getLeaderMyGroups();
+        setMyGatherings(data);
+      } catch (error) {
+        console.error('Failed to fetch my gatherings:', error);
+      }
+    };
+    fetchMyGatherings();
+  }, []);
 
   return (
-    <DashboardLayout mainCss="px-[105px]">
-    <section className="bg-[#121212] text-white lg:pt-[29px]">
+    <section className="text-white lg:pt-[29px]">
       <div className="mx-auto max-w-[1440px]">
         {/* 제목 */}
-        <h2 className="lg:mb-[39px] text-left text-[20px] font-semibold text-white lg:text-[28px]">
+        <h2 className="text-left text-[20px] font-semibold text-white lg:mb-[39px] lg:text-[28px]">
           내 게시물
         </h2>
 
@@ -39,19 +48,19 @@ export default function MyGatheringList() {
               </tr>
             </thead>
             <tbody>
-              {notices.map((n, idx) => (
+              {myGatherings.map((item) => (
                 <tr
-                  key={idx}
+                  key={item.groupId}
                   className="mb-1 flex flex-col border-b border-[#383838] lg:table-row"
                 >
                   <td className="px-8 py-2 font-semibold whitespace-nowrap text-[#06CE9E] lg:py-6 lg:align-top">
-                    {n.category}
+                    {item.groupTitle}
                   </td>
                   <td className="overflow-hidden px-8 py-1 text-sm text-ellipsis text-white lg:py-6 lg:align-top lg:text-[16px]">
-                    {n.content}
+                    {item.explain}
                   </td>
                   <td className="overflow-visible px-8 py-3 text-xs whitespace-nowrap text-[#ffffff] lg:overflow-hidden lg:py-6 lg:text-right lg:align-top lg:text-[16px] lg:text-ellipsis lg:whitespace-nowrap">
-                    {n.date}
+                    {item.groupDate.replace(/-/g, '').substring(0, 8)}
                   </td>
                 </tr>
               ))}
@@ -82,6 +91,5 @@ export default function MyGatheringList() {
         </div>
       </div>
     </section>
-    </DashboardLayout>
   );
 }
