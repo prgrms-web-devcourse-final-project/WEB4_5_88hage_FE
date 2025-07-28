@@ -37,9 +37,11 @@ export const checkFollowerStatus = async (
 };
 
 // 팔로잉 목록 조회 (페이지네이션 및 정렬 기능 추가)
+import { ApiResponse } from '@/types/api';
+
 export const getFollowings = async (
   params: GetFollowParams = {},
-): Promise<Following[]> => {
+): Promise<ApiResponse<Following>> => {
   const defaultParams = {
     page: 0,
     size: 10,
@@ -58,7 +60,7 @@ export const getFollowings = async (
     {} as Record<string, string>,
   );
   const queryString = new URLSearchParams(stringifiedParams).toString();
-  const response = await get<Following[]>(
+  const response = await get<ApiResponse<Following>>(
     `/api/follows/followings?${queryString}`,
   );
   return response;
@@ -67,7 +69,7 @@ export const getFollowings = async (
 // 팔로워 목록 조회
 export const getFollowers = async (
   params: GetFollowParams = {},
-): Promise<Follower[]> => {
+): Promise<ApiResponse<Follower>> => {
   const defaultParams = {
     page: 0,
     size: 10,
@@ -86,7 +88,7 @@ export const getFollowers = async (
     {} as Record<string, string>,
   );
   const queryString = new URLSearchParams(stringifiedParams).toString();
-  const response = await get<Follower[]>(
+  const response = await get<ApiResponse<Follower>>(
     `/api/follows/followers?${queryString}`,
   );
   return response;
