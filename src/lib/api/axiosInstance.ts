@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from "react-toastify";
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -16,38 +17,38 @@ instance.interceptors.response.use(
     switch (status) {
       case 400:
         console.warn('[400 Bad Request] 요청이 잘못되었습니다.');
-        alert('요청 데이터가 올바르지 않습니다.');
+        toast.error('요청 데이터가 올바르지 않습니다.');
         break;
 
       case 401:
         console.warn('[401 Unauthorized] 인증이 만료되었습니다.');
-        alert('로그인이 필요합니다.');
+        toast.warn('로그인이 필요합니다.');
         window.location.href = '/login'; // 또는 사용자 상태 초기화
         break;
 
       case 403:
         console.warn('[403 Forbidden] 권한이 없습니다.');
-        alert('이 작업을 수행할 권한이 없습니다.');
+        toast.warn('이 작업을 수행할 권한이 없습니다.');
         break;
 
       case 404:
         console.warn('[404 Not Found] API를 찾을 수 없습니다.');
-        alert('요청한 정보를 찾을 수 없습니다.');
+        toast.error('요청한 정보를 찾을 수 없습니다.');
         break;
 
       case 409:
         console.warn('[409 Conflict] 중복 데이터입니다.');
-        alert('이미 존재하는 정보입니다.');
+        toast.warn('이미 존재하는 정보입니다.');
         break;
 
       case 500:
         console.error('[500 Server Error] 서버 내부 오류.');
-        alert('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        toast.error('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
         break;
 
       default:
         console.warn(`[${status}] 예외 응답`);
-        alert(message);
+        toast.error(message);
         break;
     }
 

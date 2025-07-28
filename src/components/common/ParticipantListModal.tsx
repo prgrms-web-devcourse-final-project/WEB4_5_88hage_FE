@@ -10,6 +10,7 @@ import {
   checkFollowingStatus,
 } from '@/lib/api/follow';
 import { useAuthStore } from '@/stores/UseAuthStore';
+import { toast } from "react-toastify";
 
 interface ParticipantData {
   userNickname: string;
@@ -42,14 +43,14 @@ export default function ParticipantListModal({
     if (window.confirm(`${targetNickname} 님을 모임에서 추방하시겠습니까?`)) {
       try {
         await kickoutParticipant(groupId, targetEmail);
-        alert(`${targetNickname} 님이 모임에서 추방되었습니다.`);
+        toast.success(`${targetNickname} 님이 모임에서 추방되었습니다.`);
         onClose(); // Close modal after kickout
         if (onUpdate) {
           onUpdate();
         }
       } catch (error) {
         console.error('Failed to kick out participant:', error);
-        alert('참여자 추방에 실패했습니다.');
+        toast.error('참여자 추방에 실패했습니다.');
       }
     }
   };
@@ -57,7 +58,7 @@ export default function ParticipantListModal({
   const handleFollow = async (email: string, nickname: string) => {
     try {
       await followUser(email);
-      alert(`${nickname} 님을 팔로우했습니다.`);
+      toast.success(`${nickname} 님을 팔로우했습니다.`);
       setParticipantList((prevParticipants) =>
         prevParticipants.map((p) =>
           p.userEmail === email ? { ...p, isFollowing: true } : p,
@@ -65,7 +66,7 @@ export default function ParticipantListModal({
       );
     } catch (error) {
       console.error('Failed to follow user:', error);
-      alert('팔로우에 실패했습니다.');
+      toast.error('팔로우에 실패했습니다.');
     }
   };
 
@@ -73,7 +74,7 @@ export default function ParticipantListModal({
     if (window.confirm(`${nickname} 님을 언팔로우하시겠습니까?`)) {
       try {
         await unfollowUser(email);
-        alert(`${nickname} 님이 언팔로우되었습니다.`);
+        toast.success(`${nickname} 님이 언팔로우되었습니다.`);
         setParticipantList((prevParticipants) =>
           prevParticipants.map((p) =>
             p.userEmail === email ? { ...p, isFollowing: false } : p,
@@ -81,7 +82,7 @@ export default function ParticipantListModal({
         );
       } catch (error) {
         console.error('Failed to unfollow user:', error);
-        alert('언팔로우에 실패했습니다.');
+        toast.error('언팔로우에 실패했습니다.');
       }
     }
   };
@@ -160,7 +161,7 @@ export default function ParticipantListModal({
                       <button
                         className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
                         onClick={() =>
-                          alert(`메시지 보내기: ${participant.userNickname}`)
+                          toast.info(`메시지 보내기: ${participant.userNickname}`)
                         }
                       >
                         메시지

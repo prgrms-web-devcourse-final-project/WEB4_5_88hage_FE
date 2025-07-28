@@ -5,6 +5,7 @@ import { FormEvent, useEffect } from 'react';
 import axios from 'axios';
 import { useSignupStore } from '@/stores/signupStore';
 import { useRouter } from 'next/navigation';
+import { toast } from "react-toastify";
 
 export default function Emailsend() {
   const { userData, isVerified } = useSignupStore();
@@ -27,11 +28,11 @@ export default function Emailsend() {
         )
         .then((response) => {
           console.log(response.data);
-          alert('인증 메일이 재발송되었습니다.');
+          toast.info('인증 메일이 재발송되었습니다.');
         })
         .catch((error) => {
           console.log(error.response.data);
-          alert(error.response.data.message);
+          toast.error(error.response.data.message);
         });
     }
   };

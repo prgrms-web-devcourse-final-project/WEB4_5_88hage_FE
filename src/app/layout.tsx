@@ -1,6 +1,8 @@
 import Script from "next/script";
 import '../assets/styles/globals.css';
 import ChatbotButtonWrapper from "@/components/chatbot/ChatbotButtonWrapper";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata = {
   title: 'Next.js',
@@ -19,7 +21,21 @@ export default function RootLayout({
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&libraries=services,clusterer&autoload=false`}
           strategy="beforeInteractive"
         />
+
         {children}
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          hideProgressBar
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss={false}
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
+
         <ChatbotButtonWrapper />
       </body>
     </html>

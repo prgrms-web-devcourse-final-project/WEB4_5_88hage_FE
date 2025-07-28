@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "@/assets/styles/datepicker.css";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function ChatbotModal({ onClose }) {
   const router = useRouter();
@@ -148,14 +149,14 @@ export default function ChatbotModal({ onClose }) {
         setHasRecommended(true);
       }
     } catch {
-      alert("추천 요청 실패!");
+      aletoast.error("추천 요청 실패!");
     }
   };
 
   // "추천 더 받기" 버튼 클릭 핸들러 (항상 2개씩 추가, 새 메시지로 쌓음)
   const handleShowMore = () => {
     if (recommendOffset >= allRecommendGroups.length) {
-      alert("챗봇추천은 여기까지입니다.");
+      toast.info("챗봇추천은 여기까지입니다.");
       return;
     }
     const nextOffset = Math.min(recommendOffset + 2, allRecommendGroups.length);

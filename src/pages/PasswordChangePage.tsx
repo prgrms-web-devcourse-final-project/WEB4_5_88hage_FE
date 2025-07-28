@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import logo from '@/assets/images/logo.svg';
 import { changePassword } from '@/lib/api/user';
+import { toast } from "react-toastify";
 
 export default function PasswordChangePage({ email }: { email: string }) {
   const [password, setPassword] = useState('');
@@ -28,13 +29,13 @@ export default function PasswordChangePage({ email }: { email: string }) {
     });
     const data = await response.json();
     console.log(data);
-    if (data.code === '4027') alert(data.message);
+    if (data.code === '4027') toast.info(data.message);
     if (data.code !== '0000') {
-      if (data.data.password) alert(data.data.password);
-      else if (data.data.confirmPassword) alert(data.data.confirmPassword);
-      else alert(data.message);
+      if (data.data.password) toast.info(data.data.password);
+      else if (data.data.confirmPassword) toast.info(data.data.confirmPassword);
+      else toast.info(data.message);
     } else {
-      alert(data.data);
+      toast.info(data.data);
       router.push('/');
     }
   };

@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { useSignupStore } from '@/stores/signupStore';
 import SearchAddressModal from '@/components/auth/SearchAddressModal';
 import { SignupRequest } from '@/types/auth';
+import { toast } from "react-toastify";
 
 export default function Signup() {
   const [nickname, setNickname] = useState('');
@@ -105,7 +106,7 @@ export default function Signup() {
         })
         .catch((error) => {
           console.log(error.response.data);
-          alert(error.response.data.message);
+          toast.error(error.response.data.message);
         });
     }
   }, [userData]);
@@ -148,7 +149,7 @@ export default function Signup() {
               tabIndex={-1}
               onClick={() => {
                 if (!nicknameCheck.test(nickname)) {
-                  alert('닉네임이 올바른 형식이 아닙니다.');
+                  toast.warn('닉네임이 올바른 형식이 아닙니다.');
                 } else {
                   axios
                     .post(
@@ -162,12 +163,12 @@ export default function Signup() {
                     )
                     .then((response) => {
                       console.log(response.data);
-                      alert(response.data.data);
+                      toast.info(response.data.data);
                       setDuplicationCheck(true);
                     })
                     .catch((error) => {
                       console.log(error.response.data);
-                      alert(error.response.data.message);
+                      toast.error(error.response.data.message);
                       setDuplicationCheck(false);
                     });
                 }

@@ -4,6 +4,7 @@ import email from '../assets/images/email.svg';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { sendCodeEmail, verifyAuthCode } from '@/lib/api/user';
+import { toast } from "react-toastify";
 
 export default function EmailCheck({
   next,
@@ -17,35 +18,35 @@ export default function EmailCheck({
 
   const sendMailToMe = () => {
     sendCodeEmail(emailInput)
-      .then((response: any) => {
-        alert(response.data);
+      .then((response) => {
+        toast.info(response.data);
         setIsCodeInput(true);
       })
-      .catch((error) => alert(error));
+      .catch((error) => toast.error(error));
   };
 
   const sendMailAgain = async () => {
     sendCodeEmail(emailInput)
-      .then((response: any) => {
-        alert(response.data);
+      .then((response) => {
+        toast.info(response.data);
         // setIsCodeInput(true);
       })
-      .catch((error) => alert(error));
+      .catch((error) => toast.error(error));
   };
 
   const codeEvent = async (c: string) => {
     verifyAuthCode(c, emailInput)
-      .then((response: any) => {
+      .then((response) => {
         console.log(response);
-        alert(response.message);
+        toast.info(response.message);
         if (next) next(emailInput);
       })
       .catch((error) => {
-        alert(error);
+        toast.error(error);
       });
   };
 
-  const codeSubmit = (d: any) => {
+  const codeSubmit = (d) => {
     const { c1, c2, c3, c4, c5, c6 } = d;
     setCodeInput(`${c1}${c2}${c3}${c4}${c5}${c6}`);
   };

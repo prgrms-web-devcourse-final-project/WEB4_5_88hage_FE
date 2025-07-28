@@ -11,7 +11,7 @@ import CategorySelect from '@/components/layout/CategorySelect';
 import WritingForm from '@/components/layout/WritingForm';
 import WritingFormTags from '@/components/layout/WritingFormTags';
 import AddPhotoButton from '@/components/ui/AddPhotoButton';
-
+import Toast from "@/components/common/Toast";
 interface GatheringEditPageProps {
   params: Promise<{ gatheringId: number }>;
 }
@@ -96,11 +96,11 @@ export default function GatheringEditPage({ params }: GatheringEditPageProps) {
 
     try {
       await updateGroup(Number(gatheringId), newData);
-      alert('모임이 성공적으로 수정되었습니다!');
+      Toast.success('모임이 성공적으로 수정되었습니다!');
       router.back();
     } catch (error) {
       console.error('Failed to update gathering:', error);
-      alert('모임 수정에 실패했습니다.');
+      Toast.error('모임 수정에 실패했습니다.');
     }
   };
 
