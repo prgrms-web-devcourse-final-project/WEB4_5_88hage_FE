@@ -3,7 +3,7 @@
 import { X } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import DarkModeToggle from '../DarkModeToggle';
+// import DarkModeToggle from '../DarkModeToggle';
 import cloud from '@/assets/images/cloud-face.png.png';
 import getWeather from '@/lib/api/weather';
 import Link from 'next/link';
@@ -30,12 +30,29 @@ const loginItem = [
 ];
 
 export default function MenuBar({ close }: { close: () => void }) {
+  const API = process.env.NEXT_PUBLIC_API_URL;
   const [active, setActive] = useState('');
   const [weather, setWeather] = useState<number | undefined>(undefined);
+  const [notiCount, setNotiCount] = useState(0);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
 
   const NAV_ITEMS = isAuthenticated ? loginItem : logoutItem;
+
+  const getNotificationCount = async () => {
+    if (user) {
+      const response = await fetch(
+        `${API}/api/notifications/unread-count?email=${user.email}`,
+      );
+      const { data } = await response.json();
+      setNotiCount(data);
+    }
+  };
+
+  useEffect(() => {
+    getNotificationCount();
+  }, [isAuthenticated === true, user]);
 
   useEffect(() => {
     const getNowWeather = async () => {
@@ -90,7 +107,10 @@ export default function MenuBar({ close }: { close: () => void }) {
                 className={`h2 group ml-[-15px] flex w-full items-center py-1 text-left font-semibold transition ${
                   active === item.label ? 'text-main font-bold' : 'text-white'
                 } hover:text-main`}
-                onClick={() => setActive(item.label)}
+                onClick={() => {
+                  setActive(item.label);
+                  close();
+                }}
                 type="button"
               >
                 <span
@@ -98,7 +118,17 @@ export default function MenuBar({ close }: { close: () => void }) {
                     active === item.label ? 'bg-main' : 'bg-transparent'
                   }`}
                 />
-                <Link href={`/${item.value}`}>{item.label}</Link>
+                {item.label !== '로그아웃' ? (
+                  <Link href={`/${item.value}`}>{item.label}</Link>
+                ) : (
+                  <div onClick={() => logout()}>로그아웃</div>
+                )}
+
+                {item.label === '알림' && notiCount !== 0 && (
+                  <div className="mt-[3px] ml-2 rounded-[20px] border border-[#ee3c3c] bg-[#ff8888] px-2 text-[12px] text-[#000]">
+                    + {notiCount}
+                  </div>
+                )}
               </button>
 
               {/* 하단 줄 추가 */}
