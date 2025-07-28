@@ -24,7 +24,7 @@ button {
   z-index: 0;
 }
 
-.container {
+/* .container {
   height: 100vh;            
   overflow-y: scroll;        
   scroll-snap-type: y mandatory;
@@ -32,4 +32,11 @@ button {
 .slide {
   height: 100vh;             
   scroll-snap-align: start;  
+} */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

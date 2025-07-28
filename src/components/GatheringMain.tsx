@@ -9,10 +9,14 @@ import { toast } from "react-toastify";
 
 interface GatheringMainProps {
   selectedGathering: GroupDetail | null;
+  onParticipantUpdate?: () => void;
+  onGroupUpdate?: () => void;
 }
 
 export default function GatheringMain({
   selectedGathering,
+  onParticipantUpdate,
+  onGroupUpdate,
 }: GatheringMainProps) {
   console.log('🔍 selectedGathering:', selectedGathering);
   if (!selectedGathering) {
@@ -58,6 +62,8 @@ export default function GatheringMain({
           onComplete={handleCompleteGroup}
           onDelete={handleDeleteGroup}
           isLeader={selectedGathering.isLeader}
+          onParticipantUpdate={onParticipantUpdate}
+          onGroupUpdate={onGroupUpdate}
         />
         <div className="mt-5 flex gap-5">
           {selectedGathering.hashTags &&

@@ -38,13 +38,14 @@ function ShrinkBlock({ children }: ShrinkBlockProps) {
   );
 }
 
-export default function ShrinkSection() {
+export default function AdvantageTagLine() {
   return (
     <section
       className="
         text-[36px] lg:text-[80px] text-gray-default font-semibold
         flex flex-col items-center
         min-w-[335px] lg:min-w-[1580px]
+        bg-[#000]
       "
     >
       {/* 첫 블록 */}
@@ -95,6 +96,9 @@ export default function ShrinkSection() {
           <span>플레이스</span>
         </p>
       </ShrinkBlock>
+
+      <div className="relative h-[20vh] w-full bg-gradient-to-b from-[rgba(0,0,0,1)] to-[#121212]">
+      </div>
     </section>
   );
 }

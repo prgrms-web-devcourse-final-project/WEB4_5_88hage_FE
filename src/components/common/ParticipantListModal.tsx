@@ -4,38 +4,105 @@ import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { X } from 'lucide-react';
 import { kickoutParticipant } from '@/lib/api/participant';
+import {
+  followUser,
+  unfollowUser,
+  checkFollowingStatus,
+} from '@/lib/api/follow';
 import { useAuthStore } from '@/stores/UseAuthStore';
 import { toast } from "react-toastify";
 
+interface ParticipantData {
+  userNickname: string;
+  userImageUrl: string;
+  userEmail: string;
+  isFollowing?: boolean;
+}
+
 interface ParticipantListModalProps {
-  participants: ApprovedParticipantInfo[];
+  participants: ParticipantData[];
   onClose: () => void;
   isLeader?: boolean;
   groupId: number;
+  onUpdate?: () => void;
 }
 
 export default function ParticipantListModal({
   participants,
   onClose,
+  onUpdate,
   isLeader,
   groupId,
 }: ParticipantListModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const { user } = useAuthStore();
+  const [participantList, setParticipantList] =
+    React.useState<ParticipantData[]>(participants);
 
   const handleKickout = async (targetEmail: string, targetNickname: string) => {
     if (window.confirm(`${targetNickname} 님을 모임에서 추방하시겠습니까?`)) {
       try {
         await kickoutParticipant(groupId, targetEmail);
         toast.success(`${targetNickname} 님이 모임에서 추방되었습니다.`);
-        onClose(); // Close modal after kickout                                                  │
-        // Optionally, refresh the participant list or the page
+        onClose(); // Close modal after kickout
+        if (onUpdate) {
+          onUpdate();
+        }
       } catch (error) {
         console.error('Failed to kick out participant:', error);
         toast.error('참여자 추방에 실패했습니다.');
       }
     }
   };
+
+  const handleFollow = async (email: string, nickname: string) => {
+    try {
+      await followUser(email);
+      toast.success(`${nickname} 님을 팔로우했습니다.`);
+      setParticipantList((prevParticipants) =>
+        prevParticipants.map((p) =>
+          p.userEmail === email ? { ...p, isFollowing: true } : p,
+        ),
+      );
+    } catch (error) {
+      console.error('Failed to follow user:', error);
+      toast.error('팔로우에 실패했습니다.');
+    }
+  };
+
+  const handleUnfollow = async (email: string, nickname: string) => {
+    if (window.confirm(`${nickname} 님을 언팔로우하시겠습니까?`)) {
+      try {
+        await unfollowUser(email);
+        toast.success(`${nickname} 님이 언팔로우되었습니다.`);
+        setParticipantList((prevParticipants) =>
+          prevParticipants.map((p) =>
+            p.userEmail === email ? { ...p, isFollowing: false } : p,
+          ),
+        );
+      } catch (error) {
+        console.error('Failed to unfollow user:', error);
+        toast.error('언팔로우에 실패했습니다.');
+      }
+    }
+  };
+  useEffect(() => {
+    const fetchFollowingStatus = async () => {
+      const updatedParticipants = await Promise.all(
+        participants.map(async (p) => {
+          if (user?.email && p.userEmail !== user.email) {
+            const isFollowing = await checkFollowingStatus(p.userEmail);
+            return { ...p, isFollowing };
+          }
+          return p;
+        }),
+      );
+      setParticipantList(updatedParticipants);
+    };
+
+    fetchFollowingStatus();
+  }, [participants, user?.email]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -66,11 +133,11 @@ export default function ParticipantListModal({
         </button>
         <h2 className="mb-4 text-center text-[20px] text-white">모임 유저</h2>
         <hr className="text-gray-disabled py-4" />
-        {participants.length === 0 ? (
+        {participantList.length === 0 ? (
           <p className="text-gray-4">참여자가 없습니다.</p>
         ) : (
           <ul className="max-h-80 space-y-5 overflow-y-auto">
-            {participants.map((participant, index) => (
+            {participantList.map((participant, index) => (
               <li
                 key={index}
                 className="flex items-center justify-between gap-3"
@@ -99,14 +166,31 @@ export default function ParticipantListModal({
                       >
                         메시지
                       </button>
-                      <button
-                        className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
-                        onClick={() =>
-                          toast.info(`팔로우: ${participant.userNickname}`)
-                        }
-                      >
-                        팔로우
-                      </button>
+                      {participant.isFollowing ? (
+                        <button
+                          className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
+                          onClick={() =>
+                            handleUnfollow(
+                              participant.userEmail,
+                              participant.userNickname,
+                            )
+                          }
+                        >
+                          언팔로우
+                        </button>
+                      ) : (
+                        <button
+                          className="bg-gray-4 mr-2 ml-1.5 rounded px-3 py-1 text-sm text-white"
+                          onClick={() =>
+                            handleFollow(
+                              participant.userEmail,
+                              participant.userNickname,
+                            )
+                          }
+                        >
+                          팔로우
+                        </button>
+                      )}
                     </>
                   )}
                   {isLeader && user?.email !== participant.userEmail && (
