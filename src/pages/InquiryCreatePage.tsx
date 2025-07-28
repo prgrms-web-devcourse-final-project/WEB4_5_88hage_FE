@@ -7,6 +7,7 @@ import { createInquiry } from '@/lib/api/inquiry';
 // import { ContactRequest } from '@/types/inquiry';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
+import { toast } from "react-toastify";
 
 export default function InquiryCreatePage() {
   // let formData = new FormData();
@@ -35,11 +36,11 @@ export default function InquiryCreatePage() {
 
     // API
     createInquiry(formDataRequested)
-      .then((response: any) => {
-        alert(response.data);
+      .then((response) => {
+        toast.info(response.data);
         router.push('/inquiry');
       })
-      .catch((error) => alert(error));
+      .catch((error) => toast.error(error));
   };
 
   return (

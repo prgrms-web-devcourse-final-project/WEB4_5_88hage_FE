@@ -5,6 +5,7 @@ import testMap from '@/assets/images/testmap.png';
 import MainPostHeader from './common/MainPostHeader';
 import { getCategoryDisplayName } from '@/lib/utils/categoryMapping';
 import { completeGroup, deleteGroup } from '@/lib/api/group';
+import { toast } from "react-toastify";
 
 interface GatheringMainProps {
   selectedGathering: GroupDetail | null;
@@ -25,23 +26,23 @@ export default function GatheringMain({
   const handleCompleteGroup = async (groupId: number) => {
     try {
       await completeGroup(groupId);
-      alert('모임이 완료 처리되었습니다.');
+      toast.success('모임이 완료 처리되었습니다.');
 
       // Optionally, refresh or redirect
     } catch (error) {
       console.error('Failed to complete group:', error);
-      alert('모임 완료 처리에 실패했습니다.');
+      toast.error('모임 완료 처리에 실패했습니다.');
     }
   };
 
   const handleDeleteGroup = async (groupId: number) => {
     try {
       await deleteGroup(groupId);
-      alert('모임이 삭제되었습니다.');
+      toast.success('모임이 삭제되었습니다.');
       // Optionally, refresh or redirect
     } catch (error) {
       console.error('Failed to delete group:', error);
-      alert('모임 삭제에 실패했습니다.');
+      toast.error('모임 삭제에 실패했습니다.');
     }
   };
 

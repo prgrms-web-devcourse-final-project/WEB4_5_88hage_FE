@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { X } from 'lucide-react';
 import { kickoutParticipant } from '@/lib/api/participant';
 import { useAuthStore } from '@/stores/UseAuthStore';
+import { toast } from "react-toastify";
 
 interface ParticipantListModalProps {
   participants: ApprovedParticipantInfo[];
@@ -26,12 +27,12 @@ export default function ParticipantListModal({
     if (window.confirm(`${targetNickname} 님을 모임에서 추방하시겠습니까?`)) {
       try {
         await kickoutParticipant(groupId, targetEmail);
-        alert(`${targetNickname} 님이 모임에서 추방되었습니다.`);
+        toast.success(`${targetNickname} 님이 모임에서 추방되었습니다.`);
         onClose(); // Close modal after kickout                                                  │
         // Optionally, refresh the participant list or the page
       } catch (error) {
         console.error('Failed to kick out participant:', error);
-        alert('참여자 추방에 실패했습니다.');
+        toast.error('참여자 추방에 실패했습니다.');
       }
     }
   };
@@ -93,7 +94,7 @@ export default function ParticipantListModal({
                       <button
                         className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
                         onClick={() =>
-                          alert(`메시지 보내기: ${participant.userNickname}`)
+                          toast.info(`메시지 보내기: ${participant.userNickname}`)
                         }
                       >
                         메시지
@@ -101,7 +102,7 @@ export default function ParticipantListModal({
                       <button
                         className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
                         onClick={() =>
-                          alert(`팔로우: ${participant.userNickname}`)
+                          toast.info(`팔로우: ${participant.userNickname}`)
                         }
                       >
                         팔로우

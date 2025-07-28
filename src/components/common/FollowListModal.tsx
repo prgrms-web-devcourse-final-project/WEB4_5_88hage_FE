@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { X } from 'lucide-react';
 import { unfollowUser } from '@/lib/api/follow';
+import { toast } from "react-toastify";
 
 interface FollowListModalProps {
   users: { nickname: string; imageUrl: string; email: string }[];
@@ -24,13 +25,13 @@ export default function FollowListModal({
     if (window.confirm(`${nickname} 님을 언팔로우하시겠습니까?`)) {
       try {
         await unfollowUser(email);
-        alert(`${nickname} 님이 언팔로우되었습니다.`);
+        toast.success(`${nickname} 님이 언팔로우되었습니다.`);
         if (onUnfollowSuccess) {
           onUnfollowSuccess();
         }
       } catch (error) {
         console.error('Failed to unfollow user:', error);
-        alert('언팔로우에 실패했습니다.');
+        toast.error('언팔로우에 실패했습니다.');
       }
     }
   };
@@ -90,7 +91,7 @@ export default function FollowListModal({
                 <div className="flex gap-2">
                   <button
                     className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
-                    onClick={() => alert(`메시지 보내기: ${user.nickname}`)}
+                    onClick={() => toast.info(`메시지 보내기: ${user.nickname}`)}
                   >
                     메시지
                   </button>
