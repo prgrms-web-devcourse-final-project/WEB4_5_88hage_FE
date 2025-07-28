@@ -1,85 +1,32 @@
-'use client';
-
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import GatheringTabButton from './button/GatheringTabButton';
 import { Search, Users } from 'lucide-react';
 import { BiSolidChat } from 'react-icons/bi';
 import ChatItem from './common/ChatItem';
 import GatheringItem from './common/GatheringItem';
-import { getGroupById, getMyGroups } from '@/lib/api/group';
-import { getMyPersonalChatRooms, getLastChatHistory } from '@/lib/api/chat';
 import { useAuthStore } from '@/stores/UseAuthStore';
 
 interface GatheringSideProps {
   onSelectGathering: (gathering: GroupDetail) => void;
+  activeTab: 'my-gathering' | 'chat';
+  onTabChange: (tab: 'my-gathering' | 'chat') => void;
+  myGatherings: GroupDetail[];
+  lastMessages: Record<number, LastChatHistory>;
 }
 
 export default function GatheringSide({
   onSelectGathering,
+  activeTab,
+  onTabChange,
+  myGatherings,
+  lastMessages,
 }: GatheringSideProps) {
   const { user } = useAuthStore();
-  const [activeTab, setActiveTab] = useState('my-gathering');
-  const [myGatherings, setMyGatherings] = useState<GroupDetail[]>([]);
-  const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
-  const [lastMessages, setLastMessages] = useState<
-    Record<number, LastChatHistory>
-  >({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const [MyGroupsResponse, chatRoomsData] = await Promise.all([
-          getMyGroups(),
-          getMyPersonalChatRooms(),
-        ]);
-
-        const myGroupDetails = await Promise.all(
-          MyGroupsResponse.map(async (group) => {
-            const detail = await getGroupById(group.groupId);
-            return {
-              ...detail,
-              isLeader: group.groupLeaderEmail === group.currentUserEmail,
-            };
-          }),
-        );
-        setMyGatherings(myGroupDetails.filter(Boolean)); // Filter out any null/undefined details
-        setChatRooms(chatRoomsData);
-
-        if (chatRoomsData && chatRoomsData.length > 0) {
-          const lastMessagesData = await Promise.all(
-            chatRoomsData.map((room) =>
-              getLastChatHistory(room.id, 'PERSONAL_CHAT'),
-            ),
-          );
-          const lastMessagesMap = lastMessagesData.reduce(
-            (acc, msg, index) => {
-              if (msg) {
-                acc[chatRoomsData[index].id] = msg;
-              }
-              return acc;
-            },
-            {} as Record<number, LastChatHistory>,
-          );
-          setLastMessages(lastMessagesMap);
-        }
-      } catch (err) {
-        setError('데이터를 불러오는 데 실패했습니다.');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const filteredGatherings = Array.from(
     new Map(myGatherings.map((item) => [item.id, item])).values(),
@@ -88,26 +35,6 @@ export default function GatheringSide({
       gathering.title &&
       gathering.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
-
-  if (loading) {
-    return (
-      <div
-        className={`bg-gray-7 lg:border-gray-5 mt-5 flex h-full w-full flex-col items-center rounded-[15px] p-2 lg:w-[330px] lg:border`}
-      >
-        <p>로딩 중...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div
-        className={`bg-gray-7 lg:border-gray-5 mt-5 flex h-full w-full flex-col items-center rounded-[15px] p-2 lg:w-[330px] lg:border`}
-      >
-        <p>에러: {error}</p>
-      </div>
-    );
-  }
 
   return (
     <>
@@ -119,13 +46,13 @@ export default function GatheringSide({
             icon={<Users />}
             label="내 모임"
             isActive={activeTab === 'my-gathering'}
-            onClick={() => setActiveTab('my-gathering')}
+            onClick={() => onTabChange('my-gathering')}
           />
           <GatheringTabButton
             icon={<BiSolidChat className="h-[19px] w-[19px]" />}
             label="모임 채팅"
             isActive={activeTab === 'chat'}
-            onClick={() => setActiveTab('chat')}
+            onClick={() => onTabChange('chat')}
           />
           <div
             className={`bg-main absolute bottom-0 h-0.5 w-[125px] transition-transform duration-300 ease-in-out ${
@@ -169,27 +96,18 @@ export default function GatheringSide({
             </div>
           ) : (
             <div className="space-y-2">
-              {chatRooms.length > 0 ? (
-                chatRooms.map((room) => (
+              {filteredGatherings.length > 0 ? (
+                filteredGatherings.map((gathering) => (
                   <ChatItem
-                    key={room.id}
+                    key={gathering.id}
                     lastMessage={
-                      lastMessages[room.id]?.message || '메시지 없음'
+                      lastMessages[gathering.id]?.message ||
+                      '아직 대화중이 아닌 채팅방입니다.'
                     }
-                    name={room.name || '알 수 없는 채팅방'}
-                    time={
-                      lastMessages[room.id]?.created_at
-                        ? new Date(
-                            lastMessages[room.id]?.created_at,
-                          ).toLocaleTimeString([], {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })
-                        : ''
-                    }
-                    profileUrl={
-                      room.chatRoomImageUrl || '/hip-girl-thinking.svg'
-                    }
+                    name={`${gathering.title}` || '알 수 없는 채팅방'}
+                    time={lastMessages[gathering.id]?.time}
+                    imageUrl={gathering.imageUrl}
+                    onClick={() => onSelectGathering(gathering)}
                   />
                 ))
               ) : (

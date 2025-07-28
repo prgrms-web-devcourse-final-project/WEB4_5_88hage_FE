@@ -60,6 +60,8 @@ declare interface GroupDetail {
   hashTags: string[];
   activated: boolean;
   isLeader?: boolean; // Added for leader matching logic
+  memberCount: number; // for MainPostHeader
+  groupImageUrl: string; // for MainPostHeader
 }
 
 declare interface GroupUpdateRequest {
@@ -194,7 +196,7 @@ declare interface MyGroupData {
   groupLeaderEmail: string;
   groupImageUrl: string;
   currentUserEmail: string;
-  currenUserImageUrl: string;
+  currentUserImageUrl: string;
   currentUserNickname: string;
   participantCount: number;
   status: string;

@@ -10,6 +10,7 @@
     "format": "prettier --white src/"
   },
   "dependencies": {
+    "@stomp/stompjs": "^7.1.1",
     "@tanstack/react-query": "^5.83.0",
     "axios": "^1.10.0",
     "base-64": "^1.0.0",
@@ -28,6 +29,8 @@
     "react-hook-form": "^7.59.0",
     "react-icons": "^5.5.0",
     "react-kakao-maps-sdk": "^1.2.0",
+    "react-spinners": "^0.17.0",
+    "sockjs-client": "^1.6.1",
     "swiper": "^11.2.10",
     "tailwind-merge": "^3.3.1",
     "zustand": "^5.0.6"
@@ -39,6 +42,8 @@
     "@types/react": "^19",
     "@types/react-datepicker": "^6.2.0",
     "@types/react-dom": "^19",
+    "@types/sockjs-client": "^1.5.4",
+    "@types/stompjs": "^2.3.9",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
     "kakao.maps.d.ts": "^0.1.40",

@@ -9,6 +9,7 @@ import {
   LucideHeart,
   LucideMapPin,
   LucideLink2,
+  LucideChevronUp
 } from 'lucide-react';
 import Link from 'next/link';
 import moment from 'moment';
@@ -18,8 +19,9 @@ import { useState } from 'react';
 
 export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
   const [show,setShow] = useState(false);
-
+  const [showMore,setShowMore] = useState(false);
   const {content,related,nearby} = data;
+
 
   console.log(content)
   const relatedArr = [related[0],related[1]];
@@ -33,12 +35,12 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
     <div className="eventDetail-gradient flex w-screen min-w-screen justify-center bg-[#121212] lg:w-340">
       <div className="hidden h-full min-h-screen py-15 text-[#f6f6f6] lg:flex">
         <div className="flex w-160 flex-col gap-10 px-5">
-          <div className="flex flex-col gap-7.5 w-full h-[300px] overflow-hidden relative">
-            <Image src={content.poster} alt={content.contentTitle} fill className='object-contain'/>
+          <div className={`overflow-hidden ${showMore ? 'h-fit' : 'h-[300px]'}`}>
+            <Image src={content.poster} alt={content.contentTitle} width={800} height={500} className="w-full h-auto object-cover"/>
           </div>
-          <button className="flex cursor-pointer justify-center gap-2 bg-[#1c1c1c] p-5 text-[#c3c3c3] w-full">
-              더보기 <LucideChevronDown />
-          </button>
+            {showMore ?<button onClick={()=> {
+              window.scrollTo({ top: 0 });
+              setShowMore(false)}} className="flex cursor-pointer justify-center gap-2 bg-[#1c1c1c] p-5 text-[#c3c3c3] w-full">접기 <LucideChevronUp /></button>:<button onClick={()=> setShowMore(true)} className="flex cursor-pointer justify-center gap-2 bg-[#1c1c1c] p-5 text-[#c3c3c3] w-full">더보기 <LucideChevronDown /></button>}
           <div className="flex flex-col gap-8">
             <div className="text-2xl text-[#00e6ae]">안내 사항</div>
             <div className="mb-[18px] flex flex-col gap-[23px]">
@@ -46,8 +48,9 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
               <div>행사 날짜 : {dateFormatting(content.startDate)} ~ {dateFormatting(content.endDate)}</div>
               <div>행사 장소 : {content.address}</div>
               <div>행사 시간 : {content.runTime}</div>
+              <div>이용 요금 : {content.fee}</div>
               <div>나이 제한 : {content.age}</div>
-              <div>시작 시간 : {content.startTime}</div>
+              <div>시작 시간 : {content.time}</div>
             </div>
             <div className="flex flex-col gap-[20px]">
               <div className="text-main text-[24px]">찾아 오시는 길</div>
@@ -64,9 +67,9 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
             <div className="flex gap-5">
               {relatedArr.map((data) => {
                 return (
-                <button key={data.id}  className="flex cursor-pointer flex-col gap-5">
-                <div className='w-[100%] max-w-[345px] overflow-hidden relative'>
-                  <Image src={data.poster} alt="포스트 이미지" width={345} height={235} className="object-cover"/>
+                <div key={data.id}  className="flex cursor-pointer flex-col gap-5 w-[calc(50%-10px)] max-w-[calc(50%-10px)]">
+                <div className='w-[100%] h-[235px] overflow-hidden relative'>
+                  <Image src={data.poster} alt="포스트 이미지" width={290} height={235} className="w-full h-auto object-cover"/>
                 </div>
                 <div>
                   <div className="text-[16px] text-[#e4e4e4] truncate text-start mb-[15px]">{data.contentTitle}</div>
@@ -77,7 +80,7 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
                     </div>
                   </div>
                 </div>
-              </button>)
+              </div>)
               })}
             </div>
           </div>
@@ -91,20 +94,20 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
             <div className="flex gap-5">
               {nearbyArr.map((data) => {
                 return (
-                <button key={data.id}  className="flex cursor-pointer flex-col gap-5">
-                <div className='w-[100%] max-w-[345px] overflow-hidden relative'>
-                  <Image src={data.poster} alt={data.contentTitle} width={345} height={235} className="object-cover"/>
+                <div key={data.id}  className="flex cursor-pointer flex-col w-[calc(50%-10px)] max-w-[calc(50%-10px)]">
+                <div className='w-[100%] h-[235px] overflow-hidden relative mb-[20px]'>
+                  <Image src={data.poster} alt="포스트 이미지" width={290} height={235} className="w-full h-auto object-cover"/>
                 </div>
                 <div>
                   <div className="text-[16px] text-[#e4e4e4] truncate text-start mb-[15px]">{data.contentTitle}</div>
                   <div className="flex gap-4">
-                    <div className="flex gap-2 text-[#b0b0b0] text-[16px] justify-center items-center">
-                      <LucideMapPin size={16}/>
+                    <div className="flex gap-2 text-[#b0b0b0] text-[16px">
+                      <LucideMapPin size={16} className='mt-[4px]'/>
                       {data.area}
                     </div>
                   </div>
                 </div>
-              </button>)
+              </div>)
               })}
             </div>
           </div>

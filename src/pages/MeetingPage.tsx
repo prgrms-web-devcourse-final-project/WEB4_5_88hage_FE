@@ -48,7 +48,7 @@ const currentGroups = groups.slice(startIdx, endIdx);
     }
     setLoading(true);
     try {
-  const res = await fetch("https://funfun.cloud/api/chatBots/group", {
+  const res = await fetch("https://funfun.cloud/api/recommend/group", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",

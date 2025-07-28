@@ -1,4 +1,4 @@
-.rbc-calendar{
+/* .rbc-calendar{
     width: 100%;
     height: calc(100vh - 230px)  !important;
     background-color: #1a1a1a;
@@ -98,12 +98,6 @@
     text-align: start;
     flex-grow: unset;
 }
-.rbc-btn-group > button:nth-child(1) {
-    display: none;
-}
-.rbc-btn-group:last-child {
-    display: none;
-}
 .rbc-toolbar {
     display: flex;
     flex-direction: row-reverse;
@@ -123,22 +117,15 @@
 .rbc-toolbar button:active {
     background-color: transparent;
 }
+.rbc-btn-group > button:nth-child(1) {
+    display: none;
+}
+.rbc-btn-group:last-child {
+    display: none;
+}
 .rbc-row-content {
     height: 100%;
 }
-.rbc-row-segment{
-    width: 100%;
-    max-width: 80% !important;
-}
-.rbc-event {
-  color: #fff;
-  font-weight: bold;
-  max-width: 100%;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 14px;
-}
-
 @media screen and (max-width: 700px) {
     .rbc-calendar{
     width: 100%;
@@ -253,4 +240,168 @@
 .rbc-toolbar button:active {
     background-color: transparent;
 }
+} */
+
+.rbc-calendar{
+    width: 100%;
+    height: calc(100vh - 230px)  !important;
+    background-color: #1a1a1a;
+    padding: 15px;
+    padding-top: 0;
+    border-radius: 5px;
+}
+/* 툴바 */
+.rbc-toolbar {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    margin-bottom: 0;
+    border-bottom: 1px solid #313131;
+    padding: 15px 5px;
+}
+.rbc-toolbar-label {
+    font-weight: bold ;
+    background-image: linear-gradient(to right, #1cebb9, #7f74ff) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    color: transparent !important;
+    text-align: start;
+    flex-grow: unset !important;
+    padding: 0 !important;
+}
+.rbc-btn-group:last-child {
+    display: none;
+}
+.rbc-toolbar .rbc-toolbar-label {
+    text-align: start;
+    flex-grow: unset;
+}
+.rbc-toolbar button {
+    border: none;
+    color: #1CEBB9;
+}
+.rbc-toolbar button:first-child {
+    display: none;
+}
+.rbc-toolbar button:hover {
+    background-color: transparent;
+    color: #7f74ff;
+}
+.rbc-toolbar button:active {
+    background-color: transparent;
+}
+/* 툴바 */
+.rbc-month-view{
+    border: none;
+    background-color: transparent;
+    display: flex;
+    gap: 10px;
+}
+.rbc-header{
+    font-weight:normal;
+    color: #ffffff;
+    border-bottom: none;
+    border-top: 1px solid #4D4D4D;
+    padding-top: 12px;
+    padding-bottom: 5px;
+    font-size: 16px;
+    font-weight: 500;
+}
+.rbc-header:first-child,.rbc-header:last-child{
+    color: #FF4B4B;
+}
+.rbc-header + .rbc-header {
+    border-left: none;
+}
+/* cell bg */
+.rbc-month-row + .rbc-month-row {
+    border-top: none;
+}
+.rbc-row-bg {
+    gap: 10px;
+}
+.rbc-day-bg.rbc-off-range-bg {
+    background-color: #1F1F1F;
+}
+.rbc-day-bg{
+    background: #292929;
+    border-radius: 5px;
+}
+.rbc-day-bg.rbc-today {
+    color: #1CEBB9 !important;
+}
+.rbc-day-bg + .rbc-day-bg {
+    border-left: none;
+}
+
+/* cell content */
+.rbc-row-content > *:not(:first-child) {
+    width: 100%;
+}
+.rbc-row-content .rbc-row:first-child{
+    gap: 10px;
+    margin-bottom: 5px;
+}
+.rbc-date-cell {
+    display: flex;
+    justify-content: start;
+    padding-right: 0;
+    padding: 0 5px;
+}
+.rbc-date-cell .rbc-now {
+    color: #1CEBB9;
+}
+.rbc-row-segment {
+    padding: 0 0 0 0 !important;
+    margin-bottom: 5px;
+}
+.rbc-row-segment:nth-child(1) {
+    padding-left: 0 !important;
+}
+.rbc-row-segment:nth-child(2) {
+    padding-left: 5px !important;
+}
+.rbc-row-segment:nth-child(3) {
+    padding-left: 10px !important;
+}
+.rbc-row-segment:nth-child(4) {
+    padding-left: 10px !important;
+}
+.rbc-row-segment:nth-child(5) {
+    padding-left: 10px !important;
+}
+.rbc-row-segment:nth-child(6) {
+    padding-left: 10px !important;
+}
+.rbc-row-segment:nth-child(7) {
+    padding-left: 10px !important;
+}
+.rbc-event {
+    width: 70%;
+    background-color: transparent;
+    font-size: 14px;
+}
+.rbc-event-content {
+    color: #f6f6f6;
+    width: 100%;
+}
+/* cell button*/
+.rbc-date-cell:hover .rbc-button-link{
+    color: #1CEBB9;
+}
+.rbc-date-cell .rbc-button-link{
+    color: #fff;
+    font-weight: normal;
+    width: 100%;
+    text-align: start;
+    padding-top: 3px;
+}
+.rbc-current button {
+    color: #1CEBB9;    
+}
+.rbc-date-cell.rbc-off-range .rbc-button-link {
+    color: #5e5e5e;
+}
+.rbc-current .rbc-button-link{
+    color: #1CEBB9;
 }

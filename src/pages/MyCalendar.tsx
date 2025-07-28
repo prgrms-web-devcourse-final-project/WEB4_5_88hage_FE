@@ -1,16 +1,22 @@
 'use client'
+
 import CalendarContainer from '@/components/calendar/CalendarContainer';
 import CalendarSidebar from '@/components/calendar/CalendarSidebar';
 import { getMonthlyCalendar } from '@/lib/api/calendar';
 import { useEffect, useState } from 'react';
+import moment from 'moment';
+import 'moment-timezone';
 
 export default function MyCalendar() {
   const date = new Date();
   
+  //전체 일정 대한 이벤트
   const [calendarData,setCalendarData] = useState<CalendarData[]>([]);
 
+  //클릭한 날의 이벤트
   const [selectListData,setSelectListData] = useState<CalendarData[]>([]);
 
+  //사용자가 선택한 날짜
   const [selectDate,setSelectDate] = useState<SelectDate>({
     date: date.getDate(),
     month: date.getMonth()+1,
@@ -21,28 +27,27 @@ export default function MyCalendar() {
     const getMonthCalendarDate = async () => {
       try{
         const {data} = await getMonthlyCalendar(selectDate.year,selectDate.month);
-        console.log(data);
+        console.log(data)
         const temp = data.map(data => {
-          const start = new Date(data.selectedDate);
-          const end = new Date(start.getTime() + 60 * 60 * 1000)
+          const start = moment.tz(data.selectedDate, 'Asia/Seoul').toDate();
+          const end = moment(start).add(1, 'hour').toDate();
           return {
           activityId:data.activityId.toString(),
           calendarId:data.calendarId.toString(),
+          address: data.address,
           title: data.title,
           start,
           end,
-          type: data.type
+          type: data.type,
         }
       });
-      console.log(temp);
       setCalendarData(temp);
       }catch(error){
         console.log('캘린더 정보를 불러오는데 실패 했습니다.',error)
       }
     }
     getMonthCalendarDate();
-
-  },[selectDate]);
+  },[selectDate.month,selectDate.year]);
 
   return (
     <>
@@ -51,8 +56,8 @@ export default function MyCalendar() {
             일정관리
           </h2>
           <div className="flex w-full flex-col lg:flex lg:flex-row lg:gap-[20px]">
-            <CalendarSidebar selectDate={selectDate} selectListData={selectListData} setSelectListData={setSelectListData} />
-            <CalendarContainer setSelectDate={setSelectDate} setSelectListData={setSelectListData} calendarData={calendarData}/>
+            <CalendarSidebar selectDate={selectDate} selectListData={selectListData} setSelectListData={setSelectListData} setCalendarData={setCalendarData}/>
+            <CalendarContainer setSelectDate={setSelectDate} setSelectListData={setSelectListData} calendarData={calendarData} />
           </div>
         </div>
     </>

@@ -3,12 +3,14 @@ import Image from 'next/image';
 import test from '@/assets/images/test.png';
 import test2 from '@/assets/images/test2.png';
 import testmap from '@/assets/images/testmap.png';
-import { LucideChevronDown, LucideHeart, LucideMapPin } from 'lucide-react';
+import { LucideChevronDown, LucideHeart, LucideMapPin,LucideChevronUp } from 'lucide-react';
 import GatheringHostBox from '@/components/GatheringHostBox';
 import Map from '@/components/kakao/Map'
 import { useState } from 'react';
 
 export default function GatheringDetail({data}:{data:any}) {
+  const{relatedGroups} = data
+  const [showMore,setShowMore] = useState(false);
 
   const applyGathering = async (id: number) => {
   try {
@@ -46,15 +48,16 @@ export default function GatheringDetail({data}:{data:any}) {
     <div className="eventDetail-gradient flex w-screen min-w-screen justify-center bg-[#121212] lg:w-340">
       <div className="hidden h-full min-h-screen py-15 text-[#f6f6f6] lg:flex">
         <div className="flex w-160 flex-col gap-9 px-5">
+          <div className={`w-full h-fit`}>
+              <Image src={test} alt={`${data.title} 포스트 이미지`} width={800} height={500} className="w-full h-auto object-cover"/>
+          </div>
           <div className="flex flex-col gap-7.5">
-            <Image src={test} alt="" />
             <div className="text-2xl text-[#00e6ae]">상세 정보</div>
-            <div>
+            <div className={`overflow-hidden h-fit ${showMore ? 'max-h-none' : 'max-h-[50px]'}`}>
               {data.explain}
             </div>
-            <button className="flex cursor-pointer justify-center gap-2 bg-[#1c1c1c] p-5 text-[#c3c3c3]">
-              더보기 <LucideChevronDown />
-            </button>
+            {showMore ?<button onClick={()=> {
+              setShowMore(false)}} className="flex cursor-pointer justify-center gap-2 bg-[#1c1c1c] p-5 text-[#c3c3c3] w-full">접기 <LucideChevronUp /></button>:<button onClick={()=> setShowMore(true)} className="flex cursor-pointer justify-center gap-2 bg-[#1c1c1c] p-5 text-[#c3c3c3] w-full">더보기 <LucideChevronDown /></button>}
           </div>
           <div className="flex flex-col gap-8">
             <div className="text-2xl text-[#00e6ae]">안내 사항</div>
@@ -68,7 +71,7 @@ export default function GatheringDetail({data}:{data:any}) {
               <Map lat={data.latitude} lng={data.longitude} width='100%' height='280px'/>
             </div>
           </div>
-          <GatheringHostBox hostName={data.leaderNickname} hostEmail={data.leaderEmail}/>
+          <GatheringHostBox hostName={data.leaderNickname} hostEmail={data.leaderEmail} tags={data.leaderHashTags} hostExplain={data.leaderExplain}/>
           <div className="flex flex-col gap-9">
             <div className="flex items-center justify-between">
               <div className="text-2xl text-[#00e6ae]">
@@ -77,36 +80,23 @@ export default function GatheringDetail({data}:{data:any}) {
               <button className="cursor-pointer text-[#a1a1a1]">더보기</button>
             </div>
             <div className="flex gap-5">
-              <button className="flex cursor-pointer flex-col gap-5">
-                <Image src={test2} alt="" />
-                <div className="flex flex-col items-baseline gap-4">
-                  <div className="text-xl text-[#e4e4e4]">모임 이름</div>
-                  <div className="flex gap-4">
-                    <div className="flex gap-2 text-[#b0b0b0]">
-                      <LucideHeart />5
-                    </div>
-                    <div className="flex gap-2 text-[#b0b0b0]">
-                      <LucideMapPin />
-                      여의동
-                    </div>
-                  </div>
-                </div>
-              </button>
-              <button className="flex cursor-pointer flex-col gap-5">
-                <Image src={test2} alt="" />
-                <div className="flex flex-col items-baseline gap-4">
-                  <div className="text-xl text-[#e4e4e4]">모임 이름</div>
-                  <div className="flex gap-4">
-                    <div className="flex gap-2 text-[#b0b0b0]">
-                      <LucideHeart />5
-                    </div>
-                    <div className="flex gap-2 text-[#b0b0b0]">
-                      <LucideMapPin />
-                      여의동
-                    </div>
-                  </div>
-                </div>
-              </button>
+              {relatedGroups.map((data:any) => {
+                              return (
+                              <div key={data.id}  className="flex cursor-pointer flex-col w-[calc(50%-10px)] max-w-[calc(50%-10px)]">
+                              <div className='w-[100%] h-[235px] overflow-hidden relative'>
+                                <Image src={test} alt="포스트 이미지" width={290} height={235} className="w-full object-contain"/>
+                              </div>
+                              <div>
+                                <div className="text-[16px] text-[#e4e4e4] truncate text-start mb-[15px]">{data.title}</div>
+                                <div className="flex gap-4">
+                                  <div className="flex gap-2 text-[#b0b0b0] text-[16px]">
+                                    <LucideMapPin size={16} className='mt-[4px]'/>
+                                    {data.address}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>)
+                })}
             </div>
           </div>
         </div>
