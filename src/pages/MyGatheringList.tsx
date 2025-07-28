@@ -3,22 +3,51 @@
 
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { getLeaderMyGroups } from '@/lib/api/group';
 
 export default function MyGatheringList() {
   const [myGatherings, setMyGatherings] = useState<LeaderMyGroupData[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Display 10 items per page
+  const router = useRouter();
 
   useEffect(() => {
     const fetchMyGatherings = async () => {
       try {
         const data = await getLeaderMyGroups();
-        setMyGatherings(data);
+        const sortedData = data.sort((a, b) => new Date(b.groupDate).getTime() - new Date(a.groupDate).getTime());
+        setMyGatherings(sortedData);
       } catch (error) {
         console.error('Failed to fetch my gatherings:', error);
       }
     };
     fetchMyGatherings();
   }, []);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(myGatherings.length / itemsPerPage);
+
+  // Get current items for display
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = myGatherings.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  // Handle next and previous page
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   return (
     <section className="text-white lg:pt-[29px]">
@@ -48,10 +77,11 @@ export default function MyGatheringList() {
               </tr>
             </thead>
             <tbody>
-              {myGatherings.map((item) => (
+              {currentItems.map((item) => (
                 <tr
                   key={item.groupId}
-                  className="mb-1 flex flex-col border-b border-[#383838] lg:table-row"
+                  className="mb-1 flex flex-col border-b border-[#383838] lg:table-row cursor-pointer"
+                  onClick={() => router.push(`/gathering/${item.groupId}`)}
                 >
                   <td className="px-8 py-2 font-semibold whitespace-nowrap text-[#06CE9E] lg:py-6 lg:align-top">
                     {item.groupTitle}
@@ -70,22 +100,23 @@ export default function MyGatheringList() {
 
         {/* 페이징 */}
         <div className="mt-[44px] flex justify-center space-x-3 text-[#C1C1E0]">
-          <button className="p-2 transition hover:text-white">
+          <button className="p-2 transition hover:text-white" onClick={handlePrevPage} disabled={currentPage === 1}>
             <ChevronLeft size={16} />
           </button>
-          {[1, 2, 3, 4, 5].map((p) => (
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
             <button
               key={p}
+              onClick={() => paginate(p)}
               className={`rounded-full px-3 py-1 transition ${
-                p === 1
-                  ? 'bg-[#06CE9E] text-black'
+                p === currentPage
+                  ? 'bg-main text-black'
                   : 'hover:bg-[#3E3E5E] hover:text-white'
               } `}
             >
               {p}
             </button>
           ))}
-          <button className="p-2 transition hover:text-white">
+          <button className="p-2 transition hover:text-white" onClick={handleNextPage} disabled={currentPage === totalPages}>
             <ChevronRight size={16} />
           </button>
         </div>
