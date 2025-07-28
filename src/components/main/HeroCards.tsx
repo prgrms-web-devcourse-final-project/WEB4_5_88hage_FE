@@ -10,6 +10,7 @@ import thunder from '@/assets/images/thunder.png';
 import AdvantageTagLine from './AdvantageTagLine';
 import ProblemSolving from './ProblemSolving';
 import AiRecommendation from './AiRecommendation';
+import SlovingWrapper from './SlovingWrapper';
 
 
 const MotionImage = motion(Image);
@@ -42,13 +43,11 @@ const OFFSETS = Array.from({ length: CARD_COUNT }, (_, i) => {
 });
 
 export default function CardSpread() {
-  const { scrollY } = useScroll();     // 전체 페이지 스크롤 위치
+  const { scrollY } = useScroll();
   const [expanded, setExpanded] = useState(false);
-  // const [isPinned, setIsPinned] = useState(true);
 
   const controls = useAnimation();
 
-  // 컴포넌트 마운트 직후 한 번만 실행
   useEffect(() => {
     controls.start({ width: 240, transition: { duration: 0.2, ease: 'easeOut' } });
   }, [controls]);
@@ -71,7 +70,7 @@ export default function CardSpread() {
     <main>
       <section
         className={`
-          h-screen overflow-hidden flex fixed top-0 left-0 w-full
+          h-screen overflow-hidden flex top-0 left-0 w-full
           `}
       >
         <motion.div style={{ opacity: taglineOpacity }} className='w-full h-full flex items-center'>
@@ -94,7 +93,7 @@ export default function CardSpread() {
             <strong>칠</strong>하게 노는 법
           </h1>
         </div>
-        <p className="absolute bottom-[60px] left-1/2 -translate-x-1/2 text-center text-[#878787] text-[23px]">
+        <p className="absolute bottom-[60px] left-1/2 -translate-x-1/2 text-center text-[#878787] text-[23  px]">
           뻔하지 않은 우리,<br/> FUNFUN 하게 노는 방법 궁금하지 않아?
         </p>
       </motion.div>
@@ -123,15 +122,19 @@ export default function CardSpread() {
       </section>
 
       {/* hero 부분 높이 값 가질려면 아래 section height 값 설정 해주세요 */}
-      <section className="relative h-[200vh] bg-gradient-to-b from-[rgba(0,0,0,0)] to-[rgba(0,0,0,1)]">
+      <section className="relative h-[100vh] bg-gradient-to-b from-[rgba(0,0,0,0)] to-[rgba(0,0,0,1)]">
       </section>
       <section className="relative h-fit bg-[#000]">
           <AdvantageTagLine/>
       </section>
       <section className="relative h-[200px] bg-gradient-to-b from-[rgba(0,0,0,1)] to-[#121212]">
       </section>
-      <section className="relative h-fit bg-[#121212]">
+      <section className="relative h-screen bg-[#121212]">
+        <SlovingWrapper>
           <ProblemSolving/>
+          <ProblemSolving/>
+          <ProblemSolving/>
+        </SlovingWrapper>
       </section>
       <section className="relative h-fit bg-[#121212]">
         <AiRecommendation/>

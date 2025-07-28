@@ -10,7 +10,7 @@ import Image from "next/image";
 export default function ProblemSolving(){
   return (
     <>
-    <section className="py-[100px] px-[10px] lg:flex lg:items-center lg:justify-around lg:h-screen">
+    <section className="py-[100px] px-[10px] lg:flex lg:items-center lg:justify-around lg:h-screen snap-start">
     <SolveTitle img={solveTitleImg1} altText="손으로 막는 이미지" text="심심할 때 고민은" strongText="STOP!"/>
     <div className='w-full flex justify-center pb-[calc(100px+40px) relative lg:w-fit'>
         <Image src={solvePhoneTopRightImg1} alt="하품하는 이미지" className="w-[115px] h-[115px] absolute top-[30px] right-[-10px] lg:right-[-60px]" />
