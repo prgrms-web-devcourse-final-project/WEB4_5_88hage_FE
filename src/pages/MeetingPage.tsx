@@ -41,16 +41,16 @@ export default function MeetingPage() {
 const startIdx = recommendClick * 4;
 const endIdx = startIdx + 4;
 const currentGroups = groups.slice(startIdx, endIdx);
-
+const API = process.env.NEXT_PUBLIC_API_URL;
   const handleRecommend = async (address: string, start: string, end: string) => {
     console.log("AI 추천 요청:", address, start, end);
     if (recommendClick >= 3) {
-      toast.warning("AI 추천 기능은 총 3번만 가능합니다.");
+      toast.info("AI 추천 기능은 총 3번만 가능합니다.");
       return;
     }
     setLoading(true);
     try {
-  const res = await fetch("https://funfun.cloud/api/recommend/group", {
+  const res = await fetch(`${API}/api/recommend/group`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -102,7 +102,7 @@ setLoading(false);
     if (groups.length > 0) return;
     const fetchData = async () => {
       setLoading(true);
-      let url = `https://funfun.cloud/api/groups/search?sortBy=${sortBy}&page=${page}&size=16`;
+      let url = `${API}/api/groups/search?sortBy=${sortBy}&page=${page}&size=16`;
       if (selectedCategory) {
         url += `&category=${selectedCategory}`;
       }

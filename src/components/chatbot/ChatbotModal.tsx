@@ -43,9 +43,9 @@ export default function ChatbotModal({ onClose }) {
       userMessage: text,
       eventType,
     };
-
+const API = process.env.NEXT_PUBLIC_API_URL;
     try {
-      const res = await fetch("https://funfun.cloud/api/chatBot/chat", {
+      const res = await fetch(`${API}/api/chatBot/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -88,7 +88,7 @@ export default function ChatbotModal({ onClose }) {
     };
 
     try {
-      await fetch("https://funfun.cloud/api/chatBot/end", {
+      await fetch(`${API}/api/chatBot/end`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -105,8 +105,8 @@ export default function ChatbotModal({ onClose }) {
     if (!address || !startDate || !endDate) return;
     const recommendUrl =
       eventType === "CONTENT"
-        ? "https://funfun.cloud/api/chatBot/recommend/content"
-        : "https://funfun.cloud/api/chatBot/recommend/group";
+        ? `${API}/api/chatBot/recommend/content`
+        : `${API}/api/chatBot/recommend/group`;
 
     const recommendPayload = {
       address,
@@ -149,7 +149,7 @@ export default function ChatbotModal({ onClose }) {
         setHasRecommended(true);
       }
     } catch {
-      aletoast.error("추천 요청 실패!");
+      toast.error("추천 요청 실패!");
     }
   };
 

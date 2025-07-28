@@ -86,9 +86,9 @@ export default function EventPage() {
   const [recommendClick, setRecommendClick] = useState(0);
 
   const sortRef = useRef<HTMLDivElement>(null);
-
+const API = process.env.NEXT_PUBLIC_API_URL;
   function getApiUrl() {
-    let url = `https://funfun.cloud/api/contents?sortBy=${sortBy}&page=${page}&size=16`;
+    let url = `${API}/api/contents?sortBy=${sortBy}&page=${page}&size=16`;
     if (selectedCategory) url += `&category=${selectedCategory}`;
     if (search) url += `&keyword=${encodeURIComponent(search)}`;
     return url;
@@ -98,7 +98,7 @@ export default function EventPage() {
     setLoading(true)
     console.log("AI 행사 추천 요청:", address, start, end);
     try {
-      const res = await fetch("https://funfun.cloud/api/recommend/content", {
+      const res = await fetch(`${API}/api/recommend/content`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

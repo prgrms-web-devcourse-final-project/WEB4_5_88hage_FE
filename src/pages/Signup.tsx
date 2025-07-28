@@ -149,7 +149,7 @@ export default function Signup() {
               tabIndex={-1}
               onClick={() => {
                 if (!nicknameCheck.test(nickname)) {
-                  toast.warn('닉네임이 올바른 형식이 아닙니다.');
+                  toast.error('닉네임이 올바른 형식이 아닙니다.');
                 } else {
                   axios
                     .post(
