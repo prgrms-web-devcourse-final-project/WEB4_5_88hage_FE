@@ -84,6 +84,12 @@ export default function Profile() {
           email: f.email,
         })),
       );
+
+      // userInfo (팔로워/팔로잉 수 포함) 업데이트
+      const currentUserInfo = await getUserInfo();
+      const userEmail = currentUserInfo.data.email;
+      const userData = await getUserDetailInfoByEmail(userEmail);
+      setUserInfo(userData.data as UserInfo);
     } catch (error) {
       console.error('Failed to fetch follow data:', error);
     }
@@ -627,7 +633,7 @@ export default function Profile() {
           users={followers}
           onClose={() => setShowFollowerModal(false)}
           title="팔로워"
-          onUnfollowSuccess={fetchFollowData}
+          onUpdate={fetchFollowData}
         />
       )}
       {showFollowingModal && (
@@ -635,7 +641,7 @@ export default function Profile() {
           users={followings}
           onClose={() => setShowFollowingModal(false)}
           title="팔로잉"
-          onUnfollowSuccess={fetchFollowData}
+          onUpdate={fetchFollowData}
         />
       )}
       {showMyPostsModal && (

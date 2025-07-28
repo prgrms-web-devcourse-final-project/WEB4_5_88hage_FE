@@ -20,10 +20,10 @@ export const unfollowUser = async (targetEmail: string): Promise<void> => {
 export const checkFollowingStatus = async (
   targetEmail: string,
 ): Promise<boolean> => {
-  const response = await get<{ isFollowing: boolean }>(
-    `/api/follows/status/following?targetEmail=${targetEmail}`,
+  const response = await get<{ data: boolean }>(
+    `/api/follows/status/following?target=${targetEmail}`,
   );
-  return response.isFollowing;
+  return response.data;
 };
 
 // 팔로워 여부
