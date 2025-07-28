@@ -7,10 +7,10 @@ import hero1 from '@/assets/images/hero1.png';
 import emoji from '@/assets/images/emoji1.png';
 import heart from '@/assets/images/heart.png';
 import thunder from '@/assets/images/thunder.png';
-import AdvantageTagLine from './AdvantageTagLine';
-import ProblemSolving from './ProblemSolving';
-import AiRecommendation from './AiRecommendation';
-import SlovingWrapper from './SlovingWrapper';
+// import AdvantageTagLine from './AdvantageTagLine';
+// import ProblemSolving from './ProblemSolving';
+// import AiRecommendation from './AiRecommendation';
+// import SlovingWrapper from './SlovingWrapper';
 
 
 const MotionImage = motion(Image);
@@ -67,8 +67,8 @@ export default function CardSpread() {
   }, [scrollY, expanded]);
   
   return (
-    <main>
-      <section
+    <section>
+      <div
         className={`
           h-screen overflow-hidden flex top-0 left-0 w-full
           `}
@@ -119,26 +119,10 @@ export default function CardSpread() {
     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
   />
 ))}
-      </section>
-
-      {/* hero 부분 높이 값 가질려면 아래 section height 값 설정 해주세요 */}
-      <section className="relative h-[100vh] bg-gradient-to-b from-[rgba(0,0,0,0)] to-[rgba(0,0,0,1)]">
-      </section>
-      <section className="relative h-fit bg-[#000]">
-          <AdvantageTagLine/>
-      </section>
-      <section className="relative h-[200px] bg-gradient-to-b from-[rgba(0,0,0,1)] to-[#121212]">
-      </section>
-      <section className="relative h-screen bg-[#121212]">
-        <SlovingWrapper>
-          <ProblemSolving/>
-          <ProblemSolving/>
-          <ProblemSolving/>
-        </SlovingWrapper>
-      </section>
-      <section className="relative h-fit bg-[#121212]">
-        <AiRecommendation/>
-      </section>
-    </main>
+      </div>
+      {/* hero 부분 그라디언트 높이 값 가질려면 아래 section height 값 설정 해주세요 */}
+      <div className="relative h-[90vh] bg-gradient-to-b from-[rgba(0,0,0,0)] to-[rgba(0,0,0,1)]">
+      </div>
+    </section>
   );
 }
