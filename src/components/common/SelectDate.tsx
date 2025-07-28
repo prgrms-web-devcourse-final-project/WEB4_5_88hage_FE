@@ -3,14 +3,18 @@
 import DatepickerComponent from '@/components/common/DatepickerComponent';
 import { Dispatch, SetStateAction, useState } from 'react';
 
-type Props = {title:string, id:number, setShow: Dispatch<SetStateAction<boolean>>}
+type Props = {
+  title:string, 
+  id:number, 
+  setShow: Dispatch<SetStateAction<boolean>>,
+  // callbackFc : (param :PramsType) => void
+}
 
 export default function SelectDate({title,id,setShow}:Props){
     const [eventDate,setEventDate] = useState('');
 
     const addCalendar = async (data: { activityId: number; selectedDate: string }) => {
     try {
-
     const response = await fetch('https://funfun.cloud/api/calendars', {
       method: 'POST',
       credentials: 'include',
@@ -25,10 +29,7 @@ export default function SelectDate({title,id,setShow}:Props){
       const errorData = await response.json();
       throw new Error(`HTTP ${response.status}: ${errorData.message || '오류 발생'}`);
     }
-
-    const result = await response.json();
     console.log('등록 성공')
-    return result;
   } catch (error) {
     console.error('일정 등록 실패:', error);
     throw error;
