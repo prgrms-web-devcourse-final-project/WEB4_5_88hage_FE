@@ -8,6 +8,7 @@ import cloud from '@/assets/images/cloud-face.png.png';
 import getWeather from '@/lib/api/weather';
 import Link from 'next/link';
 import { useAuthStore } from '@/stores/UseAuthStore';
+import { useRouter } from 'next/navigation';
 
 const logoutItem = [
   { label: '로그인', value: 'login' },
@@ -37,6 +38,7 @@ export default function MenuBar({ close }: { close: () => void }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
+  const router = useRouter();
 
   const NAV_ITEMS = isAuthenticated ? loginItem : logoutItem;
 
@@ -121,7 +123,14 @@ export default function MenuBar({ close }: { close: () => void }) {
                 {item.label !== '로그아웃' ? (
                   <Link href={`/${item.value}`}>{item.label}</Link>
                 ) : (
-                  <div onClick={() => logout()}>로그아웃</div>
+                  <div
+                    onClick={() => {
+                      logout();
+                      router.push('/');
+                    }}
+                  >
+                    로그아웃
+                  </div>
                 )}
 
                 {item.label === '알림' && notiCount !== 0 && (
