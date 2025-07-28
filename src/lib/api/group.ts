@@ -33,7 +33,8 @@ export const updateGroup = async (
 
 // 모임 삭제
 export const deleteGroup = async (groupId: number): Promise<void> => {
-  await del(`/api/groups/${groupId}`);
+  const result = await del(`/api/groups/${groupId}`);
+  return result;
 };
 
 // 모임 생성
