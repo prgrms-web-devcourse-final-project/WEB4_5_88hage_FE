@@ -10,8 +10,14 @@ import {
 import 'swiper/css';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FadeLoader, HashLoader } from 'react-spinners';
-import { getUserInfo, getUserDetailInfoByEmail } from '@/lib/api/user';
+import { HashLoader } from 'react-spinners';
+import {
+  getUserInfo,
+  getUserDetailInfoByEmail,
+  updateUserInfo,
+  changeNickname,
+  withdrawUser,
+} from '@/lib/api/user';
 import { getGroupCompletedStats } from '@/lib/api/participant'; // Import the new API call
 import { getLeaderMyGroups } from '@/lib/api/group'; // Import getLeaderMyGroups
 import { getDailyCalendar, getCalendarForContent } from '@/lib/api/calendar'; // Import getDailyCalendar
@@ -20,12 +26,15 @@ import { getFollowers, getFollowings } from '@/lib/api/follow';
 import basicProfileImg from '../assets/images/basicProfile.png';
 import FollowListModal from '@/components/common/FollowListModal';
 import DetailListModal from '@/components/common/DetailListModal';
+import EditProfileModal from '@/components/EditProfileModal';
+import { updateProfile } from '@/lib/api/userInfo';
 
 interface UserInfo {
   nickname: string;
   followerCount: number;
   followingCount: number;
   imageUrl: string;
+  introduction: string;
 }
 
 interface GroupStat {
@@ -57,6 +66,7 @@ export default function Profile() {
   const [showMyInquiriesModal, setShowMyInquiriesModal] = useState(false);
   const [showBookedEventsModal, setShowBookedEventsModal] = useState(false);
   const [showDailyEventsModal, setShowDailyEventsModal] = useState(false);
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const [followers, setFollowers] = useState<
     { nickname: string; imageUrl: string; email: string }[]
   >([]);
@@ -250,7 +260,10 @@ export default function Profile() {
                   <span className="text-white">{userInfo.followingCount}</span>
                 </button>
               </div>
-              <button className="mt-[17px] w-45 rounded-[5px] bg-[#323232] p-3">
+              <button
+                className="mt-[17px] w-45 rounded-[5px] bg-[#323232] p-3"
+                onClick={() => setShowEditProfileModal(true)}
+              >
                 정보 수정
               </button>
             </div>
@@ -446,17 +459,17 @@ export default function Profile() {
                     ))}
                   {activeTab === 'bookedEvents' &&
                     bookedEvents.slice(0, 3).map((event) => (
-                      <div
+                      <button
                         key={event.contentId}
                         className="bg-gray-6 flex rounded-[5px] px-5 py-4"
                         onClick={() => {
                           router.push(`/event/${event.contentId}`);
                         }}
                       >
-                        <div className="w-[25%] truncate font-semibold">
+                        <div className="w-[25%] truncate text-left font-semibold">
                           {event.category}
                         </div>
-                        <div className="w-[60%] truncate">
+                        <div className="w-[60%] truncate text-left">
                           {event.contentTitle}
                         </div>
                         <div className="w-[15%] text-right">
@@ -469,7 +482,7 @@ export default function Profile() {
                             },
                           )}
                         </div>
-                      </div>
+                      </button>
                     ))}
                 </div>
               </div>
@@ -770,6 +783,67 @@ export default function Profile() {
               </div>
             </div>
           )}
+        />
+      )}
+
+      {showEditProfileModal && userInfo && (
+        <EditProfileModal
+          isOpen={showEditProfileModal}
+          onClose={() => setShowEditProfileModal(false)}
+          currentNickname={userInfo.nickname}
+          currentIntroduction={userInfo.introduction || ''}
+          currentImageUrl={userInfo.imageUrl || basicProfileImg.src}
+          onSave={async (newNickname, newIntroduction, newImageUrl) => {
+            try {
+              const imageChanged = newImageUrl !== userInfo.imageUrl;
+              const profileRequest: ProfileRequest = {
+                introduction: newIntroduction,
+                imageChanged: imageChanged,
+              };
+
+              if (imageChanged) {
+                profileRequest.image = newImageUrl; // Assuming newImageUrl can be directly used as image data
+              }
+
+              if (userInfo.nickname !== newNickname) {
+                await changeNickname(newNickname);
+              }
+              await updateProfile(profileRequest);
+
+              setUserInfo({
+                ...userInfo,
+                nickname: newNickname,
+                introduction: newIntroduction,
+                imageUrl: newImageUrl,
+              });
+              alert('프로필이 성공적으로 업데이트되었습니다.');
+            } catch (error) {
+              console.error('Failed to update profile:', error);
+              alert('프로필 업데이트에 실패했습니다.');
+            }
+          }}
+          onPasswordChange={() => {
+            console.log('Password change initiated');
+            router.push('/password-change');
+            setShowEditProfileModal(false);
+          }}
+          onAccountDelete={async () => {
+            if (
+              window.confirm(
+                '정말로 회원 탈퇴를 하시겠습니까? 모든 정보가 삭제됩니다.',
+              )
+            ) {
+              try {
+                await withdrawUser();
+                alert('회원 탈퇴가 완료되었습니다.');
+                router.push('/'); // Redirect to home or login page after deletion
+              } catch (error) {
+                console.error('Failed to withdraw user:', error);
+                alert('회원 탈퇴에 실패했습니다.');
+              }
+            }
+            setShowEditProfileModal(false);
+          }}
         />
       )}
     </>
