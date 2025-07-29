@@ -25,7 +25,7 @@ export default function GatheringDetail({data}:{data:any}) {
   const{ relatedGroups } = data;
 
   useEffect(()=>{
-    console.log(user)
+    console.log(data.leaderImgUrl)
     if(user?.email === relatedGroups.leaderEmail) SetShowEditDots(true)
   },[user])
 
@@ -107,7 +107,7 @@ export default function GatheringDetail({data}:{data:any}) {
               <Map lat={data.latitude} lng={data.longitude} width='100%' height='280px'/>
             </div>
           </div>
-          <GatheringHostBox hostName={data.leaderNickname} hostEmail={data.leaderEmail} tags={data.leaderHashTags} hostExplain={data.leaderExplain}/>
+          <GatheringHostBox hostName={data.leaderNickname} hostEmail={data.leaderEmail} tags={data.leaderHashTags} hostExplain={data.leaderExplain} hostImg={data.leaderImgUrl}/>
           <div className="flex flex-col gap-9">
             <div className="flex items-center justify-between">
               <div className="text-2xl text-[#00e6ae]">

@@ -176,14 +176,6 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
         <div className="flex w-full flex-col items-center gap-10 px-5">
           <div className="flex flex-col gap-7.5">
             <Image src={test} alt="" />
-            {/* <div>
-              정부는 회계연도마다 예산안을 편성하여 회계연도 개시 90일전까지
-              국회에 제출하고, 국회는 회계연도 개시 30일전까지 이를 의결하여야
-              한다. 모든 국민은 거주·이전의 자유를 가진다. 학교교육 및
-              평생교육을 포함한 교육제도와 그 운영, 교육재정 및 교원의 지위에
-              관한 기본적인 사항은 법률로 정한다. 대통령이 임시회의 집회를
-              요구할 때에는 기간과 집회요구의 이유를 명시하여야 한다.
-            </div> */}
             <button className="flex cursor-pointer justify-center gap-2 bg-[#1c1c1c] p-5 text-[#c3c3c3]">
               더보기 <LucideChevronDown />
             </button>

@@ -3,6 +3,7 @@
 import DatepickerComponent from '@/components/common/DatepickerComponent';
 import moment from 'moment';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import Toast from './Toast';
 
 type Props = {
   info:CalendarData,
@@ -38,7 +39,7 @@ export default function CalendarSelectDate({
     
       if (!show) return null;
 
-    const modifyEvent = async (id:number,eventDate:string)=>{
+    const modifyEvent = async (id:string,eventDate:string)=>{
     try{
      const response = await fetch(`${baseUrl}/api/calendars/${Number(id)}`,{
         method: 'PATCH',
@@ -52,14 +53,17 @@ export default function CalendarSelectDate({
         }),
     });
 
+    if(!response.ok){
+      Toast.error('수정을 실패했습니다.');
+      throw new Error('수정 실패');
+    } else {
+      Toast.success('수정이 완료 됐습니다!')
+    }
+
     const start = moment.tz(eventDate, 'Asia/Seoul').toDate();
     const end = moment(start).add(1, 'hour').toDate();
-    
-    setSelectListData(prev => prev.map(event =>
-    event.calendarId === info.calendarId.toString()
-        ? { ...event, start, end }     
-        : event                         
-    ));
+
+    setSelectListData((prev) => prev.filter(data => data.calendarId !== id));
 
     setCalendarData(prev => prev.map(event =>
     event.calendarId === info.calendarId.toString()
