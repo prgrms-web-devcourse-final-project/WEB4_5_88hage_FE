@@ -158,14 +158,7 @@ export default function ParticipantListModal({
                 <div className="flex gap-2">
                   {user?.email !== participant.userEmail && (
                     <>
-                      <button
-                        className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
-                        onClick={() =>
-                          toast.info(`메시지 보내기: ${participant.userNickname}`)
-                        }
-                      >
-                        메시지
-                      </button>
+                      
                       {participant.isFollowing ? (
                         <button
                           className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
