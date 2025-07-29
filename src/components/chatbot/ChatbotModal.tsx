@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, ArrowUp, Image } from "lucide-react";
+import { ChevronLeft, ArrowUp } from "lucide-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "@/assets/styles/datepicker.css";
@@ -216,7 +216,7 @@ const API = process.env.NEXT_PUBLIC_API_URL;
             onClick={() => router.push(`/gathering/${item.id}`)}
             className="w-[180px] rounded-[12px] overflow-hidden shadow-lg bg-white cursor-pointer hover:shadow-xl transition"
           >
-            <Image
+            <img
               className="w-full h-32 object-cover"
               src={item.imageUrl}
               alt={item.title}
@@ -236,7 +236,7 @@ const API = process.env.NEXT_PUBLIC_API_URL;
           onClick={() => router.push(`/event/${item.id}`)}
           className="w-[180px] rounded-[12px] overflow-hidden shadow-lg bg-white cursor-pointer hover:shadow-xl transition"
         >
-          <Image
+          <img
             className="w-full h-32 object-cover"
             src={item.poster}
             alt={item.contentTitle}
