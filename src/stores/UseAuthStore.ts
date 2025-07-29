@@ -76,7 +76,7 @@ export const useAuthStore = create<AuthState>()(
           const headers: Record<string, string> = {};
           if (token) headers.Authorization = `Bearer ${token}`;
           const response = await fetchGet<CoordinateResponse>(
-            `/api/users/coordinate`,
+            '/api/users/coordinate',
             { headers, credentials: 'include' }
           );
           const { latitude, longitude } = response.data;
@@ -112,8 +112,8 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         set({ token: null, user: null, isAuthenticated: false });
         if (typeof window !== "undefined") {
-    localStorage.removeItem("authState");
-  }
+          localStorage.removeItem("authState");
+        }
       },
     }),
     {

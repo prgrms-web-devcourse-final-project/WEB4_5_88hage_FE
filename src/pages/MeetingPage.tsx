@@ -58,16 +58,20 @@ export default function MeetingPage() {
     }
     setLoading(true);
     try {
+      const token = useAuthStore.getState().token;
       const res = await fetch(`${API}/api/recommend/group`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          startTime: start,
-          endTime: end,
-          address,
-        }),
-      });
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}), // 토큰 있으면 Authorization 헤더 추가
+  },
+  credentials: "include",
+  body: JSON.stringify({
+    startTime: start,
+    endTime: end,
+    address,
+  }),
+});
       if (!res.ok) {
         toast.error("추천 결과를 불러오지 못했습니다.");
         setLoading(false);
