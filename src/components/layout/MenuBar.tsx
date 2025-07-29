@@ -133,7 +133,7 @@ export default function MenuBar({ close }: { close: () => void }) {
                   </div>
                 )}
 
-                {item.label === '알림' && notiCount !== 0 && (
+                {item.label === '알림' && notiCount > 0 && (
                   <div className="mt-[3px] ml-2 rounded-[20px] border border-[#ee3c3c] bg-[#ff8888] px-2 text-[12px] text-[#000]">
                     + {notiCount}
                   </div>
