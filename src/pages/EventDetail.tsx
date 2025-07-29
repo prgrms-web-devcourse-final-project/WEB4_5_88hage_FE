@@ -132,7 +132,7 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
                 {content.area && <span>{content.area}</span>}
                 <span>{dateFormatting(content.startDate)} - {dateFormatting(content.endDate)}</span>
               </div>
-              <div className="flex pt-6 gap-2 border-t border-t-[#2D2A2A]">
+              <div className="flex pt-6 gap-2 border-t border-t-[#2D2A2A] flex-wrap">
                 {content.urls.map((data) => 
                 <button key={data.id} className="gradient-border flex rounded-full bg-[#2a2a2a] px-[15px] py-[5px] text-[#e4e4e4]">
                   <Link href={data.url} className='flex gap-[5px]'>{data.siteName} <LucideLink2 /></Link>
