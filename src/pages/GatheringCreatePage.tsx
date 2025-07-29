@@ -9,7 +9,7 @@ import AddPhotoButton from '@/components/ui/AddPhotoButton';
 import { createGroup } from '@/lib/api/group';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 export default function GatheringCreatePage() {
   const [tags, setTags] = useState<string[]>([]);

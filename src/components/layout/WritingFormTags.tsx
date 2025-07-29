@@ -33,8 +33,8 @@ export default function WritingFormTags({
   }, [value]);
 
   useEffect(() => {
-    const handleOutsideClose = (e: { target: any }) => {
-      if (tagsDropMenu && !inputRef.current!.contains(e.target)) {
+    const handleOutsideClose = (e: MouseEvent) => {
+      if (tagsDropMenu && !inputRef.current!.contains(e.target as Node)) {
         setTagsDropMenu(false);
       }
     };
