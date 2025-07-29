@@ -56,6 +56,7 @@ export default function Profile() {
   const [groupStats, setGroupStats] = useState<GroupStat[]>([]); // New state for group stats
   const [leaderGroups, setLeaderGroups] = useState<LeaderMyGroupData[]>([]); // New state for leader groups
   const [dailyEvents, setDailyEvents] = useState<DailyCalender[]>([]); // New state for daily events
+  const [dailyEventsLoading, setDailyEventsLoading] = useState(false); // New state for daily events loading
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date()); // New state for selected date
   const [myInquiries, setMyInquiries] = useState<Inquiry[]>([]); // New state for inquiries
   const [bookedEvents, setBookedEvents] = useState<any[]>([]);
@@ -124,17 +125,27 @@ export default function Profile() {
         setLeaderGroups(leaderGroupsData);
 
         if (selectedDate) {
+          setDailyEventsLoading(true); // Start loading
           const year = selectedDate.getFullYear();
           const month = selectedDate.getMonth() + 1; // Month is 0-indexed
           const day = selectedDate.getDate();
-          const dailyCalendarData = await getDailyCalendar(year, month, day);
-          setDailyEvents(
-            dailyCalendarData.data.filter(
-              (event: DailyCalender, index: number, self: DailyCalender[]) =>
-                index ===
-                self.findIndex((e) => e.activityId === event.activityId),
-            ),
-          );
+          try {
+            const dailyCalendarData = await getDailyCalendar(year, month, day);
+            setDailyEvents(
+              dailyCalendarData.data.filter(
+                (event: DailyCalender, index: number, self: DailyCalender[]) =>
+                  index ===
+                  self.findIndex((e) => e.activityId === event.activityId),
+              ),
+            );
+          } catch (dailyEventsError) {
+            console.error('Failed to fetch daily events:', dailyEventsError);
+            setDailyEvents([]); // Clear events on error
+          } finally {
+            setTimeout(() => {
+              setDailyEventsLoading(false); // End loading
+            }, 500); // Add a 500ms delay for testing
+          }
         }
 
         const inquiriesData = await getContacts();
@@ -436,7 +447,11 @@ export default function Profile() {
                 </button>
               </div>
               <div className="flex flex-col gap-[15px]">
-                {dailyEvents.length > 0 ? (
+                {dailyEventsLoading ? (
+                  <div className="flex h-20 items-center justify-center">
+                    <HashLoader color="#36d7b7" size={30} />
+                  </div>
+                ) : dailyEvents.length > 0 ? (
                   dailyEvents.slice(0, 4).map((event) => (
                     <div key={event.calendarId}>
                       <div className="flex items-center gap-5">
@@ -460,7 +475,9 @@ export default function Profile() {
                     </div>
                   ))
                 ) : (
-                  <div className="text-center text-gray-400">일정이 없습니다.</div>
+                  <div className="text-center text-gray-400">
+                    일정이 없습니다.
+                  </div>
                 )}
               </div>
             </div>
