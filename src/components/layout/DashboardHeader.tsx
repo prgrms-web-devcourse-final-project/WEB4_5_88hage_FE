@@ -23,13 +23,13 @@ export default function DashboardHeader() {
           >
             <IoIosArrowBack fill="#ffffff" size={24} />
           </button>
-          {/* <Logo className="relative h-[24px] w-[63px] lg:h-[44px] lg:w-[117px]" /> */}
-          {/* <button
+          <Logo className="relative h-[24px] w-[63px] lg:h-[44px] lg:w-[117px]" /> */}
+          <button
             className="rounded-full p-1 lg:bg-[#414141]"
             aria-label="사이드바 토글 버튼"
           >
             <BiMenuAltLeft className="text-main -mr-2 h-8 w-8 lg:mr-0" />
-          </button> */}
+          </button>
         </nav>
       </header>
     </>
