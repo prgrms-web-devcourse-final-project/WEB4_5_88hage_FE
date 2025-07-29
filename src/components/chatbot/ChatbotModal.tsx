@@ -29,7 +29,7 @@ export default function ChatbotModal({ onClose }) {
   const [allRecommendGroups, setAllRecommendGroups] = useState([]);
   const [recommendOffset, setRecommendOffset] = useState(2); // 몇 개까지 노출중인지
   const [hasRecommended, setHasRecommended] = useState(false); // 추천 한 번이라도 받았는지
-
+const API = process.env.NEXT_PUBLIC_API_URL;
   // 챗봇 대화 전송
   const handleSend = async () => {
     const text = inputMessage.trim();
@@ -43,9 +43,9 @@ export default function ChatbotModal({ onClose }) {
       userMessage: text,
       eventType,
     };
-
+const API = process.env.NEXT_PUBLIC_API_URL;
     try {
-      const res = await fetch("https://funfun.cloud/api/chatBot/chat", {
+      const res = await fetch(`${API}/api/chatBot/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -88,7 +88,7 @@ export default function ChatbotModal({ onClose }) {
     };
 
     try {
-      await fetch("https://funfun.cloud/api/chatBot/end", {
+      await fetch(`${API}/api/chatBot/end`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -105,8 +105,8 @@ export default function ChatbotModal({ onClose }) {
     if (!address || !startDate || !endDate) return;
     const recommendUrl =
       eventType === "CONTENT"
-        ? "https://funfun.cloud/api/chatBot/recommend/content"
-        : "https://funfun.cloud/api/chatBot/recommend/group";
+        ? `${API}/api/chatBot/recommend/content`
+        : `${API}/api/chatBot/recommend/group`;
 
     const recommendPayload = {
       address,
@@ -149,7 +149,7 @@ export default function ChatbotModal({ onClose }) {
         setHasRecommended(true);
       }
     } catch {
-      aletoast.error("추천 요청 실패!");
+      toast.error("추천 요청 실패!");
     }
   };
 
@@ -338,7 +338,7 @@ export default function ChatbotModal({ onClose }) {
           <div className="bg-white rounded-2xl shadow-xl px-8 py-8 w-[380px] flex flex-col items-center">
             <h2 className="mb-6 text-lg font-bold text-gray-900">추천 조건 입력</h2>
             <input
-              className="w-full mb-4 p-3 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-main text-gray-700 placeholder:text-[14px]"
+              className="w-full mb-4 p-3 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-main text-gray-700 placeholder:text-[13px]"
               value={address}
               placeholder="서울특별시 ㅇㅇ구 ㅇㅇ동 형태로 입력해주세요"
               onChange={(e) => setAddress(e.target.value)}
@@ -355,7 +355,7 @@ export default function ChatbotModal({ onClose }) {
                 selected={startDate}
                 onChange={setStartDate}
                 placeholderText="시작일"
-                className="placeholder-gray-400 w-full p-3 rounded-lg border border-gray-300 bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-main"
+                className="placeholder-gray-400 w-full p-3 rounded-lg border border-gray-300 bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-main placeholder:text-[13px]"
               />
             </div>
             <div className="w-full mb-5">
@@ -370,7 +370,7 @@ export default function ChatbotModal({ onClose }) {
                 selected={endDate}
                 onChange={setEndDate}
                 placeholderText="종료일"
-                className="placeholder-gray-400 w-full p-3 rounded-lg border border-gray-300 bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-main"
+                className="placeholder-gray-400 w-full p-3 rounded-lg border border-gray-300 bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-main placeholder:text-[13px]"
               />
             </div>
             <button

@@ -3,6 +3,7 @@ import '../assets/styles/globals.css';
 import ChatbotButtonWrapper from "@/components/chatbot/ChatbotButtonWrapper";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import '../assets/styles/toast.css';
 
 export const metadata = {
   title: 'Next.js',

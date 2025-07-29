@@ -51,7 +51,7 @@ export default function InquiryDetail({ id }: { id: string }) {
     <>
       <DashboardLayout mainCss="px-[105px]">
         {inquiryData && (
-          <div className="flex min-h-screen max-w-[1440px] flex-col bg-[#121212]">
+          <div className="flex min-h-screen max-w-[1440px] flex-col">
             <div className="flex min-h-screen w-full flex-col lg:pt-[14px]">
               <div></div>
               <div className="flex flex-col items-start justify-center pb-4 lg:items-center lg:pb-10">

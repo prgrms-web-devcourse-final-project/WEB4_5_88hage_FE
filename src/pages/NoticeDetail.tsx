@@ -8,11 +8,11 @@ export default function NotiDetail () {
   console.log('params:', params);
   const id = params.noticeId;
   const [notice, setNotice] = useState(null);
-
+const API = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     console.log("useEffect 동작, id:", id);
     if (!id) return;
-    fetch(`https://funfun.cloud/api/admin/notices/${id}`)
+    fetch(`${API}/api/admin/notices/${id}`)
       .then(res => res.json())
       .then(data => {
         console.log("fetch 결과:", data);
