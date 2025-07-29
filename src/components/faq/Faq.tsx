@@ -1,6 +1,8 @@
 import FaqAccordion from "./FaqAccordion";
+import { useRouter } from "next/navigation";
 
 export default function FaqContent() {
+  const router = useRouter();
   return (
     <section className="bg-[#151515] text-white px-6 lg:px-24 pt-12 lg:pt-20 pb-32 w-full flex justify-center py-10">
       <div className="w-full max-w-[1440px] mx-auto flex flex-col lg:flex-row gap-x-20">
@@ -25,7 +27,12 @@ export default function FaqContent() {
         <div className="lg:w-2/3 space-y-2">
           <FaqAccordion />
           <div className="flex justify-center space-x-4 mt-8">
-            문구 고민중
+            <button
+              onClick={() => router.push("/inquiry/create")}
+              className="bg-[#222] px-6 py-2 rounded-md text-white font-medium hover:bg-[#06CE9E] hover:text-black transition"
+            >
+              빠르게 문의하기
+            </button>
           </div>
         </div>
       </div>
