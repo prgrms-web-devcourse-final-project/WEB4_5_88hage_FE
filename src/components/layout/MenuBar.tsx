@@ -105,40 +105,50 @@ export default function MenuBar({ close }: { close: () => void }) {
         <nav className="flex flex-col gap-2">
           {NAV_ITEMS.map((item) => (
             <div key={item.label}>
-              <button
-                className={`h2 group ml-[-15px] flex w-full items-center py-1 text-left font-semibold transition ${
-                  active === item.label ? 'text-main font-bold' : 'text-white'
-                } hover:text-main`}
-                onClick={() => {
-                  setActive(item.label);
-                  close();
-                }}
-                type="button"
-              >
-                <span
-                  className={`mr-2 h-1 w-1 rounded-full transition-all ${
-                    active === item.label ? 'bg-main' : 'bg-transparent'
-                  }`}
-                />
-                {item.label !== '로그아웃' ? (
-                  <Link href={`/${item.value}`}>{item.label}</Link>
-                ) : (
-                  <div
-                    onClick={() => {
-                      logout();
-                      router.push('/');
-                    }}
-                  >
-                    로그아웃
-                  </div>
-                )}
-
-                {item.label === '알림' && notiCount !== 0 && (
-                  <div className="mt-[3px] ml-2 rounded-[20px] border border-[#ee3c3c] bg-[#ff8888] px-2 text-[12px] text-[#000]">
-                    + {notiCount}
-                  </div>
-                )}
-              </button>
+              {item.label !== '로그아웃' ? (
+                <Link
+                  href={`/${item.value}`}
+                  className={`h2 group ml-[-15px] flex w-full items-center py-1 text-left font-semibold transition ${
+                    active === item.label ? 'text-main font-bold' : 'text-white'
+                  } hover:text-main`}
+                  onClick={() => {
+                    setActive(item.label);
+                    close();
+                  }}
+                >
+                  <span
+                    className={`mr-2 h-1 w-1 rounded-full transition-all ${
+                      active === item.label ? 'bg-main' : 'bg-transparent'
+                    }`}
+                  />
+                  {item.label}
+                  {item.label === '알림' && notiCount !== 0 && (
+                    <div className="mt-[3px] ml-2 rounded-[20px] border border-[#ee3c3c] bg-[#ff8888] px-2 text-[12px] text-[#000]">
+                      + {notiCount}
+                    </div>
+                  )}
+                </Link>
+              ) : (
+                <button
+                  className={`h2 group ml-[-15px] flex w-full items-center py-1 text-left font-semibold transition ${
+                    active === item.label ? 'text-main font-bold' : 'text-white'
+                  } hover:text-main`}
+                  onClick={() => {
+                    setActive(item.label);
+                    close();
+                    logout();
+                    router.push('/');
+                  }}
+                  type="button"
+                >
+                  <span
+                    className={`mr-2 h-1 w-1 rounded-full transition-all ${
+                      active === item.label ? 'bg-main' : 'bg-transparent'
+                    }`}
+                  />
+                  {item.label}
+                </button>
+              )}
 
               {/* 하단 줄 추가 */}
               {bottomBorder.includes(item.label) && (

@@ -1,4 +1,4 @@
-'use client'; // 클라이언트 컴포넌트임을 명시
+'use client';
 
 import { useAuthStore } from '@/stores/UseAuthStore'; // UseAuthStore 임포트
 
