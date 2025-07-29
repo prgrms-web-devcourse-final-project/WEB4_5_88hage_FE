@@ -6,18 +6,47 @@ import testmap from '@/assets/images/testmap.png';
 import { LucideChevronDown, LucideHeart, LucideMapPin,LucideChevronUp } from 'lucide-react';
 import GatheringHostBox from '@/components/GatheringHostBox';
 import Map from '@/components/kakao/Map'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Toast from '@/components/common/Toast';
+import { useRouter } from 'next/navigation'
+import { EllipsisVertical } from 'lucide-react';
+import { useAuthStore } from '@/stores/UseAuthStore';
+import { deleteGroup } from '@/lib/api/group';
+
+const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function GatheringDetail({data}:{data:any}) {
-  if (!data) {
-    return <div className="text-white">데이터가 없습니다.</div>;
-  }
-  const{relatedGroups} = data
+  const route = useRouter();
   const [showMore,setShowMore] = useState(false);
+  const [showEditDots,SetShowEditDots] = useState(false);
+  const [showEditBox,SetShowEditBox] = useState(false);
+  const user = useAuthStore((state) => state.user);
+  const{ relatedGroups } = data;
+
+  useEffect(()=>{
+    console.log(user)
+    if(user?.email === relatedGroups.leaderEmail) SetShowEditDots(true)
+  },[user])
+
+  const deleteGathering = async (id:number) => {
+    try{
+      const response = await deleteGroup(id);
+      console.log('삭제에 성공했습니다.', response);
+      Toast.success('삭제에 성공했습니다.');
+      route.push('/gathering');
+    } catch(error){
+      console.error('삭제에 실패했습니다 :', error);
+      Toast.error('삭제에 실패했습니다.');
+    }
+  }
+
+  const routing = (id:number) => {
+    route.push(`/gathering/${id}`)
+  }
 
   const applyGathering = async (id: number) => {
   try {
-    const response = await fetch(`https://funfun.cloud/api/participants/${id}/apply`, {
+    const response = await fetch(`${baseUrl}/api/participants/${id}/apply`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -26,9 +55,12 @@ export default function GatheringDetail({data}:{data:any}) {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`HTTP ${response.status}:`, errorText);
+      const errorData = await response.json();
+      Toast.error('모임 신청에 실패했습니다.');
+      console.error(`HTTP ${response.status}:`, errorData.message);
       throw new Error(`HTTP ${response.status}`);
+    } else {
+      Toast.success('모임 신청에 성공했습니다!');
     }
 
     const result = await response.json();
@@ -51,8 +83,8 @@ export default function GatheringDetail({data}:{data:any}) {
     <div className="eventDetail-gradient flex w-screen min-w-screen justify-center bg-[#121212] lg:w-340">
       <div className="hidden h-full min-h-screen py-15 text-[#f6f6f6] lg:flex">
         <div className="flex w-160 flex-col gap-9 px-5">
-          <div className={`w-full h-fit`}>
-              <Image src={test} alt={`${data.title} 포스트 이미지`} width={800} height={500} className="w-full h-auto object-cover"/>
+          <div className="w-full h-fit">
+              <Image src={data.imageUrl} alt={`${data.title} 포스트 이미지`} width={800} height={500} className="w-full h-auto object-cover"/>
           </div>
           <div className="flex flex-col gap-7.5">
             <div className="text-2xl text-[#00e6ae]">상세 정보</div>
@@ -85,11 +117,11 @@ export default function GatheringDetail({data}:{data:any}) {
             <div className="flex gap-5">
               {relatedGroups.map((data:any) => {
                               return (
-                              <div key={data.id}  className="flex cursor-pointer flex-col w-[calc(50%-10px)] max-w-[calc(50%-10px)]">
+                              <div onClick={() => routing(data.id)} key={data.id}  className="flex cursor-pointer flex-col w-[calc(50%-10px)] max-w-[calc(50%-10px)] gap-[25px]">
                               <div className='w-[100%] h-[235px] overflow-hidden relative'>
-                                <Image src={test} alt="포스트 이미지" width={290} height={235} className="w-full object-contain"/>
+                                <Image src={data.imageUrl} alt="포스트 이미지" fill className="w-full object-cover"/>
                               </div>
-                              <div>
+                              <div className='pl-[5px]'>
                                 <div className="text-[16px] text-[#e4e4e4] truncate text-start mb-[15px]">{data.title}</div>
                                 <div className="flex gap-4">
                                   <div className="flex gap-2 text-[#b0b0b0] text-[16px]">
@@ -104,10 +136,21 @@ export default function GatheringDetail({data}:{data:any}) {
           </div>
         </div>
         <div className="sticky top-8 h-full w-160 px-5">
-          <div className="flex flex-col self-start rounded-sm bg-[#1c1c1c] p-6">
+          <div className="flex flex-col self-start rounded-sm bg-[#1c1c1c] px-[22px] py-[20px]">
             <div className="flex flex-col gap-5 mb-[30px]">
-              <div className="gradient-border self-start px-6 py-2.5">
-                음식 🍔
+              <div className='w-full h-fit flex justify-between'>
+                <div className="gradient-border self-start px-6 py-2.5 flex items-center">
+                  {data.category} 🍔
+                </div>
+                {showEditDots && <div className='w-fit h-fit relative'>
+                  <EllipsisVertical onClick={() => SetShowEditBox(prev => !prev)} className='cursor-pointer'/>
+                  {showEditBox &&                  
+                  <div className='w-[80px] flex flex-col bg-[#252525] border border-[rgba(192,192,192,.4)] rounded-[5px] text-[#fff] absolute z-5'>
+                    <button className='w-full h-[44px] flex items-center justify-center hover:text-main'>수정</button>
+                    <button onClick={() => deleteGathering(data.id)} className='w-full h-[44px] flex items-center justify-center hover:text-main'>삭제</button>
+                  </div>
+                    }
+                </div>}
               </div>
               <div className="gradient-text text-3xl font-bold">
                 {data.title}
@@ -128,7 +171,7 @@ export default function GatheringDetail({data}:{data:any}) {
       <div className="flex w-full flex-col gap-[41px] lg:hidden">
         <div className="flex w-full flex-col gap-7.5 self-start rounded-sm bg-[#1c1c1c] p-6">
           <div className="mt-[61px] mb-[59px] flex flex-col items-center gap-5 text-white">
-            <div className="gradient-border px-6 py-2.5">음식 🍔</div>
+            <div className="gradient-border px-6 py-2.5">{data.category} 🍔</div>
             <div className="gradient-text text-xl font-bold">
               {data.title}
             </div>

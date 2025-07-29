@@ -26,6 +26,7 @@ export default function CalendarCard({info,setSelectListData,setCalendarData}:Pr
 
   const deleteEvent = async (id:number)=>{
     try{
+
      const response = await fetch(`${baseUrl}/api/calendars/${Number(id)}`,{
         method: 'DELETE',
         credentials: 'include', 
@@ -33,6 +34,7 @@ export default function CalendarCard({info,setSelectListData,setCalendarData}:Pr
           accept: 'application/json',
         },
     })
+
      const data = await response.json();
      setSelectListData((prev) => prev.filter(data => data.calendarId !== info.calendarId));
      setCalendarData((prev) => prev.filter(data => data.calendarId !== info.calendarId));
@@ -58,17 +60,18 @@ export default function CalendarCard({info,setSelectListData,setCalendarData}:Pr
         </div>
       </div>
       <div className='relative'>
+        {info.type !== 'GROUP' &&       
         <button className='mt-[18px] mr-[8px]'>
           <EllipsisVertical size={18} onClick={()=> setShowBox(prev => !prev)} className='text-[#e4e4e4]'/>
         </button>
-        {showBox &&<div className='w-[80px] flex flex-col bg-[#252525] border border-[rgba(192,192,192,.4)] rounded-[5px] text-[#fff] absolute z-5'>
-          {info.type !== 'GROUP' && <button onClick={() => {
+        }
+        {showBox && <div className='w-[80px] flex flex-col bg-[#252525] border border-[rgba(192,192,192,.4)] rounded-[5px] text-[#fff] absolute z-5'>
+          <button onClick={() => {
             setShowModal(true);
             setShowBox(false);
           }} className='w-full h-[44px] flex items-center justify-center hover:text-main'>수정</button>
-          }
           <button onClick={() => {
-            deleteEvent(info.calendarId)
+            deleteEvent(+info.calendarId)
             setShowBox(false);
           }} className='w-full h-[44px] flex items-center justify-center hover:text-main'>삭제</button>
         </div>
