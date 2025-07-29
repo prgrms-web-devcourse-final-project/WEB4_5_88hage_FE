@@ -11,7 +11,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/stores/UseAuthStore';
-import { LoginRequest } from '@/types/auth';
 
 export default function Login() {
   const {
