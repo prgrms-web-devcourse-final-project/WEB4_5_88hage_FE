@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ArrowUp } from "lucide-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 
 export default function ChatbotModal({ onClose }) {
   const router = useRouter();
+
+  const chatBoxRef = useRef<HTMLDivElement>(null);
 
   const [messages, setMessages] = useState([
     {
@@ -20,17 +22,21 @@ export default function ChatbotModal({ onClose }) {
   const [chatHistory, setChatHistory] = useState([]);
   const [showRecommendModal, setShowRecommendModal] = useState(false);
 
-  // 추천조건 입력값
   const [address, setAddress] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
-  // 추천 결과 관리
   const [allRecommendGroups, setAllRecommendGroups] = useState([]);
-  const [recommendOffset, setRecommendOffset] = useState(2); // 몇 개까지 노출중인지
-  const [hasRecommended, setHasRecommended] = useState(false); // 추천 한 번이라도 받았는지
-const API = process.env.NEXT_PUBLIC_API_URL;
-  // 챗봇 대화 전송
+  const [recommendOffset, setRecommendOffset] = useState(2);
+  const [hasRecommended, setHasRecommended] = useState(false);
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   const handleSend = async () => {
     const text = inputMessage.trim();
     if (!text) return;
@@ -43,7 +49,7 @@ const API = process.env.NEXT_PUBLIC_API_URL;
       userMessage: text,
       eventType,
     };
-const API = process.env.NEXT_PUBLIC_API_URL;
+
     try {
       const res = await fetch(`${API}/api/chatBot/chat`, {
         method: "POST",
@@ -69,7 +75,6 @@ const API = process.env.NEXT_PUBLIC_API_URL;
     }
   };
 
-  // 요약 버튼 클릭 시: 요약API 호출 후 추천조건 모달 오픈
   const handleSummary = async () => {
     const trimmedInput = inputMessage.trim();
 
@@ -94,13 +99,12 @@ const API = process.env.NEXT_PUBLIC_API_URL;
         credentials: "include",
         body: JSON.stringify(payload),
       });
-      setShowRecommendModal(true); // 추천조건 모달 열기!
+      setShowRecommendModal(true);
     } catch (error) {
       console.error("요약 요청 실패", error);
     }
   };
 
-  // 추천조건 입력 후 추천API 호출 (groups/contents 자동 분기!)
   const handleRecommend = async () => {
     if (!address || !startDate || !endDate) return;
     const recommendUrl =
@@ -124,14 +128,13 @@ const API = process.env.NEXT_PUBLIC_API_URL;
       const data = await res.json();
       setShowRecommendModal(false);
 
-      // 여기서 분기! (groups/contents)
       const isGroup = eventType === "GROUP";
       const resultArray = isGroup ? data.data?.groups : data.data?.contents;
 
       if (data.data && Array.isArray(resultArray) && resultArray.length > 0) {
         setAllRecommendGroups(resultArray);
-        setRecommendOffset(2); // 항상 처음 2개부터!
-        setHasRecommended(true); // 추천 버튼 → 더 받기로 변경
+        setRecommendOffset(2);
+        setHasRecommended(true);
         setMessages((prev) => [
           ...prev,
           {
@@ -153,7 +156,6 @@ const API = process.env.NEXT_PUBLIC_API_URL;
     }
   };
 
-  // "추천 더 받기" 버튼 클릭 핸들러 (항상 2개씩 추가, 새 메시지로 쌓음)
   const handleShowMore = () => {
     if (recommendOffset >= allRecommendGroups.length) {
       toast.info("챗봇추천은 여기까지입니다.");
@@ -171,11 +173,6 @@ const API = process.env.NEXT_PUBLIC_API_URL;
     ]);
   };
 
-  useEffect(() => {
-    // debug 용
-    // console.log("chatHistory state:", chatHistory);
-  }, [chatHistory]);
-
   return (
     <div className="fixed bottom-[90px] right-[128px] z-200 w-[300px] h-[519px] rounded-[5px] bg-[#CAEAE2] shadow-lg flex flex-col items-center">
       <div className="relative bg-[#CAEAE2] rounded-xl w-[300px] h-[519px] flex flex-col shadow-lg overflow-hidden">
@@ -186,13 +183,19 @@ const API = process.env.NEXT_PUBLIC_API_URL;
           <span className="font-semibold text-[14px] text-[#333333]">AI 큐큐✨</span>
           <span style={{ width: 24 }}></span>
         </div>
-        <div className="flex-1 flex flex-col overflow-y-auto">
+        <div
+          ref={chatBoxRef}
+          className="flex-1 flex flex-col overflow-y-auto chatbot-scrollbar"
+          style={{
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+          }}
+        >
           {messages.map((msg, idx) => (
             <div
               key={idx}
               className={`flex ${msg.type === "bot" ? "justify-start" : "justify-end"} mb-[5px] ${idx === 0 ? "mt-[14px]" : ""}`}
             >
-              {/* 일반 텍스트 메시지 */}
               {msg.text && (
                 <div
                   className={`text-[12px] whitespace-pre-line px-4 py-2 shadow rounded-[5px] max-w-[242px]
@@ -204,58 +207,53 @@ const API = process.env.NEXT_PUBLIC_API_URL;
                 </div>
               )}
 
-              {/* 추천 결과 카드 메시지 */}
               {msg.recommendGroups && (
-  <div className="flex flex-col gap-3 mt-2 ml-[15px] w-full">
-    {msg.recommendGroups.map((item) => {
-      // 모임(GROUP)
-      if (item.title) {
-        return (
-          <div
-            key={item.id}
-            onClick={() => router.push(`/gathering/${item.id}`)}
-            className="w-[180px] rounded-[12px] overflow-hidden shadow-lg bg-white cursor-pointer hover:shadow-xl transition"
-          >
-            <img
-              className="w-full h-32 object-cover"
-              src={item.imageUrl}
-              alt={item.title}
-            />
-            <div className="px-4 py-3">
-              <div className="font-bold text-[16px] mb-1">{item.title}</div>
-              <p className="text-gray-700 text-[14px] mb-1">{item.simpleExplain}</p>
-              <p className="text-gray-400 text-[13px]">{item.placeName}</p>
-            </div>
-          </div>
-        );
-      }
-      // 컨텐츠(CONTENT)
-      return (
-        <div
-          key={item.id}
-          onClick={() => router.push(`/event/${item.id}`)}
-          className="w-[180px] rounded-[12px] overflow-hidden shadow-lg bg-white cursor-pointer hover:shadow-xl transition"
-        >
-          <img
-            className="w-full h-32 object-cover"
-            src={item.poster}
-            alt={item.contentTitle}
-          />
-          <div className="px-4 py-3">
-            <div className="font-bold text-[16px] mb-1">{item.contentTitle}</div>
-            {/* <p className="text-gray-700 text-[14px] mb-1">{item.reason}</p> */}
-            <p className="text-gray-400 text-[13px]">{item.address}</p>
-          </div>
-        </div>
-      );
-    })}
-  </div>
-)}
-
+                <div className="flex flex-col gap-3 mt-2 ml-[15px] w-full">
+                  {msg.recommendGroups.map((item) => {
+                    if (item.title) {
+                      return (
+                        <div
+                          key={item.id}
+                          onClick={() => router.push(`/gathering/${item.id}`)}
+                          className="w-[180px] rounded-[12px] overflow-hidden shadow-lg bg-white cursor-pointer hover:shadow-xl transition"
+                        >
+                          <img
+                            className="w-full h-32 object-cover"
+                            src={item.imageUrl}
+                            alt={item.title}
+                          />
+                          <div className="px-4 py-3">
+                            <div className="font-bold text-[16px] mb-1">{item.title}</div>
+                            <p className="text-gray-700 text-[14px] mb-1">{item.simpleExplain}</p>
+                            <p className="text-gray-400 text-[13px]">{item.placeName}</p>
+                          </div>
+                        </div>
+                      );
+                    }
+                    return (
+                      <div
+                        key={item.id}
+                        onClick={() => router.push(`/event/${item.id}`)}
+                        className="w-[180px] rounded-[12px] overflow-hidden shadow-lg bg-white cursor-pointer hover:shadow-xl transition"
+                      >
+                        <img
+                          className="w-full h-32 object-cover"
+                          src={item.poster}
+                          alt={item.contentTitle}
+                        />
+                        <div className="px-4 py-3">
+                          <div className="font-bold text-[16px] mb-1">{item.contentTitle}</div>
+                          {/* <p className="text-gray-700 text-[14px] mb-1">{item.reason}</p> */}
+                          <p className="text-gray-400 text-[13px]">{item.address}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           ))}
 
-          {/* 모임/컨텐츠 선택 초기 버튼 */}
           {!eventType && (
             <div className="flex flex-row gap-2 mt-[5px] ml-[15px]">
               <button
@@ -294,7 +292,6 @@ const API = process.env.NEXT_PUBLIC_API_URL;
           )}
         </div>
 
-        {/* 버튼: 추천 전/후 분기 */}
         <div className="w-full flex justify-center pt-2 pb-3">
           {!hasRecommended && (
             <button
@@ -313,7 +310,6 @@ const API = process.env.NEXT_PUBLIC_API_URL;
           )}
         </div>
 
-        {/* 인풋 */}
         <div className="w-full flex justify-center items-center border-t border-[#eee] bg-white py-2">
           <input
             type="text"
@@ -332,7 +328,6 @@ const API = process.env.NEXT_PUBLIC_API_URL;
         </div>
       </div>
 
-      {/* 추천 조건 입력 모달 */}
       {showRecommendModal && (
         <div className="fixed z-50 inset-0 flex items-center justify-center bg-black/60">
           <div className="bg-white rounded-2xl shadow-xl px-8 py-8 w-[380px] flex flex-col items-center">
