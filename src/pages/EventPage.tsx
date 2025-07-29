@@ -89,6 +89,7 @@ export default function EventPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedCategory = searchParams.get("category") || "";
+  const type = searchParams.get("type");
 
   const sortRef = useRef<HTMLDivElement>(null);
   const API = process.env.NEXT_PUBLIC_API_URL;
@@ -105,6 +106,7 @@ export default function EventPage() {
     const params = new URLSearchParams(searchParams);
     if (category) params.set("category", category);
     else params.delete("category");
+    if (type) params.set("type", type);
     router.push(`?${params.toString()}`);
     setPage(0);
   };
@@ -156,14 +158,17 @@ export default function EventPage() {
       const res = await fetch(url, {
         credentials: "include",
       }).then(r => r.json());
-      const list = res.data?.content || res.data?.contents || [];
-      setData(prev => (page === 0 ? list : [...prev, ...list]));
-      setHasMore(res.data && typeof res.data.last !== "undefined" ? !res.data.last : false);
-      setLoading(false);
+      let list = res.data?.content || res.data?.contents || [];
+      if (type) {
+      list = list.filter((event: EventApiResponse) => event.eventType === type);
+    }
+    setData(prev => (page === 0 ? list : [...prev, ...list]));
+    setHasMore(res.data && typeof res.data.last !== "undefined" ? !res.data.last : false);
+    setLoading(false);
     };
     fetchData();
     // eslint-disable-next-line
-  }, [sortBy, page, search, selectedCategory]);
+  }, [sortBy, page, search, selectedCategory,type]);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
