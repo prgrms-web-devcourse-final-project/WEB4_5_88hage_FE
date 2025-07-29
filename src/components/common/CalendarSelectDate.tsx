@@ -6,10 +6,10 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Toast from './Toast';
 
 type Props = {
-  info:CalendarData,
+  info:CalendarEvent,
   setShow: Dispatch<SetStateAction<boolean>>,
-  setSelectListData:Dispatch<SetStateAction<CalendarData[]>>,
-  setCalendarData:Dispatch<SetStateAction<CalendarData[]>>,
+  setSelectListData:Dispatch<SetStateAction<CalendarEventList>>,
+  setCalendarData:Dispatch<SetStateAction<CalendarEventList>>,
   show:boolean
 }
 

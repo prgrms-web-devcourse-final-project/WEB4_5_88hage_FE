@@ -29,7 +29,6 @@ export default async function page({params}: {params: Promise<{eventId: string}>
     }
   }
   const data = await getEventDetail(eventId);
-  // console.log(data)
   return (
     <>
       <EventDetail data={data} />

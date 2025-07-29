@@ -16,7 +16,7 @@ import { filterGatheringCategory } from '@/lib/utils/filterCategory';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export default function GatheringDetail({data}:{data:any}) {
+export default function GatheringDetail({data}:{data:GroupDetailData}) {
   const route = useRouter();
   const [showMore,setShowMore] = useState(false);
   const [showEditDots,SetShowEditDots] = useState(false);
@@ -26,7 +26,7 @@ export default function GatheringDetail({data}:{data:any}) {
 
   useEffect(()=>{
     console.log(data.leaderImgUrl)
-    if(user?.email === relatedGroups.leaderEmail) SetShowEditDots(true)
+    if(user?.email === relatedGroups[0].leaderEmail) SetShowEditDots(true)
   },[user])
 
   const deleteGathering = async (id:number) => {
@@ -116,7 +116,7 @@ export default function GatheringDetail({data}:{data:any}) {
               <button onClick={() => route.push(`/gathering?category=${data.category}`)} className="cursor-pointer text-[#a1a1a1]">더보기</button>
             </div>
             <div className="flex gap-5">
-              {relatedGroups.map((data:any) => {
+              {relatedGroups.map((data:RelatedGroup) => {
                               return (
                               <div onClick={() => routing(data.id)} key={data.id}  className="flex cursor-pointer flex-col w-[calc(50%-10px)] max-w-[calc(50%-10px)] gap-[25px]">
                               <div className='w-[100%] h-[235px] overflow-hidden relative'>

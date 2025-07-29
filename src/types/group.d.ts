@@ -29,7 +29,35 @@ declare interface Group {
   title?: string;
 }
 
-declare interface GroupDetail {
+declare interface GroupDetailData {
+  id: number;
+  title: string;
+  explain: string;
+  simpleExplain: string;
+  imageUrl: string;
+  placeName: string;
+  address: string;
+  viewCount: number;
+  groupDate: string;         // ISO string
+  createdAt: string;
+  maxPeople: number;
+  nowPeople: number;
+  status: 'RECRUITING' | 'CLOSED' | string;
+  latitude: number;
+  longitude: number;
+  during: number;            // 단위: 시간
+  category: string;          // e.g. 'STUDY', 'SPORT', 'MUSIC'
+  leaderNickname: string;
+  leaderEmail: string;
+  leaderExplain: string;
+  leaderImgUrl: string;
+  leaderHashTags: string[];
+  hashTags: string[];
+  activated: boolean;
+  relatedGroups: RelatedGroup[];
+}
+
+declare interface RelatedGroup {
   id: number;
   title: string;
   explain: string;
@@ -42,26 +70,19 @@ declare interface GroupDetail {
   createdAt: string;
   maxPeople: number;
   nowPeople: number;
-  status: 'RECRUITING' | 'FULL' | 'COMPLETED' | 'CANCELED' | 'DELETE';
+  status: 'RECRUITING' | 'CLOSED' | string;
   latitude: number;
   longitude: number;
   during: number;
-  category:
-    | 'ART'
-    | 'TRAVEL'
-    | 'FOOD'
-    | 'GAME'
-    | 'CULTURE'
-    | 'SPORT'
-    | 'STUDY'
-    | 'MOVIE';
+  category: string;
   leaderNickname: string;
   leaderEmail: string;
+  leaderExplain: string;
+  leaderImgUrl: string;
+  leaderHashTags: string[];
   hashTags: string[];
   activated: boolean;
-  isLeader?: boolean; // Added for leader matching logic
-  memberCount: number; // for MainPostHeader
-  groupImageUrl: string; // for MainPostHeader
+  relatedGroups: null;
 }
 
 declare interface GroupUpdateRequest {
@@ -203,4 +224,4 @@ declare interface MyGroupData {
   type: string;
 }
 
-declare interface MyGroupResponse extends ApiResponse<MyGroupData[]> {}
+// declare interface MyGroupResponse extends ApiResponse<MyGroupData[]> {}

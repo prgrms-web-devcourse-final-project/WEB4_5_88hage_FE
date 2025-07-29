@@ -19,7 +19,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation'
 import { filterContentCategory } from '@/lib/utils/filterCategory';
 
-export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
+export default function EventDetail({data}:{data:EventData}) {
   const [show,setShow] = useState(false);
   const [showMore,setShowMore] = useState(false);
   const {content,related,nearby} = data;
@@ -31,7 +31,7 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
 
   const relatedArr = [related[0],related[1]];
   const nearbyArr = [nearby[0],nearby[1]];
-  console.log(data)
+  console.log(data.content.images,data.content.urls)
 
   const dateFormatting = (date:string)=>{
     return moment(date).format("YYYY년 MM월 DD일")
