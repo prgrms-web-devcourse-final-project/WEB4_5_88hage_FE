@@ -14,7 +14,7 @@ export default function Header() {
         {/* 네비게이션 영역 */}
         <div className="flex h-[50px] items-center justify-between bg-black/30 px-6 backdrop-blur-sm lg:h-[65px]">
           {/* 로고 */}
-          <div className="relative mt-5 h-[40px] w-[80px] lg:h-[50px] lg:w-[120px]">
+          <div className="relative mt-6 h-[40px] w-[80px] lg:h-[50px] lg:w-[120px]">
             <Logo />
           </div>
 

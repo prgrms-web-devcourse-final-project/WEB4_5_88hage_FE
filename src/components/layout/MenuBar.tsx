@@ -81,7 +81,7 @@ export default function MenuBar({ close }: { close: () => void }) {
       </div>
       <div className="mt-[50px] lg:mt-0">
         <Image
-          src={weather! > 0 ? cloud : 'sun-face.svg'}
+          src={weather! > 0 ? cloud : '/sun-face.svg'}
           width={40}
           height={40}
           alt="sun"
