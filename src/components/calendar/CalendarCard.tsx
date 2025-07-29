@@ -78,7 +78,7 @@ export default function CalendarCard({info,setSelectListData,setCalendarData}:Pr
         }
       </div>
     </div>
-    {showModal && <CalendarSelectDate info={info} setShow={setShowModal} setSelectListData={setSelectListData }setCalendarData={setCalendarData}/>}
+    {showModal && <CalendarSelectDate info={info} setShow={setShowModal} setSelectListData={setSelectListData }setCalendarData={setCalendarData} show={showModal}/>}
     </>
   );
 };

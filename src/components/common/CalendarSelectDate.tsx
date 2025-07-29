@@ -2,13 +2,14 @@
 
 import DatepickerComponent from '@/components/common/DatepickerComponent';
 import moment from 'moment';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 type Props = {
   info:CalendarData,
   setShow: Dispatch<SetStateAction<boolean>>,
   setSelectListData:Dispatch<SetStateAction<CalendarData[]>>,
-  setCalendarData:Dispatch<SetStateAction<CalendarData[]>>
+  setCalendarData:Dispatch<SetStateAction<CalendarData[]>>,
+  show:boolean
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -17,10 +18,25 @@ export default function CalendarSelectDate({
     info,
     setShow,
     setSelectListData,
-    setCalendarData
+    setCalendarData,
+    show
     }:Props){
     
     const [eventDate,setEventDate] = useState('');
+
+    useEffect(() => {
+        if (show) {
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = '';
+        }
+    
+        return () => {
+          document.body.style.overflow = '';
+        };
+      }, [show]);
+    
+      if (!show) return null;
 
     const modifyEvent = async (id:number,eventDate:string)=>{
     try{

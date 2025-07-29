@@ -17,6 +17,7 @@ import Map from '@/components/kakao/Map'
 import SelectDate from '@/components/common/SelectDate';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'
+import { filterContentCategory } from '@/lib/utils/filterCategory';
 
 export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
   const [show,setShow] = useState(false);
@@ -28,9 +29,9 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
     route.push(`/event/${id}`)
   }
 
-  console.log(content)
   const relatedArr = [related[0],related[1]];
   const nearbyArr = [nearby[0],nearby[1]];
+  console.log(data)
 
   const dateFormatting = (date:string)=>{
     return moment(date).format("YYYY년 MM월 DD일")
@@ -40,8 +41,9 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
     <div className="eventDetail-gradient flex w-screen min-w-screen justify-center bg-[#121212] lg:w-340">
       <div className="hidden h-full min-h-screen py-15 text-[#f6f6f6] lg:flex">
         <div className="flex w-160 flex-col gap-10 px-5">
-          <div className={`overflow-hidden ${showMore ? 'h-fit' : 'h-[300px]'}`}>
+          <div className={`overflow-hidden flex flex-col gap-[20px] ${showMore ? 'h-fit' : 'h-[300px]'}`}>
             <Image src={content.poster} alt={content.contentTitle} width={800} height={500} className="w-full h-auto object-cover"/>
+            {content.images.map(img => <Image key={img.id} src={img.imageUrl} alt={content.contentTitle} width={800} height={500} className="w-full h-auto object-cover"/>)}
           </div>
             {showMore ?<button onClick={()=> {
               window.scrollTo({ top: 0 });
@@ -49,7 +51,7 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
           <div className="flex flex-col gap-8">
             <div className="text-2xl text-[#00e6ae]">안내 사항</div>
             <div className="mb-[18px] flex flex-col gap-[23px]">
-              {content.category && <div>카테고리 : {content.category}</div>}
+              {content.category && <div>카테고리 : {filterContentCategory(content.category)}</div>}
               {content.startDate && content.endDate && <div>행사 날짜 : {dateFormatting(content.startDate)} ~ {dateFormatting(content.endDate)}</div>}
               {content.address && <div>행사 장소 : {content.address}</div>}
               {content.runTime && <div>행사 시간 : {content.runTime}</div>}
@@ -122,7 +124,7 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
             <div className="flex flex-col gap-5">
               <div className="flex items-center justify-between">
                 <div className="gradient-border self-start px-6 py-1.5">
-                  {content.category} 🍔
+                  {filterContentCategory(content.category)}  
                 </div>
               </div>
               <div className="gradient-text text-3xl font-bold">
@@ -152,7 +154,7 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
           <div className="flex flex-col items-center gap-5">
             <div className="flex items-center justify-between">
               <div className="gradient-border self-start px-6 py-1.5">
-                음식 🍔
+                {filterContentCategory(content.category)}
               </div>
               {/* <div className="text-[#777777]">2025년 7월 19일</div> */}
             </div>
@@ -208,7 +210,7 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
               <div className="text-main text-xl lg:text-2xl">
                 비슷한 행사 추천해드려요
               </div>
-              <button className="cursor-pointer text-[#a1a1a1]">더보기</button>
+              <button onClick={() => route.push(`/event?category=${related[0].category}&type=${related[0].eventType}`)} className="cursor-pointer text-[#a1a1a1]">더보기</button>
             </div>
             <div className="flex justify-center gap-5">
               <button className="flex cursor-pointer flex-col gap-5">
@@ -217,7 +219,7 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
                   <div className="text-xl text-[#e4e4e4]">모임 이름</div>
                   <div className="flex gap-4">
                     <div className="flex gap-2 text-[#b0b0b0]">
-                      <LucideHeart />5
+                      <LucideHeart />
                     </div>
                     <div className="flex gap-2 text-[#b0b0b0]">
                       <LucideMapPin />
@@ -248,7 +250,7 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
               <div className="text-main text-lg lg:text-2xl">
                 주변에 가까운 행사 추천
               </div>
-              <button className="cursor-pointer text-[#a1a1a1]">더보기</button>
+              <button onClick={() => route.push(`/event`)} className="cursor-pointer text-[#a1a1a1]">더보기</button>
             </div>
             <div className="flex justify-center gap-5">
               <button className="flex cursor-pointer flex-col gap-5">
@@ -288,7 +290,7 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
           <span className="gradient-text">일정 등록</span>
         </button>
       </div>
-      {show && <SelectDate title={content.contentTitle} id={content.id} setShow={setShow}/>}
+      {show && <SelectDate title={content.contentTitle} id={content.id} setShow={setShow} show={show}/>}
     </div>
   );
 }
