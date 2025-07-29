@@ -1,0 +1,10 @@
+.Toastify__toast {
+  box-shadow: 0 6px 32px 0 rgba(0,0,0,0.18), 0 1.5px 8px 0 rgba(0,0,0,0.12);
+  border: 1.5px solid #323232;
+  border-radius: 10px;
+}
+
+.Toastify__toast-body {
+  color: #fff;
+  font-weight: 500;
+}
