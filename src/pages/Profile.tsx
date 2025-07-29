@@ -28,6 +28,8 @@ import FollowListModal from '@/components/common/FollowListModal';
 import DetailListModal from '@/components/common/DetailListModal';
 import EditProfileModal from '@/components/EditProfileModal';
 import { updateProfile } from '@/lib/api/userInfo';
+import Toast from '@/components/common/Toast';
+import ConfirmModal from '@/components/common/ConfirmModal';
 
 interface UserInfo {
   nickname: string;
@@ -74,6 +76,7 @@ export default function Profile() {
     { nickname: string; imageUrl: string; email: string }[]
   >([]);
   const [loading, setLoading] = useState(true);
+  const [showWithdrawConfirmModal, setShowWithdrawConfirmModal] = useState(false); // 새로운 상태 추가
 
   const fetchFollowData = async () => {
     try {
@@ -816,29 +819,37 @@ export default function Profile() {
                 introduction: newIntroduction,
                 imageUrl: newImageUrl,
               });
-              alert('프로필이 성공적으로 업데이트되었습니다.');
+              Toast.success('프로필이 성공적으로 업데이트되었습니다.');
             } catch (error) {
               console.error('Failed to update profile:', error);
-              alert('프로필 업데이트에 실패했습니다.');
+              Toast.error('프로필 업데이트에 실패했습니다.');
             }
           }}
-          onAccountDelete={async () => {
-            if (
-              window.confirm(
-                '정말로 회원 탈퇴를 하시겠습니까? 모든 정보가 삭제됩니다.',
-              )
-            ) {
-              try {
-                await withdrawUser();
-                alert('회원 탈퇴가 완료되었습니다.');
-                router.push('/'); // Redirect to home or login page after deletion
-              } catch (error) {
-                console.error('Failed to withdraw user:', error);
-                alert('회원 탈퇴에 실패했습니다.');
-              }
-            }
-            setShowEditProfileModal(false);
+          onAccountDelete={() => {
+            setShowWithdrawConfirmModal(true); // 확인 모달을 띄웁니다.
+            setShowEditProfileModal(false); // EditProfileModal은 닫습니다.
           }}
+        />
+      )}
+
+      {showWithdrawConfirmModal && (
+        <ConfirmModal
+          isOpen={showWithdrawConfirmModal}
+          onClose={() => setShowWithdrawConfirmModal(false)}
+          onConfirm={async () => {
+            try {
+              await withdrawUser();
+              Toast.success('회원 탈퇴가 완료되었습니다.');
+              router.push('/');
+            } catch (error) {
+              console.error('Failed to withdraw user:', error);
+              Toast.error('회원 탈퇴에 실패했습니다.');
+            } finally {
+              setShowWithdrawConfirmModal(false); // 확인 모달 닫기
+            }
+          }}
+          title="회원 탈퇴 확인"
+          message="정말로 회원 탈퇴를 하시겠습니까? 모든 정보가 삭제됩니다."
         />
       )}
     </>
