@@ -24,15 +24,6 @@ button {
   z-index: 0;
 }
 
-/* .container {
-  height: 100vh;            
-  overflow-y: scroll;        
-  scroll-snap-type: y mandatory;
-}
-.slide {
-  height: 100vh;             
-  scroll-snap-align: start;  
-} */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;

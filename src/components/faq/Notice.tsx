@@ -11,12 +11,12 @@ export default function NoticeContent() {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
-
+const API = process.env.NEXT_PUBLIC_API_URL;
   // 공지사항 리스트 불러오기
   const getNoticeList = async (pageNum = 0) => {
     try {
       const response = await fetch(
-        `https://funfun.cloud/api/admin/notices?page=${pageNum}&size=${PAGE_SIZE}&sort=createdAt,desc`
+        `${API}/api/admin/notices?page=${pageNum}&size=${PAGE_SIZE}&sort=createdAt,desc`
       );
       const res = await response.json();
       setNotices(
