@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import basicProfileImg from '@/assets/images/basicProfile.png';
 import { ChevronLeft, Settings } from 'lucide-react';
 import GrayButton from './button/GrayButton';
-import { verifyNickname, changeNickname } from '../lib/api/user';
+import { verifyNickname } from '../lib/api/user';
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -12,7 +13,6 @@ interface EditProfileModalProps {
   currentIntroduction: string;
   currentImageUrl: string;
   onSave: (nickname: string, introduction: string, imageUrl: string) => void;
-  onPasswordChange: () => void;
   onAccountDelete: () => void;
 }
 
@@ -23,9 +23,9 @@ export default function EditProfileModal({
   currentIntroduction,
   currentImageUrl,
   onSave,
-  onPasswordChange,
   onAccountDelete,
 }: EditProfileModalProps) {
+  const router = useRouter();
   const [nickname, setNickname] = useState(currentNickname);
   const [introduction, setIntroduction] = useState(currentIntroduction);
   const [imageUrl, setImageUrl] = useState(currentImageUrl); // This would ideally handle file uploads
@@ -223,7 +223,10 @@ export default function EditProfileModal({
           저장하기
         </GrayButton>
         <div className="border-gray-7 t4 mt-2 flex items-center justify-center pt-4">
-          <button onClick={onPasswordChange} className="w-full hover:underline">
+          <button
+            onClick={() => router.push('/login/password-change')}
+            className="w-full hover:underline"
+          >
             비밀번호 변경
           </button>
           <button onClick={onAccountDelete} className="w-full hover:underline">

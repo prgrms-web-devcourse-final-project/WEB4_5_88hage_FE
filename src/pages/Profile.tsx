@@ -822,11 +822,6 @@ export default function Profile() {
               alert('프로필 업데이트에 실패했습니다.');
             }
           }}
-          onPasswordChange={() => {
-            console.log('Password change initiated');
-            router.push('/password-change');
-            setShowEditProfileModal(false);
-          }}
           onAccountDelete={async () => {
             if (
               window.confirm(
