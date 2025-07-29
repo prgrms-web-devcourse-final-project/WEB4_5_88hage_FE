@@ -2,13 +2,10 @@
 import Image from 'next/image';
 import profileImg from '@/assets/images/profile_test.png';
 import mapIcon from '@/assets/images/map_icon_test.png';
-import {
-  LucideArrowUpRight,
-  LucideChevronsLeftRight,
-  LucideUsers2,
-} from 'lucide-react';
+import { LucideArrowUpRight, LucideUsers2 } from 'lucide-react';
 import 'swiper/css';
 import { useEffect, useState } from 'react';
+import moment from 'moment';
 import { useRouter } from 'next/navigation';
 import { HashLoader } from 'react-spinners';
 import {
@@ -29,6 +26,7 @@ import EditProfileModal from '@/components/EditProfileModal';
 import { updateProfile } from '@/lib/api/userInfo';
 import Toast from '@/components/common/Toast';
 import ConfirmModal from '@/components/common/ConfirmModal';
+import ProfileCalendar from '@/components/calendar/ProfileCalendar';
 
 interface UserInfo {
   nickname: string;
@@ -58,6 +56,7 @@ export default function Profile() {
   const [groupStats, setGroupStats] = useState<GroupStat[]>([]); // New state for group stats
   const [leaderGroups, setLeaderGroups] = useState<LeaderMyGroupData[]>([]); // New state for leader groups
   const [dailyEvents, setDailyEvents] = useState<DailyCalender[]>([]); // New state for daily events
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date()); // New state for selected date
   const [myInquiries, setMyInquiries] = useState<Inquiry[]>([]); // New state for inquiries
   const [bookedEvents, setBookedEvents] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState('myPosts'); // 'myPosts', 'myInquiries', 'bookedEvents'
@@ -124,18 +123,19 @@ export default function Profile() {
         const leaderGroupsData = await getLeaderMyGroups(); // Fetch leader groups
         setLeaderGroups(leaderGroupsData);
 
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = today.getMonth() + 1; // Month is 0-indexed
-        const day = today.getDate();
-        const dailyCalendarData = await getDailyCalendar(year, month, day);
-        setDailyEvents(
-          dailyCalendarData.data.filter(
-            (event: DailyCalender, index: number, self: DailyCalender[]) =>
-              index ===
-              self.findIndex((e) => e.activityId === event.activityId),
-          ),
-        );
+        if (selectedDate) {
+          const year = selectedDate.getFullYear();
+          const month = selectedDate.getMonth() + 1; // Month is 0-indexed
+          const day = selectedDate.getDate();
+          const dailyCalendarData = await getDailyCalendar(year, month, day);
+          setDailyEvents(
+            dailyCalendarData.data.filter(
+              (event: DailyCalender, index: number, self: DailyCalender[]) =>
+                index ===
+                self.findIndex((e) => e.activityId === event.activityId),
+            ),
+          );
+        }
 
         const inquiriesData = await getContacts();
         setMyInquiries(inquiriesData.data.content);
@@ -158,7 +158,7 @@ export default function Profile() {
     };
 
     fetchData();
-  }, []);
+  }, [selectedDate]);
 
   if (loading) {
     return (
@@ -301,74 +301,8 @@ export default function Profile() {
                 })}
               </div>
             </div>
-            <div className="bg-gray-7 h-90 w-[calc(100%*(467/1440))] rounded-[5px] px-9 py-3">
-              <div className="flex justify-between pb-2 text-lg text-[#a8a8a8]">
-                <div className="">July, 2025</div>
-                <button className="">
-                  <LucideChevronsLeftRight />
-                </button>
-              </div>
-              {/* 달력 */}
-              {/* <div className="flex flex-col gap-2.5">
-                <div className="flex gap-2.5">
-                  <div className="w-12 text-center text-[#ffb6b6]">일</div>
-                  <div className="w-12 text-center">월</div>
-                  <div className="w-12 text-center">화</div>
-                  <div className="w-12 text-center">수</div>
-                  <div className="w-12 text-center">목</div>
-                  <div className="w-12 text-center">금</div>
-                  <div className="w-12 text-center text-[#ffb6b6]">토</div>
-                </div>
-                <div className="flex flex-col gap-1.5 text-xl font-medium text-white">
-                  <div className="flex gap-2.5">
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]">
-                      1
-                    </div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                  </div>
-                  <div className="flex gap-2.5">
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                  </div>
-                  <div className="flex gap-2.5">
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                  </div>
-                  <div className="flex gap-2.5">
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                  </div>
-                  <div className="flex gap-2.5">
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                  </div>
-                </div>
-              </div> */}
+            <div className="bg-gray-7 h-90 w-[calc(100%*(467/1440))] rounded-[5px] px-3">
+              <ProfileCalendar onDateSelect={setSelectedDate} />
             </div>
           </div>
           <div className="flex h-[356px] gap-[30px]">
@@ -492,34 +426,42 @@ export default function Profile() {
             </div>
             <div className="bg-gray-7 h-full w-[calc(100%*(467/1440))] rounded-[5px] px-5 py-[26px]">
               <div className="mb-5 flex justify-between border-b-1 border-[#4d4d4d] pb-4 text-[#a8a8a8]">
-                <div>오늘의 일정</div>
+                <div>
+                  {selectedDate
+                    ? `${moment(selectedDate).format('YYYY년 MM월 DD일')} 일정`
+                    : '오늘의 일정'}
+                </div>
                 <button onClick={() => setShowDailyEventsModal(true)}>
                   <LucideArrowUpRight />
                 </button>
               </div>
               <div className="flex flex-col gap-[15px]">
-                {dailyEvents.map((event) => (
-                  <div key={event.calendarId}>
-                    <div className="flex items-center gap-5">
-                      <Image src={mapIcon} alt="icon" />
-                      <div className="flex flex-col items-baseline gap-[3px]">
-                        <div className="text-gray-1 font-semibold">
-                          {event.title}
-                        </div>
-                        <div className="text-sm font-medium text-[#7e7e7e]">
-                          {new Date(event.selectedDate).toLocaleDateString(
-                            'ko-KR',
-                            {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                            },
-                          )}
+                {dailyEvents.length > 0 ? (
+                  dailyEvents.slice(0, 4).map((event) => (
+                    <div key={event.calendarId}>
+                      <div className="flex items-center gap-5">
+                        <Image src={mapIcon} alt="icon" />
+                        <div className="flex flex-col items-baseline gap-[3px]">
+                          <div className="text-gray-1 font-semibold">
+                            {event.title}
+                          </div>
+                          <div className="text-sm font-medium text-[#7e7e7e]">
+                            {new Date(event.selectedDate).toLocaleDateString(
+                              'ko-KR',
+                              {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                              },
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <div className="text-center text-gray-400">일정이 없습니다.</div>
+                )}
               </div>
             </div>
           </div>
@@ -766,7 +708,11 @@ export default function Profile() {
       )}
       {showDailyEventsModal && (
         <DetailListModal
-          title="오늘의 일정"
+          title={
+            selectedDate
+              ? `${moment(selectedDate).format('YYYY년 MM월 DD일')} 일정`
+              : '오늘의 일정'
+          }
           data={dailyEvents}
           onClose={() => setShowDailyEventsModal(false)}
           renderItem={(event) => (
@@ -796,9 +742,15 @@ export default function Profile() {
           currentNickname={userInfo.nickname}
           currentIntroduction={userInfo.introduction || ''}
           currentImageUrl={userInfo.imageUrl || basicProfileImg.src}
-          onSave={async (newNickname, newIntroduction, newImageUrl, newImageFile) => {
+          onSave={async (
+            newNickname,
+            newIntroduction,
+            newImageUrl,
+            newImageFile,
+          ) => {
             try {
-              const imageChanged = newImageFile !== undefined || newImageUrl !== userInfo.imageUrl;
+              const imageChanged =
+                newImageFile !== undefined || newImageUrl !== userInfo.imageUrl;
               const profileRequest: ProfileRequest = {
                 introduction: newIntroduction,
                 imageChanged: imageChanged,
@@ -806,7 +758,10 @@ export default function Profile() {
 
               if (newImageFile) {
                 profileRequest.image = newImageFile;
-              } else if (newImageUrl === basicProfileImg.src && userInfo.imageUrl !== basicProfileImg.src) {
+              } else if (
+                newImageUrl === basicProfileImg.src &&
+                userInfo.imageUrl !== basicProfileImg.src
+              ) {
                 // If image is reset to basic and was not basic before, set image to null to delete it
                 profileRequest.image = null; // Or a specific value to indicate deletion
               }
