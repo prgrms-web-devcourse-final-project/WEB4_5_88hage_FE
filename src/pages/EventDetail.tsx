@@ -74,7 +74,7 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
                 return (
                 <div onClick={() => routing(data.id)} key={data.id}  className="flex cursor-pointer flex-col gap-5 w-[calc(50%-10px)] max-w-[calc(50%-10px)]">
                 <div className='w-[100%] h-[235px] overflow-hidden relative'>
-                  <Image src={data.poster} alt="포스트 이미지" width={290} height={235} className="w-full h-auto object-cover"/>
+                  <Image src={data.poster} alt="포스트 이미지" fill className="w-full object-cover"/>
                 </div>
                 <div>
                   <div className="text-[16px] text-[#e4e4e4] truncate text-start mb-[15px]">{data.contentTitle}</div>
@@ -101,7 +101,7 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
                 return (
                 <div onClick={() => routing(data.id)} key={data.id}  className="flex cursor-pointer flex-col w-[calc(50%-10px)] max-w-[calc(50%-10px)]">
                 <div className='w-[100%] h-[235px] overflow-hidden relative mb-[20px]'>
-                  <Image src={data.poster} alt="포스트 이미지" width={290} height={235} className="w-full h-auto object-cover"/>
+                  <Image src={data.poster} alt="포스트 이미지" fill  className="w-full object-cover"/>
                 </div>
                 <div>
                   <div className="text-[16px] text-[#e4e4e4] truncate text-start mb-[15px]">{data.contentTitle}</div>

@@ -24,6 +24,7 @@ export default function GatheringDetail({data}:{data:any}) {
   const{ relatedGroups } = data;
 
   useEffect(()=>{
+    console.log(user)
     if(user?.email === relatedGroups.leaderEmail) SetShowEditDots(true)
   },[user])
 
@@ -82,8 +83,8 @@ export default function GatheringDetail({data}:{data:any}) {
     <div className="eventDetail-gradient flex w-screen min-w-screen justify-center bg-[#121212] lg:w-340">
       <div className="hidden h-full min-h-screen py-15 text-[#f6f6f6] lg:flex">
         <div className="flex w-160 flex-col gap-9 px-5">
-          <div className={`w-full h-fit`}>
-              <Image src={test} alt={`${data.title} 포스트 이미지`} width={800} height={500} className="w-full h-auto object-cover"/>
+          <div className="w-full h-fit">
+              <Image src={data.imageUrl} alt={`${data.title} 포스트 이미지`} width={800} height={500} className="w-full h-auto object-cover"/>
           </div>
           <div className="flex flex-col gap-7.5">
             <div className="text-2xl text-[#00e6ae]">상세 정보</div>
@@ -116,11 +117,11 @@ export default function GatheringDetail({data}:{data:any}) {
             <div className="flex gap-5">
               {relatedGroups.map((data:any) => {
                               return (
-                              <div onClick={() => routing(data.id)} key={data.id}  className="flex cursor-pointer flex-col w-[calc(50%-10px)] max-w-[calc(50%-10px)]">
+                              <div onClick={() => routing(data.id)} key={data.id}  className="flex cursor-pointer flex-col w-[calc(50%-10px)] max-w-[calc(50%-10px)] gap-[25px]">
                               <div className='w-[100%] h-[235px] overflow-hidden relative'>
-                                <Image src={test} alt="포스트 이미지" width={290} height={235} className="w-full object-contain"/>
+                                <Image src={data.imageUrl} alt="포스트 이미지" fill className="w-full object-cover"/>
                               </div>
-                              <div>
+                              <div className='pl-[5px]'>
                                 <div className="text-[16px] text-[#e4e4e4] truncate text-start mb-[15px]">{data.title}</div>
                                 <div className="flex gap-4">
                                   <div className="flex gap-2 text-[#b0b0b0] text-[16px]">
