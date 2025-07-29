@@ -3,16 +3,14 @@
 import Image from 'next/image';
 import logo from '@/assets/images/logo.svg';
 import signupImg from '@/assets/images/signUpImg.png';
-// import thinking from '@/assets/images/thinking.png';
 import Input from '@/components/common/Input';
 import Checkbox from '@/components/common/Checkbox';
 import { FormEvent, useEffect, useState } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSignupStore } from '@/stores/signupStore';
 import SearchAddressModal from '@/components/auth/SearchAddressModal';
-import { SignupRequest } from '@/types/auth';
 import { toast } from "react-toastify";
+
 
 export default function Signup() {
   const [nickname, setNickname] = useState('');
@@ -27,7 +25,7 @@ export default function Signup() {
   const [showModal, setShowModal] = useState(false);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
-
+  const API = process.env.NEXT_PUBLIC_API_URL;
   const [requiredAlert, setRequiredAlert] = useState(false);
   const { userData, setData } = useSignupStore((state) => state);
   const router = useRouter();
@@ -96,12 +94,14 @@ export default function Signup() {
 
   useEffect(() => {
     if (userData) {
-      axios
-        .post('https://funfun.cloud/api/users/signup', userData, {
-          withCredentials: true,
-        })
+      fetch(`${API}/api/users/signup`, {
+        method: 'POST',
+        body: JSON.stringify(userData),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      })
         .then((response) => {
-          console.log(response.data);
+          console.log(response);
           router.push('/signup/verify');
         })
         .catch((error) => {
@@ -151,19 +151,15 @@ export default function Signup() {
                 if (!nicknameCheck.test(nickname)) {
                   toast.warn('닉네임이 올바른 형식이 아닙니다.');
                 } else {
-                  axios
-                    .post(
-                      'https://funfun.cloud/api/users/verify/nickname',
-                      { nickname: nickname },
-                      {
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                      },
-                    )
-                    .then((response) => {
-                      console.log(response.data);
-                      toast.info(response.data.data);
+                  fetch(`${API}/api/users/verify/nickname`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nickname: nickname }),
+                  })
+                    .then((response) => response.json())
+                    .then((data) => {
+                      console.log(data);
+                      toast.info(data.data);
                       setDuplicationCheck(true);
                     })
                     .catch((error) => {
