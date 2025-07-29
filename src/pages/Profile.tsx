@@ -14,7 +14,6 @@ import { HashLoader } from 'react-spinners';
 import {
   getUserInfo,
   getUserDetailInfoByEmail,
-  updateUserInfo,
   changeNickname,
   withdrawUser,
 } from '@/lib/api/user';
@@ -76,7 +75,8 @@ export default function Profile() {
     { nickname: string; imageUrl: string; email: string }[]
   >([]);
   const [loading, setLoading] = useState(true);
-  const [showWithdrawConfirmModal, setShowWithdrawConfirmModal] = useState(false); // 새로운 상태 추가
+  const [showWithdrawConfirmModal, setShowWithdrawConfirmModal] =
+    useState(false); // 새로운 상태 추가
 
   const fetchFollowData = async () => {
     try {
@@ -796,16 +796,19 @@ export default function Profile() {
           currentNickname={userInfo.nickname}
           currentIntroduction={userInfo.introduction || ''}
           currentImageUrl={userInfo.imageUrl || basicProfileImg.src}
-          onSave={async (newNickname, newIntroduction, newImageUrl) => {
+          onSave={async (newNickname, newIntroduction, newImageUrl, newImageFile) => {
             try {
-              const imageChanged = newImageUrl !== userInfo.imageUrl;
+              const imageChanged = newImageFile !== undefined || newImageUrl !== userInfo.imageUrl;
               const profileRequest: ProfileRequest = {
                 introduction: newIntroduction,
                 imageChanged: imageChanged,
               };
 
-              if (imageChanged) {
-                profileRequest.image = newImageUrl; // Assuming newImageUrl can be directly used as image data
+              if (newImageFile) {
+                profileRequest.image = newImageFile;
+              } else if (newImageUrl === basicProfileImg.src && userInfo.imageUrl !== basicProfileImg.src) {
+                // If image is reset to basic and was not basic before, set image to null to delete it
+                profileRequest.image = null; // Or a specific value to indicate deletion
               }
 
               if (userInfo.nickname !== newNickname) {

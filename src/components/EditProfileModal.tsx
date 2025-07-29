@@ -12,7 +12,12 @@ interface EditProfileModalProps {
   currentNickname: string;
   currentIntroduction: string;
   currentImageUrl: string;
-  onSave: (nickname: string, introduction: string, imageUrl: string) => void;
+  onSave: (
+    nickname: string,
+    introduction: string,
+    imageUrl: string,
+    imageFile?: File,
+  ) => void;
   onAccountDelete: () => void;
 }
 
@@ -28,7 +33,8 @@ export default function EditProfileModal({
   const router = useRouter();
   const [nickname, setNickname] = useState(currentNickname);
   const [introduction, setIntroduction] = useState(currentIntroduction);
-  const [imageUrl, setImageUrl] = useState(currentImageUrl); // This would ideally handle file uploads
+  const [imageUrl, setImageUrl] = useState(currentImageUrl);
+  const [selectedImageFile, setSelectedImageFile] = useState<File | undefined>(undefined);
   const [nicknameValidationMessage, setNicknameValidationMessage] =
     useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -96,6 +102,7 @@ export default function EditProfileModal({
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setSelectedImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImageUrl(reader.result as string);
@@ -217,7 +224,7 @@ export default function EditProfileModal({
         </div>
 
         <GrayButton
-          onClick={() => onSave(nickname, introduction, imageUrl)}
+          onClick={() => onSave(nickname, introduction, imageUrl, selectedImageFile)}
           disabled={nickname !== currentNickname && !isNicknameValidated}
         >
           저장하기

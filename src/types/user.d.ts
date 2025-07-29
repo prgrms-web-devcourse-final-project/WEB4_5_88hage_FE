@@ -1,5 +1,5 @@
 declare interface ProfileRequest {
-  image?: string; // binary
+  image?: File | null;
   imageChanged: boolean;
   introduction: string;
 }
