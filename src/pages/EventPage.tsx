@@ -8,6 +8,7 @@ import { ChevronDown } from "lucide-react";
 import CategoryDropdown from "@/components/ui/CategoryDropdown";
 import MoreRecommendButton from "@/components/common/MoreRecommendButton";
 import { toast } from "react-toastify";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const SORT_OPTIONS = [
   { label: "인기순", value: "bookmarkCount" },
@@ -79,20 +80,34 @@ export default function EventPage() {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("");
 
   const [recommendedEvents, setRecommendedEvents] = useState<EventApiResponse[]>([]);
   const [recommendReasons, setRecommendReasons] = useState<string[]>([]);
   const [recommendClick, setRecommendClick] = useState(0);
 
+  // ---- 카테고리 쿼리스트링 처리 ----
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const selectedCategory = searchParams.get("category") || "";
+
   const sortRef = useRef<HTMLDivElement>(null);
   const API = process.env.NEXT_PUBLIC_API_URL;
+
   function getApiUrl() {
     let url = `${API}/api/contents?sortBy=${sortBy}&page=${page}&size=16`;
     if (selectedCategory) url += `&category=${selectedCategory}`;
     if (search) url += `&keyword=${encodeURIComponent(search)}`;
     return url;
   }
+
+  //카테고리 변경시 url로 push
+  const handleCategoryChange = (category: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (category) params.set("category", category);
+    else params.delete("category");
+    router.push(`?${params.toString()}`);
+    setPage(0);
+  };
 
   const handleEventRecommend = async (address: string, start: string, end: string) => {
     setLoading(true)
@@ -192,7 +207,7 @@ export default function EventPage() {
             <CategoryDropdown
               options={CATEGORY_OPTIONS}
               selected={selectedCategory}
-              setSelected={setSelectedCategory}
+              setSelected={handleCategoryChange}
             />
             <div className="relative" ref={sortRef}>
               <button
