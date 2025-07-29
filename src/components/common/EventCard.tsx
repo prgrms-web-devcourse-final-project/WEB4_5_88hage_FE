@@ -29,7 +29,7 @@ export default function EventCard({ event }) {
       </div>
 
       <div className="h-[120px] bg-[#1b1b1b] p-3">
-        <h2 className="t3 mb-1">{event.title}</h2>
+        <h2 className="t3 mb-2">{event.title}</h2>
         <p className="mb-5 text-[14px] text-[#ffffff] whitespace-pre-line">
           {event.simpleExplain}
         </p>

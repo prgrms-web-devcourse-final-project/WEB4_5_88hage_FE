@@ -112,7 +112,7 @@ export default function Login() {
               </label>
               <button
                 type="button"
-                onClick={() => router.push('/password-change')}
+                onClick={() => router.push('/login/password-change')}
               >
                 비밀번호 찾기
               </button>
