@@ -20,6 +20,7 @@ interface AuthState {
   login: (email: string, pw: string, remember: boolean) => Promise<void>;
   fetchCoordinate: () => Promise<void>;
   logout: () => void;
+  checkSession: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -28,37 +29,41 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       user: null,
       isAuthenticated: false,
+
       login: async (email, pw, remember) => {
-        const result = await apiLogin(email, pw, remember);
-        console.log('apiLogin 응답:', result);
+        try {
+          const result = await apiLogin(email, pw, remember);
+          const token = result?.data?.accessToken || null;
 
-        // accessToken 안전하게 파싱
-        const token = result?.data?.accessToken || null;
+          if (!token) {
+            toast.error('로그인 실패: accessToken 없음');
+            return;
+          }
 
-        if (!token) {
-          toast.error('로그인 실패: accessToken 없음');
-          return;
+          const [, payload] = token.split('.');
+          const padded = payload
+            .replace(/-/g, '+')
+            .replace(/_/g, '/')
+            .padEnd(payload.length + ((4 - (payload.length % 4)) % 4), '=');
+          const raw = Buffer.from(padded, 'base64').toString('utf8');
+          const { sub, nickname } = JSON.parse(raw);
+
+          set({
+            token,
+            user: { email: sub, nickname },
+            isAuthenticated: true,
+          });
+
+          await get().fetchCoordinate();
+        } catch (e) {
+          toast.error('로그인 실패: ' + (e?.message || ''));
+          set({ token: null, user: null, isAuthenticated: false });
         }
-
-        const [, payload] = token.split('.');
-        const padded = payload
-          .replace(/-/g, '+')
-          .replace(/_/g, '/')
-          .padEnd(payload.length + ((4 - (payload.length % 4)) % 4), '=');
-        const raw = Buffer.from(padded, 'base64').toString('utf8');
-        const { sub, nickname } = JSON.parse(raw);
-
-        set({
-          token,
-          user: { email: sub, nickname },
-          isAuthenticated: true,
-        });
-        await get().fetchCoordinate();
       },
 
       fetchCoordinate: async () => {
         const { token, user } = get();
-        if (!token || !user) return;
+        if (!user) return;
 
         interface CoordinateResponse {
           data: {
@@ -67,23 +72,41 @@ export const useAuthStore = create<AuthState>()(
           };
         }
 
-        const response = await fetchGet<CoordinateResponse>(
-          `/api/users/coordinate`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-            credentials: 'include',
-          },
-        );
-        const { latitude, longitude } = response.data;
-        set((state) => ({
-          user: {
-            ...state.user,
-            email: state.user?.email || '',
-            nickname: state.user?.nickname || '',
-            latitude,
-            longitude,
-          },
-        }));
+        try {
+          const headers: Record<string, string> = {};
+          if (token) headers.Authorization = `Bearer ${token}`;
+          const response = await fetchGet<CoordinateResponse>(
+            `/api/users/coordinate`,
+            { headers, credentials: 'include' }
+          );
+          const { latitude, longitude } = response.data;
+          set((state) => ({
+            user: {
+              ...state.user,
+              email: state.user?.email || '',
+              nickname: state.user?.nickname || '',
+              latitude,
+              longitude,
+            },
+          }));
+        } catch {
+        }
+      },
+
+      checkSession: async () => {
+        try {
+          const response = await fetchGet<{ data: User }>(
+            '/api/users/info',
+            { credentials: 'include' }
+          );
+          set({
+            user: response.data,
+            isAuthenticated: true,
+          });
+          await get().fetchCoordinate();
+        } catch {
+          set({ token: null, user: null, isAuthenticated: false });
+        }
       },
 
       logout: () => {
@@ -97,6 +120,6 @@ export const useAuthStore = create<AuthState>()(
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
-    },
-  ),
+    }
+  )
 );

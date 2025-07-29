@@ -8,6 +8,7 @@ import { ChevronDown } from "lucide-react";
 import CategoryDropdown from "@/components/ui/CategoryDropdown";
 import MoreRecommendButton from "@/components/common/MoreRecommendButton";
 import { toast } from "react-toastify";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const SORT_OPTIONS = [
   { label: "인기순", value: "bookmarkCount" },
@@ -79,26 +80,41 @@ export default function EventPage() {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("");
 
   const [recommendedEvents, setRecommendedEvents] = useState<EventApiResponse[]>([]);
   const [recommendReasons, setRecommendReasons] = useState<string[]>([]);
   const [recommendClick, setRecommendClick] = useState(0);
 
+  // ---- 카테고리 쿼리스트링 처리 ----
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const selectedCategory = searchParams.get("category") || "";
+  const type = searchParams.get("type");
+
   const sortRef = useRef<HTMLDivElement>(null);
+  const API = process.env.NEXT_PUBLIC_API_URL;
 
   function getApiUrl() {
-    let url = `https://funfun.cloud/api/contents?sortBy=${sortBy}&page=${page}&size=16`;
+    let url = `${API}/api/contents?sortBy=${sortBy}&page=${page}&size=16`;
     if (selectedCategory) url += `&category=${selectedCategory}`;
     if (search) url += `&keyword=${encodeURIComponent(search)}`;
     return url;
   }
 
+  //카테고리 변경시 url로 push
+  const handleCategoryChange = (category: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (category) params.set("category", category);
+    else params.delete("category");
+    if (type) params.set("type", type);
+    router.push(`?${params.toString()}`);
+    setPage(0);
+  };
+
   const handleEventRecommend = async (address: string, start: string, end: string) => {
     setLoading(true)
-    console.log("AI 행사 추천 요청:", address, start, end);
     try {
-      const res = await fetch("https://funfun.cloud/api/recommend/content", {
+      const res = await fetch(`${API}/api/recommend/content`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -115,12 +131,10 @@ export default function EventPage() {
       }
       const json = await res.json();
       setRecommendedEvents(json.data.events || []);
-      console.log(recommendedEvents.length) 
       setRecommendReasons(
         (json.data.events || []).map((e: EventApiResponse) => e.reason || "추천 이유 없음")
       );
       setRecommendClick(0);
-      console.log("행사 추천 응답:", json);
     } catch (e) {
       console.error("AI 행사 추천 fetch error:", e);
       toast.error("에러가 발생했습니다.");
@@ -142,16 +156,19 @@ export default function EventPage() {
       setLoading(true);
       const url = getApiUrl();
       const res = await fetch(url, {
-    credentials: "include",
-  }).then(r => r.json());
-      const list = res.data?.content || res.data?.contents || [];
-      setData(prev => (page === 0 ? list : [...prev, ...list]));
-      setHasMore(res.data && typeof res.data.last !== "undefined" ? !res.data.last : false);
-      setLoading(false);
+        credentials: "include",
+      }).then(r => r.json());
+      let list = res.data?.content || res.data?.contents || [];
+      if (type) {
+      list = list.filter((event: EventApiResponse) => event.eventType === type);
+    }
+    setData(prev => (page === 0 ? list : [...prev, ...list]));
+    setHasMore(res.data && typeof res.data.last !== "undefined" ? !res.data.last : false);
+    setLoading(false);
     };
     fetchData();
     // eslint-disable-next-line
-  }, [sortBy, page, search, selectedCategory]);
+  }, [sortBy, page, search, selectedCategory,type]);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -176,11 +193,12 @@ export default function EventPage() {
 
   return (
     <div className="w-full">
-      {loading && (
-  <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-[9999]">
-    <span className="text-white text-2xl font-bold">로딩중...</span>
-  </div>
-)}
+      {page === 0 && loading && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-[9999]">
+          <span className="text-white text-2xl font-bold">로딩중...</span>
+        </div>
+      )}
+
       <div className="meetingPage-gradient lg:h-[350px] lg:pt-[115px] h-fit pt-[70px] pb-[25px]">
         <SearchBar value={search} onChange={setSearch} />
       </div>
@@ -194,7 +212,7 @@ export default function EventPage() {
             <CategoryDropdown
               options={CATEGORY_OPTIONS}
               selected={selectedCategory}
-              setSelected={setSelectedCategory}
+              setSelected={handleCategoryChange}
             />
             <div className="relative" ref={sortRef}>
               <button
@@ -224,60 +242,64 @@ export default function EventPage() {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 min-h-[600px]">
-  {loading ? null : recommendedEvents.length > 0 ? (
-    recommendedEvents
-      .slice(recommendClick * 4, recommendClick * 4 + 4)
-      .map((event) => (
-        <EventCard key={event.id} event={mapEventToCard(event)} />
-      ))
-  ) : (
-    data.length > 0 ? (
-      data.map((event, idx) =>
-        idx === data.length - 1 ? (
-          <div key={`${event.id}-${idx}`} ref={lastCardRef}>
-            <EventCard event={mapEventToCard(event)} />
+        <div className="relative">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 min-h-[300px]">
+            {recommendedEvents.length > 0 ? (
+              recommendedEvents
+                .slice(recommendClick * 4, recommendClick * 4 + 4)
+                .map((event) => (
+                  <EventCard key={event.id} event={mapEventToCard(event)} />
+                ))
+            ) : data.length > 0 ? (
+              data.map((event, idx) =>
+                idx === data.length - 1 ? (
+                  <div key={`${event.id}-${idx}`} ref={lastCardRef}>
+                    <EventCard event={mapEventToCard(event)} />
+                  </div>
+                ) : (
+                  <EventCard key={`${event.id}-${idx}`} event={mapEventToCard(event)} />
+                )
+              )
+            ) : (
+              <div className="col-span-4 text-center text-[#aaa] py-10">
+                검색 결과가 없습니다.
+              </div>
+            )}
+            {loading && page > 0 && (
+              <div className="col-span-4 flex justify-center items-center py-6">
+                <span className="text-white text-lg">로딩중...</span>
+              </div>
+            )}
           </div>
-        ) : (
-          <EventCard key={`${event.id}-${idx}`} event={mapEventToCard(event)} />
-        )
-      )
-    ) : (
-      <div className="col-span-4 text-center text-[#aaa] py-10">
-        검색 결과가 없습니다.
-      </div>
-    )
-  )}
-</div>
+        </div>
         {recommendedEvents.length > 0 && (
           <div className="gradient-box mt-[51.45px] mb-[100px] flex flex-col rounded-[5px] px-[40px] text-white">
             <div className="mt-[33px] mb-[29px] text-[24px] font-semibold">
               추천 이유👍
             </div>
             <div className="mb-[24px] min-h-[44px] whitespace-pre-line">
-  {(recommendReasons || [])
-    .slice(recommendClick * 4, recommendClick * 4 + 4)
-    .map((reason, idx) => (
-      <div key={idx} className="mb-3 flex items-start">
-        <span className=" mr-2">{idx + 1}.</span>
-        <span className="text-[16px] leading-relaxed">{reason || "추천 이유 없음"}</span>
-      </div>
-    ))}
-</div>
-
-              <div className="w-[153px] text-[16px] text-white self-start mb-[30px]">
-                <MoreRecommendButton
-                  onRecommend={() => {
-                    if ((recommendClick + 1) * 4 >= recommendedEvents.length) {
-                      toast.info("AI추천 결과는 여기까지입니다.");
-                      return;
-                    }
-                    setRecommendClick(prev => prev + 1);
-                  }}
-                  disabled={loading}
-                  loading={loading}
-                />
-              </div>
+              {(recommendReasons || [])
+                .slice(recommendClick * 4, recommendClick * 4 + 4)
+                .map((reason, idx) => (
+                  <div key={idx} className="mb-3 flex items-start">
+                    <span className="mr-2">{idx + 1}.</span>
+                    <span className="text-[16px] leading-relaxed">{reason || "추천 이유 없음"}</span>
+                  </div>
+                ))}
+            </div>
+            <div className="w-[153px] text-[16px] text-white self-start mb-[30px]">
+              <MoreRecommendButton
+                onRecommend={() => {
+                  if ((recommendClick + 1) * 4 >= recommendedEvents.length) {
+                    toast.info("AI추천 결과는 여기까지입니다.");
+                    return;
+                  }
+                  setRecommendClick(prev => prev + 1);
+                }}
+                disabled={loading}
+                loading={loading}
+              />
+            </div>
           </div>
         )}
       </div>

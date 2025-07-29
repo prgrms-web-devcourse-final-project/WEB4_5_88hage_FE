@@ -16,12 +16,17 @@ import moment from 'moment';
 import Map from '@/components/kakao/Map'
 import SelectDate from '@/components/common/SelectDate';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation'
 
 export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
   const [show,setShow] = useState(false);
   const [showMore,setShowMore] = useState(false);
   const {content,related,nearby} = data;
+  const route = useRouter();
 
+  const routing = (id:number) => {
+    route.push(`/event/${id}`)
+  }
 
   console.log(content)
   const relatedArr = [related[0],related[1]];
@@ -44,13 +49,13 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
           <div className="flex flex-col gap-8">
             <div className="text-2xl text-[#00e6ae]">안내 사항</div>
             <div className="mb-[18px] flex flex-col gap-[23px]">
-              <div>카테고리 : {content.category}</div>
-              <div>행사 날짜 : {dateFormatting(content.startDate)} ~ {dateFormatting(content.endDate)}</div>
-              <div>행사 장소 : {content.address}</div>
-              <div>행사 시간 : {content.runTime}</div>
-              <div>이용 요금 : {content.fee}</div>
-              <div>나이 제한 : {content.age}</div>
-              <div>시작 시간 : {content.time}</div>
+              {content.category && <div>카테고리 : {content.category}</div>}
+              {content.startDate && content.endDate && <div>행사 날짜 : {dateFormatting(content.startDate)} ~ {dateFormatting(content.endDate)}</div>}
+              {content.address && <div>행사 장소 : {content.address}</div>}
+              {content.runTime && <div>행사 시간 : {content.runTime}</div>}
+              {content.fee&& <div>이용 요금 : {content.fee}</div>}
+              {content.age&& <div>나이 제한 : {content.age}</div>}
+              {content.time &&<div>시작 시간 : {content.time}</div>}
             </div>
             <div className="flex flex-col gap-[20px]">
               <div className="text-main text-[24px]">찾아 오시는 길</div>
@@ -67,16 +72,16 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
             <div className="flex gap-5">
               {relatedArr.map((data) => {
                 return (
-                <div key={data.id}  className="flex cursor-pointer flex-col gap-5 w-[calc(50%-10px)] max-w-[calc(50%-10px)]">
+                <div onClick={() => routing(data.id)} key={data.id}  className="flex cursor-pointer flex-col gap-5 w-[calc(50%-10px)] max-w-[calc(50%-10px)]">
                 <div className='w-[100%] h-[235px] overflow-hidden relative'>
-                  <Image src={data.poster} alt="포스트 이미지" width={290} height={235} className="w-full h-auto object-cover"/>
+                  <Image src={data.poster} alt="포스트 이미지" fill className="w-full object-cover"/>
                 </div>
                 <div>
                   <div className="text-[16px] text-[#e4e4e4] truncate text-start mb-[15px]">{data.contentTitle}</div>
                   <div className="flex gap-4">
                     <div className="flex gap-2 text-[#b0b0b0] text-[16px] justify-center items-center">
                       <LucideMapPin size={16}/>
-                      {data.area}
+                      {data.guname}
                     </div>
                   </div>
                 </div>
@@ -94,16 +99,16 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
             <div className="flex gap-5">
               {nearbyArr.map((data) => {
                 return (
-                <div key={data.id}  className="flex cursor-pointer flex-col w-[calc(50%-10px)] max-w-[calc(50%-10px)]">
+                <div onClick={() => routing(data.id)} key={data.id}  className="flex cursor-pointer flex-col w-[calc(50%-10px)] max-w-[calc(50%-10px)]">
                 <div className='w-[100%] h-[235px] overflow-hidden relative mb-[20px]'>
-                  <Image src={data.poster} alt="포스트 이미지" width={290} height={235} className="w-full h-auto object-cover"/>
+                  <Image src={data.poster} alt="포스트 이미지" fill  className="w-full object-cover"/>
                 </div>
                 <div>
                   <div className="text-[16px] text-[#e4e4e4] truncate text-start mb-[15px]">{data.contentTitle}</div>
                   <div className="flex gap-4">
                     <div className="flex gap-2 text-[#b0b0b0] text-[16px">
                       <LucideMapPin size={16} className='mt-[4px]'/>
-                      {data.area}
+                      {data.guname}
                     </div>
                   </div>
                 </div>
@@ -124,10 +129,10 @@ export default function EventDetail({data}:{data:ContentAPI.ContentItem}) {
                 {content.contentTitle}
               </div>
               <div className="flex gap-5">
-                <span>{content.area}</span>
+                {content.area && <span>{content.area}</span>}
                 <span>{dateFormatting(content.startDate)} - {dateFormatting(content.endDate)}</span>
               </div>
-              <div className="flex pt-6 gap-2 border-t border-t-[#2D2A2A]">
+              <div className="flex pt-6 gap-2 border-t border-t-[#2D2A2A] flex-wrap">
                 {content.urls.map((data) => 
                 <button key={data.id} className="gradient-border flex rounded-full bg-[#2a2a2a] px-[15px] py-[5px] text-[#e4e4e4]">
                   <Link href={data.url} className='flex gap-[5px]'>{data.siteName} <LucideLink2 /></Link>

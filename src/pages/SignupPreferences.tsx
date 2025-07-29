@@ -6,7 +6,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useSignupStore } from '@/stores/signupStore';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 function Tag({
   type,
@@ -44,30 +44,35 @@ function Tag({
   );
 }
 
-export default function SignupPreferences() {
+export default function SignupPreferences({ isOAuth }: { isOAuth?: boolean }) {
   const [newUserPreferences, setNewUserPreferences] = useState<
     { category: string; type: string }[]
   >([]);
   const router = useRouter();
   const { userData, clearAll } = useSignupStore();
+  const API = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
-    axios
-      .post(
-        'https://funfun.cloud/api/auth/login',
-        {
-          email: userData?.email,
-          password: userData?.password,
+    if (userData && !isOAuth) {
+      fetch(`${API}/api/auth/login`, {
+        method: 'POST',
+        body: JSON.stringify({
+          email: userData.email,
+          password: userData.password,
           rememberMe: true,
-        },
-        { withCredentials: true },
-      )
-      .then((response) => {
-        console.log(response.data);
-        clearAll();
-        localStorage.removeItem('signup-store');
+        }),
+        headers: { 'Content-Type': 'application/json' },
       })
-      .catch((error) => console.log(error.response.data));
+        .then((response) => {
+          console.log(response);
+          clearAll();
+          localStorage.removeItem('signup-store');
+        })
+        .catch((error) => console.log(error.response.data));
+    } else if (userData && isOAuth) {
+      clearAll();
+      localStorage.removeItem('signup-store');
+    }
   }, [userData]);
 
   const tagSelectHandler = (
@@ -88,6 +93,28 @@ export default function SignupPreferences() {
       );
     }
   };
+
+  const handlePreferences = async () => {
+    const contents = newUserPreferences
+      .filter((item) => item.category === 'content')
+      .map((e) => e.type);
+    const groups = newUserPreferences
+      .filter((item) => item.category === 'group')
+      .map((e) => e.type);
+    const response = await fetch(`${API}/api/preferences`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contentPreferences: contents,
+        groupPreferences: groups,
+      }),
+    });
+    const { code, message } = await response.json();
+    if (code === '0000') router.push('/signup/complete');
+    else toast.warn(message);
+  };
+
   return (
     <div className="flex w-screen">
       <div className="hidden items-center justify-center lg:flex lg:w-1/2">
@@ -208,40 +235,7 @@ export default function SignupPreferences() {
         <button
           type="button"
           className="signup-btn absolute bottom-[21px] lg:relative lg:mt-[59px]"
-          onClick={() => {
-            const contents = newUserPreferences
-              .filter((item) => item.category === 'content')
-              .map((e) => e.type);
-            const groups = newUserPreferences
-              .filter((item) => item.category === 'group')
-              .map((e) => e.type);
-
-            axios
-              .post(
-                'https://funfun.cloud/api/preferences',
-                {
-                  contentPreferences: contents,
-                  groupPreferences: groups,
-                },
-                {
-                  withCredentials: true,
-                },
-              )
-              .then((res) => {
-                console.log(res.data);
-                router.push('/signup/complete');
-              })
-              .catch((error) => {
-                if (error.response.data.code === '4000') {
-                  console.log(error.response.data.data);
-                  if (error.response.data.data.groupPreferences) {
-                    toast.error(error.response.data.data.groupPreferences);
-                  } else if (error.response.data.data.contentPreferences) {
-                    toast.error(error.response.data.data.contentPreferences);
-                  }
-                } else console.log(error);
-              });
-          }}
+          onClick={handlePreferences}
         >
           완료
         </button>

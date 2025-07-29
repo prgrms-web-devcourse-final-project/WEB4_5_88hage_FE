@@ -3,8 +3,10 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 
+const API = process.env.NEXT_PUBLIC_API_URL;
+
 async function fetchFaqs() {
-  const res = await fetch("https://funfun.cloud/api/faqs", {
+  const res = await fetch(`${API}/api/faqs`, {
     method: "GET",
     credentials: "include",
   });
