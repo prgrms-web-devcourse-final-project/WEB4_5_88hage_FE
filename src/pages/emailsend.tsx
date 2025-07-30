@@ -1,39 +1,31 @@
 'use client';
 import Image from 'next/image';
 import EmailImage from '@/assets/images/email.svg';
-import { FormEvent} from 'react';
+import { FormEvent } from 'react';
 import axios from 'axios';
 import { useSignupStore } from '@/stores/signupStore';
 import { useRouter } from 'next/navigation';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 export default function Emailsend() {
   const { userData, isVerified } = useSignupStore();
+  const API = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
-  // if (isVerified) router.push('/signup/tags');
-
-  const emailSendAgain = (e: FormEvent<HTMLFormElement>) => {
+  const emailSendAgain = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (userData) {
-      axios
-        .post(
-          `https://funfun.cloud/api/users/send/signup/${userData.email}`,
-          userData.email,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          },
-        )
-        .then((response) => {
-          console.log(response.data);
-          toast.info('인증 메일이 재발송되었습니다.');
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-          toast.error(error.response.data.message);
-        });
+      const response = await fetch(
+        `${API}/api/users/send/signup/${userData.email}`,
+        {
+          method: 'POST',
+          body: JSON.stringify({}),
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
+      const { code, message } = await response.json();
+      if (code === '0000') toast.info('인증 메일이 재발송되었습니다.');
+      else toast.error(message);
     }
   };
 

@@ -2,14 +2,41 @@
 import Image from 'next/image';
 import completeImg from '@/assets/images/signup_complete.png';
 import { useRouter } from 'next/navigation';
+import { useSignupStore } from '@/stores/signupStore';
+import { useEffect } from 'react';
 
 export default function SignupComplete() {
   const router = useRouter();
+  const { userData, clearAll } = useSignupStore();
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
+  const loginInThisPage = async () => {
+    if (userData) {
+      const response = await fetch(`${API}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: userData.email,
+          password: userData.password,
+          rememberMe: true,
+        }),
+        credentials: 'include',
+      });
+      const data = await response.json();
+      console.log(data);
+    }
+  };
+
+  useEffect(() => {
+    loginInThisPage();
+  }, [userData]);
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
+        clearAll();
+        localStorage.removeItem('signup-store');
         router.push('/');
       }}
       className="flex h-screen w-screen flex-col items-center justify-between px-5 py-[14px] lg:justify-center"
@@ -22,7 +49,10 @@ export default function SignupComplete() {
         <div className="mt-6 mb-2.5 flex gap-4 text-[32px]">
           <span>환영해요!</span>
           <span>
-            <strong className="text-main">홍길동</strong>님
+            {userData && (
+              <strong className="text-main">{userData.nickname}</strong>
+            )}
+            님
           </span>
         </div>
         <div>이제 다양한 서비스를 자유롭게 이용하실 수 있어요.</div>

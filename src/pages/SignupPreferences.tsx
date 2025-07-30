@@ -19,6 +19,7 @@ function Tag({
   selected: (type: string, checked: boolean, category: string) => void;
 }) {
   const [checked, setChecked] = useState(false);
+
   const checkHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setChecked(e.target.checked);
     selected(type, e.target.checked, category);
@@ -51,28 +52,31 @@ export default function SignupPreferences({ isOAuth }: { isOAuth?: boolean }) {
   const { userData, clearAll } = useSignupStore();
   const API = process.env.NEXT_PUBLIC_API_URL;
 
-  useEffect(() => {
-    if (userData && !isOAuth) {
-      fetch(`${API}/api/auth/login`, {
+  const loginInThisPage = async () => {
+    if (userData) {
+      const response = await fetch(`${API}/api/auth/login`, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: userData.email,
           password: userData.password,
           rememberMe: true,
         }),
-        headers: { 'Content-Type': 'application/json' },
-      })
-        .then((response) => {
-          console.log(response);
-          clearAll();
-          localStorage.removeItem('signup-store');
-        })
-        .catch((error) => console.log(error.response.data));
-    } else if (userData && isOAuth) {
-      clearAll();
-      localStorage.removeItem('signup-store');
+        credentials: 'include',
+      });
+      const data = await response.json();
+      console.log(data);
+      // if (code === '0000') {
+      //   clearAll;
+      //   localStorage.removeItem('signup-store');
+      // } else toast.error(message);
     }
-  },);
+  };
+
+  useEffect(() => {
+    if (userData && !isOAuth) {
+      loginInThisPage();
+   });
 
   const tagSelectHandler = (
     type: string,
@@ -111,7 +115,7 @@ export default function SignupPreferences({ isOAuth }: { isOAuth?: boolean }) {
     });
     const { code, message } = await response.json();
     if (code === '0000') router.push('/signup/complete');
-    else toast.warn(message);
+    else toast.error(message);
   };
 
   return (
