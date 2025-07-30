@@ -74,7 +74,7 @@ export default function GatheringMain({
 
         <p className="t3 mt-5 text-white">{selectedGathering.explain}</p>
 
-        <div className="mt-5 flex">
+        <div className="my-5 flex">
           <Image
             src={mapIcon}
             alt="mapicon"

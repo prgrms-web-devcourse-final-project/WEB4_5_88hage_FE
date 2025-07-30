@@ -10,6 +10,7 @@ import MoreRecommendButton from '@/components/common/MoreRecommendButton';
 import { toast } from 'react-toastify';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/stores/UseAuthStore';
+import { HashLoader } from 'react-spinners';
 
 const SORT_OPTIONS = [
   { label: '인기순', value: 'bookmarkCount' },
@@ -212,8 +213,8 @@ export default function EventPage() {
   return (
     <div className="w-full">
       {page === 0 && loading && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40">
-          <span className="text-2xl font-bold text-white">로딩중...</span>
+        <div className="col-span-4 flex items-center justify-center py-6">
+          <HashLoader color="#36d7b7" size={50} />
         </div>
       )}
 
@@ -264,42 +265,43 @@ export default function EventPage() {
         </div>
         <div className="relative">
           <div className="grid min-h-[300px] grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {recommendedEvents.length > 0 ? (
-              recommendedEvents
-                .slice(recommendClick * 4, recommendClick * 4 + 4)
-                .map((event) => (
-                  <EventCard key={event.id} event={mapEventToCard(event)} />
-                ))
-            ) : data.length > 0 ? (
-              data.map((event, idx) =>
-                idx === data.length - 1 ? (
-                  <div key={`${event.id}-${idx}`} ref={lastCardRef}>
-                    <EventCard
-                      className="overflow-hidden rounded-[5px]"
-                      event={mapEventToCard(event)}
-                    />
-                  </div>
-                ) : (
-                  <EventCard
-                    key={`${event.id}-${idx}`}
-                    event={mapEventToCard(event)}
-                  />
-                ),
-              )
-            ) : search ? (
-              <div className="col-span-4 py-10 text-center text-[#aaa]">
-                검색 결과가 없습니다.
-              </div>
-            ) : (
-              // 아무 메시지도 없고 min-height만
-              <div className="col-span-4 py-10" />
-            )}
-            {loading && page > 0 && (
-              <div className="col-span-4 flex items-center justify-center py-6">
-                <span className="text-lg text-white">로딩중...</span>
-              </div>
-            )}
+  {recommendedEvents.length > 0 ? (
+    recommendedEvents
+      .slice(recommendClick * 4, recommendClick * 4 + 4)
+      .map((event) => (
+        <EventCard key={event.id} event={mapEventToCard(event)} />
+      ))
+  ) : data.length > 0 ? (
+    <>
+      {data.map((event, idx) =>
+        idx === data.length - 1 ? (
+          <div key={`${event.id}-${idx}`} ref={lastCardRef}>
+            <EventCard
+              className="overflow-hidden rounded-[5px]"
+              event={mapEventToCard(event)}
+            />
           </div>
+        ) : (
+          <EventCard
+            key={`${event.id}-${idx}`}
+            event={mapEventToCard(event)}
+          />
+        )
+      )}
+      {loading && page > 0 && (
+        <div className="col-span-4 flex items-center justify-center py-6">
+          <HashLoader color="#36d7b7" size={50} />
+        </div>
+      )}
+    </>
+  ) : search ? (
+    <div className="col-span-4 py-10 text-center text-[#aaa]">
+      검색 결과가 없습니다.
+    </div>
+  ) : (
+    <div className="col-span-4 py-10" />
+  )}
+</div>
         </div>
         {recommendedEvents.length > 0 && (
           <div className="gradient-box mt-[51.45px] mb-[100px] flex flex-col rounded-[5px] px-[40px] text-white">

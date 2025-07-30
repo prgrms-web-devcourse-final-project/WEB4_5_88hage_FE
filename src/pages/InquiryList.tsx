@@ -39,7 +39,7 @@ export default function InquiryListPage() {
   // 날짜 포맷
   const convertTime = (createdAt: string) => {
     const date = new Date(createdAt);
-    date.setHours(date.getHours() + 9);
+    // date.setHours(date.getHours() + 9);
     return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
   };
 
@@ -57,21 +57,21 @@ export default function InquiryListPage() {
 
   return (
     <div className="min-h-screen w-full">
-      <div className="max-w-[1440px] mx-auto w-full">
-        <main className="flex flex-col lg:pt-[29px] w-full">
+      <div className="mx-auto w-full max-w-[1440px]">
+        <main className="flex w-full flex-col lg:pt-[29px]">
           {/* 상단 탭 & border */}
-          <div className="flex gap-[4px] border-b-2 border-[#949494] w-full mb-[4px]">
+          <div className="mb-[4px] flex w-full gap-[4px] border-b-2 border-[#949494]">
             <button
               disabled={pending}
               onClick={() => setPending(true)}
-              className="z-5 pr-2 pb-[14px] text-[18px] text-[#949494] disabled:font-semibold disabled:text-[#1CEBB9] border-b-2 border-transparent disabled:border-[#1CEBB9] lg:text-[24px] transition"
+              className="z-5 border-b-2 border-transparent pr-2 pb-[14px] text-[18px] text-[#949494] transition disabled:border-[#1CEBB9] disabled:font-semibold disabled:text-[#1CEBB9] lg:text-[24px]"
             >
               문의 내역
             </button>
             <button
               disabled={!pending}
               onClick={() => setPending(false)}
-              className="z-5 px-2 pb-[14px] text-[18px] text-[#949494] disabled:font-semibold disabled:text-[#1CEBB9] border-b-2 border-transparent disabled:border-[#1CEBB9] lg:text-[24px] transition"
+              className="z-5 border-b-2 border-transparent px-2 pb-[14px] text-[18px] text-[#949494] transition disabled:border-[#1CEBB9] disabled:font-semibold disabled:text-[#1CEBB9] lg:text-[24px]"
             >
               답변이 완료 된 문의
             </button>
@@ -79,14 +79,16 @@ export default function InquiryListPage() {
           {/* 문의 내역 리스트 */}
           <div className="w-full">
             {contacts.length === 0 ? (
-              <div className="text-center text-[#888] py-10">
-                {pending ? '문의 내역이 없습니다.' : '답변이 완료 된 문의가 없습니다.'}
+              <div className="py-10 text-center text-[#888]">
+                {pending
+                  ? '문의 내역이 없습니다.'
+                  : '답변이 완료 된 문의가 없습니다.'}
               </div>
             ) : (
               contacts.map((n) => (
                 <div
                   key={n.id}
-                  className="flex items-center border-b border-[#383838] pt-[24px] pb-[24px] text-[15px] w-full"
+                  className="flex w-full items-center border-b border-[#383838] pt-[24px] pb-[24px] text-[15px]"
                 >
                   <span className="w-[120px] font-semibold text-[#ffffff]">
                     {n.category === 'GENERAL' ? '일반' : '신고'}
@@ -108,7 +110,12 @@ export default function InquiryListPage() {
           <div className="flex items-center justify-center space-x-3 text-[#ffffff] lg:mt-[52px]">
             <button
               onClick={() => setPage((prev) => prev - 5)}
-              disabled={pageNum.slice(Math.floor(page / 5) * 5, Math.floor(page / 5) * 5 + 5)[0] === 1}
+              disabled={
+                pageNum.slice(
+                  Math.floor(page / 5) * 5,
+                  Math.floor(page / 5) * 5 + 5,
+                )[0] === 1
+              }
               className="disabled:text-gray-disabled p-2 disabled:cursor-none"
             >
               <ChevronLeft />
@@ -137,8 +144,14 @@ export default function InquiryListPage() {
                 } else setPage((prev) => prev + 5);
               }}
               disabled={
-                pageNum.slice(Math.floor(page / 5) * 5, Math.floor(page / 5) * 5 + 5)[
-                  pageNum.slice(Math.floor(page / 5) * 5, Math.floor(page / 5) * 5 + 5).length - 1
+                pageNum.slice(
+                  Math.floor(page / 5) * 5,
+                  Math.floor(page / 5) * 5 + 5,
+                )[
+                  pageNum.slice(
+                    Math.floor(page / 5) * 5,
+                    Math.floor(page / 5) * 5 + 5,
+                  ).length - 1
                 ] === pageNum[pageNum.length - 1]
               }
               className="disabled:text-gray-disabled p-2 disabled:cursor-none"

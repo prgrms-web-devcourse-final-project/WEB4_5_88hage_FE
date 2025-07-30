@@ -121,20 +121,8 @@ export default function MyGathering() {
 
   if (loading) {
     return (
-      <div className="mb-50">
-        <div className="lg:flex lg:items-center lg:justify-center">
-          <div className="flex-shrink-0 lg:h-[740px] lg:w-[330px]">
-            <h2 className="h3 text-white">모임</h2>
-            <div className="flex h-screen items-center justify-center">
-              <HashLoader color="#36d7b7" size={50} />
-            </div>
-          </div>
-          <div className="max-w-[1050px] flex-grow lg:ml-5 lg:h-[740px]">
-            <div className="flex h-screen items-center justify-center">
-              <HashLoader color="#36d7b7" size={50} />
-            </div>
-          </div>
-        </div>
+      <div className="flex h-screen items-center justify-center">
+        <HashLoader color="#36d7b7" size={50} />
       </div>
     );
   }
@@ -190,7 +178,7 @@ export default function MyGathering() {
               lastMessages={lastMessages}
             />
           ) : (
-            <div className="bg-gray-7 lg:border-gray-5 mt-5 flex h-full w-full items-center justify-center rounded-[15px] p-4 text-white lg:border lg:p-10">
+            <div className="bg-gray-7 lg:border-gray-5 h3 mt-5 flex h-full w-full items-center justify-center rounded-[15px] p-4 text-white lg:border lg:p-10">
               <p className="">
                 {activeTab === 'my-gathering'
                   ? '왼쪽에서 모임을 선택해주세요.'

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import { HashLoader } from 'react-spinners';
 //import Greeting from '@/components/common/Greeting';
 import { toast } from 'react-toastify';
 
@@ -41,7 +42,7 @@ export default function InquiryDetail({ id }: { id: string }) {
 
   const convertTime = (createdAt: string) => {
     const date = new Date(createdAt);
-    date.setHours(date.getHours() + 9);
+    // date.setHours(date.getHours() + 9);
     return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
   };
 
@@ -88,14 +89,22 @@ export default function InquiryDetail({ id }: { id: string }) {
                     </span>
                   </div>
                   <div className="mb-4 flex w-full flex-col items-center gap-6">
-                    {inquiryData.imageUrls.map((image, index) => (
-                      <div
-                        key={image}
-                        className="relative flex h-50 w-100 flex-col justify-center"
-                      >
-                        <Image src={image} alt={`inquiryImage${index}`} fill />
-                      </div>
-                    ))}
+                    {inquiryData.imageUrls.map(
+                      (image, index) =>
+                        index > 0 && (
+                          <div
+                            key={image}
+                            className="relative flex h-70 w-full flex-col justify-center"
+                          >
+                            <Image
+                              src={image}
+                              alt={`inquiryImage${index}`}
+                              fill
+                              objectFit="contain"
+                            />
+                          </div>
+                        ),
+                    )}
                   </div>
                   <p className="ml-0 text-[13px] leading-relaxed text-[#f6f6f6] lg:ml-[25px] lg:text-[16px]">
                     {inquiryData.content}
@@ -128,9 +137,9 @@ export default function InquiryDetail({ id }: { id: string }) {
           </div>
         )}
         {!inquiryData && (
-          <div className="absolute top-0 left-0 flex h-screen w-screen items-center justify-center text-xl font-semibold text-white">
-            로딩 중...
-          </div>
+          <div className="flex h-screen items-center justify-center">
+        <HashLoader color="#36d7b7" size={50} />
+      </div>
         )}
       </DashboardLayout>
     </>
