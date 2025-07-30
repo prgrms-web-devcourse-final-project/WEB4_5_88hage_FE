@@ -25,6 +25,11 @@ export default function EventDetail({ data }: { data: EventData }) {
   const [show, setShow] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const route = useRouter();
+
+  if(!data){
+    return <Spinner/>
+  }
+
   const { content, related, nearby } = data;
 
   const routing = (id: number) => {
@@ -37,10 +42,6 @@ export default function EventDetail({ data }: { data: EventData }) {
   const dateFormatting = (date: string) => {
     return moment(date).format('YYYY년 MM월 DD일');
   };
-
-  if(!data){
-    return <Spinner/>
-  }
 
   return (
     <div className="eventDetail-gradient flex w-screen min-w-screen justify-center bg-[#121212] lg:w-340">
