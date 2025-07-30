@@ -114,12 +114,16 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      logout: () => {
-        set({ token: null, user: null, isAuthenticated: false });
-        if (typeof window !== "undefined") {
-          localStorage.removeItem("authState");
-        }
-      },
+      logout: async () => {
+  try {
+    await fetch("https://funfun.cloud/api/auth/logout", {
+      method: "GET",
+      credentials: "include",
+    });
+  } catch {
+  }
+  set({ token: null, user: null, isAuthenticated: false });
+},
 
       leave: async () => {
         try {
