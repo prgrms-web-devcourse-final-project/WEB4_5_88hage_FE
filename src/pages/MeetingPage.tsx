@@ -309,7 +309,7 @@ export default function MeetingPage() {
       {/* 무한스크롤 추가 로딩(다음 페이지 요청) 시 리스트 하단에만 스피너 */}
       {loading && page > 0 && (
         <div className="col-span-full flex justify-center items-center py-8">
-          <HashLoader color="#36d7b7" size={32} />
+          <HashLoader color="#36d7b7" size={50} />
         </div>
       )}
     </>
