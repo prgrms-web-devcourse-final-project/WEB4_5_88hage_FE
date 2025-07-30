@@ -38,6 +38,7 @@ export default function SearchBar({ value, onChange }: SearchBarProps) {
   <Search
     className="
       text-gray-3 absolute top-1/2
+      // 오른쪽 여백을 input의 왼쪽 padding과 동일하게
       right-5
       h-[20px] w-[20px] -translate-y-1/2
     "
