@@ -26,8 +26,8 @@ export default function MainCellPhoneFrame(
               <BatteryFull size={18}/>
             </div>
         </div>
-        <div className='w-full h-[370px]'>
-           <Image src={img} alt={altText} width={340}></Image>
+        <div className='w-full h-[370px] overflow-hidden'>
+           <Image src={img} alt={altText} width={340} className="object-cover"></Image>
         </div>
     </div>
     </>
