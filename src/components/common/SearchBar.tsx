@@ -27,17 +27,22 @@ export default function SearchBar({ value, onChange }: SearchBarProps) {
       </div>
 
       <div className="relative w-[335px] lg:w-[900px]">
-        <input
-          type="text"
-          placeholder="빠르게 축제를 추천해 드릴게요"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          className="bg-gray-7 h-[50px] w-full rounded-[5px] border-[2px] border-[#393939] p-5 pr-12 font-semibold text-white lg:h-[80px]"
-        />
-        <Search className="text-gray-3 absolute top-1/2 right-3 h-[20px] w-[20px] -translate-y-1/2" />
-        {/* <SlidersHorizontal className="text-gray-3 absolute top-1/2 right-10 h-[20px] w-[20px] -translate-y-1/2" /> */}
-      </div>
+  <input
+    type="text"
+    placeholder="빠르게 축제를 추천해 드릴게요"
+    value={input}
+    onChange={(e) => setInput(e.target.value)}
+    onKeyDown={handleKeyDown}
+    className="bg-gray-7 h-[50px] w-full rounded-[5px] border-[2px] border-[#393939] px-5 pr-12 font-semibold text-white lg:h-[80px]"
+  />
+  <Search
+    className="
+      text-gray-3 absolute top-1/2
+      right-5
+      h-[20px] w-[20px] -translate-y-1/2
+    "
+  />
+</div>
     </div>
   );
 }
