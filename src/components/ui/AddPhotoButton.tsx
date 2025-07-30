@@ -26,7 +26,7 @@ export default function AddPhotoButton({
   };
 
   const handleDelete = (file: File) => {
-    setImageList(imageList.filter((v) => v !== file));
+    setImageList((prev) => prev.filter((v) => v !== file));
   };
 
   useEffect(() => {

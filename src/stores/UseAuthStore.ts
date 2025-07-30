@@ -57,9 +57,13 @@ export const useAuthStore = create<AuthState>()(
 
           await get().fetchCoordinate();
         } catch (e) {
-          toast.error('로그인 실패: ' + (e?.message || ''));
-          set({ token: null, user: null, isAuthenticated: false });
-        }
+  const errorMsg =
+    e && typeof e === "object" && "message" in e
+      ? (e as Error).message
+      : "";
+  toast.error("로그인 실패: " + errorMsg);
+  set({ token: null, user: null, isAuthenticated: false });
+}
       },
 
       fetchCoordinate: async () => {
@@ -129,8 +133,12 @@ export const useAuthStore = create<AuthState>()(
           }
           toast.success("회원탈퇴가 완료되었습니다.");
         } catch (e) {
-          toast.error('회원탈퇴 실패: ' + (e?.message || ''));
-        }
+  const errorMsg =
+    e && typeof e === "object" && "message" in e
+      ? (e as Error).message
+      : "";
+  toast.error("회원탈퇴 실패: " + errorMsg);
+}
       },
     }),
     {
