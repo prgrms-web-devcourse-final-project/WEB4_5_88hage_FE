@@ -150,7 +150,7 @@ export default function MyGathering() {
   }
 
   return (
-    <div className="mb-50">
+    <div className="mb-10">
       <div className="lg:flex lg:items-center lg:justify-center">
         {/* 고정 너비 사이드 */}
         <div className="flex-shrink-0 lg:h-[740px] lg:w-[330px]">

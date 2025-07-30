@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { X } from 'lucide-react';
 import { kickoutParticipant } from '@/lib/api/participant';
@@ -10,7 +10,7 @@ import {
   checkFollowingStatus,
 } from '@/lib/api/follow';
 import { useAuthStore } from '@/stores/UseAuthStore';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 interface ParticipantData {
   userNickname: string;
@@ -37,10 +37,14 @@ export default function ParticipantListModal({
   const modalRef = useRef<HTMLDivElement>(null);
   const { user } = useAuthStore();
   const [participantList, setParticipantList] =
-    React.useState<ParticipantData[]>(participants);
+    useState<ParticipantData[]>(participants);
+  const [view, setView] = useState('list'); // 'list' or 'confirm'
+  const [confirmAction, setConfirmAction] = useState<() => void>(() => {});
+  const [confirmMessage, setConfirmMessage] = useState('');
 
-  const handleKickout = async (targetEmail: string, targetNickname: string) => {
-    if (window.confirm(`${targetNickname} 님을 모임에서 추방하시겠습니까?`)) {
+  const handleKickout = (targetEmail: string, targetNickname: string) => {
+    setConfirmMessage(`${targetNickname} 님을 모임에서 추방하시겠습니까?`);
+    setConfirmAction(() => async () => {
       try {
         await kickoutParticipant(groupId, targetEmail);
         toast.success(`${targetNickname} 님이 모임에서 추방되었습니다.`);
@@ -52,7 +56,9 @@ export default function ParticipantListModal({
         console.error('Failed to kick out participant:', error);
         toast.error('참여자 추방에 실패했습니다.');
       }
-    }
+      setView('list');
+    });
+    setView('confirm');
   };
 
   const handleFollow = async (email: string, nickname: string) => {
@@ -70,8 +76,9 @@ export default function ParticipantListModal({
     }
   };
 
-  const handleUnfollow = async (email: string, nickname: string) => {
-    if (window.confirm(`${nickname} 님을 언팔로우하시겠습니까?`)) {
+  const handleUnfollow = (email: string, nickname: string) => {
+    setConfirmMessage(`${nickname} 님을 언팔로우하시겠습니까?`);
+    setConfirmAction(() => async () => {
       try {
         await unfollowUser(email);
         toast.success(`${nickname} 님이 언팔로우되었습니다.`);
@@ -84,8 +91,11 @@ export default function ParticipantListModal({
         console.error('Failed to unfollow user:', error);
         toast.error('언팔로우에 실패했습니다.');
       }
-    }
+      setView('list');
+    });
+    setView('confirm');
   };
+
   useEffect(() => {
     const fetchFollowingStatus = async () => {
       const updatedParticipants = await Promise.all(
@@ -131,78 +141,102 @@ export default function ParticipantListModal({
         >
           <X size={24} />
         </button>
-        <h2 className="mb-4 text-center text-[20px] text-white">모임 유저</h2>
-        <hr className="text-gray-disabled py-4" />
-        {participantList.length === 0 ? (
-          <p className="text-gray-4">참여자가 없습니다.</p>
-        ) : (
-          <ul className="max-h-80 space-y-5 overflow-y-auto">
-            {participantList.map((participant, index) => (
-              <li
-                key={index}
-                className="flex items-center justify-between gap-3"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="relative h-12 w-12 overflow-hidden rounded-full">
-                    <Image
-                      src={participant.userImageUrl || '/hip-girl-thinking.svg'}
-                      alt={participant.userNickname}
-                      layout="fill"
-                      objectFit="cover"
-                    />
-                  </div>
-                  <span className="text-[16px] text-white">
-                    {participant.userNickname}
-                  </span>
-                </div>
-                <div className="flex gap-2">
-                  {user?.email !== participant.userEmail && (
-                    <>
-                      
-                      {participant.isFollowing ? (
+        {view === 'list' && (
+          <>
+            <h2 className="mb-4 text-center text-[20px] text-white">모임 유저</h2>
+            <hr className="text-gray-disabled py-4" />
+            {participantList.length === 0 ? (
+              <p className="text-gray-4">참여자가 없습니다.</p>
+            ) : (
+              <ul className="max-h-80 space-y-5 overflow-y-auto">
+                {participantList.map((participant, index) => (
+                  <li
+                    key={index}
+                    className="flex items-center justify-between gap-3"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="relative h-12 w-12 overflow-hidden rounded-full">
+                        <Image
+                          src={
+                            participant.userImageUrl || '/hip-girl-thinking.svg'
+                          }
+                          alt={participant.userNickname}
+                          layout="fill"
+                          objectFit="cover"
+                        />
+                      </div>
+                      <span className="text-[16px] text-white">
+                        {participant.userNickname}
+                      </span>
+                    </div>
+                    <div className="flex gap-2">
+                      {user?.email !== participant.userEmail && (
+                        <>
+                          {participant.isFollowing ? (
+                            <button
+                              className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
+                              onClick={() =>
+                                handleUnfollow(
+                                  participant.userEmail,
+                                  participant.userNickname,
+                                )
+                              }
+                            >
+                              언팔로우
+                            </button>
+                          ) : (
+                            <button
+                              className="bg-gray-4 mr-2 ml-1.5 rounded px-3 py-1 text-sm text-white"
+                              onClick={() =>
+                                handleFollow(
+                                  participant.userEmail,
+                                  participant.userNickname,
+                                )
+                              }
+                            >
+                              팔로우
+                            </button>
+                          )}
+                        </>
+                      )}
+                      {isLeader && user?.email !== participant.userEmail && (
                         <button
-                          className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
+                          className="rounded bg-red-500 px-3 py-1 text-sm text-white"
                           onClick={() =>
-                            handleUnfollow(
+                            handleKickout(
                               participant.userEmail,
                               participant.userNickname,
                             )
                           }
                         >
-                          언팔로우
-                        </button>
-                      ) : (
-                        <button
-                          className="bg-gray-4 mr-2 ml-1.5 rounded px-3 py-1 text-sm text-white"
-                          onClick={() =>
-                            handleFollow(
-                              participant.userEmail,
-                              participant.userNickname,
-                            )
-                          }
-                        >
-                          팔로우
+                          추방
                         </button>
                       )}
-                    </>
-                  )}
-                  {isLeader && user?.email !== participant.userEmail && (
-                    <button
-                      className="rounded bg-red-500 px-3 py-1 text-sm text-white"
-                      onClick={() =>
-                        handleKickout(
-                          participant.userEmail,
-                          participant.userNickname,
-                        )
-                      }
-                    >
-                      추방
-                    </button>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
+        )}
+        {view === 'confirm' && (
+          <div className="text-center">
+            <p className="mb-6 text-white">{confirmMessage}</p>
+            <div className="flex justify-center gap-3">
+              <button
+                onClick={() => setView('list')}
+                className="bg-gray-5 hover:bg-gray-4 rounded px-4 py-2 text-white"
+              >
+                취소
+              </button>
+              <button
+                onClick={confirmAction}
+                className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+              >
+                확인
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>

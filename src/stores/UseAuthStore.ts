@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware';
 import { Buffer } from 'buffer';
 import { login as apiLogin } from '@/lib/api/auth';
 import { get as fetchGet, patch as fetchPatch } from '@/lib/api/fetchInstance';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 interface User {
   email: string;
@@ -58,13 +58,9 @@ export const useAuthStore = create<AuthState>()(
 
           await get().fetchCoordinate();
         } catch (e) {
-  const errorMsg =
-    e && typeof e === "object" && "message" in e
-      ? (e as Error).message
-      : "";
-  toast.error("로그인 실패: " + errorMsg);
-  set({ token: null, user: null, isAuthenticated: false });
-}
+          set({ token: null, user: null, isAuthenticated: false });
+          throw e;
+        }
       },
 
       fetchCoordinate: async () => {
@@ -83,7 +79,7 @@ export const useAuthStore = create<AuthState>()(
           if (token) headers.Authorization = `Bearer ${token}`;
           const response = await fetchGet<CoordinateResponse>(
             '/api/users/coordinate',
-            { headers, credentials: 'include' }
+            { headers, credentials: 'include' },
           );
           const { latitude, longitude } = response.data;
           set((state) => ({
@@ -95,16 +91,14 @@ export const useAuthStore = create<AuthState>()(
               longitude,
             },
           }));
-        } catch {
-        }
+        } catch {}
       },
 
       checkSession: async () => {
         try {
-          const response = await fetchGet<{ data: User }>(
-            '/api/users/info',
-            { credentials: 'include' }
-          );
+          const response = await fetchGet<{ data: User }>('/api/users/info', {
+            credentials: 'include',
+          });
           set({
             user: response.data,
             isAuthenticated: true,
@@ -116,34 +110,37 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: async () => {
-  try {
-    await fetch("https://funfun.cloud/api/auth/logout", {
-      method: "GET",
-      credentials: "include",
-    });
-  } catch {
-  }
-  set({ token: null, user: null, isAuthenticated: false });
-},
+        try {
+          await fetch('https://funfun.cloud/api/auth/logout', {
+            method: 'GET',
+            credentials: 'include',
+          });
+        } catch {}
+        set({ token: null, user: null, isAuthenticated: false });
+      },
 
       leave: async () => {
         try {
           const { token } = get();
           const headers: Record<string, string> = {};
           if (token) headers.Authorization = `Bearer ${token}`;
-          await fetchPatch('/api/users', {}, { headers, credentials: 'include' });
+          await fetchPatch(
+            '/api/users',
+            {},
+            { headers, credentials: 'include' },
+          );
           set({ token: null, user: null, isAuthenticated: false });
-          if (typeof window !== "undefined") {
-            localStorage.removeItem("authState");
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('authState');
           }
-          toast.success("회원탈퇴가 완료되었습니다.");
+          toast.success('회원탈퇴가 완료되었습니다.');
         } catch (e) {
-  const errorMsg =
-    e && typeof e === "object" && "message" in e
-      ? (e as Error).message
-      : "";
-  toast.error("회원탈퇴 실패: " + errorMsg);
-}
+          const errorMsg =
+            e && typeof e === 'object' && 'message' in e
+              ? (e as Error).message
+              : '';
+          toast.error('회원탈퇴 실패: ' + errorMsg);
+        }
       },
 
       setNickname: (nickname: string) => {
@@ -159,6 +156,6 @@ export const useAuthStore = create<AuthState>()(
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
-    }
-  )
+    },
+  ),
 );
