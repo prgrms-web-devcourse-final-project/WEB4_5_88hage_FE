@@ -14,6 +14,7 @@ import Logo from '@/components/common/Logo';
 
 interface LoginError {
   code: string;
+  message: string;
 }
 
 export default function Login() {
@@ -43,6 +44,9 @@ export default function Login() {
       if (loginError.code === '4000') {
         console.error('로그인 실패: 올바른 이메일 형식이 아닙니다');
         setLoginError('올바른 이메일 형식이 아닙니다.');
+      } else if (loginError.code === '4017') {
+        console.error('로그인 실패', err);
+        setLoginError(err.message);
       } else {
         console.error('로그인 실패: ', err);
         setLoginError('이메일 또는 비밀번호가 일치하지 않습니다.');
