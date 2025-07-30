@@ -1,5 +1,4 @@
 import { Check } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 type NotiCheckboxProps = {

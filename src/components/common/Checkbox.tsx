@@ -1,5 +1,5 @@
-import { LucideCheck, LucideCheckCheck } from 'lucide-react';
-import { ChangeEvent, InputHTMLAttributes, useState } from 'react';
+import { LucideCheck } from 'lucide-react';
+import { ChangeEvent, InputHTMLAttributes } from 'react';
 
 interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   box?: boolean;
