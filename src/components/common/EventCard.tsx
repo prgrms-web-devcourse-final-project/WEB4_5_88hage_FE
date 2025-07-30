@@ -3,7 +3,19 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-export default function EventCard({ event }) {
+type EventItem = {
+  id: number;
+  imageUrl?: string;
+  title: string;
+  simpleExplain?: string;
+  during?: string;
+};
+
+type EventCardProps = {
+  event: EventItem;
+};
+
+export default function EventCard({ event }: EventCardProps) {
   const router = useRouter();
   if (!event) return null;
 
@@ -36,9 +48,9 @@ export default function EventCard({ event }) {
       <div className="h-[120px] bg-[#1b1b1b] p-3">
         <h2 className="t3 mb-2">{event.title}</h2>
         <p className="mb-5 text-[14px] text-[#ffffff] whitespace-pre-line">
-          {event.simpleExplain}
+          {event.simpleExplain ?? ""}
         </p>
-        {event.during !== '- ~ -' && (
+        {!!event.during && event.during !== '- ~ -' && (
           <p className="text-[14px] text-[#bdbdbd]">{event.during}</p>
         )}
       </div>

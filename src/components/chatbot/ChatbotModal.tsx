@@ -6,29 +6,77 @@ import "@/assets/styles/datepicker.css";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-export default function ChatbotModal({ onClose }) {
-  const router = useRouter();
+// 1. 타입 정의
+type ContentItem = {
+  id: number;
+  contentTitle: string;
+  address: string;
+  age: string;
+  fee: string;
+  category: string;
+  description: string;
+  eventType: string;
+  startDate: string;
+  endDate: string;
+  poster: string;
+  url: string;
+};
 
+type GroupItem = {
+  id: number;
+  title: string;
+  imageUrl: string;
+  simpleExplain: string;
+  placeName: string;
+};
+
+type RecommendResponse = {
+  code: string;
+  message: string;
+  data: {
+    contents?: ContentItem[];
+    groups?: GroupItem[];
+  };
+};
+
+type ChatbotModalProps = {
+  onClose: () => void;
+};
+
+type Message = {
+  type: "bot" | "user";
+  text: string;
+  recommendGroups?: (ContentItem | GroupItem)[];
+};
+
+type ChatHistory = {
+  user: string;
+  ai: string;
+};
+
+export default function ChatbotModal({ onClose }: ChatbotModalProps) {
+  const router = useRouter();
   const chatBoxRef = useRef<HTMLDivElement>(null);
 
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<Message[]>([
     {
       type: "bot",
-      text: "안녕! 나는 여가 생활 추천 AI 큐큐야!\n서울에 있는 컨텐츠나 모임을 지금 너가 원하는 상태에 따라 추천해줄게.\n\n모임, 컨텐츠(행사,장소) 둘 중 하나를 선택해줘.",
+      text:
+        "안녕! 나는 여가 생활 추천 AI 큐큐야!\n서울에 있는 컨텐츠나 모임을 지금 너가 원하는 상태에 따라 추천해줄게.\n\n모임, 컨텐츠(행사,장소) 둘 중 하나를 선택해줘.",
     },
   ]);
-  const [inputMessage, setInputMessage] = useState("");
-  const [eventType, setEventType] = useState(null);
-  const [chatHistory, setChatHistory] = useState([]);
-  const [showRecommendModal, setShowRecommendModal] = useState(false);
+  const [inputMessage, setInputMessage] = useState<string>("");
+  const [eventType, setEventType] = useState<"GROUP" | "CONTENT" | null>(null);
+  const [chatHistory, setChatHistory] = useState<ChatHistory[]>([]);
+  const [showRecommendModal, setShowRecommendModal] = useState<boolean>(false);
 
-  const [address, setAddress] = useState("");
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [address, setAddress] = useState<string>("");
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
-  const [allRecommendGroups, setAllRecommendGroups] = useState([]);
-  const [recommendOffset, setRecommendOffset] = useState(2);
-  const [hasRecommended, setHasRecommended] = useState(false);
+  const [allRecommendGroups, setAllRecommendGroups] = useState<(ContentItem | GroupItem)[]>([]);
+  const [recommendOffset, setRecommendOffset] = useState<number>(2);
+  const [hasRecommended, setHasRecommended] = useState<boolean>(false);
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
@@ -125,7 +173,8 @@ export default function ChatbotModal({ onClose }) {
         credentials: "include",
         body: JSON.stringify(recommendPayload),
       });
-      const data = await res.json();
+      const data: RecommendResponse = await res.json();
+
       setShowRecommendModal(false);
 
       const isGroup = eventType === "GROUP";
@@ -207,47 +256,53 @@ export default function ChatbotModal({ onClose }) {
                 </div>
               )}
 
+              {/* 타입가드 분기 */}
               {msg.recommendGroups && (
                 <div className="flex flex-col gap-3 mt-2 ml-[15px] w-full">
                   {msg.recommendGroups.map((item) => {
-                    if (item.title) {
+                    if ("title" in item) {
+                      // GroupItem
+                      const group = item as GroupItem;
                       return (
                         <div
-                          key={item.id}
-                          onClick={() => router.push(`/gathering/${item.id}`)}
+                          key={group.id}
+                          onClick={() => router.push(`/gathering/${group.id}`)}
                           className="w-[180px] rounded-[12px] overflow-hidden shadow-lg bg-white cursor-pointer hover:shadow-xl transition"
                         >
                           <img
                             className="w-full h-32 object-cover"
-                            src={item.imageUrl}
-                            alt={item.title}
+                            src={group.imageUrl}
+                            alt={group.title}
                           />
                           <div className="px-4 py-3">
-                            <div className="font-bold text-[16px] mb-1">{item.title}</div>
-                            <p className="text-gray-700 text-[14px] mb-1">{item.simpleExplain}</p>
-                            <p className="text-gray-400 text-[13px]">{item.placeName}</p>
+                            <div className="font-bold text-[16px] mb-1">{group.title}</div>
+                            <p className="text-gray-700 text-[14px] mb-1">{group.simpleExplain}</p>
+                            <p className="text-gray-400 text-[13px]">{group.placeName}</p>
+                          </div>
+                        </div>
+                      );
+                    } else {
+                      // ContentItem
+                      const content = item as ContentItem;
+                      return (
+                        <div
+                          key={content.id}
+                          onClick={() => router.push(`/event/${content.id}`)}
+                          className="w-[180px] rounded-[12px] overflow-hidden shadow-lg bg-white cursor-pointer hover:shadow-xl transition"
+                        >
+                          <img
+                            className="w-full h-32 object-cover"
+                            src={content.poster}
+                            alt={content.contentTitle}
+                          />
+                          <div className="px-4 py-3">
+                            <div className="font-bold text-[16px] mb-1">{content.contentTitle}</div>
+                            {/* <p className="text-gray-700 text-[14px] mb-1">{content.reason}</p> */}
+                            <p className="text-gray-400 text-[13px]">{content.address}</p>
                           </div>
                         </div>
                       );
                     }
-                    return (
-                      <div
-                        key={item.id}
-                        onClick={() => router.push(`/event/${item.id}`)}
-                        className="w-[180px] rounded-[12px] overflow-hidden shadow-lg bg-white cursor-pointer hover:shadow-xl transition"
-                      >
-                        <img
-                          className="w-full h-32 object-cover"
-                          src={item.poster}
-                          alt={item.contentTitle}
-                        />
-                        <div className="px-4 py-3">
-                          <div className="font-bold text-[16px] mb-1">{item.contentTitle}</div>
-                          {/* <p className="text-gray-700 text-[14px] mb-1">{item.reason}</p> */}
-                          <p className="text-gray-400 text-[13px]">{item.address}</p>
-                        </div>
-                      </div>
-                    );
                   })}
                 </div>
               )}
@@ -348,7 +403,7 @@ export default function ChatbotModal({ onClose }) {
                 timeIntervals={60}
                 minDate={new Date()}
                 selected={startDate}
-                onChange={setStartDate}
+                onChange={(date: Date | null) => setStartDate(date)}
                 placeholderText="시작일"
                 className="placeholder-gray-400 w-full p-3 rounded-lg border border-gray-300 bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-main placeholder:text-[13px]"
               />
@@ -363,7 +418,7 @@ export default function ChatbotModal({ onClose }) {
                 timeIntervals={60}
                 minDate={startDate || new Date()}
                 selected={endDate}
-                onChange={setEndDate}
+                onChange={(date: Date | null) => setEndDate(date)}
                 placeholderText="종료일"
                 className="placeholder-gray-400 w-full p-3 rounded-lg border border-gray-300 bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-main placeholder:text-[13px]"
               />
