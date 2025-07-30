@@ -49,7 +49,7 @@ export default function SignupPreferences({ isOAuth }: { isOAuth?: boolean }) {
     { category: string; type: string }[]
   >([]);
   const router = useRouter();
-  const { userData, clearAll } = useSignupStore();
+  const { userData } = useSignupStore();
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const loginInThisPage = async () => {
