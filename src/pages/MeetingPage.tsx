@@ -196,9 +196,9 @@ const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   return (
     <div className="w-full">
       {loading && (
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-[9999]">
-          <HashLoader />
-        </div>
+        <div className="flex h-screen items-center justify-center">
+        <HashLoader color="#36d7b7" size={50} />
+      </div>
       )}
       <div className="meetingPage-gradient lg:h-[450px] lg:pt-[115px] h-fit pt-[70px] pb-[25px]">
         <SearchBar value={search} onChange={setSearch} />
