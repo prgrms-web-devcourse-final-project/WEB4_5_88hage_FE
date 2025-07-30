@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
 
@@ -23,22 +23,17 @@ async function fetchFaqs(): Promise<FaqItem[]> {
 export default function FaqAccordion() {
   const [faqs, setFaqs] = useState<FaqItem[]>([]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const [page, setPage] = useState(0);
-  const PAGE_SIZE = 5;
 
   useEffect(() => {
     fetchFaqs().then(setFaqs);
   }, []);
 
-  const totalPages = Math.ceil(faqs.length / PAGE_SIZE);
-  const pagedFaqs = faqs.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
-
   return (
     <div className="space-y-2 flex flex-col items-center">
-      {pagedFaqs.length === 0 && (
+      {faqs.length === 0 && (
         <div className="text-gray-300 mt-8">FAQ가 없습니다.</div>
       )}
-      {pagedFaqs.map((item, idx) => {
+      {faqs.map((item, idx) => {
         const isOpen = openIndex === idx;
         return (
           <div
@@ -74,37 +69,6 @@ export default function FaqAccordion() {
           </div>
         );
       })}
-
-      {/* 페이지네이션 UI */}
-      {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 mt-8">
-          <button
-            onClick={() => setPage((prev) => Math.max(0, prev - 1))}
-            disabled={page === 0}
-            className="disabled:text-gray-500 p-2"
-          >
-            <ChevronLeft />
-          </button>
-          {Array.from({ length: totalPages }).map((_, i) => (
-            <button
-              key={i}
-              className={`h-[29px] w-[29px] rounded-full text-[15px] transition ${
-                page === i ? "bg-[#1CEBB9] font-bold text-black" : "text-white"
-              }`}
-              onClick={() => setPage(i)}
-            >
-              {i + 1}
-            </button>
-          ))}
-          <button
-            onClick={() => setPage((prev) => Math.min(totalPages - 1, prev + 1))}
-            disabled={page === totalPages - 1}
-            className="disabled:text-gray-500 p-2"
-          >
-            <ChevronRight />
-          </button>
-        </div>
-      )}
     </div>
   );
 }
