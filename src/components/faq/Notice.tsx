@@ -30,9 +30,12 @@ export default function NoticeContent() {
   const getNoticeList = async (pageNum = 0) => {
     try {
       const response = await fetch(
-        `${API}/api/admin/notices?page=${pageNum}&size=${PAGE_SIZE}&sort=createdAt,desc`
-      );
-      const res = await response.json();
+      `${API}/api/admin/notices?page=${pageNum}&size=${PAGE_SIZE}&sort=createdAt,desc`,
+      {
+        credentials: 'include',
+      }
+    );
+    const res = await response.json();
       setNotices(
   (res.data?.content || []).map((n: NoticeRaw) => ({
     id: n.id,
