@@ -4,7 +4,6 @@
 import { searchAddress } from '@/lib/utils/getAddressXYGeocode';
 import React, { Dispatch, SetStateAction } from 'react';
 import DaumPostcode from 'react-daum-postcode';
-import '../../assets/styles/daum/daum.css'
 
 type setFc = {
   setShowModal: Dispatch<SetStateAction<boolean>>;
