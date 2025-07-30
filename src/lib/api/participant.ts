@@ -1,3 +1,4 @@
+import { GroupStat, ServiceResponse } from '@/types/api';
 import { get, post } from './fetchInstance';
 
 // 모임 참여 신청자 거절
@@ -18,7 +19,10 @@ export const kickoutParticipant = async (
   groupId: number,
   targetEmail: string,
 ) => {
-  await post(`/api/participants/${groupId}/kickout?targetEmail=${targetEmail}`, null);
+  await post(
+    `/api/participants/${groupId}/kickout?targetEmail=${targetEmail}`,
+    null,
+  );
 };
 
 // groupID의 승인된 사용자 목록 확인
@@ -47,6 +51,10 @@ export const applyToGroup = async (groupId: number): Promise<void> => {
 };
 
 // 모임 완료 통계: 유저가 완료한 모임을 카테고리별로 카운트합니다. (즐겨 찾는 여가 생활)
-export const getGroupCompletedStats = async () => {
-  return await get(`/api/participants/stats/group-completed`);
+export const getGroupCompletedStats = async (): Promise<
+  ServiceResponse<GroupStat[]>
+> => {
+  return await get<ServiceResponse<GroupStat[]>>(
+    `/api/participants/stats/group-completed`,
+  );
 };

@@ -5,6 +5,7 @@ import basicProfileImg from '@/assets/images/basicProfile.png';
 import { ChevronLeft, Settings } from 'lucide-react';
 import GrayButton from './button/GrayButton';
 import { verifyNickname } from '../lib/api/user';
+import { NicknameVerificationResponse } from '@/types/api';
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -39,7 +40,9 @@ export default function EditProfileModal({
   const [nickname, setNickname] = useState(currentNickname);
   const [introduction, setIntroduction] = useState(currentIntroduction);
   const [imageUrl, setImageUrl] = useState(currentImageUrl);
-  const [selectedImageFile, setSelectedImageFile] = useState<File | undefined>(undefined);
+  const [selectedImageFile, setSelectedImageFile] = useState<File | undefined>(
+    undefined,
+  );
   const [nicknameValidationMessage, setNicknameValidationMessage] =
     useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -66,22 +69,11 @@ export default function EditProfileModal({
       return;
     }
     try {
-      const response = await verifyNickname(nickname) as VerifyNicknameResponse;
-      console.log("리스폰스 확인", response);
-      if (response.code === '4014') {
-        setErrorMessage('이미 사용 중인 닉네임입니다.');
-        setIsNicknameValidated(false);
-      } else if (
-        response.code === '4000' &&
-        response.data &&
-        response.data.nickname
-      ) {
-        setErrorMessage(response.data.nickname);
-        setIsNicknameValidated(false);
-      } else if (!response.reason) {
-        if (typeof response.data === 'string') {
-          setNicknameValidationMessage(response.data);
-        }
+      const response: NicknameVerificationResponse =
+        await verifyNickname(nickname);
+      console.log(response);
+      if (!response.reason) {
+        setNicknameValidationMessage(response.data);
         setIsNicknameValidated(true);
       } else {
         setNicknameValidationMessage('알 수 없는 응답입니다.');
@@ -231,7 +223,9 @@ export default function EditProfileModal({
         </div>
 
         <GrayButton
-          onClick={() => onSave(nickname, introduction, imageUrl, selectedImageFile)}
+          onClick={() =>
+            onSave(nickname, introduction, imageUrl, selectedImageFile)
+          }
           disabled={nickname !== currentNickname && !isNicknameValidated}
         >
           저장하기

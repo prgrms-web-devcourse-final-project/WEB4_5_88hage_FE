@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 import Greeting from '../common/Greeting';
-
+import Sidebar from '../layout/Sidebar';
 
 export default function DashboardLayout({
   children,
@@ -11,7 +11,8 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex min-h-screen">
-      <div className="flex flex-1 flex-col mx-[100px]">
+      <Sidebar />
+      <div className="mx-[100px] flex flex-1 flex-col">
         <main
           className={twMerge(
             'mainColor-gradient flex-1 p-5 pt-[70px] lg:pt-5',

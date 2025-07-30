@@ -1,19 +1,19 @@
 import React from 'react';
 import { LucideX } from 'lucide-react';
 
-interface DetailListModalProps {
+interface DetailListModalProps<T> {
   title: string;
-  data: any[];
+  data: T[];
   onClose: () => void;
-  renderItem: (item: any, index: number) => React.ReactNode;
+  renderItem: (item: T, index: number) => React.ReactNode;
 }
 
-const DetailListModal: React.FC<DetailListModalProps> = ({
+const DetailListModal = <T,>({
   title,
   data,
   onClose,
   renderItem,
-}) => {
+}: DetailListModalProps<T>) => {
   return (
     <div
       className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"

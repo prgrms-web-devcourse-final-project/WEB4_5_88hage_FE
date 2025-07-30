@@ -9,6 +9,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { useSignupStore } from '@/stores/signupStore';
 import SearchAddressModal from '@/components/auth/SearchAddressModal';
 import { toast } from 'react-toastify';
+import Logo from '@/components/common/Logo';
 
 export default function Signup() {
   const [nickname, setNickname] = useState('');
@@ -118,13 +119,7 @@ export default function Signup() {
 
   return (
     <div className="flex">
-      <Image
-        src={logo}
-        alt="logo"
-        width={200}
-        loading="lazy"
-        className="absolute top-[150px] left-[300px] hidden lg:block"
-      />
+      <Logo className="absolute top-10 left-10" />
       <div className="hidden h-screen w-1/2 items-center justify-center lg:flex">
         <Image src={signupImg} alt="signupImg" className="z-10" />
       </div>
