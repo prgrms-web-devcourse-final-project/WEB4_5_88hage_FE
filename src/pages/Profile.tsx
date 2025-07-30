@@ -81,6 +81,7 @@ export default function Profile() {
   const fetchFollowData = async () => {
     try {
       const followersData = await getFollowers();
+      console.log(followersData)
       setFollowers(
         followersData.data.content.map((f: any) => ({
           nickname: f.nickname,
