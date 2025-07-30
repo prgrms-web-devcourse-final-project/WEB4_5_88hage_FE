@@ -3,18 +3,19 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-type GroupItem = {
+type Group = {
   id: number;
   title: string;
   imageUrl: string;
   leaderNickname: string;
   groupDate: string;
   simpleExplain?: string;
-  reason?:string;
+  reason?: string;
 };
 
 type PostCardProps = {
-  group: GroupItem;
+  group: Group;
+  className?: string;
 };
 
 export default function PostCard({ group }: PostCardProps) {
@@ -28,13 +29,7 @@ export default function PostCard({ group }: PostCardProps) {
 
   return (
     <div
-      className="
-        hover-gradient relative w-full cursor-pointer overflow-hidden rounded-[5px] bg-black text-white
-        transition-transform duration-200
-        hover:scale-[1.04] hover:z-20
-        hover:shadow-[0_8px_32px_rgba(44,64,255,0.18)]
-        focus:outline-none
-      "
+      className="hover-gradient relative w-full cursor-pointer overflow-hidden rounded-[5px] bg-black text-white transition-transform duration-200 hover:z-20 hover:scale-[1.04] hover:shadow-[0_8px_32px_rgba(44,64,255,0.18)] focus:outline-none"
       onClick={handleClick}
       role="button"
       tabIndex={0}
@@ -54,15 +49,16 @@ export default function PostCard({ group }: PostCardProps) {
       <div className="h-[120px] bg-[#1b1b1b] p-3">
         <h2 className="t3 mb-1">{group.title}</h2>
         <p className="mb-5 text-[14px] text-[#ffffff]">
-          주최자: {group.leaderNickname ?? ""}
+          주최자: {group.leaderNickname ?? ''}
         </p>
         <p className="text-[14px] text-[#bdbdbd]">
-          시작일: {group.groupDate
+          시작일:{' '}
+          {group.groupDate
             ? (() => {
-                const d = group.groupDate.split("T")[0].split("-");
+                const d = group.groupDate.split('T')[0].split('-');
                 return `${d[1]}.${d[2]}`;
               })()
-            : "미정"}
+            : '미정'}
         </p>
       </div>
     </div>

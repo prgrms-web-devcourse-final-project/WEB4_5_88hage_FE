@@ -18,7 +18,7 @@ export default function CalendarSidebar({selectDate, selectListData, setSelectLi
             <h3 className="text-gray-sub">{String(selectDate.month)}월 {String(selectDate.date)}일 일정 <span className="text-main">{selectListData.length}</span>개</h3>
             <Undo2 className='lg:hidden cursor-pointer text-[#fff] mr-[10px] text-[14px]'/>
         </div>
-        <ul>
+        <ul className='h-full max-h-[calc(100%-65px)] overflow-y-auto scrollbar-hide'>
           {selectListData.map((info) => {
           return <li className='mb-[10px]' key={Number(info.calendarId)}>
             <CalendarCard info={info} setSelectListData={setSelectListData} setCalendarData={setCalendarData}/>

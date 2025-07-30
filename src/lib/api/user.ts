@@ -1,4 +1,8 @@
-import { CurrentUserInfo, ServiceResponse, NicknameVerificationResponse } from '@/types/api';
+import {
+  CurrentUserInfo,
+  NicknameVerificationResponse,
+  ServiceResponse,
+} from '@/types/api';
 import { get, post, put, patch } from './fetchInstance';
 
 // 회원 정보 조회 (현재 로그인한 사용자)

@@ -38,9 +38,8 @@ export const deleteGroup = async (groupId: number): Promise<void> => {
 };
 
 // 모임 생성
-export const createGroup = async (
-  data: GroupCreateRequest,
-): Promise<Group> => {
+
+export const createGroup = async (data: GroupCreateRequest) => {
   const formData = new FormData();
   formData.append('title', data.title);
   formData.append('explain', data.explain);
@@ -101,7 +100,10 @@ export const getMyGroups = async (): Promise<MyGroupData[]> => {
 // 내가 리더 역할인 모임 조회
 export const getLeaderMyGroups = async (): Promise<LeaderMyGroupData[]> => {
   const res = await get<GetLeaderMyGroupsResponse>('/api/groups/getLeaderMy');
-  return res.data;
+  return res.data.map((group) => ({
+    ...group,
+    groupDate: '', // 혹은 적절한 기본값 또는 계산된 값
+  }));
 };
 
 // 자동 완성을 위한 단어 저장 (모임 해시태그)

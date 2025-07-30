@@ -13,5 +13,5 @@ interface GetLeaderMyGroupsResponse {
   code: string;
   message: string;
   reason: string | null;
-  data: LeaderGroupData[];
+  data: LeaderMyGroupData[];
 }

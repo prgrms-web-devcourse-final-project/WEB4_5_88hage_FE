@@ -32,3 +32,12 @@ button {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+body.modal-open::-webkit-scrollbar {
+  display: none;
+}
+body.modal-open {
+  overflow: hidden;               
+  scrollbar-width: none;         
+  -ms-overflow-style: none;       
+}

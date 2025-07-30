@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export default function WritingFormTags({
   title,
@@ -20,6 +20,14 @@ export default function WritingFormTags({
   const API = process.env.NEXT_PUBLIC_API_URL;
   const inputRef = useRef<HTMLDivElement>(null);
 
+  const fetchHashtags = useCallback(async () => {
+    const response = await fetch(
+      `${API}/api/groupHashtags/complete?prefix=${value}`,
+    );
+    const { data } = await response.json();
+    setHashTagsList(Array.isArray(data) ? data : []);
+  }, [API, value]);
+
   useEffect(() => {
     const fetchHashtags = async () => {
       const response = await fetch(
@@ -29,7 +37,7 @@ export default function WritingFormTags({
       setHashTagsList(Array.isArray(data) ? data : []);
     };
     fetchHashtags();
-  }, [value, API]);
+  }, [value, fetchHashtags, API]);
 
   useEffect(() => {
     const handleOutsideClose = (e: MouseEvent) => {

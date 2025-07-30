@@ -24,6 +24,7 @@ import FollowListModal from '@/components/common/FollowListModal';
 import DetailListModal from '@/components/common/DetailListModal';
 import EditProfileModal from '@/components/EditProfileModal';
 import { updateProfile } from '@/lib/api/userInfo';
+import { useAuthStore } from '@/stores/UseAuthStore';
 import Toast from '@/components/common/Toast';
 import ConfirmModal from '@/components/common/ConfirmModal';
 import ProfileCalendar from '@/components/calendar/ProfileCalendar';
@@ -66,18 +67,21 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [showWithdrawConfirmModal, setShowWithdrawConfirmModal] =
     useState(false);
+  const setAuthStoreNickname = useAuthStore((state) => state.setNickname);
   const fetchFollowData = async () => {
     try {
       const followersData = await getFollowers();
       console.log(followersData);
       setFollowers(
-        followersData.data.content.map((f: Follower) => ({
-          nickname: f.nickname,
-          imageUrl: f.imageUrl,
-          email: f.email,
-          introduction: f.introduction,
-          followedAt: f.followedAt,
-        })),
+        Array.isArray(followersData.data.content)
+          ? followersData.data.content.map((f: Follower) => ({
+              nickname: f.nickname,
+              imageUrl: f.imageUrl,
+              email: f.email,
+              introduction: f.introduction,
+              followedAt: f.followedAt,
+            }))
+          : [],
       );
 
       const followingsData = await getFollowings();
@@ -128,11 +132,17 @@ export default function Profile() {
           try {
             const dailyCalendarData = await getDailyCalendar(year, month, day);
             setDailyEvents(
-              dailyCalendarData.data.filter(
-                (event: DailyCalendar, index: number, self: DailyCalendar[]) =>
-                  index ===
-                  self.findIndex((e) => e.activityId === event.activityId),
-              ),
+              Array.isArray(dailyCalendarData.data)
+                ? dailyCalendarData.data.filter(
+                    (
+                      event: DailyCalendar,
+                      index: number,
+                      self: DailyCalendar[],
+                    ) =>
+                      index ===
+                      self.findIndex((e) => e.activityId === event.activityId),
+                  )
+                : [],
             );
           } catch (dailyEventsError) {
             console.error('Failed to fetch daily events:', dailyEventsError);
@@ -145,15 +155,24 @@ export default function Profile() {
         }
 
         const inquiriesData = await getContacts();
-        setMyInquiries(inquiriesData.data);
+
+        const data = inquiriesData.data as Inquiry[];
+        setMyInquiries(data);
 
         const bookedEventsData = await getCalendarForContent();
         console.log(bookedEventsData);
         setBookedEvents(
-          bookedEventsData.data.filter(
-            (event: CalendarContent, index: number, self: CalendarContent[]) =>
-              index === self.findIndex((e) => e.contentId === event.contentId),
-          ),
+          Array.isArray(bookedEventsData.data)
+            ? bookedEventsData.data.filter(
+                (
+                  event: CalendarContent,
+                  index: number,
+                  self: CalendarContent[],
+                ) =>
+                  index ===
+                  self.findIndex((e) => e.contentId === event.contentId),
+              )
+            : [],
         );
 
         await fetchFollowData(); // Initial fetch of follow data
@@ -168,11 +187,19 @@ export default function Profile() {
   }, [selectedDate]);
 
   if (loading) {
-    return;
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <HashLoader color="#36d7b7" size={50} />
+      </div>
+    );
   }
 
   if (!userInfo) {
-    return <div>Failed to load profile.</div>;
+    return (
+      <div className="h1 text-white">
+        프로필을 불러오는 데 실패하였습니다 다시 실행해주시기 바랍니다.
+      </div>
+    );
   }
 
   // Helper function to map category names and assign colors
@@ -358,7 +385,10 @@ export default function Profile() {
                 </div>
                 <div className="flex flex-col gap-3">
                   {activeTab === 'myPosts' &&
-                    leaderGroups.slice(0, 3).map((group) => (
+                    (Array.isArray(leaderGroups)
+                      ? leaderGroups.slice(0, 3)
+                      : []
+                    ).map((group) => (
                       <button
                         onClick={() => {
                           router.push(`/gathering/${group.groupId}`);
@@ -378,7 +408,10 @@ export default function Profile() {
                       </button>
                     ))}
                   {activeTab === 'myInquiries' &&
-                    myInquiries.slice(0, 3).map((inquiry) => (
+                    (Array.isArray(myInquiries)
+                      ? myInquiries.slice(0, 3)
+                      : []
+                    ).map((inquiry) => (
                       <button
                         key={inquiry.id}
                         className="bg-gray-6 flex w-full rounded-[5px] px-5 py-4"
@@ -398,7 +431,10 @@ export default function Profile() {
                       </button>
                     ))}
                   {activeTab === 'bookedEvents' &&
-                    bookedEvents.slice(0, 3).map((event) => (
+                    (Array.isArray(bookedEvents)
+                      ? bookedEvents.slice(0, 3)
+                      : []
+                    ).map((event) => (
                       <button
                         key={event.contentId}
                         className="bg-gray-6 flex rounded-[5px] px-5 py-4"
@@ -444,7 +480,7 @@ export default function Profile() {
                     <HashLoader color="#36d7b7" size={30} />
                   </div>
                 ) : dailyEvents.length > 0 ? (
-                  dailyEvents.slice(0, 4).map((event) => (
+                  dailyEvents.slice(0, 3).map((event) => (
                     <div key={event.calendarId}>
                       <div className="flex items-center gap-5">
                         <Image src={mapIcon} alt="icon" />
@@ -777,6 +813,7 @@ export default function Profile() {
 
               if (userInfo.nickname !== newNickname) {
                 await changeNickname(newNickname);
+                setAuthStoreNickname(newNickname);
               }
               await updateProfile(profileRequest);
 

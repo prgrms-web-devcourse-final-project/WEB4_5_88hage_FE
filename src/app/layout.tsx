@@ -1,11 +1,12 @@
-import Script from "next/script";
+import Script from 'next/script';
 import '../assets/styles/globals.css';
-import ChatbotButtonWrapper from "@/components/chatbot/ChatbotButtonWrapper";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import ChatbotButtonWrapper from '@/components/chatbot/ChatbotButtonWrapper';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../assets/styles/toast.css';
-import SessionInit from "@/components/SessionInit";
+import SessionInit from '@/components/SessionInit';
 import { Noto_Sans_KR } from 'next/font/google';
+import { Suspense } from 'react';
 
 const notoSans = Noto_Sans_KR({
   subsets: ['latin'],
@@ -20,7 +21,6 @@ export const metadata = {
   },
 };
 
-
 export default function RootLayout({
   children,
 }: {
@@ -34,22 +34,24 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
 
-        <SessionInit />
-        {children}
-        <ToastContainer
-          position="top-center"
-          autoClose={2000}
-          hideProgressBar
-          newestOnTop
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss={false}
-          draggable
-          pauseOnHover
-          theme="dark"
-        />
+        <Suspense fallback={<p>loading..</p>}>
+          <SessionInit />
+          {children}
+          <ToastContainer
+            position="top-center"
+            autoClose={2000}
+            hideProgressBar
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss={false}
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
 
-        <ChatbotButtonWrapper />
+          <ChatbotButtonWrapper />
+        </Suspense>
       </body>
     </html>
   );

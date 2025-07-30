@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import { get, post } from './fetchInstance';
 
 // 채팅 기록 조회
@@ -28,9 +27,10 @@ export const getLastChatHistory = async (
     return response.data; // data 객체를 반환
   } catch (error) {
     // 404 에러 (채팅 내역 없음) 처리
-    const axiosError = error as AxiosError;
-    if (axiosError.response?.status === 404) {
-      return null; // 채팅 내역이 없으면 null 반환
+    if (error instanceof Response) {
+      if (error.status === 404) {
+        return null;
+      }
     }
     throw error; // 다른 에러는 다시 던짐
   }
