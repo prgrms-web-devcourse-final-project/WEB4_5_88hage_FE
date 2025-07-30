@@ -141,7 +141,6 @@ console.log("[추천 버튼] fetch 결과 status:", res.status);
           }
         })
       );
-
       setData(prev => {
         if (page === 0) return withDetails;
         const newUnique = withDetails.filter(newItem => !prev.some(prevItem => prevItem.id === newItem.id));
@@ -151,7 +150,8 @@ console.log("[추천 버튼] fetch 결과 status:", res.status);
       setLoading(false);
     };
     fetchData();
-  }, );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [groups.length, sortBy, page, selectedCategory]);
 
   useEffect(() => {
     setSearch("");
@@ -192,7 +192,6 @@ console.log("[추천 버튼] fetch 결과 status:", res.status);
     .join('\n\n');
 
 const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-
   return (
     <div className="w-full">
       {loading && (
