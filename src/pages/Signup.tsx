@@ -115,7 +115,7 @@ export default function Signup() {
           console.log(error);
         });
     }
-  }, [userData]);
+  }, [userData,API,email]);
 
   return (
     <div className="flex">
