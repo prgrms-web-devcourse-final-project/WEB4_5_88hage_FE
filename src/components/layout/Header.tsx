@@ -24,7 +24,7 @@ export default function Header() {
               <Navigation />
             </div>
             <button
-              className="from-main/20 bg-gradient-to-b to-[#FF58D8]/20 lg:rounded-full lg:p-1"
+              className="from-main/20 bg-transparent to-[#FF58D8]/20 lg:rounded-full lg:bg-gradient-to-b lg:p-1"
               aria-label="사이드바 열기"
               onClick={() => setSidebarOpen(true)}
             >

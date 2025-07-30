@@ -30,7 +30,7 @@ export default function Notification() {
 
   const convertTime = (createdAt: string) => {
     const date = new Date(createdAt);
-    date.setHours(date.getHours() + 9);
+    // date.setHours(date.getHours() + 9);
     return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
   };
 
