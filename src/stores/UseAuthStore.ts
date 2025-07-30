@@ -22,6 +22,7 @@ interface AuthState {
   logout: () => void;
   checkSession: () => Promise<void>;
   leave: () => Promise<void>;
+  setNickname: (nickname: string) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -143,6 +144,12 @@ export const useAuthStore = create<AuthState>()(
       : "";
   toast.error("회원탈퇴 실패: " + errorMsg);
 }
+      },
+
+      setNickname: (nickname: string) => {
+        set((state) => ({
+          user: state.user ? { ...state.user, nickname } : null,
+        }));
       },
     }),
     {
