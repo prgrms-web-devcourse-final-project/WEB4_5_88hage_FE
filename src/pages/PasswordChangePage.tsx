@@ -5,7 +5,6 @@ import Input from '@/components/common/Input';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import logo from '@/assets/images/logo.svg';
-import { changePassword } from '@/lib/api/user';
 import { toast } from "react-toastify";
 
 export default function PasswordChangePage({ email }: { email: string }) {

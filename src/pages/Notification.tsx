@@ -1,9 +1,8 @@
 'use client';
 import NotiCheckbox from '@/components/NotiCheckbox';
 import { useAuthStore } from '@/stores/UseAuthStore';
-import { Check, ChevronLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { toast } from "react-toastify";
@@ -23,7 +22,6 @@ type NotificationData = {
 export default function Notification() {
   const API = process.env.NEXT_PUBLIC_API_URL;
   const { user } = useAuthStore();
-  const router = useRouter();
   const [activeTab, setActiveTab] = useState<'recent' | 'unread' | 'read'>(
     'recent',
   );

@@ -21,7 +21,7 @@ export default function GatheringSide({
   myGatherings,
   lastMessages,
 }: GatheringSideProps) {
-  const { user } = useAuthStore();
+  // const { user } = useAuthStore();
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
