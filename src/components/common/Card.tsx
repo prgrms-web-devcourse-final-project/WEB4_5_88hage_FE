@@ -11,7 +11,6 @@ export default function PostCard({ group }) {
   const handleClick = () => {
     router.push(`/gathering/${group.id}`);
   };
-
   return (
     <div
       className="

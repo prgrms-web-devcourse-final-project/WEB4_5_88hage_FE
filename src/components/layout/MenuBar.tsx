@@ -46,6 +46,9 @@ export default function MenuBar({ close }: { close: () => void }) {
     if (user) {
       const response = await fetch(
         `${API}/api/notifications/unread-count?email=${user.email}`,
+        {
+        credentials: "include",
+      }
       );
       const { data } = await response.json();
       setNotiCount(data);

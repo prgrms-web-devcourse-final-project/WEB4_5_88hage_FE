@@ -59,6 +59,7 @@ export default function MeetingPage() {
     setLoading(true);
     try {
       const token = useAuthStore.getState().token;
+      console.log("[추천 버튼] 요청 데이터:", { address, start, end, token });
       const res = await fetch(`${API}/api/recommend/group`, {
   method: "POST",
   headers: {
@@ -72,16 +73,20 @@ export default function MeetingPage() {
     address,
   }),
 });
+console.log("[추천 버튼] fetch 결과 status:", res.status);
       if (!res.ok) {
+        console.log("[추천 버튼] 응답 실패!", errorText);
         toast.error("추천 결과를 불러오지 못했습니다.");
         setLoading(false);
         return;
       }
       const json = await res.json();
+      console.log("[추천 버튼] 응답 json:", json);
       setGroups(json.data.groups ?? []);
       setRecommendClick(0);
     } catch {
       toast.error("에러가 발생했습니다.");
+      console.log("[추천 버튼] 예외:", e);
     }
     setLoading(false);
   };
