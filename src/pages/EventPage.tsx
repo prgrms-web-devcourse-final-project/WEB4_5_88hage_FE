@@ -89,8 +89,8 @@ export default function EventPage() {
   // ---- 카테고리 쿼리스트링 처리 ----
   const router = useRouter();
   const searchParams = useSearchParams();
-  const selectedCategory = searchParams.get("category") || "";
-  const type = searchParams.get("type");
+  const selectedCategory = searchParams?.get("category") || "";
+  const type = searchParams?.get("type") || "";
 
   const sortRef = useRef<HTMLDivElement>(null);
   const API = process.env.NEXT_PUBLIC_API_URL;
@@ -104,7 +104,7 @@ export default function EventPage() {
 
   //카테고리 변경시 url로 push
   const handleCategoryChange = (category: string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams?.toString());
     if (category) params.set("category", category);
     else params.delete("category");
     if (type) params.set("type", type);
@@ -179,7 +179,7 @@ export default function EventPage() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, [showSort]);
 
-  const observer = useRef<IntersectionObserver>();
+  const observer = useRef<IntersectionObserver | null>(null);
   const lastCardRef = useCallback(
     (node: HTMLDivElement | null) => {
       if (loading) return;

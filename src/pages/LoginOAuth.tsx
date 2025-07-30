@@ -1,13 +1,13 @@
 'use client';
 import SearchAddressModal from '@/components/auth/SearchAddressModal';
-import Image from 'next/image';
-import logo from '@/assets/images/logo.png';
+
 import { useEffect, useState } from 'react';
 import Input from '@/components/common/Input';
 import { useRouter } from 'next/navigation';
 import Checkbox from '@/components/common/Checkbox';
 import { useSignupStore } from '@/stores/signupStore';
 import SignupPreferences from './SignupPreferences';
+import Logo from '@/components/common/Logo';
 
 export default function LoginOAuth() {
   const API = process.env.NEXT_PUBLIC_API_URL;
@@ -111,13 +111,7 @@ export default function LoginOAuth() {
           {isLoading && <div className="text-white"></div>}
           {!isLoading && (
             <>
-              <Image
-                src={logo}
-                alt="logo"
-                width={100}
-                loading="lazy"
-                className="absolute top-[26px] left-[40px] hidden lg:block"
-              />
+              <Logo className="absolute top-[26px] left-[40px] hidden lg:block"/>
               <form
                 id="oAuthFormId"
                 onSubmit={handleLoginOAuth2}

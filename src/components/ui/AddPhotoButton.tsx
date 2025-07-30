@@ -1,6 +1,6 @@
 'use client';
 import { CircleX } from 'lucide-react';
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { FaCamera } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
 
@@ -26,7 +26,7 @@ export default function AddPhotoButton({
   };
 
   const handleDelete = (file: File) => {
-    setImageList(imageList.filter((v) => v !== file));
+    setImageList((prev) => prev.filter((v) => v !== file));
   };
 
   useEffect(() => {

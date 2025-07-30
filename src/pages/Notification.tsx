@@ -1,9 +1,8 @@
 'use client';
 import NotiCheckbox from '@/components/NotiCheckbox';
 import { useAuthStore } from '@/stores/UseAuthStore';
-import { Check, ChevronLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { toast } from "react-toastify";
@@ -23,7 +22,6 @@ type NotificationData = {
 export default function Notification() {
   const API = process.env.NEXT_PUBLIC_API_URL;
   const { user } = useAuthStore();
-  const router = useRouter();
   const [activeTab, setActiveTab] = useState<'recent' | 'unread' | 'read'>(
     'recent',
   );
@@ -34,6 +32,9 @@ export default function Notification() {
     if (user) {
       const response = await fetch(
         `${API}/api/notifications/${activeTab}?email=${user.email}`,
+        {
+    credentials: "include",
+  }
       );
       const { code, message, data } = await response.json();
       if (code === '0000') setNotiList(data);
@@ -45,6 +46,7 @@ export default function Notification() {
     const response = await fetch(`${API}/api/notifications/read-selected`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
+      credentials: "include",
       body: JSON.stringify(selectedId),
     });
     const { code, message } = await response.json();

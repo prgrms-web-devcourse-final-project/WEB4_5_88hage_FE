@@ -136,15 +136,16 @@ declare interface GroupCreateRequest {
   placeName: string;
   groupDate: string;
   address: string;
-  category:
-    | 'ART'
-    | 'TRAVEL'
-    | 'FOOD'
-    | 'GAME'
-    | 'CULTURE'
-    | 'SPORT'
-    | 'STUDY'
-    | 'MOVIE';
+  // category:
+  //   | 'ART'
+  //   | 'TRAVEL'
+  //   | 'FOOD'
+  //   | 'GAME'
+  //   | 'CULTURE'
+  //   | 'SPORT'
+  //   | 'STUDY'
+  //   | 'MOVIE';
+  category: string;
   maxPeople: number;
   latitude: number;
   longitude: number;

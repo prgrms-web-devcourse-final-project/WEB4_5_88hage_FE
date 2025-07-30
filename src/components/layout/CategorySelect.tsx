@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 
 type CategorySelectProps = {

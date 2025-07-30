@@ -23,7 +23,8 @@ type Group = {
   imageUrl: string;
   leaderNickname: string;
   groupDate: string;
-  //simpleExplain: string;
+  simpleExplain?: string;
+  reason?:string;
 };
 
 export default function MeetingPage() {
@@ -44,7 +45,7 @@ export default function MeetingPage() {
   // URL 기반 카테고리 관리
   const router = useRouter();
   const searchParams = useSearchParams();
-  const selectedCategory = searchParams.get("category") || "";
+  const selectedCategory = searchParams?.get("category") || "";
 
   const startIdx = recommendClick * 4;
   const endIdx = startIdx + 4;
@@ -59,6 +60,7 @@ export default function MeetingPage() {
     setLoading(true);
     try {
       const token = useAuthStore.getState().token;
+      console.log("[추천 버튼] 요청 데이터:", { address, start, end, token });
       const res = await fetch(`${API}/api/recommend/group`, {
   method: "POST",
   headers: {
@@ -72,17 +74,21 @@ export default function MeetingPage() {
     address,
   }),
 });
+console.log("[추천 버튼] fetch 결과 status:", res.status);
       if (!res.ok) {
+        console.log("[추천 버튼] 응답 실패!", res.status, res.statusText);
         toast.error("추천 결과를 불러오지 못했습니다.");
         setLoading(false);
         return;
       }
       const json = await res.json();
+      console.log("[추천 버튼] 응답 json:", json);
       setGroups(json.data.groups ?? []);
       setRecommendClick(0);
-    } catch {
-      toast.error("에러가 발생했습니다.");
-    }
+    } catch (e: unknown) {
+  toast.error("에러가 발생했습니다.");
+  console.log("[추천 버튼] 예외:", e);
+}
     setLoading(false);
   };
 
@@ -93,7 +99,7 @@ export default function MeetingPage() {
 
   // 카테고리 변경 핸들러
   const handleCategorySelect = (category: string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams?.toString());
     if (category) params.set("category", category);
     else params.delete("category");
     router.push(`?${params.toString()}`);
@@ -118,7 +124,7 @@ export default function MeetingPage() {
 
       // 상세조회 병렬
       const withDetails = await Promise.all(
-        list.map(async (g) => {
+        list.map(async (g:Group) => {
           try {
             const res = await fetch(`${API}/api/groups/${g.id}`, { credentials: "include" });
             const detail = await res.json();
@@ -160,15 +166,15 @@ export default function MeetingPage() {
   }, [showSort]);
 
   const filtered = data.filter(
-    group =>
-      group.title.includes(search) ||
-      group.simpleExplain?.includes(search)
-  );
+  group =>
+    group.title.includes(search) ||
+    (group.simpleExplain || "").includes(search)
+);
 
   const currentSortLabel =
     SORT_OPTIONS.find(option => option.value === sortBy)?.label || "정렬";
 
-  const observer = useRef<IntersectionObserver>();
+  const observer = useRef<IntersectionObserver | null>(null);
   const lastCardRef = useCallback((node: HTMLDivElement | null) => {
     if (loading) return;
     if (observer.current) observer.current.disconnect();

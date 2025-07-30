@@ -42,8 +42,6 @@ interface DisplayMessage {
 
 export default function GatheringChatting({
   gathering,
-  myGatherings,
-  lastMessages,
 }: GatheringChattingProps) {
   const [messages, setMessages] = useState<DisplayMessage[]>([]);
   const [messageInput, setMessageInput] = useState('');

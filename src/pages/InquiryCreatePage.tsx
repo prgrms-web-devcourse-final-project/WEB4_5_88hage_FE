@@ -7,40 +7,40 @@ import { createInquiry } from '@/lib/api/inquiry';
 // import { ContactRequest } from '@/types/inquiry';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 export default function InquiryCreatePage() {
-  // let formData = new FormData();
+  const router = useRouter();
   const [images, setImages] = useState<File[]>([]);
   const API = process.env.NEXT_PUBLIC_API_URL;
-  const router = useRouter();
+  const [explain, setExplain] = useState('');
 
-  const handleDataChange = (data: File[]) => setImages(data);
+  const handleDataChange = (data: File[]) => {
+    setImages(data);
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // formData 만들기
     const formData = new FormData(e.currentTarget);
-    let formDataRequested: ContactRequest = {
-      title: '',
-      content: '',
-      category: '',
-      imagesChanged: true,
-    };
-
-    formDataRequested.title = String(formData.get('title'));
-    formDataRequested.content = String(formData.get('content'));
-    formDataRequested.category = String(formData.get('category'));
-    if (images.length > 0) formDataRequested.images = images;
+    formData.append('imagesChanged', 'true');
+    if (images.length > 0) {
+      images.forEach((image) => formData.append('images', image));
+    }
 
     // API
-    createInquiry(formDataRequested)
-      .then((response) => {
-        toast.info(response.data);
-        router.push('/inquiry');
-      })
-      .catch((error) => toast.error(error));
+    const response = await fetch(`${API}/api/contacts`, {
+      method: 'POST',
+      body: formData,
+      credentials: 'include',
+    });
+    const { code, message, data } = await response.json();
+    console.log(`${code}, ${message}, ${data}`);
+    if (code === '0000') {
+      toast.info(data);
+      router.push('/user/inquiry');
+    } else toast.error(message);
   };
 
   return (
@@ -78,6 +78,8 @@ export default function InquiryCreatePage() {
           placeholder="문의에 관한 내용을 자세히 적어주세요."
           isRequired
           isLongForm
+          value={explain}
+          onChange={(e) => setExplain(e.target.value)}
         />
 
         <AddPhotoButton multiple onDataChange={handleDataChange} />

@@ -6,7 +6,6 @@ import signupImg from '@/assets/images/signUpImg.png';
 import Input from '@/components/common/Input';
 import Checkbox from '@/components/common/Checkbox';
 import { FormEvent, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useSignupStore } from '@/stores/signupStore';
 import SearchAddressModal from '@/components/auth/SearchAddressModal';
 import { toast } from 'react-toastify';
@@ -26,9 +25,9 @@ export default function Signup() {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const API = process.env.NEXT_PUBLIC_API_URL;
-  const [requiredAlert, setRequiredAlert] = useState(false);
+  // const [requiredAlert, setRequiredAlert] = useState(false);
   const { userData, setData } = useSignupStore((state) => state);
-  const router = useRouter();
+  // const router = useRouter();
 
   const nicknameCheck = /^[가-힣a-zA-Z0-9]{2,10}$/;
   const emailCheck = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;

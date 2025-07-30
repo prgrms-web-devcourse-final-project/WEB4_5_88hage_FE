@@ -6,13 +6,27 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const PAGE_SIZE = 10;
 
+type NoticeRaw = {
+  id: number;
+  category?: string;
+  title: string;
+  createdAt: string;
+};
+
+type Notice = {
+  id: number;
+  category: string;
+  content: string;
+  date: string;
+};
+
 export default function NoticeContent() {
-  const [notices, setNotices] = useState([]);
+  const [notices, setNotices] = useState<Notice[]>([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
-const API = process.env.NEXT_PUBLIC_API_URL;
-  // 공지사항 리스트 불러오기
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
   const getNoticeList = async (pageNum = 0) => {
     try {
       const response = await fetch(
@@ -20,13 +34,13 @@ const API = process.env.NEXT_PUBLIC_API_URL;
       );
       const res = await response.json();
       setNotices(
-        (res.data?.content || []).map((n) => ({
-          id: n.id,
-          category: n.category || "공지",
-          content: n.title,
-          date: n.createdAt?.split("T")[0].replace(/-/g, "."),
-        }))
-      );
+  (res.data?.content || []).map((n: NoticeRaw) => ({
+    id: n.id,
+    category: n.category || "공지",
+    content: n.title,
+    date: n.createdAt?.split("T")[0].replace(/-/g, "."),
+  }))
+);
       setTotalPages(res.data?.totalPages || 1);
     } catch (error) {
       console.log("공지사항 정보를 불러오는데 실패했습니다 :", error);
@@ -35,6 +49,7 @@ const API = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     getNoticeList(page);
+    // eslint-disable-next-line
   }, [page]);
 
   // 페이지 번호 배열 생성
@@ -58,10 +73,14 @@ const API = process.env.NEXT_PUBLIC_API_URL;
             <thead className="hidden lg:table-header-group">
               <tr className="border-b-2 border-[#383838]">
                 <th className="px-4 pt-1 lg:pb-5 align-top leading-none text-center text-[#06ce9e] font-semibold w-[100px]">
-  카테고리
-</th>
-                <th className="px-8 pt-1 lg:pb-5 align-top leading-none text-center text-white font-medium">제목</th>
-                <th className="px-15 pt-1 lg:pb-5 align-top leading-none text-right text-white font-medium whitespace-nowrap w-[112px]">등록일</th>
+                  카테고리
+                </th>
+                <th className="px-8 pt-1 lg:pb-5 align-top leading-none text-center text-white font-medium">
+                  제목
+                </th>
+                <th className="px-15 pt-1 lg:pb-5 align-top leading-none text-right text-white font-medium whitespace-nowrap w-[112px]">
+                  등록일
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -72,8 +91,8 @@ const API = process.env.NEXT_PUBLIC_API_URL;
                   onClick={() => router.push(`/notice/${n.id}`)}
                 >
                   <td className="text-center lg:table-cell lg:py-6 lg:align-top text-[#06CE9E] font-semibold whitespace-nowrap px-4 w-[100px]">
-  {n.category}
-</td>
+                    {n.category}
+                  </td>
                   <td className="text-sm lg:text-base px-8 lg:py-6 py-1 lg:align-top text-white break-words">
                     {n.content}
                   </td>
@@ -95,23 +114,22 @@ const API = process.env.NEXT_PUBLIC_API_URL;
           >
             <ChevronLeft size={16} />
           </button>
-          {pageButtons.slice(
-            Math.max(0, page - 2),
-            Math.min(totalPages, page + 3)
-          ).map((p) => (
-            <button
-              key={p}
-              className={`
-                px-3 py-1 rounded-full transition
-                ${p === page + 1
-                  ? "bg-[#06CE9E] text-black"
-                  : "hover:bg-[#3E3E5E] hover:text-white"}
-              `}
-              onClick={() => setPage(p - 1)}
-            >
-              {p}
-            </button>
-          ))}
+          {pageButtons
+            .slice(Math.max(0, page - 2), Math.min(totalPages, page + 3))
+            .map((p) => (
+              <button
+                key={p}
+                className={`
+                  px-3 py-1 rounded-full transition
+                  ${p === page + 1
+                    ? "bg-[#06CE9E] text-black"
+                    : "hover:bg-[#3E3E5E] hover:text-white"}
+                `}
+                onClick={() => setPage(p - 1)}
+              >
+                {p}
+              </button>
+            ))}
           <button
             className="p-2 hover:text-white transition"
             disabled={page + 1 >= totalPages}

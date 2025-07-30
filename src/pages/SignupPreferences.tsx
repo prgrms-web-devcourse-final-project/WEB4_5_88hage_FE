@@ -4,7 +4,6 @@ import thinking from '@/assets/images/thinking.svg';
 import tagspageImg from '@/assets/images/tagspageImg.png';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import { useSignupStore } from '@/stores/signupStore';
 import { toast } from 'react-toastify';
 

@@ -22,6 +22,11 @@ interface EditProfileModalProps {
   onAccountDelete: () => void;
 }
 
+type VerifyNicknameResponse =
+  | { code: '0000'; message: string; reason: null; data: string }
+  | { code: '4000' | '4014'; message: string; reason: string | null; data: { nickname?: string } }
+  | { code: string; message: string; reason?: string | null; data?: { nickname?: string | undefined; } };
+
 export default function EditProfileModal({
   isOpen,
   onClose,
