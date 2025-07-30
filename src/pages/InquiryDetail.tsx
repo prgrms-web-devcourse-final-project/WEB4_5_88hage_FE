@@ -3,7 +3,7 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 //import Greeting from '@/components/common/Greeting';
 import { toast } from 'react-toastify';
 
@@ -22,7 +22,8 @@ export default function InquiryDetail({ id }: { id: string }) {
   const API = process.env.NEXT_PUBLIC_API_URL;
   const [inquiryData, setInquiryData] = useState<InquiryData>();
   const router = useRouter();
-  const fetchData = async () => {
+
+  const fetchData = useCallback(async () => {
     try {
       const response = await fetch(`${API}/api/contacts/${id}`, {
         credentials: 'include',
@@ -37,7 +38,8 @@ export default function InquiryDetail({ id }: { id: string }) {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [API, id, router]);
+
   const convertTime = (createdAt: string) => {
     const date = new Date(createdAt);
     date.setHours(date.getHours() + 9);
@@ -46,7 +48,7 @@ export default function InquiryDetail({ id }: { id: string }) {
 
   useEffect(() => {
     fetchData();
-  }, [id]);
+  }, [id, fetchData]);
 
   return (
     <>

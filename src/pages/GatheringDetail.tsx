@@ -32,7 +32,7 @@ export default function GatheringDetail({ data }: { data: GroupDetail }) {
   useEffect(() => {
     console.log(data.leaderImgUrl);
     if (user?.email === relatedGroups[0].leaderEmail) SetShowEditDots(true);
-  }, [user]);
+  }, [user, data.leaderImgUrl, relatedGroups]);
 
   const deleteGathering = async (id: number) => {
     try {
