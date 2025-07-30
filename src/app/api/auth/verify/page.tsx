@@ -5,10 +5,10 @@ import { useSignupStore } from '@/stores/signupStore';
 import { useEffect } from 'react';
 import { toast } from "react-toastify";
 
-export default function page() {
+export default function Page() {
   const searchParams = useSearchParams();
   const code = searchParams?.get('code');
-  const { isVerified, setVerified } = useSignupStore();
+  const { setVerified } = useSignupStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function page() {
         setVerified(false);
         toast.error(error.response.data.message);
       });
-  }, []);
+  }, [code,router,setVerified]);
 
   return (
     <div className="flex h-screen w-screen items-center justify-center">

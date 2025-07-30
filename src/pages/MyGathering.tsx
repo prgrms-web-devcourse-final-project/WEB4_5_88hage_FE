@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import GatheringChatting from '@/components/GatheringChatting';
 import GatheringMain from '@/components/GatheringMain';
 import GatheringSide from '@/components/GatheringSide';
@@ -10,7 +10,7 @@ import { getLastChatHistory } from '@/lib/api/chat';
 import { HashLoader } from 'react-spinners';
 
 export default function MyGathering() {
-  const router = useRouter();
+  // const router = useRouter();
   const [selectedGathering, setSelectedGathering] =
     useState<GroupDetail | null>(null);
   const [activeTab, setActiveTab] = useState<'my-gathering' | 'chat'>(
