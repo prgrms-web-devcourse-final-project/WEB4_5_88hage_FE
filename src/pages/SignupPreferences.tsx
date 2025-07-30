@@ -72,7 +72,7 @@ export default function SignupPreferences({ isOAuth }: { isOAuth?: boolean }) {
       clearAll();
       localStorage.removeItem('signup-store');
     }
-  }, [userData]);
+  },);
 
   const tagSelectHandler = (
     type: string,
