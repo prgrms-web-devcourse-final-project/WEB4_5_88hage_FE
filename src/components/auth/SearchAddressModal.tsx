@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { searchAddress } from '@/lib/utils/getAddressXYGeocode';
@@ -24,6 +25,7 @@ export default function SearchAddressModal({
 
   //지번 선택시 data로 결과값이 넘어온다.
   const onCompletePost = async (data: any) => {
+    console.log(data)
     const xyCoordinate = await searchAddress(data.address);
 
     if (xyCoordinate) {
