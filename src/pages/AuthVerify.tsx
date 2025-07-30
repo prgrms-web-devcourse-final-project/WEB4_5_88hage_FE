@@ -1,9 +1,7 @@
 'use client';
-import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSignupStore } from '@/stores/signupStore';
 import { useEffect } from 'react';
-import { toast } from 'react-toastify';
 
 export default function AuthVerify() {
   const searchParams = useSearchParams();
@@ -27,7 +25,7 @@ export default function AuthVerify() {
           router.push('/signup/tags');
         } else setVerified(false);
       });
-  }, [code, router, setVerified]);
+  }, [code, router, setVerified,API]);
 
   return (
     <div className="flex h-screen w-screen items-center justify-center">

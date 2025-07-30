@@ -2,14 +2,8 @@ import GatheringDetail from '@/pages/GatheringDetail';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
-type PageProps = {
-  params: {
-    gatheringId: string;
-  };
-};
-
-export default async function Page({ params }: PageProps) {
-  const { gatheringId } = params;
+export default async function Page({ params }: { params: Promise<{gatheringId: string;}>;}) {
+  const { gatheringId } = await params;
   const getGatheringDetail = async () => {
     try {
       const response = await fetch(`${baseUrl}/api/groups/${gatheringId}`,{
