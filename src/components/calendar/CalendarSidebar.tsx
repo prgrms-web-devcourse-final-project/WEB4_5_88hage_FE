@@ -19,12 +19,15 @@ export default function CalendarSidebar({selectDate, selectListData, setSelectLi
             <Undo2 className='lg:hidden cursor-pointer text-[#fff] mr-[10px] text-[14px]'/>
         </div>
         <ul className='h-full max-h-[calc(100%-65px)] overflow-y-auto scrollbar-hide'>
-          {selectListData.map((info) => {
-          return <li className='mb-[10px]' key={Number(info.calendarId)}>
-            <CalendarCard info={info} setSelectListData={setSelectListData} setCalendarData={setCalendarData}/>
-          </li>
+          {
+            selectListData.length === 0 ? 
+            <li className='h-full w-full flex items-center justify-center text-[#5E5E5E]'>일정이 없습니다.</li>
+            :
+            selectListData.map((info) => {
+            return <li className='mb-[10px]' key={Number(info.calendarId)}>
+              <CalendarCard info={info} setSelectListData={setSelectListData} setCalendarData={setCalendarData}/>
+            </li>})
           }
-          )}
         </ul>
     </div>
     </>

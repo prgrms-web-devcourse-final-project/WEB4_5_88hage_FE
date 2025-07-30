@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiMenuAltLeft } from 'react-icons/bi';
 import Navigation from '../Navigation';
 import MenuBar from './MenuBar';
@@ -7,12 +7,29 @@ import Logo from '../common/Logo';
 
 export default function Header() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   return (
     <>
       {/* 헤더 전체 컨테이너 */}
       <header className="fixed top-0 z-30 flex w-full flex-col">
         {/* 네비게이션 영역 */}
-        <div className="flex h-[50px] items-center justify-between bg-black/30 px-6 backdrop-blur-sm lg:h-[65px]">
+        <div
+          className={[
+            'flex h-[50px] items-center justify-between px-6 backdrop-blur-sm lg:h-[65px]',
+            isScrolled ? 'bg-black/30' : 'bg-transparent'
+          ].join(' ')}
+        >
           {/* 로고 */}
           <div className="relative mt-6 h-[40px] w-[80px] lg:h-[50px] lg:w-[120px]">
             <Logo />

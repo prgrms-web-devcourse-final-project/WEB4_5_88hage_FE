@@ -3,12 +3,14 @@
 import CalendarContainer from '@/components/calendar/CalendarContainer';
 import CalendarSidebar from '@/components/calendar/CalendarSidebar';
 import { getMonthlyCalendar } from '@/lib/api/calendar';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
+import Spinner from '@/components/common/Spinner';
 
 export default function MyCalendar() {
   const date = new Date();
+  const [loading,setLoading] = useState(true);
   
   //사용자 전체 일정 대한 이벤트 리스트
   const [calendarData,setCalendarData] = useState<CalendarEventList>([]);
@@ -23,7 +25,15 @@ export default function MyCalendar() {
     year: date.getFullYear(),
   });
 
+  const isFirstLoad = useRef(true)
+
   useEffect(()=>{
+
+    if(isFirstLoad){
+      setLoading(true);
+    }
+
+    setLoading(true);
     //년, 월이 변경 되면 매달 받아올 데이터를 패칭
     const getMonthCalendarDate = async (year:number, month:number) => {
       try{
@@ -55,12 +65,21 @@ export default function MyCalendar() {
 
       }catch(error){
         console.log('캘린더 정보를 불러오는데 실패 했습니다.',error)
+      } finally {
+        setLoading(false);
+        isFirstLoad.current = false;
       }
     }
 
     getMonthCalendarDate(+selectDate.year, +selectDate.month);
 
   },[selectDate.month,selectDate.year,selectDate.date]);
+
+  if (loading) {
+    return (
+      <Spinner/>
+    );
+  }
 
   return (
     <>
