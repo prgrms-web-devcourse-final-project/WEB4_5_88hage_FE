@@ -76,7 +76,8 @@ export default function SignupPreferences({ isOAuth }: { isOAuth?: boolean }) {
   useEffect(() => {
     if (userData && !isOAuth) {
       loginInThisPage();
-   });
+    }
+  });
 
   const tagSelectHandler = (
     type: string,
