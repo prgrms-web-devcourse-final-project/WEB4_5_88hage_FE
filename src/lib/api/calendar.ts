@@ -1,4 +1,5 @@
 // import { CalendarContentRequest } from '@/types/global';
+import { CalendarContent, DailyCalendar, ServiceResponse } from '@/types/api';
 import { get, post, del, patch } from './fetchInstance';
 
 // 캘린더 일정 등록 - 예약하기
@@ -29,8 +30,10 @@ export const getDailyCalendar = async (
   year: number,
   month: number,
   day: number,
-) => {
-  return get(`/api/calendars/daily?year=${year}&month=${month}&day=${day}`);
+): Promise<ServiceResponse<DailyCalendar[]>> => {
+  return get<ServiceResponse<DailyCalendar[]>>(
+    `/api/calendars/daily?year=${year}&month=${month}&day=${day}`,
+  );
 };
 
 // 컨텐츠 일별 일정 조회
@@ -44,7 +47,7 @@ export const getCalendarForContent = async (params?: {
   page: number;
   size: number;
   sort: string[];
-}) => {
+}): Promise<ServiceResponse<CalendarContent[]>> => {
   const defaultParams = {
     pastIncluded: true,
     page: 0,

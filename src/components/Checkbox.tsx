@@ -27,7 +27,7 @@ export default function Checkbox({ label, ...props }: CheckboxProps) {
           />
         </svg>
       </span>
-      {label && <span className="t4 font-semibold">{label}</span>}
+      {label && <span className="text-[16px] font-semibold">{label}</span>}
     </label>
   );
 }

@@ -3,7 +3,6 @@
 import { useForm } from 'react-hook-form';
 import GrayButton from '@/components/button/GrayButton';
 import Input from '@/components/common/Input';
-import logo from '@/assets/images/logo.png';
 import loginBgImg from '@/assets/images/loginBgImg.png';
 import LoginButton from '@/components/button/LoginButton';
 import Checkbox from '@/components/Checkbox';
@@ -11,6 +10,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/stores/UseAuthStore';
+import Logo from '@/components/common/Logo';
 
 export default function Login() {
   const {
@@ -44,14 +44,7 @@ export default function Login() {
     <div className="relative flex h-screen w-screen">
       {/* 왼쪽(데스크탑 뷰): 배경  */}
       <div className="hidden w-1/2 bg-black lg:flex lg:items-center lg:justify-center">
-        <Image
-          width={200}
-          height={200}
-          alt="로고"
-          src={logo}
-          className="top-[300px] left-[420px] mb-5 hidden lg:absolute lg:block"
-          priority
-        />
+        <Logo className="absolute top-10 left-10" />
         <Image
           alt="로그인 이미지"
           src={loginBgImg}
@@ -115,6 +108,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => router.push('/login/password-change')}
+                className='text-[16px] font-semibold'
               >
                 비밀번호 찾기
               </button>

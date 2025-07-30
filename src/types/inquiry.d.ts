@@ -9,6 +9,7 @@ declare interface Inquiry {
   status: string;
   title: string;
   user_id: string;
+  content: string;
 }
 
 declare interface ContactRequest {
