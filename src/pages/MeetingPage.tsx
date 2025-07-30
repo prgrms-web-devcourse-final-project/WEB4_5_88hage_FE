@@ -281,15 +281,15 @@ const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
                   </div>
                 ) : (
                   <PostCard
-                  className="rounded-[5px] overflow-hidden"
-                   key={`${group.id}-${idx}`} group={group} />
+                  key={`${group.id}-${idx}`} group={group} />
                 )
               )
             ) : (
               <div className="col-span-4 text-center text-[#aaa] py-10">
                 검색 결과가 없습니다.
               </div>
-            )}
+            )
+            }
           </div>
         )}
       </div>

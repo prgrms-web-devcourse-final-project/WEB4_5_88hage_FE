@@ -54,8 +54,8 @@ function formatDate(date: Date | null) {
       formatDate(endDate)
     );
     setAddress("");
-    setStartDate("");
-    setEndDate("");
+    setStartDate(null);
+    setEndDate(null);
   };
   
 type AddressData = {

@@ -7,10 +7,10 @@ type GroupItem = {
   id: number;
   title: string;
   imageUrl: string;
-  simpleExplain: string;
-  placeName: string;
-  leaderNickname?: string;
-  groupDate?: string;
+  leaderNickname: string;
+  groupDate: string;
+  simpleExplain?: string;
+  reason?:string;
 };
 
 type PostCardProps = {
