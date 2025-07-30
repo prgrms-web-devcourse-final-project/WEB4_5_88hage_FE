@@ -1,13 +1,11 @@
-import GatheringEditPage from '@/pages/GatheringEditPage';
+import GateringEditPageComponent from '@/components/GateringEditPageComponent';
 
 interface GatheringEditPageProps {
-  params: Promise<{ gatheringId: number }>;
+  params: Promise<{ gatheringId: string }>;
 }
 
-export default function page({ params }: GatheringEditPageProps) {
-  return (
-    <>
-      <GatheringEditPage params={params} />
-    </>
-  );
+export default async function page({ params }: GatheringEditPageProps) {
+  const { gatheringId } = await params;
+
+  return <GateringEditPageComponent gatheringId={Number(gatheringId) || 1} />;
 }

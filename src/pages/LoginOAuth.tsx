@@ -1,7 +1,7 @@
 'use client';
 import SearchAddressModal from '@/components/auth/SearchAddressModal';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Input from '@/components/common/Input';
 import { useRouter } from 'next/navigation';
 import Checkbox from '@/components/common/Checkbox';
@@ -27,7 +27,7 @@ export default function LoginOAuth() {
 
   const nicknameCheck = /^[가-힣a-zA-Z0-9]{2,10}$/;
 
-  const getUserInfo = async () => {
+  const getUserInfo = useCallback(async () => {
     const response = await fetch(`${API}/api/users/info`, {
       method: 'GET',
       credentials: 'include',
@@ -38,11 +38,11 @@ export default function LoginOAuth() {
       alert('이미 가입된 사용자입니다.');
       router.push('/');
     } else setIsLoading(false);
-  };
+  }, [API, router]);
 
   useEffect(() => {
     getUserInfo();
-  },);
+  }, [getUserInfo]);
 
   const handleCheckChange = (id: string) => {
     const isChecked = checkedList.includes(id);
@@ -111,7 +111,7 @@ export default function LoginOAuth() {
           {isLoading && <div className="text-white"></div>}
           {!isLoading && (
             <>
-              <Logo className="absolute top-[26px] left-[40px] hidden lg:block"/>
+              <Logo className="absolute top-[26px] left-[40px] hidden lg:block" />
               <form
                 id="oAuthFormId"
                 onSubmit={handleLoginOAuth2}

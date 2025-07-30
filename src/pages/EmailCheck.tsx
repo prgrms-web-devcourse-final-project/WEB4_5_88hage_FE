@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import email from '../assets/images/email.svg';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -50,22 +50,25 @@ export default function EmailCheck({
     } else toast.error(message);
   };
 
-  const codeEvent = async (c: string) => {
-    const response = await fetch(
-      `${API}//api/users/verify/code/${emailInput}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: c }),
-        credentials: 'include',
-      },
-    );
-    const { code, message } = await response.json();
-    if (code === '0000') {
-      toast.info(message);
-      if (next) next(emailInput);
-    } else toast.info(message);
-  };
+  const codeEvent = useCallback(
+    async (c: string) => {
+      const response = await fetch(
+        `${API}//api/users/verify/code/${emailInput}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: c }),
+          credentials: 'include',
+        },
+      );
+      const { code, message } = await response.json();
+      if (code === '0000') {
+        toast.info(message);
+        if (next) next(emailInput);
+      } else toast.info(message);
+    },
+    [API, emailInput, next],
+  );
 
   const codeSubmit: SubmitHandler<FormValues> = (d) => {
     const { c1, c2, c3, c4, c5, c6 } = d;
@@ -74,7 +77,7 @@ export default function EmailCheck({
 
   useEffect(() => {
     if (codeInput.length === 6) codeEvent(codeInput);
-  },);
+  }, [codeInput, codeEvent]);
 
   return (
     <form

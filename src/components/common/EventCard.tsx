@@ -3,19 +3,20 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-type EventItem = {
-  id: number;
-  imageUrl?: string;
-  title: string;
-  simpleExplain?: string;
-  during?: string;
-};
-
-type EventCardProps = {
-  event: EventItem;
-};
-
-export default function EventCard({ event }: EventCardProps) {
+export default function EventCard({
+  event,
+}: {
+  event: {
+    id: number;
+    title: string;
+    simpleExplain: string;
+    during: string;
+    imageUrl: string;
+    address: string | undefined;
+    eventType: string | undefined;
+  };
+  className?: string;
+}) {
   const router = useRouter();
   if (!event) return null;
 
@@ -25,11 +26,7 @@ export default function EventCard({ event }: EventCardProps) {
 
   return (
     <div
-      className="hover-gradient relative w-full cursor-pointer overflow-hidden rounded-[5px] bg-black text-white
-        transition-transform duration-200
-        hover:scale-[1.04] hover:z-20
-        hover:shadow-[0_8px_32px_rgba(44,64,255,0.18)]
-        focus:outline-none"
+      className="hover-gradient relative w-full cursor-pointer overflow-hidden rounded-[5px] bg-black text-white transition-transform duration-200 hover:z-20 hover:scale-[1.04] hover:shadow-[0_8px_32px_rgba(44,64,255,0.18)] focus:outline-none"
       onClick={handleClick}
       role="button"
       tabIndex={0}
@@ -47,8 +44,8 @@ export default function EventCard({ event }: EventCardProps) {
 
       <div className="h-[120px] bg-[#1b1b1b] p-3">
         <h2 className="t3 mb-2">{event.title}</h2>
-        <p className="mb-5 text-[14px] text-[#ffffff] whitespace-pre-line">
-          {event.simpleExplain ?? ""}
+        <p className="mb-5 text-[14px] whitespace-pre-line text-[#ffffff]">
+          {event.simpleExplain ?? ''}
         </p>
         {!!event.during && event.during !== '- ~ -' && (
           <p className="text-[14px] text-[#bdbdbd]">{event.during}</p>

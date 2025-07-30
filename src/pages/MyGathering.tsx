@@ -65,12 +65,7 @@ export default function MyGathering() {
     } finally {
       setLoading(false);
     }
-  }, [
-    setLoading,
-    setMyGatherings,
-    setLastMessages,
-    setError,
-  ]);
+  }, []);
 
   useEffect(() => {
     fetchData();
