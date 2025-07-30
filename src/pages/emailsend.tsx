@@ -2,7 +2,6 @@
 import Image from 'next/image';
 import EmailImage from '@/assets/images/email.svg';
 import { FormEvent } from 'react';
-import axios from 'axios';
 import { useSignupStore } from '@/stores/signupStore';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
