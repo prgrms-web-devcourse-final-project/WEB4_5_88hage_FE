@@ -13,10 +13,15 @@ export default function EventCard({ event }) {
 
   return (
     <div
-      className="hover-gradient relative w-full cursor-pointer overflow-hidden rounded-[5px] bg-black text-white"
+      className="hover-gradient relative w-full cursor-pointer overflow-hidden rounded-[5px] bg-black text-white
+        transition-transform duration-200
+        hover:scale-[1.04] hover:z-20
+        hover:shadow-[0_8px_32px_rgba(44,64,255,0.18)]
+        focus:outline-none"
       onClick={handleClick}
       role="button"
       tabIndex={0}
+      style={{ willChange: 'transform' }}
     >
       <div className="relative h-[240px] w-full">
         <Image

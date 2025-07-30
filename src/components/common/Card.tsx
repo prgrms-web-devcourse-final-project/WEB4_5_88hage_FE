@@ -3,15 +3,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-// function formatDuration(minutes) {
-//   if (!minutes && minutes !== 0) return '-';
-//   const h = Math.floor(minutes / 60);
-//   const m = minutes % 60;
-//   if (h === 0) return `${m}분`;
-//   if (m === 0) return `${h}시간`;
-//   return `${h}시간 ${m}분`;
-// }
-
 export default function PostCard({ group }) {
   const router = useRouter();
 
@@ -23,10 +14,17 @@ export default function PostCard({ group }) {
 
   return (
     <div
-      className="hover-gradient relative w-full cursor-pointer overflow-hidden rounded-[5px] bg-black text-white"
+      className="
+        hover-gradient relative w-full cursor-pointer overflow-hidden rounded-[5px] bg-black text-white
+        transition-transform duration-200
+        hover:scale-[1.04] hover:z-20
+        hover:shadow-[0_8px_32px_rgba(44,64,255,0.18)]
+        focus:outline-none
+      "
       onClick={handleClick}
       role="button"
       tabIndex={0}
+      style={{ willChange: 'transform' }}
     >
       {/* 썸네일 */}
       <div className="relative h-[240px] w-full">
@@ -44,11 +42,11 @@ export default function PostCard({ group }) {
         <p className="mb-5 text-[14px] text-[#ffffff]">주최자: {group.leaderNickname}</p>
         <p className="text-[14px] text-[#bdbdbd]">
           시작일: {group.groupDate
-    ? (() => {
-        const d = group.groupDate.split("T")[0].split("-");
-        return `${d[1]}.${d[2]}`;
-      })()
-    : "미정"}
+            ? (() => {
+                const d = group.groupDate.split("T")[0].split("-");
+                return `${d[1]}.${d[2]}`;
+              })()
+            : "미정"}
         </p>
       </div>
     </div>

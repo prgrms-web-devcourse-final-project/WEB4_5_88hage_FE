@@ -20,6 +20,7 @@ export default function GatheringCreatePage() {
   const [address, setAddress] = useState('');
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+  const [explain, setExplain] = useState('');
 
   const router = useRouter();
   const handleDataChange = (data: File[]) => setImages(data);
@@ -188,6 +189,8 @@ export default function GatheringCreatePage() {
           placeholder="모임에 관한 소개를 작성 해주세요."
           isRequired
           isLongForm
+          value={explain}
+          onChange={(e) => setExplain(e.target.value)}
         />
 
         <AddPhotoButton
