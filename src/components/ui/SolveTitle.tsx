@@ -13,10 +13,10 @@ export default function SolveTitle(
   return (
     <>
     <div className="w-[160px] min-w-[160px] lg:w-[279px] flex flex-col mb-[30px]">
-        <div className="w-[34px] h-[34px] lg:w-[68px] lg:h-[68px] relative">
+        <div className="w-[40px] h-[40px] lg:w-[68px] lg:h-[68px] relative">
            <Image src={img} alt={altText} fill className="object-contain"/>
         </div>
-        <p className="text-[36px] lg:text-[64px] w-full text-gray-default leading-none">
+        <p className="text-[36px] lg:text-[64px] w-full text-gray-default leading-[77px]">
             {text}
             <strong>
                 {strongText}
