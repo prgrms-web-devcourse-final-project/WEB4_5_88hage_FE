@@ -1,6 +1,7 @@
 'use client';
 import { CircleX } from 'lucide-react';
-import { ChangeEvent, useEffect, useState } from 'react';
+import Image from 'next/image';
+import { ChangeEvent, useCallback, useState } from 'react';
 import { FaCamera } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
 
@@ -29,7 +30,7 @@ export default function AddPhotoButton({
     setImageList((prev) => prev.filter((v) => v !== file));
   };
 
-  useEffect(() => {
+  useCallback(() => {
     if (onDataChange) onDataChange(imageList);
   }, [imageList]);
 
@@ -53,11 +54,11 @@ export default function AddPhotoButton({
                 className="relative size-[50px] rounded-[5px] border border-[#343434] lg:size-[80px]"
                 key={index}
               >
-                <img
+                <Image
                   src={URL.createObjectURL(item)}
                   alt=""
-                  key={index}
                   className="size-full rounded-[5px] object-cover object-center"
+                  fill
                 />
                 <div className="bg-bg-color absolute top-0 left-0 size-full rounded-[5px] opacity-50"></div>
                 <button
