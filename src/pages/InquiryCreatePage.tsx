@@ -3,7 +3,6 @@ import GrayButton from '@/components/button/GrayButton';
 import CategorySelect from '@/components/layout/CategorySelect';
 import WritingForm from '@/components/layout/WritingForm';
 import AddPhotoButton from '@/components/ui/AddPhotoButton';
-import { createInquiry } from '@/lib/api/inquiry';
 // import { ContactRequest } from '@/types/inquiry';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
