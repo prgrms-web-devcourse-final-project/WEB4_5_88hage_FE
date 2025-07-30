@@ -5,6 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import '@/assets/styles/datepicker.css';
 import { ko } from 'date-fns/locale/ko';
 import { toast } from 'react-toastify';
+import { HashLoader } from 'react-spinners';
 
 registerLocale('ko', ko);
 
@@ -95,7 +96,11 @@ export default function AIrecommendButton({
         }}
         disabled={disabled || loading}
       >
-        {loading ? '로딩중...' : '빠른 AI 추천 ✨'}
+        {loading ? (
+  <HashLoader color="#36d7b7" size={18} />
+) : (
+  "빠른 추천 받기 ✨"
+)}
       </button>
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
