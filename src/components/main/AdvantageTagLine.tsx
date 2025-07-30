@@ -13,7 +13,7 @@ interface ShrinkBlockProps {
 }
 
 function ShrinkBlock({ children }: ShrinkBlockProps) {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: ref,
