@@ -1,17 +1,18 @@
 'use client';
 import SearchAddressModal from '@/components/auth/SearchAddressModal';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Input from '@/components/common/Input';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import Checkbox from '@/components/common/Checkbox';
 import { useSignupStore } from '@/stores/signupStore';
 import SignupPreferences from './SignupPreferences';
 import Logo from '@/components/common/Logo';
+import { toast } from 'react-toastify';
 
 export default function LoginOAuth() {
   const API = process.env.NEXT_PUBLIC_API_URL;
-  const router = useRouter();
+  // const router = useRouter();
   const { setData, setVerified } = useSignupStore();
   const [maleSelected, setMaleSelected] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -27,22 +28,22 @@ export default function LoginOAuth() {
 
   const nicknameCheck = /^[가-힣a-zA-Z0-9]{2,10}$/;
 
-  const getUserInfo = useCallback(async () => {
-    const response = await fetch(`${API}/api/users/info`, {
-      method: 'GET',
-      credentials: 'include',
-    });
-    const { data } = await response.json();
-    console.log(data);
-    if (!!data.gender) {
-      alert('이미 가입된 사용자입니다.');
-      router.push('/');
-    } else setIsLoading(false);
-  }, [API, router]);
+  // const getUserInfo = async () => {
+  //   const response = await fetch(`${API}/api/users/info`, {
+  //     method: 'GET',
+  //     credentials: 'include',
+  //   });
+  //   const { data } = await response.json();
+  //   console.log(data);
+  //   if (!!data.gender) {
+  //     alert('이미 가입된 사용자입니다.');
+  //     router.push('/');
+  //   } else setIsLoading(false);
+  // };
 
   useEffect(() => {
-    getUserInfo();
-  }, [getUserInfo]);
+    setIsLoading(false);
+  }, [setIsLoading]);
 
   const handleCheckChange = (id: string) => {
     const isChecked = checkedList.includes(id);
@@ -129,7 +130,7 @@ export default function LoginOAuth() {
                     type="button"
                     onClick={async () => {
                       if (!nicknameCheck.test(nick)) {
-                        alert('닉네임이 올바른 형식이 아닙니다.');
+                        toast.error('닉네임이 올바른 형식이 아닙니다.');
                       } else {
                         const response = await fetch(
                           `${API}/api/users/verify/nickname`,
@@ -141,9 +142,9 @@ export default function LoginOAuth() {
                         );
                         const { code, message, data } = await response.json();
                         if (code === '0000') {
-                          alert(data);
+                          toast.success(data);
                           setNickChecked(true);
-                        } else alert(message);
+                        } else toast.error(message);
                       }
                     }}
                     className="absolute right-4 cursor-pointer text-sm text-[#8d8d8d]"

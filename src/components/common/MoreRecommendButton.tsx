@@ -1,3 +1,5 @@
+import { HashLoader } from "react-spinners";
+
 type Props = {
   onRecommend: () => void;
   disabled?: boolean;
@@ -24,7 +26,11 @@ export default function MoreRecommendButton({ onRecommend, disabled, loading }: 
       onClick={handleClick}
       disabled={disabled || loading}
     >
-      {loading ? "로딩중..." : "다른 추천 받기 ✨"}
+      {loading ? (
+  <HashLoader color="#36d7b7" size={18} />
+) : (
+  "다른 추천 받기 ✨"
+)}
     </button>
   );
 }
