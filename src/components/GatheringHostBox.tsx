@@ -8,23 +8,28 @@ import {
 } from '@/lib/api/follow';
 import { useEffect, useState } from 'react';
 import { toast } from "react-toastify";
+import Image from 'next/image';
+import Toast from './common/Toast';
 
 type Props = {
   hostName: string;
   hostEmail: string;
   tags: string[];
   hostExplain: string;
+  hostImg:string
 };
 export default function GatheringHostBox({
   hostName,
   hostEmail,
   tags,
   hostExplain,
+  hostImg
 }: Props) {
   const user = useAuthStore((s) => s.user);
   const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
+    console.log(hostImg)
     const checkStatus = async () => {
       if (user?.email && hostEmail !== user.email) {
         const status = await checkFollowingStatus(hostEmail);
@@ -37,11 +42,11 @@ export default function GatheringHostBox({
   const handleFollow = async () => {
     try {
       await followUser(hostEmail);
-      toast.success(`${hostName} 님을 팔로우했습니다.`);
+      Toast.success(`${hostName} 님을 팔로우했습니다.`);
       setIsFollowing(true);
     } catch (error) {
       console.error('Failed to follow user:', error);
-      toast.error('팔로우에 실패했습니다.');
+      Toast.error('팔로우에 실패했습니다.');
     }
   };
 
@@ -49,18 +54,22 @@ export default function GatheringHostBox({
     if (window.confirm(`${hostName} 님을 언팔로우하시겠습니까?`)) {
       try {
         await unfollowUser(hostEmail);
-        toast.success(`${hostName} 님이 언팔로우되었습니다.`);
+        Toast.success(`${hostName} 님이 언팔로우되었습니다.`);
         setIsFollowing(false);
       } catch (error) {
         console.error('Failed to unfollow user:', error);
-        aletoast.errorrt('언팔로우에 실패했습니다.');
+        Toast.error('언팔로우에 실패했습니다.');
       }
     }
   };
 
   return (
     <div className="flex w-full gap-[20px] rounded-[5px] border border-[#393939] p-[20px]">
-      <div className="bg-gray-3 size-[100px] rounded-full"></div>
+      <div className="size-[100px] bg-amber-200 rounded-full overflow-hidden">
+        {hostImg ? (
+            <Image src={hostImg} alt={`${hostName}의 프로필 이미지`} width={100} height={100} className="w-full object-cover"/>
+        ) : null}
+      </div>
       <div className="flex grow-1 flex-col">
         <div className="text-[18px] text-white">{hostName}</div>
         <div className="pt-[11.33px] pb-[14.33px] text-[#ababab]">

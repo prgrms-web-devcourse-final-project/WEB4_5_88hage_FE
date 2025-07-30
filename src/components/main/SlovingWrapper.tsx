@@ -38,7 +38,7 @@ export default function ScrollSnapWrapper({ children }: { children: React.ReactN
         {children.map((child, i) => (
           <section
             key={i}
-            className="h-screen w-full snap-start flex items-center justify-around"
+            className="h-screen w-full snap-start flex flex-col lg:flex-row items-center justify-around"
           >
             {child}
           </section>

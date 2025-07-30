@@ -1,13 +1,12 @@
-declare interface Calendar {
-  id: number;
-  activated: boolean;
-  content_id: number | null;
-  created_at: string;
-  group_id: number | null;
-  modified_at: string;
-  selected_date: string;
-  email: string | null;
-  type: 'CONTENT' | 'GROUP';
+type CalendarType = 'CONTENT' | 'GROUP';
+
+declare interface CalendarItem {
+  calendarId: number;
+  activityId: number;
+  title: string;
+  type: CalendarType;
+  selectedDate: string;
+  address: string;
 }
 
 declare type SelectDate = {
@@ -16,13 +15,25 @@ declare type SelectDate = {
   year:number,
 }
 
-declare type CalendarData = {
-  id:string,
-  calendarId:string,
-  activityId:string,
-  address:string,
-  title: string,
-  start:Date,
-  end:Date,
-  type:string,
+declare type CalendarData = CalendarItem[];
+
+declare interface ApiResponse<T> {
+  code: string;               
+  message: string;            
+  reason: string | null;   
+  data: T;
 }
+
+type CalendarResponse = ApiResponse<CalendarData>;
+
+declare interface CalendarEvent {
+  activityId: string;
+  calendarId: string;
+  address: string;
+  title: string;
+  start: Date;
+  end: Date;
+  type: CalendarType;
+}
+
+declare type CalendarEventList = CalendarEvent[];

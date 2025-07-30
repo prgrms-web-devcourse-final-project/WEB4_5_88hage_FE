@@ -1,19 +1,34 @@
 'use client';
 
 import DatepickerComponent from '@/components/common/DatepickerComponent';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Toast from './Toast';
 
 type Props = {
   title:string, 
   id:number, 
   setShow: Dispatch<SetStateAction<boolean>>,
+  show:boolean
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export default function SelectDate({title,id,setShow}:Props){
+export default function SelectDate({title,id,setShow,show}:Props){
     const [eventDate,setEventDate] = useState('');
+
+    useEffect(() => {
+    if (show) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [show]);
+
+  if (!show) return null;
 
     const addCalendar = async (data: { activityId: number; selectedDate: string }) => {
     try {

@@ -11,10 +11,10 @@ export default function MyCalendar() {
   const date = new Date();
   
   //전체 일정 대한 이벤트
-  const [calendarData,setCalendarData] = useState<CalendarData[]>([]);
+  const [calendarData,setCalendarData] = useState<CalendarEventList>([]);
 
   //클릭한 날의 이벤트
-  const [selectListData,setSelectListData] = useState<CalendarData[]>([]);
+  const [selectListData,setSelectListData] = useState<CalendarEventList>([]);
 
   //사용자가 선택한 날짜
   const [selectDate,setSelectDate] = useState<SelectDate>({
@@ -26,9 +26,9 @@ export default function MyCalendar() {
   useEffect(()=>{
     const getMonthCalendarDate = async () => {
       try{
-        const {data} = await getMonthlyCalendar(selectDate.year,selectDate.month);
-        console.log(data)
-        const temp = data.map(data => {
+        const {data} = await getMonthlyCalendar(selectDate.year,selectDate.month) as CalendarResponse;
+        console.log(data);
+        const temp:CalendarEventList = data.map(data => {
           const start = moment.tz(data.selectedDate, 'Asia/Seoul').toDate();
           const end = moment(start).add(1, 'hour').toDate();
           return {
@@ -40,7 +40,7 @@ export default function MyCalendar() {
           end,
           type: data.type,
         }
-      });
+      })
       setCalendarData(temp);
       }catch(error){
         console.log('캘린더 정보를 불러오는데 실패 했습니다.',error)
@@ -55,7 +55,7 @@ export default function MyCalendar() {
           <h2 className="pt-[15px] pb-[5px] pl-[10px] font-semibold text-[#fff] lg:mb-[20px] lg:pl-0 lg:text-[28px]">
             일정관리
           </h2>
-          <div className="flex w-full flex-col lg:flex lg:flex-row lg:gap-[20px]">
+          <div className="flex w-full flex-col lg:flex lg:flex-row lg:gap-[20px] lg:h-[calc(100vh-230px)]">
             <CalendarSidebar selectDate={selectDate} selectListData={selectListData} setSelectListData={setSelectListData} setCalendarData={setCalendarData}/>
             <CalendarContainer setSelectDate={setSelectDate} setSelectListData={setSelectListData} calendarData={calendarData} />
           </div>

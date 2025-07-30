@@ -12,10 +12,11 @@ import { useRouter } from 'next/navigation'
 import { EllipsisVertical } from 'lucide-react';
 import { useAuthStore } from '@/stores/UseAuthStore';
 import { deleteGroup } from '@/lib/api/group';
+import { filterGatheringCategory } from '@/lib/utils/filterCategory';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export default function GatheringDetail({data}:{data:any}) {
+export default function GatheringDetail({data}:{data:GroupDetailData}) {
   const route = useRouter();
   const [showMore,setShowMore] = useState(false);
   const [showEditDots,SetShowEditDots] = useState(false);
@@ -24,8 +25,8 @@ export default function GatheringDetail({data}:{data:any}) {
   const{ relatedGroups } = data;
 
   useEffect(()=>{
-    console.log(user)
-    if(user?.email === relatedGroups.leaderEmail) SetShowEditDots(true)
+    console.log(data.leaderImgUrl)
+    if(user?.email === relatedGroups[0].leaderEmail) SetShowEditDots(true)
   },[user])
 
   const deleteGathering = async (id:number) => {
@@ -97,7 +98,7 @@ export default function GatheringDetail({data}:{data:any}) {
           <div className="flex flex-col gap-8">
             <div className="text-2xl text-[#00e6ae]">안내 사항</div>
             <div className="flex flex-col gap-5">
-              <div>카테고리 : {data.category}</div>
+              <div>카테고리 : {filterGatheringCategory(data.category)}</div>
               <div>해쉬 태그 : {data.hashTags.join(', ')}</div>
               <div>모임 날짜 : {dateFormatting(new Date(data.groupDate))}</div>
               <div>모임 위치 : {data.address}</div>
@@ -106,16 +107,16 @@ export default function GatheringDetail({data}:{data:any}) {
               <Map lat={data.latitude} lng={data.longitude} width='100%' height='280px'/>
             </div>
           </div>
-          <GatheringHostBox hostName={data.leaderNickname} hostEmail={data.leaderEmail} tags={data.leaderHashTags} hostExplain={data.leaderExplain}/>
+          <GatheringHostBox hostName={data.leaderNickname} hostEmail={data.leaderEmail} tags={data.leaderHashTags} hostExplain={data.leaderExplain} hostImg={data.leaderImgUrl}/>
           <div className="flex flex-col gap-9">
             <div className="flex items-center justify-between">
               <div className="text-2xl text-[#00e6ae]">
                 비슷한 모임도 있어요
               </div>
-              <button className="cursor-pointer text-[#a1a1a1]">더보기</button>
+              <button onClick={() => route.push(`/gathering?category=${data.category}`)} className="cursor-pointer text-[#a1a1a1]">더보기</button>
             </div>
             <div className="flex gap-5">
-              {relatedGroups.map((data:any) => {
+              {relatedGroups.map((data:RelatedGroup) => {
                               return (
                               <div onClick={() => routing(data.id)} key={data.id}  className="flex cursor-pointer flex-col w-[calc(50%-10px)] max-w-[calc(50%-10px)] gap-[25px]">
                               <div className='w-[100%] h-[235px] overflow-hidden relative'>
@@ -140,13 +141,13 @@ export default function GatheringDetail({data}:{data:any}) {
             <div className="flex flex-col gap-5 mb-[30px]">
               <div className='w-full h-fit flex justify-between'>
                 <div className="gradient-border self-start px-6 py-2.5 flex items-center">
-                  {data.category} 🍔
+                  {filterGatheringCategory(data.category)}
                 </div>
                 {showEditDots && <div className='w-fit h-fit relative'>
                   <EllipsisVertical onClick={() => SetShowEditBox(prev => !prev)} className='cursor-pointer'/>
                   {showEditBox &&                  
                   <div className='w-[80px] flex flex-col bg-[#252525] border border-[rgba(192,192,192,.4)] rounded-[5px] text-[#fff] absolute z-5'>
-                    <button className='w-full h-[44px] flex items-center justify-center hover:text-main'>수정</button>
+                    <button onClick={() => route.push(`/gathering/${data.id}/edit`)} className='w-full h-[44px] flex items-center justify-center hover:text-main'>수정</button>
                     <button onClick={() => deleteGathering(data.id)} className='w-full h-[44px] flex items-center justify-center hover:text-main'>삭제</button>
                   </div>
                     }

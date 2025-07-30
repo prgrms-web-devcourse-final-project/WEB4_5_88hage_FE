@@ -46,3 +46,45 @@ interface GetContentsParams {
   size?: number;
   sort?: string[];
 }
+
+declare interface ImagesArray {
+  id: number;
+  imageUrl: string
+}
+
+interface UrlsArray {
+  id: number;
+  siteName: string;
+  url: string;
+}
+
+declare interface ContentItem {
+  id: number;
+  externalId: string | null;
+  contentTitle: string;
+  age: string;
+  fee: string;
+  startDate: string;    
+  endDate: string;
+  address: string;
+  area: string;
+  guname: string;
+  time: string;
+  runTime: string;
+  startTime: string;
+  poster: string;
+  description: string | null;
+  category: string;      
+  images: ImagesArray[];          
+  urls: UrlsArray[];            
+  eventType: string;      
+  bookmarkCount: number;
+  latitude: number;
+  longitude: number;
+}
+
+declare interface EventData {
+  content: ContentItem;
+  related: ContentItem[];
+  nearby: ContentItem[];
+}
