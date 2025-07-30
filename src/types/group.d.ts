@@ -29,7 +29,7 @@ declare interface Group {
   title?: string;
 }
 
-declare interface GroupDetailData {
+declare interface GroupDetail {
   id: number;
   title: string;
   explain: string;
@@ -55,6 +55,9 @@ declare interface GroupDetailData {
   hashTags: string[];
   activated: boolean;
   relatedGroups: RelatedGroup[];
+  isLeader?: boolean;
+  type?: string;
+  currentUserImageUrl?: string;
 }
 
 declare interface RelatedGroup {

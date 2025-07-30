@@ -11,12 +11,7 @@ declare interface GroupBookmark {
   group: number;
 }
 
-declare interface ApiResponse<T = any> {
-  code: string;
-  message: string;
-  reason?: string;
-  data: T;
-}
+
 
 declare interface MessageDTO {
   id: number;

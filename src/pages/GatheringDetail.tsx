@@ -1,14 +1,19 @@
-'use client'
+'use client';
 import Image from 'next/image';
 import test from '@/assets/images/test.png';
 import test2 from '@/assets/images/test2.png';
 import testmap from '@/assets/images/testmap.png';
-import { LucideChevronDown, LucideHeart, LucideMapPin,LucideChevronUp } from 'lucide-react';
+import {
+  LucideChevronDown,
+  LucideHeart,
+  LucideMapPin,
+  LucideChevronUp,
+} from 'lucide-react';
 import GatheringHostBox from '@/components/GatheringHostBox';
-import Map from '@/components/kakao/Map'
+import Map from '@/components/kakao/Map';
 import { useEffect, useState } from 'react';
 import Toast from '@/components/common/Toast';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 import { EllipsisVertical } from 'lucide-react';
 import { useAuthStore } from '@/stores/UseAuthStore';
 import { deleteGroup } from '@/lib/api/group';
@@ -16,84 +21,107 @@ import { filterGatheringCategory } from '@/lib/utils/filterCategory';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export default function GatheringDetail({data}:{data:GroupDetailData}) {
+export default function GatheringDetail({ data }: { data: GroupDetail }) {
   const route = useRouter();
-  const [showMore,setShowMore] = useState(false);
-  const [showEditDots,SetShowEditDots] = useState(false);
-  const [showEditBox,SetShowEditBox] = useState(false);
+  const [showMore, setShowMore] = useState(false);
+  const [showEditDots, SetShowEditDots] = useState(false);
+  const [showEditBox, SetShowEditBox] = useState(false);
   const user = useAuthStore((state) => state.user);
-  const{ relatedGroups } = data;
+  const { relatedGroups } = data;
 
-  useEffect(()=>{
-    console.log(data.leaderImgUrl)
-    if(user?.email === relatedGroups[0].leaderEmail) SetShowEditDots(true)
-  },[user])
+  useEffect(() => {
+    console.log(data.leaderImgUrl);
+    if (user?.email === relatedGroups[0].leaderEmail) SetShowEditDots(true);
+  }, [user]);
 
-  const deleteGathering = async (id:number) => {
-    try{
+  const deleteGathering = async (id: number) => {
+    try {
       const response = await deleteGroup(id);
       console.log('삭제에 성공했습니다.', response);
       Toast.success('삭제에 성공했습니다.');
       route.push('/gathering');
-    } catch(error){
+    } catch (error) {
       console.error('삭제에 실패했습니다 :', error);
       Toast.error('삭제에 실패했습니다.');
     }
-  }
+  };
 
-  const routing = (id:number) => {
-    route.push(`/gathering/${id}`)
-  }
+  const routing = (id: number) => {
+    route.push(`/gathering/${id}`);
+  };
 
   const applyGathering = async (id: number) => {
-  try {
-    const response = await fetch(`${baseUrl}/api/participants/${id}/apply`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
+    try {
+      const response = await fetch(`${baseUrl}/api/participants/${id}/apply`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        Toast.error('모임 신청에 실패했습니다.');
+        console.error(`HTTP ${response.status}:`, errorData.message);
+        throw new Error(`HTTP ${response.status}`);
+      } else {
+        Toast.success('모임 신청에 성공했습니다!');
       }
-    });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      Toast.error('모임 신청에 실패했습니다.');
-      console.error(`HTTP ${response.status}:`, errorData.message);
-      throw new Error(`HTTP ${response.status}`);
-    } else {
-      Toast.success('모임 신청에 성공했습니다!');
+      const result = await response.json();
+      console.log('참여 신청 성공:', result);
+      return result;
+    } catch (error) {
+      console.error('참여 신청 실패:', error);
+      throw error;
     }
+  };
 
-    const result = await response.json();
-    console.log('참여 신청 성공:', result);
-    return result;
-  } catch (error) {
-    console.error('참여 신청 실패:', error);
-    throw error;
-  }
-};
+  const dateFormatting = (date: Date) => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
 
-  const dateFormatting = (date:Date) => {
-          const day = date.getDate();
-          const month = date.getMonth()+1;
-          const year = date.getFullYear();
-
-    return `${year}년 ${month}월 ${day}일`
-  }
+    return `${year}년 ${month}월 ${day}일`;
+  };
   return (
     <div className="eventDetail-gradient flex w-screen min-w-screen justify-center bg-[#121212] lg:w-340">
       <div className="hidden h-full min-h-screen py-15 text-[#f6f6f6] lg:flex">
         <div className="flex w-160 flex-col gap-9 px-5">
-          <div className="w-full h-fit">
-              <Image src={data.imageUrl} alt={`${data.title} 포스트 이미지`} width={800} height={500} className="w-full h-auto object-cover"/>
+          <div className="h-fit w-full">
+            <Image
+              src={data.imageUrl}
+              alt={`${data.title} 포스트 이미지`}
+              width={800}
+              height={500}
+              className="h-auto w-full object-cover"
+            />
           </div>
           <div className="flex flex-col gap-7.5">
             <div className="text-2xl text-[#00e6ae]">상세 정보</div>
-            <div className={`overflow-hidden h-fit ${showMore ? 'max-h-none' : 'max-h-[50px]'}`}>
+            <div
+              className={`h-fit overflow-hidden ${showMore ? 'max-h-none' : 'max-h-[50px]'}`}
+            >
               {data.explain}
             </div>
-            {showMore ?<button onClick={()=> {
-              setShowMore(false)}} className="flex cursor-pointer justify-center gap-2 bg-[#1c1c1c] p-5 text-[#c3c3c3] w-full">접기 <LucideChevronUp /></button>:<button onClick={()=> setShowMore(true)} className="flex cursor-pointer justify-center gap-2 bg-[#1c1c1c] p-5 text-[#c3c3c3] w-full">더보기 <LucideChevronDown /></button>}
+            {showMore ? (
+              <button
+                onClick={() => {
+                  setShowMore(false);
+                }}
+                className="flex w-full cursor-pointer justify-center gap-2 bg-[#1c1c1c] p-5 text-[#c3c3c3]"
+              >
+                접기 <LucideChevronUp />
+              </button>
+            ) : (
+              <button
+                onClick={() => setShowMore(true)}
+                className="flex w-full cursor-pointer justify-center gap-2 bg-[#1c1c1c] p-5 text-[#c3c3c3]"
+              >
+                더보기 <LucideChevronDown />
+              </button>
+            )}
           </div>
           <div className="flex flex-col gap-8">
             <div className="text-2xl text-[#00e6ae]">안내 사항</div>
@@ -104,66 +132,123 @@ export default function GatheringDetail({data}:{data:GroupDetailData}) {
               <div>모임 위치 : {data.address}</div>
             </div>
             <div>
-              <Map lat={data.latitude} lng={data.longitude} width='100%' height='280px'/>
+              <Map
+                lat={data.latitude}
+                lng={data.longitude}
+                width="100%"
+                height="280px"
+              />
             </div>
           </div>
-          <GatheringHostBox hostName={data.leaderNickname} hostEmail={data.leaderEmail} tags={data.leaderHashTags} hostExplain={data.leaderExplain} hostImg={data.leaderImgUrl}/>
+          <GatheringHostBox
+            hostName={data.leaderNickname}
+            hostEmail={data.leaderEmail}
+            tags={data.leaderHashTags}
+            hostExplain={data.leaderExplain}
+            hostImg={data.leaderImgUrl}
+          />
           <div className="flex flex-col gap-9">
             <div className="flex items-center justify-between">
               <div className="text-2xl text-[#00e6ae]">
                 비슷한 모임도 있어요
               </div>
-              <button onClick={() => route.push(`/gathering?category=${data.category}`)} className="cursor-pointer text-[#a1a1a1]">더보기</button>
+              <button
+                onClick={() =>
+                  route.push(`/gathering?category=${data.category}`)
+                }
+                className="cursor-pointer text-[#a1a1a1]"
+              >
+                더보기
+              </button>
             </div>
             <div className="flex gap-5">
-              {relatedGroups.map((data:RelatedGroup) => {
-                              return (
-                              <div onClick={() => routing(data.id)} key={data.id}  className="flex cursor-pointer flex-col w-[calc(50%-10px)] max-w-[calc(50%-10px)] gap-[25px]">
-                              <div className='w-[100%] h-[235px] overflow-hidden relative'>
-                                <Image src={data.imageUrl} alt="포스트 이미지" fill className="w-full object-cover"/>
-                              </div>
-                              <div className='pl-[5px]'>
-                                <div className="text-[16px] text-[#e4e4e4] truncate text-start mb-[15px]">{data.title}</div>
-                                <div className="flex gap-4">
-                                  <div className="flex gap-2 text-[#b0b0b0] text-[16px]">
-                                    <LucideMapPin size={16} className='mt-[4px]'/>
-                                    {data.address}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>)
-                })}
+              {relatedGroups.map((data: RelatedGroup) => {
+                return (
+                  <div
+                    onClick={() => routing(data.id)}
+                    key={data.id}
+                    className="flex w-[calc(50%-10px)] max-w-[calc(50%-10px)] cursor-pointer flex-col gap-[25px]"
+                  >
+                    <div className="relative h-[235px] w-[100%] overflow-hidden">
+                      <Image
+                        src={data.imageUrl}
+                        alt="포스트 이미지"
+                        fill
+                        className="w-full object-cover"
+                      />
+                    </div>
+                    <div className="pl-[5px]">
+                      <div className="mb-[15px] truncate text-start text-[16px] text-[#e4e4e4]">
+                        {data.title}
+                      </div>
+                      <div className="flex gap-4">
+                        <div className="flex gap-2 text-[16px] text-[#b0b0b0]">
+                          <LucideMapPin size={16} className="mt-[4px]" />
+                          {data.address}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
         <div className="sticky top-8 h-full w-160 px-5">
           <div className="flex flex-col self-start rounded-sm bg-[#1c1c1c] px-[22px] py-[20px]">
-            <div className="flex flex-col gap-5 mb-[30px]">
-              <div className='w-full h-fit flex justify-between'>
-                <div className="gradient-border self-start px-6 py-2.5 flex items-center">
+            <div className="mb-[30px] flex flex-col gap-5">
+              <div className="flex h-fit w-full justify-between">
+                <div className="gradient-border flex items-center self-start px-6 py-2.5">
                   {filterGatheringCategory(data.category)}
                 </div>
-                {showEditDots && <div className='w-fit h-fit relative'>
-                  <EllipsisVertical onClick={() => SetShowEditBox(prev => !prev)} className='cursor-pointer'/>
-                  {showEditBox &&                  
-                  <div className='w-[80px] flex flex-col bg-[#252525] border border-[rgba(192,192,192,.4)] rounded-[5px] text-[#fff] absolute z-5'>
-                    <button onClick={() => route.push(`/gathering/${data.id}/edit`)} className='w-full h-[44px] flex items-center justify-center hover:text-main'>수정</button>
-                    <button onClick={() => deleteGathering(data.id)} className='w-full h-[44px] flex items-center justify-center hover:text-main'>삭제</button>
+                {showEditDots && (
+                  <div className="relative h-fit w-fit">
+                    <EllipsisVertical
+                      onClick={() => SetShowEditBox((prev) => !prev)}
+                      className="cursor-pointer"
+                    />
+                    {showEditBox && (
+                      <div className="absolute z-5 flex w-[80px] flex-col rounded-[5px] border border-[rgba(192,192,192,.4)] bg-[#252525] text-[#fff]">
+                        <button
+                          onClick={() =>
+                            route.push(`/gathering/${data.id}/edit`)
+                          }
+                          className="hover:text-main flex h-[44px] w-full items-center justify-center"
+                        >
+                          수정
+                        </button>
+                        <button
+                          onClick={() => deleteGathering(data.id)}
+                          className="hover:text-main flex h-[44px] w-full items-center justify-center"
+                        >
+                          삭제
+                        </button>
+                      </div>
+                    )}
                   </div>
-                    }
-                </div>}
+                )}
               </div>
               <div className="gradient-text text-3xl font-bold">
                 {data.title}
               </div>
               <div className="flex gap-2">
-                {data.hashTags.map((el,idx) => <div key={idx}  className="rounded-full bg-[#2a2a2a] px-3.5 py-1.5 text-[#e4e4e4]">#{el}</div>)}
+                {data.hashTags.map((el, idx) => (
+                  <div
+                    key={idx}
+                    className="rounded-full bg-[#2a2a2a] px-3.5 py-1.5 text-[#e4e4e4]"
+                  >
+                    #{el}
+                  </div>
+                ))}
               </div>
             </div>
-            <div className='border-t border-t-[#2D2A2A] py-[30px]'>
+            <div className="border-t border-t-[#2D2A2A] py-[30px]">
               {data.simpleExplain}
             </div>
-            <button onClick={()=>applyGathering(data.id)} className="cursor-pointer rounded-sm bg-[#2a2a2a] p-4 text-3xl">
+            <button
+              onClick={() => applyGathering(data.id)}
+              className="cursor-pointer rounded-sm bg-[#2a2a2a] p-4 text-3xl"
+            >
               <span className="gradient-text">모임 신청</span>
             </button>
           </div>
@@ -172,10 +257,10 @@ export default function GatheringDetail({data}:{data:GroupDetailData}) {
       <div className="flex w-full flex-col gap-[41px] lg:hidden">
         <div className="flex w-full flex-col gap-7.5 self-start rounded-sm bg-[#1c1c1c] p-6">
           <div className="mt-[61px] mb-[59px] flex flex-col items-center gap-5 text-white">
-            <div className="gradient-border px-6 py-2.5">{data.category} 🍔</div>
-            <div className="gradient-text text-xl font-bold">
-              {data.title}
+            <div className="gradient-border px-6 py-2.5">
+              {data.category} 🍔
             </div>
+            <div className="gradient-text text-xl font-bold">{data.title}</div>
             <div className="flex gap-2">
               {/* {data.hashTags.map((el,idx)=> <div className="rounded-full bg-[#2a2a2a] px-3.5 py-1.5 text-[#e4e4e4]" key={idx}>#{el}</div> )} */}
               <div className="rounded-full bg-[#2a2a2a] px-3.5 py-1.5 text-[#e4e4e4]">
@@ -191,9 +276,7 @@ export default function GatheringDetail({data}:{data:GroupDetailData}) {
           <div className="flex w-full flex-col items-center gap-7.5">
             <Image src={test} alt="" />
             <div className="self-start text-xl text-[#00e6ae]">상세 정보</div>
-            <div>
-              {data.explain}
-            </div>
+            <div>{data.explain}</div>
             <button className="flex w-full cursor-pointer justify-center gap-2 bg-[#1c1c1c] p-5 text-[#c3c3c3]">
               더보기 <LucideChevronDown />
             </button>
