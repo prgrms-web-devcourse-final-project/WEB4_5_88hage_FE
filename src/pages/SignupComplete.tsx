@@ -3,33 +3,44 @@ import Image from 'next/image';
 import completeImg from '@/assets/images/signup_complete.png';
 import { useRouter } from 'next/navigation';
 import { useSignupStore } from '@/stores/signupStore';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 export default function SignupComplete() {
   const router = useRouter();
   const { userData, clearAll } = useSignupStore();
   const API = process.env.NEXT_PUBLIC_API_URL;
 
-  const loginInThisPage = async () => {
-    if (userData) {
-      const response = await fetch(`${API}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: userData.email,
-          password: userData.password,
-          rememberMe: true,
-        }),
-        credentials: 'include',
-      });
-      const data = await response.json();
-      console.log(data);
-    }
-  };
+  const loginInThisPage = useCallback(async () => {
+  if (!userData?.email || !userData?.password) return;
 
-  useEffect(() => {
-    loginInThisPage();
-  }, [userData]);
+  try {
+    const response = await fetch(`${API}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: userData.email,
+        password: userData.password,
+        rememberMe: true,
+      }),
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Login failed:', errorData.message || response.status);
+      return;
+    }
+
+    const data = await response.json();
+    console.log('Login success:', data);
+  } catch (error) {
+    console.error('Login error:', error);
+  }
+}, [userData, API]);
+
+useEffect(() => {
+  loginInThisPage();
+}, [loginInThisPage]);
 
   return (
     <form
