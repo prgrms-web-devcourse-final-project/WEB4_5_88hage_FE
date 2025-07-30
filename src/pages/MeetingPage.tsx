@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { useRouter, useSearchParams } from "next/navigation";
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuthStore } from "@/stores/UseAuthStore";
+import { HashLoader } from "react-spinners";
 
 const SORT_OPTIONS = [
   { label: "최신순", value: "recent" },
@@ -141,7 +142,6 @@ console.log("[추천 버튼] fetch 결과 status:", res.status);
           }
         })
       );
-
       setData(prev => {
         if (page === 0) return withDetails;
         const newUnique = withDetails.filter(newItem => !prev.some(prevItem => prevItem.id === newItem.id));
@@ -151,7 +151,8 @@ console.log("[추천 버튼] fetch 결과 status:", res.status);
       setLoading(false);
     };
     fetchData();
-  }, );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [groups.length, sortBy, page, selectedCategory]);
 
   useEffect(() => {
     setSearch("");
@@ -192,12 +193,11 @@ console.log("[추천 버튼] fetch 결과 status:", res.status);
     .join('\n\n');
 
 const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-
   return (
     <div className="w-full">
       {loading && (
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-[9999]">
-          <span className="text-white text-2xl font-bold">로딩중...</span>
+          <HashLoader />
         </div>
       )}
       <div className="meetingPage-gradient lg:h-[450px] lg:pt-[115px] h-fit pt-[70px] pb-[25px]">
