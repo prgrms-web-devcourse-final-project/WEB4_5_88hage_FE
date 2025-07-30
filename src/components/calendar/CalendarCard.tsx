@@ -2,11 +2,12 @@
 import { EllipsisVertical } from 'lucide-react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import CalendarSelectDate from '../common/CalendarSelectDate';
+import Toast from '../common/Toast';
 
 type Props ={
-  info:CalendarData,
-  setSelectListData:Dispatch<SetStateAction<CalendarData[]>>,
-  setCalendarData:Dispatch<SetStateAction<CalendarData[]>>
+  info:CalendarEvent,
+  setSelectListData:Dispatch<SetStateAction<CalendarEventList>>,
+  setCalendarData:Dispatch<SetStateAction<CalendarEventList>>
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -34,6 +35,12 @@ export default function CalendarCard({info,setSelectListData,setCalendarData}:Pr
           accept: 'application/json',
         },
     })
+    if(!response.ok){
+      Toast.error('삭제 실패')
+      throw new Error('삭제 실패');
+    } else {
+      Toast.success('삭제 성공')
+    }
 
      const data = await response.json();
      setSelectListData((prev) => prev.filter(data => data.calendarId !== info.calendarId));
@@ -65,7 +72,7 @@ export default function CalendarCard({info,setSelectListData,setCalendarData}:Pr
           <EllipsisVertical size={18} onClick={()=> setShowBox(prev => !prev)} className='text-[#e4e4e4]'/>
         </button>
         }
-        {showBox && <div className='w-[80px] flex flex-col bg-[#252525] border border-[rgba(192,192,192,.4)] rounded-[5px] text-[#fff] absolute z-5'>
+        {showBox && <div className='w-[80px] flex flex-col bg-[#252525] border border-[rgba(192,192,192,.4)] rounded-[5px] text-[#fff] absolute z-5 left-[-40px]'>
           <button onClick={() => {
             setShowModal(true);
             setShowBox(false);
@@ -78,7 +85,7 @@ export default function CalendarCard({info,setSelectListData,setCalendarData}:Pr
         }
       </div>
     </div>
-    {showModal && <CalendarSelectDate info={info} setShow={setShowModal} setSelectListData={setSelectListData }setCalendarData={setCalendarData}/>}
+    {showModal && <CalendarSelectDate info={info} setShow={setShowModal} setSelectListData={setSelectListData }setCalendarData={setCalendarData} show={showModal}/>}
     </>
   );
 };

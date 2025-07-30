@@ -2,13 +2,15 @@
 
 import DatepickerComponent from '@/components/common/DatepickerComponent';
 import moment from 'moment';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import Toast from './Toast';
 
 type Props = {
-  info:CalendarData,
+  info:CalendarEvent,
   setShow: Dispatch<SetStateAction<boolean>>,
-  setSelectListData:Dispatch<SetStateAction<CalendarData[]>>,
-  setCalendarData:Dispatch<SetStateAction<CalendarData[]>>
+  setSelectListData:Dispatch<SetStateAction<CalendarEventList>>,
+  setCalendarData:Dispatch<SetStateAction<CalendarEventList>>,
+  show:boolean
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -17,12 +19,27 @@ export default function CalendarSelectDate({
     info,
     setShow,
     setSelectListData,
-    setCalendarData
+    setCalendarData,
+    show
     }:Props){
     
     const [eventDate,setEventDate] = useState('');
 
-    const modifyEvent = async (id:number,eventDate:string)=>{
+    useEffect(() => {
+        if (show) {
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = '';
+        }
+    
+        return () => {
+          document.body.style.overflow = '';
+        };
+      }, [show]);
+    
+      if (!show) return null;
+
+    const modifyEvent = async (id:string,eventDate:string)=>{
     try{
      const response = await fetch(`${baseUrl}/api/calendars/${Number(id)}`,{
         method: 'PATCH',
@@ -36,14 +53,17 @@ export default function CalendarSelectDate({
         }),
     });
 
+    if(!response.ok){
+      Toast.error('수정을 실패했습니다.');
+      throw new Error('수정 실패');
+    } else {
+      Toast.success('수정이 완료 됐습니다!')
+    }
+
     const start = moment.tz(eventDate, 'Asia/Seoul').toDate();
     const end = moment(start).add(1, 'hour').toDate();
-    
-    setSelectListData(prev => prev.map(event =>
-    event.calendarId === info.calendarId.toString()
-        ? { ...event, start, end }     
-        : event                         
-    ));
+
+    setSelectListData((prev) => prev.filter(data => data.calendarId !== id));
 
     setCalendarData(prev => prev.map(event =>
     event.calendarId === info.calendarId.toString()

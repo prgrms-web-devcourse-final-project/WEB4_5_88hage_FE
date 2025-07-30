@@ -9,20 +9,28 @@ import { Dispatch, SetStateAction} from 'react';
 
 moment.locale('ko');
 const localizer = momentLocalizer(moment);
+
+interface SlotInfo {
+  start: Date;
+  end: Date;
+  slots: Date[];
+  action: 'click' | 'select';
+}
+
 type Props = {
   setSelectDate: Dispatch<SetStateAction<SelectDate>>,
-  setSelectListData:Dispatch<SetStateAction<CalendarData[]>>,
-  calendarData:CalendarData[],
+  setSelectListData:Dispatch<SetStateAction<CalendarEventList>>,
+  calendarData:CalendarEventList,
 }
 
 export default function CalendarContainer({setSelectDate,setSelectListData,calendarData}:Props){
 
   const calenderGetDateInfo = (date:Date) => {
-      const newDate = {
-          date: date.getDate(),
-          month: date.getMonth()+1,
-          year: date.getFullYear()
-      }
+    const newDate = {
+        date: date.getDate(),
+        month: date.getMonth()+1,
+        year: date.getFullYear()
+    }
       //컨트롤러에 사용에 따른 월 변화 캐치
       setSelectDate(prevDate => {
           return {...prevDate,...newDate}
@@ -35,13 +43,14 @@ export default function CalendarContainer({setSelectDate,setSelectListData,calen
       setSelectListData(getEventsList);
     }
 
-  const cellClickGetDateInfo = (slotInfo:any) => {
+  const cellClickGetDateInfo = (slotInfo:SlotInfo) => {
           console.log(slotInfo);
           const newDate = slotInfo.start;
+          console.log(newDate);
           setSelectDate(prevDate => {
             return {...prevDate,...newDate}
           });
-        }
+    }
 
   return (
     <>

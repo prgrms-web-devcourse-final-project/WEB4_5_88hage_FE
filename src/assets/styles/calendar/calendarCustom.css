@@ -1,6 +1,6 @@
 .rbc-calendar{
     width: 100%;
-    height: calc(100vh - 230px);
+    height: calc(100vh - 230px) !important;
     background-color: #1a1a1a;
     padding: 15px;
     padding-top: 0;
@@ -160,6 +160,17 @@
 }
 .rbc-current .rbc-button-link{
     color: #1CEBB9;
+}
+
+/* more + */
+.rbc-show-more {
+        background-color: transparent;
+        padding: 3px;
+        padding-top: 0;
+        cursor: default;
+}
+.rbc-show-more:hover{
+    color: #3174ad;;
 }
 
 @media screen and (max-width: 500px) {

@@ -17,7 +17,7 @@ export default function DashboardLayout({
         <DashboardHeader />
         <main
           className={twMerge(
-            'mainColor-gradient flex-1 p-5 pt-[70px] lg:pt-5',
+            'mainColor-gradient flex-1 p-25 pt-[70px] lg:pt-5',
             mainCss,
           )}
         >
