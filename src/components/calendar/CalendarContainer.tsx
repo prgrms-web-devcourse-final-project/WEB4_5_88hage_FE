@@ -54,7 +54,7 @@ export default function CalendarContainer({setSelectDate,setSelectListData,calen
 
   return (
     <>
-    <div className='w-[100%] lg:w-[calc(100%-300px)] h-fit'>
+    <div className='w-[100%] lg:w-[calc(100%-300px)] h-full'>
       <Calendar
         localizer={localizer}
         views={['month']}
