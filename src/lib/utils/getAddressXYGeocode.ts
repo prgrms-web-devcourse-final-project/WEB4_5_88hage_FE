@@ -1,5 +1,18 @@
 type XY = { x: number; y: number };
 
+interface GeocoderResult {
+  address_name: string;
+  region_1depth_name: string;
+  region_2depth_name: string;
+  region_3depth_name: string;
+  road_address_name: string;
+  building_name: string;
+  x: string;
+  y: string;
+}
+
+type GeocoderStatus = 'OK' | 'ZERO_RESULT' | 'ERROR';
+
 export function searchAddress(address: string): Promise<XY | null> {
   return new Promise((resolve, reject) => {
     if (typeof window === "undefined" || !window.kakao) {
@@ -11,7 +24,7 @@ export function searchAddress(address: string): Promise<XY | null> {
     window.kakao.maps.load(() => {
       const geocoder = new window.kakao.maps.services.Geocoder();
 
-      geocoder.addressSearch(address, (result: any, status: any) => {
+      geocoder.addressSearch(address, (result: GeocoderResult[], status: GeocoderStatus) => {
         if (status === window.kakao.maps.services.Status.OK && result?.length) {
           const { x, y } = result[0]; // 문자열로 옴
           console.log(`주소: ${address}`);
