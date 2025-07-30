@@ -21,7 +21,37 @@ import { filterGatheringCategory } from '@/lib/utils/filterCategory';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export default function GatheringDetail({ data }: { data: GroupDetail }) {
+export default function GatheringDetail({
+  data = {
+    relatedGroups: [],
+    id: 0,
+    title: '',
+    explain: '',
+    simpleExplain: '',
+    imageUrl: '',
+    placeName: '',
+    address: '',
+    viewCount: 0,
+    groupDate: '',
+    createdAt: '',
+    maxPeople: 0,
+    nowPeople: 0,
+    status: '',
+    latitude: 0,
+    longitude: 0,
+    during: 0,
+    category: '',
+    leaderNickname: '',
+    leaderEmail: '',
+    leaderExplain: '',
+    leaderImgUrl: '',
+    leaderHashTags: [],
+    hashTags: [],
+    activated: false,
+  },
+}: {
+  data?: GroupDetail;
+}) {
   const route = useRouter();
   const [showMore, setShowMore] = useState(false);
   const [showEditDots, SetShowEditDots] = useState(false);

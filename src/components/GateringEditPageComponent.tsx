@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, use } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getGroupById, updateGroup } from '@/lib/api/group';
 
@@ -12,14 +12,12 @@ import WritingForm from '@/components/layout/WritingForm';
 import WritingFormTags from '@/components/layout/WritingFormTags';
 import AddPhotoButton from '@/components/ui/AddPhotoButton';
 import Toast from '@/components/common/Toast';
-interface GatheringEditPageProps {
-  params: Promise<{ gatheringId: number }>;
+interface Props {
+  gatheringId: number;
 }
 
-export default function GatheringEditPage({ params }: GatheringEditPageProps) {
+export default function GateringEditPageComponent({ gatheringId }: Props) {
   const router = useRouter();
-  const unwrappedParams = use(params);
-  const { gatheringId } = unwrappedParams;
   const [gathering, setGathering] = useState<GroupDetail | null>(null);
 
   // States for form fields, initialized with empty values

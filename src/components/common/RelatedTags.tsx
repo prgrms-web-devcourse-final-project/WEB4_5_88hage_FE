@@ -28,19 +28,21 @@ export default function RelatedTags({ selected, onSelect }: RelatedTagsProps) {
       {TAGS.map(({ label, icon, category }) => (
         <div
           key={label}
-          className={`relative h-[100px] w-[100px] rounded-[5px] bg-[#2f2f2f] p-2 text-white border border-[#2F2F2F] cursor-pointer
-          ${selected === category ? 'border-[#7f74ff]' : 'border-[#2F2F2F]'}
-          `}
-          onClick={() => onSelect(selected)}
+          className={`relative h-[100px] w-[100px] cursor-pointer rounded-[5px] border border-[#2F2F2F] bg-[#2f2f2f] p-2 text-white ${selected === category ? 'border-[#7f74ff]' : 'border-[#2F2F2F]'} `}
+          onClick={() => onSelect(selected === category ? '' : category)}
         >
           {/* 이모지 (왼쪽 위) */}
-          <div className="absolute left-2 top-2 h-6 w-6">
-            <Image src={icon} alt={label} className="h-full w-full object-contain" />
+          <div className="absolute top-2 left-2 h-6 w-6">
+            <Image
+              src={icon}
+              alt={label}
+              className="h-full w-full object-contain"
+            />
           </div>
 
           {/* 태그 버튼 (왼쪽 아래) */}
           <div className="absolute bottom-2 left-2">
-            <button className="text-[16px] font-semibold text-gray-sub">
+            <button className="text-gray-sub text-[16px] font-semibold">
               {label}
             </button>
           </div>

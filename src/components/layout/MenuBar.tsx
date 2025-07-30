@@ -2,7 +2,7 @@
 
 import { X } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 // import DarkModeToggle from '../DarkModeToggle';
 import cloud from '@/assets/images/cloud-face.png.png';
 import getWeather from '@/lib/api/weather';
@@ -41,23 +41,23 @@ export default function MenuBar({ close }: { close: () => void }) {
   const router = useRouter();
 
   const NAV_ITEMS = isAuthenticated ? loginItem : logoutItem;
-  
-useEffect(() => {
-  const fetchNotificationCount = async () => {
+
+  const getNotificationCount = useCallback(async () => {
     if (user) {
       const response = await fetch(
         `${API}/api/notifications/unread-count?email=${user.email}`,
         {
-          credentials: "include",
-        }
+          credentials: 'include',
+        },
       );
       const { data } = await response.json();
       setNotiCount(data);
     }
-  };
+  }, [API, user]);
 
-  fetchNotificationCount();
-}, [isAuthenticated, user,API]);
+  useEffect(() => {
+    getNotificationCount();
+  }, [user, getNotificationCount]);
 
   useEffect(() => {
     const getNowWeather = async () => {

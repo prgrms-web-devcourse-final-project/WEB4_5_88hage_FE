@@ -34,7 +34,7 @@ export default function ProfileCalendar({
     onDateSelect(date);
   };
 
-  const cellClickGetDateInfo = (slotInfo:SlotInfo) => {
+  const cellClickGetDateInfo = (slotInfo: SlotInfo) => {
     console.log(
       'Cell clicked from: ',
       moment(slotInfo.start).format('YYYY년 MM월 DD일 HH:mm'),

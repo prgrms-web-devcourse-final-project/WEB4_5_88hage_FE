@@ -64,7 +64,7 @@ export default function Notification() {
 
   useEffect(() => {
     fetchNotification();
-  }, [fetchNotification]);
+  }, [user, activeTab, fetchNotification]);
 
   return (
     <>

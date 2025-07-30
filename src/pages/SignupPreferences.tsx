@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import thinking from '@/assets/images/thinking.svg';
 import tagspageImg from '@/assets/images/tagspageImg.png';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSignupStore } from '@/stores/signupStore';
 import { toast } from 'react-toastify';
@@ -52,7 +52,7 @@ export default function SignupPreferences({ isOAuth }: { isOAuth?: boolean }) {
   const { userData } = useSignupStore();
   const API = process.env.NEXT_PUBLIC_API_URL;
 
-  const loginInThisPage = async () => {
+  const loginInThisPage = useCallback(async () => {
     if (userData) {
       const response = await fetch(`${API}/api/auth/login`, {
         method: 'POST',
@@ -71,13 +71,13 @@ export default function SignupPreferences({ isOAuth }: { isOAuth?: boolean }) {
       //   localStorage.removeItem('signup-store');
       // } else toast.error(message);
     }
-  };
+  }, [API, userData]);
 
   useEffect(() => {
     if (userData && !isOAuth) {
       loginInThisPage();
     }
-  });
+  }, [userData, API, isOAuth, loginInThisPage]);
 
   const tagSelectHandler = (
     type: string,

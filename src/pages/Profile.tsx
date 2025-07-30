@@ -145,7 +145,9 @@ export default function Profile() {
         }
 
         const inquiriesData = await getContacts();
-        setMyInquiries(inquiriesData.data);
+
+        const data = inquiriesData.data as Inquiry[];
+        setMyInquiries(data);
 
         const bookedEventsData = await getCalendarForContent();
         console.log(bookedEventsData);

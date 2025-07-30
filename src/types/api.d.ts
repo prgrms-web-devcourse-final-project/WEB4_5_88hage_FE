@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 export interface ApiResponse<T> {
   code: string;
   message: string;
