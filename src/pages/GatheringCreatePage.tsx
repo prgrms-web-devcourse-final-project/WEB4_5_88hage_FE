@@ -25,10 +25,6 @@ export default function GatheringCreatePage() {
   const router = useRouter();
   const handleDataChange = (data: File[]) => setImages(data);
 
-  const getCategory = (d: FormDataEntryValue | null) => {
-    if (d === 'ART') return 'ART';
-  };
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
