@@ -10,13 +10,13 @@ import 'moment-timezone';
 export default function MyCalendar() {
   const date = new Date();
   
-  //전체 일정 대한 이벤트
+  //사용자 전체 일정 대한 이벤트 리스트
   const [calendarData,setCalendarData] = useState<CalendarEventList>([]);
 
-  //클릭한 날의 이벤트
+  //사이드 바에 나올 클릭한 날의 이벤트 리스트
   const [selectListData,setSelectListData] = useState<CalendarEventList>([]);
 
-  //사용자가 선택한 날짜
+  //사용자가 클릭해서 선택한 날짜
   const [selectDate,setSelectDate] = useState<SelectDate>({
     date: date.getDate(),
     month: date.getMonth()+1,
@@ -24,10 +24,13 @@ export default function MyCalendar() {
   });
 
   useEffect(()=>{
-    const getMonthCalendarDate = async () => {
+    //년, 월이 변경 되면 매달 받아올 데이터를 패칭
+    const getMonthCalendarDate = async (year:number, month:number) => {
       try{
-        const {data} = await getMonthlyCalendar(selectDate.year,selectDate.month) as CalendarResponse;
-        console.log(data);
+        const {data} = await getMonthlyCalendar(year,month) as CalendarResponse;
+
+        console.log('월 데이터 넘어오기 성공!', data);
+
         const temp:CalendarEventList = data.map(data => {
           const start = moment.tz(data.selectedDate, 'Asia/Seoul').toDate();
           const end = moment(start).add(1, 'hour').toDate();
@@ -40,22 +43,32 @@ export default function MyCalendar() {
           end,
           type: data.type,
         }
-      })
+      });
+
       setCalendarData(temp);
+
+      const todayEvents = temp.filter(event =>
+        event.start.getDate() === selectDate.date
+      );
+
+      setSelectListData(todayEvents);
+
       }catch(error){
         console.log('캘린더 정보를 불러오는데 실패 했습니다.',error)
       }
     }
-    getMonthCalendarDate();
-  },[selectDate.month,selectDate.year]);
+
+    getMonthCalendarDate(+selectDate.year, +selectDate.month);
+
+  },[selectDate.month,selectDate.year,selectDate.date]);
 
   return (
     <>
-        <div className="bg-gray-7 flex min-w-[335px] flex-col w-full lg:min-w-[375px] lg:bg-transparent mb-[80px] lg:mb-0">
-          <h2 className="pt-[15px] pb-[5px] pl-[10px] font-semibold text-[#fff] lg:mb-[20px] lg:pl-0 lg:text-[28px]">
+        <div className="bg-gray-7 flex min-w-[335px] flex-col w-full lg:min-w-[375px] lg:bg-transparent mb-[80px] lg:mb-0 lg:h-[calc(100vh-170px)] lg:max-h-[calc(100vh-170px)] lg:min-h-[calc(100vh-170px)]">
+          <h2 className="pt-[15px] pb-[5px] pl-[10px] font-semibold text-[#fff] lg:mb-[35px] lg:pl-0 lg:text-[28px]">
             일정관리
           </h2>
-          <div className="flex w-full flex-col lg:flex lg:flex-row lg:gap-[20px] lg:h-[calc(100vh-230px)]">
+          <div className="flex w-full flex-col lg:flex lg:flex-row lg:gap-[20px] max-h-[calc(100%-60px)]">
             <CalendarSidebar selectDate={selectDate} selectListData={selectListData} setSelectListData={setSelectListData} setCalendarData={setCalendarData}/>
             <CalendarContainer setSelectDate={setSelectDate} setSelectListData={setSelectListData} calendarData={calendarData} />
           </div>
