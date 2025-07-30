@@ -42,13 +42,23 @@ export default function EventCard({
         />
       </div>
 
-      <div className="h-[120px] bg-[#1b1b1b] p-3">
-        <h2 className="t3 mb-2">{event.title}</h2>
-        <p className="mb-5 text-[14px] whitespace-pre-line text-[#ffffff]">
-          {event.simpleExplain ?? ''}
+      <div className="bg-[#1b1b1b] px-[19px] py-[19px] h-[120px] flex flex-col justify-between">
+        <h2
+          className="text-[18px] font-semibold leading-tight mb-[7px] overflow-hidden text-ellipsis whitespace-nowrap"
+          title={event.title}
+        >
+          {event.title}
+        </h2>
+        <p
+          className="text-[14px] text-[#bdbdbd] mb-[7px] overflow-hidden text-ellipsis whitespace-nowrap"
+          title={event.simpleExplain}
+        >
+          {event.simpleExplain || ''}
         </p>
         {!!event.during && event.during !== '- ~ -' && (
-          <p className="text-[14px] text-[#bdbdbd]">{event.during}</p>
+          <p className="text-[14px] text-[#bdbdbd] whitespace-nowrap overflow-hidden text-ellipsis">
+            {event.during}
+          </p>
         )}
       </div>
     </div>

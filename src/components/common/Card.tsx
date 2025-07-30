@@ -20,12 +20,18 @@ type PostCardProps = {
 
 export default function PostCard({ group }: PostCardProps) {
   const router = useRouter();
-
   if (!group) return null;
 
   const handleClick = () => {
     router.push(`/gathering/${group.id}`);
   };
+
+  const dateString = group.groupDate
+    ? (() => {
+        const d = group.groupDate.split('T')[0].split('-');
+        return `${d[1]}.${d[2]}`;
+      })()
+    : '미정';
 
   return (
     <div
@@ -35,7 +41,6 @@ export default function PostCard({ group }: PostCardProps) {
       tabIndex={0}
       style={{ willChange: 'transform' }}
     >
-      {/* 썸네일 */}
       <div className="relative h-[240px] w-full">
         <Image
           src={group.imageUrl || '/hip-girl-thinking.svg'}
@@ -45,20 +50,21 @@ export default function PostCard({ group }: PostCardProps) {
           priority
         />
       </div>
-      {/* 콘텐츠 */}
-      <div className="h-[120px] bg-[#1b1b1b] p-3">
-        <h2 className="t3 mb-1">{group.title}</h2>
-        <p className="mb-5 text-[14px] text-[#ffffff]">
+      <div className="bg-[#1b1b1b] px-[19px] py-[19px] h-[120px] flex flex-col justify-between">
+        <h2
+          className="text-[18px] font-semibold leading-tight mb-[7px] overflow-hidden text-ellipsis whitespace-nowrap"
+          title={group.title}
+        >
+          {group.title}
+        </h2>
+        <p
+          className="text-[14px] text-[#bdbdbd] mb-[7px] overflow-hidden text-ellipsis whitespace-nowrap"
+          title={group.leaderNickname}
+        >
           주최자: {group.leaderNickname ?? ''}
         </p>
-        <p className="text-[14px] text-[#bdbdbd]">
-          시작일:{' '}
-          {group.groupDate
-            ? (() => {
-                const d = group.groupDate.split('T')[0].split('-');
-                return `${d[1]}.${d[2]}`;
-              })()
-            : '미정'}
+        <p className="text-[14px] text-[#bdbdbd] whitespace-nowrap overflow-hidden text-ellipsis">
+          {dateString}
         </p>
       </div>
     </div>
