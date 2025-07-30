@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getApprovedParticipants, leaveGroup } from '@/lib/api/participant';
 import ParticipantListModal from './ParticipantListModal';
+import ConfirmModal from './ConfirmModal';
 import { toast } from "react-toastify";
 
 interface MainPostHeaderProps {
@@ -36,6 +37,12 @@ export default function MainPostHeader({
   const [participantsList, setParticipantsList] = useState<
     ApprovedParticipantInfo[]
   >([]);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmModalContent, setConfirmModalContent] = useState({
+    title: '',
+    message: '',
+    onConfirm: () => {},
+  });
   const router = useRouter();
 
   const toggleModal = () => {
@@ -53,47 +60,61 @@ export default function MainPostHeader({
     }
   };
 
-  const handleComplete = async () => {
-    if (window.confirm('모임을 완료하시겠습니까?')) {
-      await onComplete(groupId);
-      setIsModalOpen(false);
-      router.refresh();
-      if (onGroupUpdate) {
-        onGroupUpdate();
-      }
-    }
-  };
-
-  const handleDelete = async () => {
-    if (
-      window.confirm(
-        '모임을 정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.',
-      )
-    ) {
-      await onDelete(groupId);
-      setIsModalOpen(false);
-      router.refresh();
-      if (onGroupUpdate) {
-        onGroupUpdate();
-      }
-    }
-  };
-
-  const handleLeaveGroup = async () => {
-    if (window.confirm('모임을 정말 탈퇴하시겠습니까?')) {
-      try {
-        await leaveGroup(groupId);
-        toast.success('모임에서 탈퇴되었습니다.');
+  const handleComplete = () => {
+    setConfirmModalContent({
+      title: '모임 완료',
+      message: '모임을 완료하시겠습니까?',
+      onConfirm: async () => {
+        await onComplete(groupId);
         setIsModalOpen(false);
-        router.push('/user/gathering'); // Redirect to my gatherings page after leaving
+        setShowConfirmModal(false);
+        router.refresh();
         if (onGroupUpdate) {
           onGroupUpdate();
         }
-      } catch (error) {
-        console.error('Failed to leave group:', error);
-        toast.error('모임 탈퇴에 실패했습니다.');
-      }
-    }
+      },
+    });
+    setShowConfirmModal(true);
+  };
+
+  const handleDelete = () => {
+    setConfirmModalContent({
+      title: '모임 삭제',
+      message: '모임을 정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.',
+      onConfirm: async () => {
+        await onDelete(groupId);
+        setIsModalOpen(false);
+        setShowConfirmModal(false);
+        router.refresh();
+        if (onGroupUpdate) {
+          onGroupUpdate();
+        }
+      },
+    });
+    setShowConfirmModal(true);
+  };
+
+  const handleLeaveGroup = () => {
+    setConfirmModalContent({
+      title: '모임 탈퇴',
+      message: '모임을 정말 탈퇴하시겠습니까?',
+      onConfirm: async () => {
+        try {
+          await leaveGroup(groupId);
+          toast.success('모임에서 탈퇴되었습니다.');
+          setIsModalOpen(false);
+          setShowConfirmModal(false);
+          router.push('/user/gathering'); // Redirect to my gatherings page after leaving
+          if (onGroupUpdate) {
+            onGroupUpdate();
+          }
+        } catch (error) {
+          console.error('Failed to leave group:', error);
+          toast.error('모임 탈퇴에 실패했습니다.');
+        }
+      },
+    });
+    setShowConfirmModal(true);
   };
 
   return (
@@ -160,6 +181,13 @@ export default function MainPostHeader({
           onUpdate={onParticipantUpdate}
         />
       )}
+      <ConfirmModal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        onConfirm={confirmModalContent.onConfirm}
+        title={confirmModalContent.title}
+        message={confirmModalContent.message}
+      />
     </>
   );
 }
