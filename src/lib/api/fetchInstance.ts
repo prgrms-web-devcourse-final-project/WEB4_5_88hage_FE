@@ -41,9 +41,7 @@ const fetchInstance = async (
       const errorData = await response
         .json()
         .catch(() => ({ message: '알 수 없는 오류가 발생했습니다.' }));
-      throw new Error(
-        errorData.message || `HTTP error! status: ${response.status}`,
-      );
+      throw errorData;
     }
 
     const contentType = response.headers.get('content-type');

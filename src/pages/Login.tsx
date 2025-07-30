@@ -12,6 +12,10 @@ import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/stores/UseAuthStore';
 import Logo from '@/components/common/Logo';
 
+interface LoginError {
+  code: string;
+}
+
 export default function Login() {
   const {
     register,
@@ -35,8 +39,14 @@ export default function Login() {
       await login(data.email, data.password, data.rememberMe);
       router.push('/');
     } catch (err) {
-      console.error('로그인 실패:', err);
-      setLoginError('이메일 또는 비밀번호가 일치하지 않습니다.');
+      const loginError = err as LoginError;
+      if (loginError.code === '4000') {
+        console.error('로그인 실패: 올바른 이메일 형식이 아닙니다');
+        setLoginError('올바른 이메일 형식이 아닙니다.');
+      } else {
+        console.error('로그인 실패: ', err);
+        setLoginError('이메일 또는 비밀번호가 일치하지 않습니다.');
+      }
     }
   };
 
@@ -108,7 +118,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => router.push('/login/password-change')}
-                className='text-[16px] font-semibold'
+                className="text-[16px] font-semibold"
               >
                 비밀번호 찾기
               </button>
