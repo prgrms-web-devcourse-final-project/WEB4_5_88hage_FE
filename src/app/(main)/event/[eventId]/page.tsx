@@ -29,9 +29,13 @@ export default async function page({params}: {params: Promise<{eventId: string}>
     }
   }
   const data = await getEventDetail(eventId);
-  return (
-    <>
-      <EventDetail data={data} />
-    </>
-  );
+  if(data){
+    return (
+      <>
+        <EventDetail data={data} />
+      </>
+    );
+  } else {
+    return <div className='h-[900px] w-full flex items-center justify-center text-[#fff]'> 네트워크 통신에 실패했습니다. </div>
+  }
 }

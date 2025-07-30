@@ -28,10 +28,9 @@ export default function EventDetail({data}:{data:EventData}) {
   const routing = (id:number) => {
     route.push(`/event/${id}`)
   }
-
+  
   const relatedArr = [related[0],related[1]];
   const nearbyArr = [nearby[0],nearby[1]];
-  console.log(data.content.images,data.content.urls)
 
   const dateFormatting = (date:string)=>{
     return moment(date).format("YYYY년 MM월 DD일")
@@ -69,7 +68,7 @@ export default function EventDetail({data}:{data:EventData}) {
               <div className="text-main text-2xl">
                 비슷한 행사 추천 해드려요
               </div>
-              <button className="cursor-pointer text-[#a1a1a1]">더보기</button>
+              <button onClick={()=> route.push(`event?category=${content.category}&type=${content.eventType}`)}  className="cursor-pointer text-[#a1a1a1]">더보기</button>
             </div>
             <div className="flex gap-5">
               {relatedArr.map((data) => {
@@ -93,7 +92,7 @@ export default function EventDetail({data}:{data:EventData}) {
           </div>
           <div className="flex flex-col gap-9">
             <div className="flex items-center justify-between">
-              <div className="text-main text-2xl">
+              <div onClick={()=> route.push('/event')} className="text-main text-2xl">
                 주변에 가까운 행사 추천 해드려요
               </div>
               <button className="cursor-pointer text-[#a1a1a1]">더보기</button>
