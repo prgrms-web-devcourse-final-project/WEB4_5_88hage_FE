@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import GrayButton from '@/components/button/GrayButton';
 import Input from '@/components/common/Input';
-import logo from '@/assets/images/logo.svg';
+import logo from '@/assets/images/logo.png';
 import loginBgImg from '@/assets/images/loginBgImg.png';
 import LoginButton from '@/components/button/LoginButton';
 import Checkbox from '@/components/Checkbox';
@@ -45,15 +45,17 @@ export default function Login() {
       {/* 왼쪽(데스크탑 뷰): 배경  */}
       <div className="hidden w-1/2 bg-black lg:flex lg:items-center lg:justify-center">
         <Image
+          width={200}
+          height={200}
           alt="로고"
           src={logo}
-          className="top-[30px] left-[40px] mb-5 hidden lg:absolute lg:block"
+          className="top-[300px] left-[420px] mb-5 hidden lg:absolute lg:block"
           priority
         />
         <Image
           alt="로그인 이미지"
           src={loginBgImg}
-          className="hidden lg:block"
+          className="z-10 hidden lg:block"
           width={500}
           height={500}
           priority

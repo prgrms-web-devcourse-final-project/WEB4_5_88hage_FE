@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import logo from '@/assets/images/logo.svg';
+import logo from '@/assets/images/logo.png';
 import signupImg from '@/assets/images/signUpImg.png';
 import Input from '@/components/common/Input';
 import Checkbox from '@/components/common/Checkbox';
@@ -122,12 +122,12 @@ export default function Signup() {
       <Image
         src={logo}
         alt="logo"
-        width={100}
+        width={200}
         loading="lazy"
-        className="absolute top-[26px] left-[40px] hidden lg:block"
+        className="absolute top-[150px] left-[300px] hidden lg:block"
       />
       <div className="hidden h-screen w-1/2 items-center justify-center lg:flex">
-        <Image src={signupImg} alt="signupImg" />
+        <Image src={signupImg} alt="signupImg" className="z-10" />
       </div>
       <form onSubmit={siguUpValidation} className="signup-bg">
         <Image

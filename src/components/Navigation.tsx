@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 const NAV_ITEMS = [
-  { label: '행사', value: 'event' },
-  { label: '모임', value: 'gathering' },
-  { label: '도움', value: 'notice' },
+  { label: 'CONTENT', value: 'event' },
+  { label: 'CLUB', value: 'gathering' },
+  { label: 'HELP', value: 'notice' },
 ];
 
 export default function Navigation() {

@@ -1,10 +1,10 @@
 import Image from 'next/image';
-import logo from '@/assets/images/logo.svg';
+import logo from '@/assets/images/logo.png';
 
 export default function Footer() {
   return (
     <>
-      <div className="w-[375px] p-4 lg:w-full pl-50 bg-[#1c1c1c]">
+      <div className="w-[375px] bg-[#1c1c1c] p-4 pl-50 lg:w-full">
         <div className="relative h-[24px] w-[60px] lg:h-[40px] lg:w-[100px]">
           <Image
             alt="logo"
