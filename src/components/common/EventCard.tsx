@@ -40,7 +40,7 @@ export default function EventCard({ event }: EventCardProps) {
           src={event.imageUrl || '/hip-girl-thinking.svg'}
           alt="썸네일"
           fill
-          className="rounded-t-lg object-cover"
+          className="rounded-t-[5px] object-cover"
           priority
         />
       </div>

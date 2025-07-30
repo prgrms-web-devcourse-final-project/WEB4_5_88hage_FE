@@ -259,7 +259,7 @@ export default function EventPage() {
     data.map((event, idx) =>
       idx === data.length - 1 ? (
         <div key={`${event.id}-${idx}`} ref={lastCardRef}>
-          <EventCard event={mapEventToCard(event)} />
+          <EventCard className="rounded-[5px] overflow-hidden" event={mapEventToCard(event)} />
         </div>
       ) : (
         <EventCard key={`${event.id}-${idx}`} event={mapEventToCard(event)} />
