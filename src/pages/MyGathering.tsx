@@ -65,12 +65,7 @@ export default function MyGathering() {
     } finally {
       setLoading(false);
     }
-  }, [
-    setLoading,
-    setMyGatherings,
-    setLastMessages,
-    setError,
-  ]);
+  }, [setLoading, setMyGatherings, setLastMessages, setError]);
 
   useEffect(() => {
     fetchData();
@@ -126,20 +121,8 @@ export default function MyGathering() {
 
   if (loading) {
     return (
-      <div className="mb-50">
-        <div className="lg:flex lg:items-center lg:justify-center">
-          <div className="flex-shrink-0 lg:h-[740px] lg:w-[330px]">
-            <h2 className="h3 text-white">모임</h2>
-            <div className="flex h-screen items-center justify-center">
-              <HashLoader color="#36d7b7" size={50} />
-            </div>
-          </div>
-          <div className="max-w-[1050px] flex-grow lg:ml-5 lg:h-[740px]">
-            <div className="flex h-screen items-center justify-center">
-              <HashLoader color="#36d7b7" size={50} />
-            </div>
-          </div>
-        </div>
+      <div className="flex h-screen items-center justify-center">
+        <HashLoader color="#36d7b7" size={50} />
       </div>
     );
   }
@@ -148,7 +131,7 @@ export default function MyGathering() {
     return (
       <div className="mb-50">
         <div className="lg:flex lg:items-center lg:justify-center">
-          <div className="flex-shrink-0 lg:h-[740px] lg:w-[330px]">
+          <div className="flex-shrink-0 lg:h-screen lg:w-[330px]">
             <h2 className="h3 text-white">모임</h2>
             <div
               className={`bg-gray-7 lg:border-gray-5 mt-5 flex h-full w-full flex-col items-center rounded-[15px] p-2 lg:w-[330px] lg:border`}

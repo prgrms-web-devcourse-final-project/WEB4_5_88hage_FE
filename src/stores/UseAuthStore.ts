@@ -22,6 +22,7 @@ interface AuthState {
   logout: () => void;
   checkSession: () => Promise<void>;
   leave: () => Promise<void>;
+  setNickname: (nickname: string) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -30,6 +31,12 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       user: null,
       isAuthenticated: false,
+
+      setNickname: (nickname: string) => {
+        set((state) => ({
+          user: state.user ? { ...state.user, nickname } : null,
+        }));
+      },
 
       login: async (email, pw, remember) => {
         try {

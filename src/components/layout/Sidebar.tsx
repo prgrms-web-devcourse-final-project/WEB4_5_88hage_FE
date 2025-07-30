@@ -19,7 +19,7 @@ const NAV_ITEMS = [
 ];
 
 export default function Sidebar() {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(9);
 
   return (
     <>

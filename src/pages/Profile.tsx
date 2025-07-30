@@ -27,6 +27,7 @@ import { updateProfile } from '@/lib/api/userInfo';
 import Toast from '@/components/common/Toast';
 import ConfirmModal from '@/components/common/ConfirmModal';
 import ProfileCalendar from '@/components/calendar/ProfileCalendar';
+import { useAuthStore } from '@/stores/UseAuthStore';
 import {
   CalendarContent,
   CurrentUserInfo,
@@ -45,6 +46,7 @@ interface UserInfo {
 
 export default function Profile() {
   const router = useRouter();
+  const setAuthNickname = useAuthStore((state) => state.setNickname);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [groupStats, setGroupStats] = useState<GroupStat[]>([]);
   const [leaderGroups, setLeaderGroups] = useState<LeaderMyGroupData[]>([]);
@@ -145,18 +147,27 @@ export default function Profile() {
         }
 
         const inquiriesData = await getContacts();
-        setMyInquiries(inquiriesData.data);
+        setMyInquiries(
+          Array.isArray(inquiriesData.data) ? inquiriesData.data : [],
+        );
 
         const bookedEventsData = await getCalendarForContent();
         console.log(bookedEventsData);
         setBookedEvents(
-          bookedEventsData.data.filter(
-            (event: CalendarContent, index: number, self: CalendarContent[]) =>
-              index === self.findIndex((e) => e.contentId === event.contentId),
-          ),
+          Array.isArray(bookedEventsData.data)
+            ? bookedEventsData.data.filter(
+                (
+                  event: CalendarContent,
+                  index: number,
+                  self: CalendarContent[],
+                ) =>
+                  index ===
+                  self.findIndex((e) => e.contentId === event.contentId),
+              )
+            : [],
         );
 
-        await fetchFollowData(); // Initial fetch of follow data
+        await fetchFollowData();
       } catch (error) {
         console.error('Failed to fetch data:', error);
       } finally {
@@ -168,14 +179,17 @@ export default function Profile() {
   }, [selectedDate]);
 
   if (loading) {
-    return;
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <HashLoader color="#36d7b7" size={50} />
+      </div>
+    );
   }
 
   if (!userInfo) {
     return <div>Failed to load profile.</div>;
   }
 
-  // Helper function to map category names and assign colors
   const getCategoryDisplayInfo = (category: string) => {
     switch (category) {
       case 'ART':
@@ -777,6 +791,7 @@ export default function Profile() {
 
               if (userInfo.nickname !== newNickname) {
                 await changeNickname(newNickname);
+                setAuthNickname(newNickname); // Update nickname in auth store
               }
               await updateProfile(profileRequest);
 
