@@ -29,7 +29,7 @@ declare interface Group {
   title?: string;
 }
 
-declare interface GroupDetailData {
+declare interface GroupDetail {
   id: number;
   title: string;
   explain: string;
@@ -38,15 +38,15 @@ declare interface GroupDetailData {
   placeName: string;
   address: string;
   viewCount: number;
-  groupDate: string;         // ISO string
+  groupDate: string; // ISO string
   createdAt: string;
   maxPeople: number;
   nowPeople: number;
   status: 'RECRUITING' | 'CLOSED' | string;
   latitude: number;
   longitude: number;
-  during: number;            // 단위: 시간
-  category: string;          // e.g. 'STUDY', 'SPORT', 'MUSIC'
+  during: number; // 단위: 시간
+  category: string; // e.g. 'STUDY', 'SPORT', 'MUSIC'
   leaderNickname: string;
   leaderEmail: string;
   leaderExplain: string;
@@ -55,6 +55,9 @@ declare interface GroupDetailData {
   hashTags: string[];
   activated: boolean;
   relatedGroups: RelatedGroup[];
+  isLeader?: boolean;
+  type?: string;
+  currentUserImageUrl?: string;
 }
 
 declare interface RelatedGroup {

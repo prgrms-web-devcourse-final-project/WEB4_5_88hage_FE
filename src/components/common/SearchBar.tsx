@@ -3,14 +3,19 @@
 import { Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-export default function SearchBar({ value, onChange }) {
+interface SearchBarProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+export default function SearchBar({ value, onChange }: SearchBarProps) {
   const [input, setInput] = useState(value);
 
   useEffect(() => {
     setInput(value);
   }, [value]);
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       onChange(input);
     }

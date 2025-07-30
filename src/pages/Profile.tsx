@@ -27,6 +27,13 @@ import { updateProfile } from '@/lib/api/userInfo';
 import Toast from '@/components/common/Toast';
 import ConfirmModal from '@/components/common/ConfirmModal';
 import ProfileCalendar from '@/components/calendar/ProfileCalendar';
+import {
+  CalendarContent,
+  CurrentUserInfo,
+  GroupStat,
+  ServiceResponse,
+  DailyCalendar,
+} from '@/types/api';
 
 interface UserInfo {
   nickname: string;
@@ -36,30 +43,16 @@ interface UserInfo {
   introduction: string;
 }
 
-interface GroupStat {
-  category: string;
-  count: number;
-}
-
-interface DailyCalender {
-  calendarId: 2;
-  type: string;
-  activityId: 1;
-  title: string;
-  selectedDate: string;
-  address: string;
-}
-
 export default function Profile() {
   const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  const [groupStats, setGroupStats] = useState<GroupStat[]>([]); // New state for group stats
-  const [leaderGroups, setLeaderGroups] = useState<LeaderMyGroupData[]>([]); // New state for leader groups
-  const [dailyEvents, setDailyEvents] = useState<DailyCalender[]>([]); // New state for daily events
-  const [dailyEventsLoading, setDailyEventsLoading] = useState(false); // New state for daily events loading
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date()); // New state for selected date
-  const [myInquiries, setMyInquiries] = useState<Inquiry[]>([]); // New state for inquiries
-  const [bookedEvents, setBookedEvents] = useState<any[]>([]);
+  const [groupStats, setGroupStats] = useState<GroupStat[]>([]);
+  const [leaderGroups, setLeaderGroups] = useState<LeaderMyGroupData[]>([]);
+  const [dailyEvents, setDailyEvents] = useState<DailyCalendar[]>([]);
+  const [dailyEventsLoading, setDailyEventsLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [myInquiries, setMyInquiries] = useState<Inquiry[]>([]);
+  const [bookedEvents, setBookedEvents] = useState<CalendarContent[]>([]);
   const [activeTab, setActiveTab] = useState('myPosts'); // 'myPosts', 'myInquiries', 'bookedEvents'
   const [showFollowerModal, setShowFollowerModal] = useState(false);
   const [showFollowingModal, setShowFollowingModal] = useState(false);
@@ -68,41 +61,42 @@ export default function Profile() {
   const [showBookedEventsModal, setShowBookedEventsModal] = useState(false);
   const [showDailyEventsModal, setShowDailyEventsModal] = useState(false);
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
-  const [followers, setFollowers] = useState<
-    { nickname: string; imageUrl: string; email: string }[]
-  >([]);
-  const [followings, setFollowings] = useState<
-    { nickname: string; imageUrl: string; email: string }[]
-  >([]);
+  const [followers, setFollowers] = useState<Follower[]>([]);
+  const [followings, setFollowings] = useState<Following[]>([]);
   const [loading, setLoading] = useState(true);
   const [showWithdrawConfirmModal, setShowWithdrawConfirmModal] =
-    useState(false); // 새로운 상태 추가
-
+    useState(false);
   const fetchFollowData = async () => {
     try {
       const followersData = await getFollowers();
       setFollowers(
-        followersData.data.content.map((f: any) => ({
+        followersData.data.content.map((f: Follower) => ({
           nickname: f.nickname,
           imageUrl: f.imageUrl,
           email: f.email,
+          introduction: f.introduction,
+          followedAt: f.followedAt,
         })),
       );
 
       const followingsData = await getFollowings();
       setFollowings(
-        followingsData.data.content.map((f: any) => ({
+        followingsData.data.content.map((f: Following) => ({
           nickname: f.nickname,
           imageUrl: f.imageUrl,
           email: f.email,
+          introduction: f.introduction,
+          followedAt: f.followedAt,
         })),
       );
 
       // userInfo (팔로워/팔로잉 수 포함) 업데이트
-      const currentUserInfo = await getUserInfo();
+      const currentUserInfo: ServiceResponse<CurrentUserInfo> =
+        await getUserInfo();
+      console.log('currentUserInfo', currentUserInfo);
       const userEmail = currentUserInfo.data.email;
       const userData = await getUserDetailInfoByEmail(userEmail);
-      setUserInfo(userData.data as UserInfo);
+      setUserInfo(userData.data as unknown as UserInfo);
     } catch (error) {
       console.error('Failed to fetch follow data:', error);
     }
@@ -111,11 +105,12 @@ export default function Profile() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const currentUserInfo = await getUserInfo();
+        const currentUserInfo: ServiceResponse<CurrentUserInfo> =
+          await getUserInfo();
         console.log('currentUserInfo:', currentUserInfo);
         const userEmail = currentUserInfo.data.email;
         const userData = await getUserDetailInfoByEmail(userEmail);
-        setUserInfo(userData.data as UserInfo);
+        setUserInfo(userData.data as unknown as UserInfo);
         console.log('userData:', userData);
 
         const statsData = await getGroupCompletedStats(); // Fetch group stats
@@ -133,29 +128,29 @@ export default function Profile() {
             const dailyCalendarData = await getDailyCalendar(year, month, day);
             setDailyEvents(
               dailyCalendarData.data.filter(
-                (event: DailyCalender, index: number, self: DailyCalender[]) =>
+                (event: DailyCalendar, index: number, self: DailyCalendar[]) =>
                   index ===
                   self.findIndex((e) => e.activityId === event.activityId),
               ),
             );
           } catch (dailyEventsError) {
             console.error('Failed to fetch daily events:', dailyEventsError);
-            setDailyEvents([]); // Clear events on error
+            setDailyEvents([]);
           } finally {
             setTimeout(() => {
-              setDailyEventsLoading(false); // End loading
-            }, 500); // Add a 500ms delay for testing
+              setDailyEventsLoading(false);
+            }, 500);
           }
         }
 
         const inquiriesData = await getContacts();
-        setMyInquiries(inquiriesData.data.content);
+        setMyInquiries(inquiriesData.data.content as Inquiry[]);
 
         const bookedEventsData = await getCalendarForContent();
         console.log(bookedEventsData);
         setBookedEvents(
-          bookedEventsData.data.content.filter(
-            (event: any, index: number, self: any[]) =>
+          bookedEventsData.data.filter(
+            (event: CalendarContent, index: number, self: CalendarContent[]) =>
               index === self.findIndex((e) => e.contentId === event.contentId),
           ),
         );
@@ -492,7 +487,7 @@ export default function Profile() {
           <div className="text-medium mb-[17px] text-xl">내 프로필</div>
           <div className="bg-gray-6 flex w-full flex-col items-center justify-center gap-2.5 rounded-[5px] p-[31px] font-medium">
             <Image
-              src={userInfo.profileImageUrl || profileImg}
+              src={userInfo.imageUrl || profileImg}
               alt="profile"
               className="rounded-full bg-black"
               width={100} // 적절한 width와 height를 지정해주세요

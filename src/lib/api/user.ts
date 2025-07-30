@@ -1,13 +1,18 @@
+import { CurrentUserInfo, ServiceResponse } from '@/types/api';
 import { get, post, put, patch } from './fetchInstance';
 
 // 회원 정보 조회 (현재 로그인한 사용자)
-export const getUserInfo = async () => {
-  return get('/api/users/info');
+export const getUserInfo = async (): Promise<
+  ServiceResponse<CurrentUserInfo>
+> => {
+  return get<ServiceResponse<CurrentUserInfo>>('/api/users/info');
 };
 
 // 유저 상세 정보 조회 (이메일로 조회)
-export const getUserDetailInfoByEmail = async (email: string) => {
-  return get(`/api/userInfos/${email}`);
+export const getUserDetailInfoByEmail = async (
+  email: string,
+): Promise<ServiceResponse<UserInfo>> => {
+  return get<ServiceResponse<UserInfo>>(`/api/userInfos/${email}`);
 };
 
 // 회원 정보 수정

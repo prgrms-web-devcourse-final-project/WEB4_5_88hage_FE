@@ -1,7 +1,7 @@
 'use client';
 import SearchAddressModal from '@/components/auth/SearchAddressModal';
 import Image from 'next/image';
-import logo from '@/assets/images/logo.svg';
+import logo from '@/assets/images/logo.png';
 import { useEffect, useState } from 'react';
 import Input from '@/components/common/Input';
 import { useRouter } from 'next/navigation';

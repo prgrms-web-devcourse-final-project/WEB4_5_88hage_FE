@@ -11,18 +11,7 @@ import { useAuthStore } from '@/stores/UseAuthStore';
 import { get as fetchGet } from '@/lib/api/fetchInstance';
 import { deleteGroup, completeGroup } from '@/lib/api/group';
 import { getCategoryDisplayName } from '@/lib/utils/categoryMapping';
-import { toast } from "react-toastify";
-
-// Type for the full gathering object
-interface GroupDetail {
-  id: number;
-  title: string;
-  category: string;
-  nowPeople: number;
-  groupImageUrl: string;
-  isLeader?: boolean;
-  currentUserImageUrl?: string;
-}
+import { toast } from 'react-toastify';
 
 interface GatheringChattingProps {
   gathering: GroupDetail | null;
@@ -97,7 +86,7 @@ export default function GatheringChatting({
           setMessages(historyMessages);
           console.log(`이전 채팅 ${historyMessages}`);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Failed to fetch chat history:', error);
       }
     };
@@ -210,7 +199,7 @@ export default function GatheringChatting({
         title={gathering.title}
         category={getCategoryDisplayName(gathering.category)}
         memberCount={gathering.nowPeople}
-        groupImageUrl={gathering.groupImageUrl}
+        groupImageUrl={gathering.imageUrl}
         groupId={gathering.id}
         isLeader={gathering.isLeader}
         onComplete={handleCompleteGroup}

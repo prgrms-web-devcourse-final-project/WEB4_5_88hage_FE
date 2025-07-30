@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Input from '@/components/common/Input';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import logo from '@/assets/images/logo.svg';
+import logo from '@/assets/images/logo.png';
 import { changePassword } from '@/lib/api/user';
 import { toast } from "react-toastify";
 
