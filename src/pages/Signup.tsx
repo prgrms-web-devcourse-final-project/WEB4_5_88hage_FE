@@ -9,8 +9,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSignupStore } from '@/stores/signupStore';
 import SearchAddressModal from '@/components/auth/SearchAddressModal';
-import { toast } from "react-toastify";
-
+import { toast } from 'react-toastify';
 
 export default function Signup() {
   const [nickname, setNickname] = useState('');
@@ -56,26 +55,36 @@ export default function Signup() {
 
   const siguUpValidation = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (
-      nickname.length === 0 ||
-      !duplicationCheck ||
-      !nicknameCheck.test(nickname) ||
-      email.length === 0 ||
-      !emailCheck.test(email) ||
-      password.length === 0 ||
-      !passwordCheck.test(password) ||
-      confirmPassword !== password ||
-      address.length === 0 ||
-      latitude === 0 ||
-      longitude === 0 ||
-      birthDate.length === 0 ||
-      !birthDateCheck.test(birthDate) ||
-      !checkedList.includes('terms') ||
-      !checkedList.includes('privacy')
-    ) {
-      setRequiredAlert(true);
-    } else {
-      setRequiredAlert(false);
+
+    // 닉네임
+    if (nickname.length === 0) toast.error('닉네임을 입력해 주세요.');
+    else if (!nicknameCheck.test(nickname))
+      toast.error('닉네임 형식이 올바르지 않습니다.');
+    else if (!duplicationCheck) toast.error('닉네임 중복 검사해주세요');
+    // 이메일
+    else if (email.length === 0) toast.error('이메일을 입력해 주세요.');
+    else if (!emailCheck.test(email))
+      toast.error('이메일 형식이 올바르지 않습니다.');
+    // 비밀번호
+    else if (password.length === 0) toast.error('비밀번호를 입력해 주세요.');
+    else if (!passwordCheck.test(password))
+      toast.error('비밀번호 형식이 올바르지 않습니다.');
+    else if (confirmPassword !== password)
+      toast.error('비밀번호 확인에 비밀번호를 그대로 입력해주세요.');
+    // 주소
+    else if (address.length === 0 || latitude === 0 || longitude === 0)
+      toast.error('주소를 입력해 주세요.');
+    // 생일
+    else if (birthDate.length === 0) toast.error('생일을 입력해 주세요.');
+    else if (!birthDateCheck.test(birthDate))
+      toast.error('생일 형식이 올바르지 않습니다.');
+    // 필수사항 체크
+    else if (!checkedList.includes('terms'))
+      toast.error('이용 약관에 체크해주세요.');
+    else if (!checkedList.includes('privacy'))
+      toast.error('개인정보 취급방침에 체크해주세요.');
+    //
+    else {
       const newUserData: SignupRequest = {
         email: email,
         password: password,
@@ -96,17 +105,14 @@ export default function Signup() {
     if (userData) {
       fetch(`${API}/api/users/signup`, {
         method: 'POST',
-        body: JSON.stringify(userData),
+        body: JSON.stringify({ email: email }),
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       })
-        .then((response) => {
-          console.log(response);
-          router.push('/signup/verify');
-        })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
         .catch((error) => {
-          console.log(error.response.data);
-          toast.error(error.response.data.message);
+          console.log(error);
         });
     }
   }, [userData]);
@@ -267,9 +273,9 @@ export default function Signup() {
           <button className="signup-btn hidden lg:block">다음</button>
         </div>
         <button className="signup-btn lg:hidden">다음</button>
-        <div className="mt-1 min-h-5 text-sm text-red-400">
+        {/* <div className="mt-1 min-h-5 text-sm text-red-400">
           {requiredAlert && '필수 항목을 확인해주세요.'}
-        </div>
+        </div> */}
       </form>
       {showModal && (
         <SearchAddressModal
