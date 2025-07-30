@@ -47,7 +47,6 @@ export default function EmailCheck({
     const { code, message, data } = await response.json();
     if (code === '0000') {
       toast.info(data);
-      // setIsCodeInput(true);
     } else toast.error(message);
   };
 
