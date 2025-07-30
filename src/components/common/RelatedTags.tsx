@@ -18,8 +18,8 @@ const TAGS = [
 ];
 
 interface RelatedTagsProps {
-  selected: string | null;
-  onSelect: (category: string | null) => void;
+  selected: string;
+  onSelect: (category: string) => void;
 }
 
 export default function RelatedTags({ selected, onSelect }: RelatedTagsProps) {
@@ -31,7 +31,7 @@ export default function RelatedTags({ selected, onSelect }: RelatedTagsProps) {
           className={`relative h-[100px] w-[100px] rounded-[5px] bg-[#2f2f2f] p-2 text-white border border-[#2F2F2F] cursor-pointer
           ${selected === category ? 'border-[#7f74ff]' : 'border-[#2F2F2F]'}
           `}
-          onClick={() => onSelect(selected === category ? null : category)}
+          onClick={() => onSelect(selected)}
         >
           {/* 이모지 (왼쪽 위) */}
           <div className="absolute left-2 top-2 h-6 w-6">
