@@ -3,9 +3,9 @@ import NotiCheckbox from '@/components/NotiCheckbox';
 import { useAuthStore } from '@/stores/UseAuthStore';
 import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 type NotificationData = {
   id: number;
@@ -28,43 +28,43 @@ export default function Notification() {
   const [selectedId, setSelectedId] = useState<number[]>([]);
   const [notiList, setNotiList] = useState<NotificationData[]>([]);
 
-  const fetchNotification = async (activeTab: string) => {
-    if (user) {
-      const response = await fetch(
-        `${API}/api/notifications/${activeTab}?email=${user.email}`,
-        {
-    credentials: "include",
-  }
-      );
-      const { code, message, data } = await response.json();
-      if (code === '0000') setNotiList(data);
-      else toast.info(message);
-    }
-  };
-
-  const readNotification = async () => {
-    const response = await fetch(`${API}/api/notifications/read-selected`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: "include",
-      body: JSON.stringify(selectedId),
-    });
-    const { code, message } = await response.json();
-    if (code === '0000') {
-      toast.info('읽음 처리되었습니다.');
-      fetchNotification(activeTab);
-    } else toast.info(message);
-  };
-
   const convertTime = (createdAt: string) => {
     const date = new Date(createdAt);
     date.setHours(date.getHours() + 9);
     return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
   };
 
+  const fetchNotification = useCallback(async () => {
+    if (user) {
+      const response = await fetch(
+        `${API}/api/notifications/${activeTab}?email=${user.email}`,
+        {
+          credentials: 'include',
+        },
+      );
+      const { code, message, data } = await response.json();
+      if (code === '0000') setNotiList(data);
+      else toast.info(message);
+    }
+  }, [activeTab, user, API, setNotiList]);
+
+  const readNotification = async () => {
+    const response = await fetch(`${API}/api/notifications/read-selected`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(selectedId),
+    });
+    const { code, message } = await response.json();
+    if (code === '0000') {
+      toast.info('읽음 처리되었습니다.');
+      fetchNotification(); // Call fetchNotification after successful read
+    } else toast.info(message);
+  };
+
   useEffect(() => {
-    fetchNotification(activeTab);
-  }, [user, activeTab]);
+    fetchNotification();
+  }, [fetchNotification]);
 
   return (
     <>
