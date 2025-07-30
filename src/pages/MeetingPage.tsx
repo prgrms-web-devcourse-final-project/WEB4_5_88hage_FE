@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { useRouter, useSearchParams } from 'next/navigation';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuthStore } from '@/stores/UseAuthStore';
+import { HashLoader } from 'react-spinners';
 
 const SORT_OPTIONS = [
   { label: '최신순', value: 'recent' },
@@ -210,9 +211,9 @@ export default function MeetingPage() {
   return (
     <div className="w-full">
       {loading && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40">
-          <span className="text-2xl font-bold text-white">로딩중...</span>
-        </div>
+        <div className="flex h-screen items-center justify-center">
+        <HashLoader color="#36d7b7" size={50} />
+      </div>
       )}
       <div className="meetingPage-gradient h-fit pt-[70px] pb-[25px] lg:h-[450px] lg:pt-[115px]">
         <SearchBar value={search} onChange={setSearch} />
@@ -290,26 +291,34 @@ export default function MeetingPage() {
           </>
         ) : (
           <div className="grid min-h-[300px] grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {filtered.length > 0 ? (
-              filtered.map((group, idx) =>
-                idx === filtered.length - 1 ? (
-                  <div key={`${group.id}-${idx}`} ref={lastCardRef}>
-                    <PostCard group={group} />
-                  </div>
-                ) : (
-                  <PostCard
-                    className="overflow-hidden rounded-[5px]"
-                    key={`${group.id}-${idx}`}
-                    group={group}
-                  />
-                ),
-              )
-            ) : (
-              <div className="col-span-4 py-10 text-center text-[#aaa]">
-                검색 결과가 없습니다.
-              </div>
-            )}
+  {filtered.length > 0 ? (
+    <>
+      {filtered.map((group, idx) =>
+        idx === filtered.length - 1 ? (
+          <div key={`${group.id}-${idx}`} ref={lastCardRef}>
+            <PostCard group={group} />
           </div>
+        ) : (
+          <PostCard
+            className="overflow-hidden rounded-[5px]"
+            key={`${group.id}-${idx}`}
+            group={group}
+          />
+        )
+      )}
+      {/* 무한스크롤 추가 로딩(다음 페이지 요청) 시 리스트 하단에만 스피너 */}
+      {loading && page > 0 && (
+        <div className="col-span-full flex justify-center items-center py-8">
+          <HashLoader color="#36d7b7" size={32} />
+        </div>
+      )}
+    </>
+  ) : (
+    <div className="col-span-4 py-10 text-center text-[#aaa]">
+      검색 결과가 없습니다.
+    </div>
+  )}
+</div>
         )}
       </div>
     </div>
