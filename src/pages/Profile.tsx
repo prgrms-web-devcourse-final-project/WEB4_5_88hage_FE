@@ -69,7 +69,7 @@ export default function Profile() {
   const fetchFollowData = async () => {
     try {
       const followersData = await getFollowers();
-      console.log(followersData)
+      console.log(followersData);
       setFollowers(
         followersData.data.content.map((f: Follower) => ({
           nickname: f.nickname,
@@ -145,7 +145,7 @@ export default function Profile() {
         }
 
         const inquiriesData = await getContacts();
-        setMyInquiries(inquiriesData.data.content as Inquiry[]);
+        setMyInquiries(inquiriesData.data);
 
         const bookedEventsData = await getCalendarForContent();
         console.log(bookedEventsData);
@@ -168,11 +168,7 @@ export default function Profile() {
   }, [selectedDate]);
 
   if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <HashLoader color="#36d7b7" size={50} />
-      </div>
-    );
+    return;
   }
 
   if (!userInfo) {

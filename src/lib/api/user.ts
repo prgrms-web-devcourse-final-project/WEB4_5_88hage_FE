@@ -1,4 +1,4 @@
-import { CurrentUserInfo, ServiceResponse } from '@/types/api';
+import { CurrentUserInfo, ServiceResponse, NicknameVerificationResponse } from '@/types/api';
 import { get, post, put, patch } from './fetchInstance';
 
 // 회원 정보 조회 (현재 로그인한 사용자)
@@ -26,7 +26,9 @@ export const verifySignupEmail = async (code: string) => {
 };
 
 // 닉네임 중복 검사
-export const verifyNickname = async (nickname: string) => {
+export const verifyNickname = async (
+  nickname: string,
+): Promise<NicknameVerificationResponse> => {
   return post('/api/users/verify/nickname', { nickname });
 };
 

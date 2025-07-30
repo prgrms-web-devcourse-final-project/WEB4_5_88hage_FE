@@ -84,7 +84,7 @@ export default function GatheringChatting({
           setMessages(historyMessages);
           console.log(`이전 채팅 ${historyMessages}`);
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error('Failed to fetch chat history:', error);
       }
     };

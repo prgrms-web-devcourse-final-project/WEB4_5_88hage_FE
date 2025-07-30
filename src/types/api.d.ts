@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export interface ApiResponse<T> {
   code: string;
   message: string;
@@ -59,8 +61,6 @@ interface CurrentUserInfo {
   // Add other properties if they are part of the user info response
 }
 
-
-
 interface GroupStat {
   category: string;
   count: number;
@@ -74,4 +74,3 @@ interface DailyCalendar {
   selectedDate: string;
   address: string;
 }
-

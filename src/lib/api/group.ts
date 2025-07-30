@@ -38,7 +38,9 @@ export const deleteGroup = async (groupId: number): Promise<void> => {
 };
 
 // 모임 생성
-export const createGroup = async (data: GroupCreateRequest): Promise<any> => {
+export const createGroup = async (
+  data: GroupCreateRequest,
+): Promise<Group> => {
   const formData = new FormData();
   formData.append('title', data.title);
   formData.append('explain', data.explain);
@@ -56,8 +58,8 @@ export const createGroup = async (data: GroupCreateRequest): Promise<any> => {
   data.hashTags.forEach((tag) => formData.append('hashTags', tag));
   if (data.during) formData.append('during', data.during.toString());
 
-  const res = await post('/api/groups/create', formData);
-  return res;
+  const res = await post<ApiResponse<Group>>('/api/groups/create', formData);
+  return res.data;
 };
 
 // 모임 완료

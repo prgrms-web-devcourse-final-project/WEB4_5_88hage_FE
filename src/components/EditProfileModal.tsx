@@ -5,7 +5,6 @@ import basicProfileImg from '@/assets/images/basicProfile.png';
 import { ChevronLeft, Settings } from 'lucide-react';
 import GrayButton from './button/GrayButton';
 import { verifyNickname } from '../lib/api/user';
-import { NicknameVerificationResponse } from '@/types/api';
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -21,11 +20,6 @@ interface EditProfileModalProps {
   ) => void;
   onAccountDelete: () => void;
 }
-
-type VerifyNicknameResponse =
-  | { code: '0000'; message: string; reason: null; data: string }
-  | { code: '4000' | '4014'; message: string; reason: string | null; data: { nickname?: string } }
-  | { code: string; message: string; reason?: string | null; data?: { nickname?: string | undefined; } };
 
 export default function EditProfileModal({
   isOpen,
@@ -69,8 +63,7 @@ export default function EditProfileModal({
       return;
     }
     try {
-      const response: NicknameVerificationResponse =
-        await verifyNickname(nickname);
+      const response = await verifyNickname(nickname);
       console.log(response);
       if (!response.reason) {
         setNicknameValidationMessage(response.data);

@@ -204,6 +204,7 @@ interface LeaderGroup {
   explain: string;
   simpleExplain: string;
   groupImageUrl: string;
+  groupDate: string;
   groupStatus: 'RECRUITING' | 'COMPLETED' | 'IN_PROGRESS'; // Assuming these are the possible statuses
   category: 'FOOD' | 'TRAVEL' | string; // Assuming these are some categories, and allowing for others
 }
