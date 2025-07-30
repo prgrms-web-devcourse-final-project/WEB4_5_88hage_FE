@@ -5,7 +5,7 @@ import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 type NotificationData = {
   id: number;
@@ -33,8 +33,8 @@ export default function Notification() {
       const response = await fetch(
         `${API}/api/notifications/${activeTab}?email=${user.email}`,
         {
-    credentials: "include",
-  }
+          credentials: 'include',
+        },
       );
       const { code, message, data } = await response.json();
       if (code === '0000') setNotiList(data);
@@ -46,7 +46,7 @@ export default function Notification() {
     const response = await fetch(`${API}/api/notifications/read-selected`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      credentials: "include",
+      credentials: 'include',
       body: JSON.stringify(selectedId),
     });
     const { code, message } = await response.json();
@@ -156,6 +156,14 @@ export default function Notification() {
                 <span className="lg:hidden">{convertTime(item.sentAt)}</span>
               </div>
               <div className="grow"></div>
+              {item.link.includes('/groups') && (
+                <div className="mr-10 flex w-24 gap-10">
+                  <button onClick={(e) => e}>수락</button>
+                  <button onClick={(e) => e} className="text-red-400">
+                    거절
+                  </button>
+                </div>
+              )}
               <div className="flex items-center gap-10 lg:mr-2.5">
                 <div className="hidden lg:block">
                   {convertTime(item.sentAt)}
