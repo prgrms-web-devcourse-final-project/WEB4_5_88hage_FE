@@ -130,9 +130,9 @@ export default function MyGathering() {
   if (loading) {
     return (
       <div className="mb-50">
-        <h2 className="h3 text-white">모임</h2>
         <div className="lg:flex lg:items-center lg:justify-center">
           <div className="flex-shrink-0 lg:h-[740px] lg:w-[330px]">
+            <h2 className="h3 text-white">모임</h2>
             <div className="flex h-screen items-center justify-center">
               <HashLoader color="#36d7b7" size={50} />
             </div>
@@ -150,17 +150,17 @@ export default function MyGathering() {
   if (error) {
     return (
       <div className="mb-50">
-        <h2 className="h3 text-white">모임</h2>
         <div className="lg:flex lg:items-center lg:justify-center">
           <div className="flex-shrink-0 lg:h-[740px] lg:w-[330px]">
+            <h2 className="h3 text-white">모임</h2>
             <div
               className={`bg-gray-7 lg:border-gray-5 mt-5 flex h-full w-full flex-col items-center rounded-[15px] p-2 lg:w-[330px] lg:border`}
             >
               <p>에러: {error}</p>
             </div>
           </div>
-          <div className="max-w-[1050px] flex-grow lg:ml-5 lg:h-[740px]">
-            <div className="bg-gray-7 lg:border-gray-5 flex h-full w-full items-center justify-center rounded-[15px] p-4 text-white lg:border lg:p-10">
+          <div className="mt-10 max-w-[1050px] flex-grow lg:ml-5 lg:h-[740px]">
+            <div className="bg-gray-7 lg:border-gray-5 mt-7 flex h-full w-full items-center justify-center rounded-[15px] p-4 text-white lg:border lg:p-10">
               <p>에러: {error}</p>
             </div>
           </div>
@@ -171,10 +171,10 @@ export default function MyGathering() {
 
   return (
     <div className="mb-50">
-      <h2 className="h3 text-white">모임</h2>
       <div className="lg:flex lg:items-center lg:justify-center">
         {/* 고정 너비 사이드 */}
         <div className="flex-shrink-0 lg:h-[740px] lg:w-[330px]">
+          <h2 className="h3 text-white">모임</h2>
           <GatheringSide
             onSelectGathering={handleSelectGathering}
             activeTab={activeTab}
@@ -184,7 +184,7 @@ export default function MyGathering() {
           />
         </div>
         {/* 유동 너비 메인 */}
-        <div className="max-w-[1050px] flex-grow lg:ml-5 lg:h-[740px]">
+        <div className="mt-15 max-w-[1050px] flex-grow lg:ml-5 lg:h-[740px]">
           {activeTab === 'my-gathering' && selectedGathering ? (
             <GatheringMain
               selectedGathering={selectedGathering}

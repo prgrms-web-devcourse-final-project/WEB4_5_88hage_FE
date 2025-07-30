@@ -2,16 +2,18 @@
 import Image from 'next/image';
 import profileImg from '@/assets/images/profile_test.png';
 import mapIcon from '@/assets/images/map_icon_test.png';
-import {
-  LucideArrowUpRight,
-  LucideChevronsLeftRight,
-  LucideUsers2,
-} from 'lucide-react';
+import { LucideArrowUpRight, LucideUsers2 } from 'lucide-react';
 import 'swiper/css';
 import { useEffect, useState } from 'react';
+import moment from 'moment';
 import { useRouter } from 'next/navigation';
-import { FadeLoader, HashLoader } from 'react-spinners';
-import { getUserInfo, getUserDetailInfoByEmail } from '@/lib/api/user';
+import { HashLoader } from 'react-spinners';
+import {
+  getUserInfo,
+  getUserDetailInfoByEmail,
+  changeNickname,
+  withdrawUser,
+} from '@/lib/api/user';
 import { getGroupCompletedStats } from '@/lib/api/participant'; // Import the new API call
 import { getLeaderMyGroups } from '@/lib/api/group'; // Import getLeaderMyGroups
 import { getDailyCalendar, getCalendarForContent } from '@/lib/api/calendar'; // Import getDailyCalendar
@@ -20,12 +22,18 @@ import { getFollowers, getFollowings } from '@/lib/api/follow';
 import basicProfileImg from '../assets/images/basicProfile.png';
 import FollowListModal from '@/components/common/FollowListModal';
 import DetailListModal from '@/components/common/DetailListModal';
+import EditProfileModal from '@/components/EditProfileModal';
+import { updateProfile } from '@/lib/api/userInfo';
+import Toast from '@/components/common/Toast';
+import ConfirmModal from '@/components/common/ConfirmModal';
+import ProfileCalendar from '@/components/calendar/ProfileCalendar';
 
 interface UserInfo {
   nickname: string;
   followerCount: number;
   followingCount: number;
   imageUrl: string;
+  introduction: string;
 }
 
 interface GroupStat {
@@ -48,8 +56,10 @@ export default function Profile() {
   const [groupStats, setGroupStats] = useState<GroupStat[]>([]); // New state for group stats
   const [leaderGroups, setLeaderGroups] = useState<LeaderMyGroupData[]>([]); // New state for leader groups
   const [dailyEvents, setDailyEvents] = useState<DailyCalender[]>([]); // New state for daily events
+  const [dailyEventsLoading, setDailyEventsLoading] = useState(false); // New state for daily events loading
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date()); // New state for selected date
   const [myInquiries, setMyInquiries] = useState<Inquiry[]>([]); // New state for inquiries
-  const [bookedEvents, setBookedEvents] = useState<any[]>([]); // New state for booked events
+  const [bookedEvents, setBookedEvents] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState('myPosts'); // 'myPosts', 'myInquiries', 'bookedEvents'
   const [showFollowerModal, setShowFollowerModal] = useState(false);
   const [showFollowingModal, setShowFollowingModal] = useState(false);
@@ -57,6 +67,7 @@ export default function Profile() {
   const [showMyInquiriesModal, setShowMyInquiriesModal] = useState(false);
   const [showBookedEventsModal, setShowBookedEventsModal] = useState(false);
   const [showDailyEventsModal, setShowDailyEventsModal] = useState(false);
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const [followers, setFollowers] = useState<
     { nickname: string; imageUrl: string; email: string }[]
   >([]);
@@ -64,6 +75,8 @@ export default function Profile() {
     { nickname: string; imageUrl: string; email: string }[]
   >([]);
   const [loading, setLoading] = useState(true);
+  const [showWithdrawConfirmModal, setShowWithdrawConfirmModal] =
+    useState(false); // 새로운 상태 추가
 
   const fetchFollowData = async () => {
     try {
@@ -111,18 +124,41 @@ export default function Profile() {
         const leaderGroupsData = await getLeaderMyGroups(); // Fetch leader groups
         setLeaderGroups(leaderGroupsData);
 
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = today.getMonth() + 1; // Month is 0-indexed
-        const day = today.getDate();
-        const dailyCalendarData = await getDailyCalendar(year, month, day);
-        setDailyEvents(dailyCalendarData.data);
+        if (selectedDate) {
+          setDailyEventsLoading(true); // Start loading
+          const year = selectedDate.getFullYear();
+          const month = selectedDate.getMonth() + 1; // Month is 0-indexed
+          const day = selectedDate.getDate();
+          try {
+            const dailyCalendarData = await getDailyCalendar(year, month, day);
+            setDailyEvents(
+              dailyCalendarData.data.filter(
+                (event: DailyCalender, index: number, self: DailyCalender[]) =>
+                  index ===
+                  self.findIndex((e) => e.activityId === event.activityId),
+              ),
+            );
+          } catch (dailyEventsError) {
+            console.error('Failed to fetch daily events:', dailyEventsError);
+            setDailyEvents([]); // Clear events on error
+          } finally {
+            setTimeout(() => {
+              setDailyEventsLoading(false); // End loading
+            }, 500); // Add a 500ms delay for testing
+          }
+        }
 
         const inquiriesData = await getContacts();
         setMyInquiries(inquiriesData.data.content);
 
         const bookedEventsData = await getCalendarForContent();
-        setBookedEvents(bookedEventsData.data.content);
+        console.log(bookedEventsData);
+        setBookedEvents(
+          bookedEventsData.data.content.filter(
+            (event: any, index: number, self: any[]) =>
+              index === self.findIndex((e) => e.contentId === event.contentId),
+          ),
+        );
 
         await fetchFollowData(); // Initial fetch of follow data
       } catch (error) {
@@ -133,7 +169,7 @@ export default function Profile() {
     };
 
     fetchData();
-  }, []);
+  }, [selectedDate]);
 
   if (loading) {
     return (
@@ -238,7 +274,10 @@ export default function Profile() {
                   <span className="text-white">{userInfo.followingCount}</span>
                 </button>
               </div>
-              <button className="mt-[17px] w-45 rounded-[5px] bg-[#323232] p-3">
+              <button
+                className="mt-[17px] w-45 rounded-[5px] bg-[#323232] p-3"
+                onClick={() => setShowEditProfileModal(true)}
+              >
                 정보 수정
               </button>
             </div>
@@ -273,74 +312,8 @@ export default function Profile() {
                 })}
               </div>
             </div>
-            <div className="bg-gray-7 h-90 w-[calc(100%*(467/1440))] rounded-[5px] px-9 py-3">
-              <div className="flex justify-between pb-2 text-lg text-[#a8a8a8]">
-                <div className="">July, 2025</div>
-                <button className="">
-                  <LucideChevronsLeftRight />
-                </button>
-              </div>
-              {/* 달력 */}
-              {/* <div className="flex flex-col gap-2.5">
-                <div className="flex gap-2.5">
-                  <div className="w-12 text-center text-[#ffb6b6]">일</div>
-                  <div className="w-12 text-center">월</div>
-                  <div className="w-12 text-center">화</div>
-                  <div className="w-12 text-center">수</div>
-                  <div className="w-12 text-center">목</div>
-                  <div className="w-12 text-center">금</div>
-                  <div className="w-12 text-center text-[#ffb6b6]">토</div>
-                </div>
-                <div className="flex flex-col gap-1.5 text-xl font-medium text-white">
-                  <div className="flex gap-2.5">
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]">
-                      1
-                    </div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                  </div>
-                  <div className="flex gap-2.5">
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                  </div>
-                  <div className="flex gap-2.5">
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                  </div>
-                  <div className="flex gap-2.5">
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                  </div>
-                  <div className="flex gap-2.5">
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                    <div className="bg-gray-6 flex size-12 items-center justify-center rounded-[5px]"></div>
-                  </div>
-                </div>
-              </div> */}
+            <div className="bg-gray-7 h-90 w-[calc(100%*(467/1440))] rounded-[5px] px-3">
+              <ProfileCalendar onDateSelect={setSelectedDate} />
             </div>
           </div>
           <div className="flex h-[356px] gap-[30px]">
@@ -394,44 +367,57 @@ export default function Profile() {
                 <div className="flex flex-col gap-3">
                   {activeTab === 'myPosts' &&
                     leaderGroups.slice(0, 3).map((group) => (
-                      <div
+                      <button
+                        onClick={() => {
+                          router.push(`/gathering/${group.groupId}`);
+                        }}
                         key={group.groupId}
                         className="bg-gray-6 flex rounded-[5px] px-5 py-4"
                       >
-                        <div className="w-[25%] truncate font-semibold">
+                        <div className="w-[25%] truncate text-left font-semibold">
                           {group.groupTitle}
                         </div>
-                        <div className="w-[60%] truncate">{group.explain}</div>
+                        <div className="w-[60%] truncate text-left">
+                          {group.explain}
+                        </div>
                         <div className="w-[15%] text-right">
                           {group.groupDate.split('T')[0].replace(/-/g, '')}
                         </div>
-                      </div>
+                      </button>
                     ))}
                   {activeTab === 'myInquiries' &&
                     myInquiries.slice(0, 3).map((inquiry) => (
-                      <div
+                      <button
                         key={inquiry.id}
-                        className="bg-gray-6 flex rounded-[5px] px-5 py-4"
+                        className="bg-gray-6 flex w-full rounded-[5px] px-5 py-4"
+                        onClick={() => {
+                          router.push(`/inquiry/${inquiry.id}`);
+                        }}
                       >
-                        <div className="w-[25%] truncate font-semibold">
+                        <div className="w-[25%] truncate text-left font-semibold">
                           {getInquiryCategoryDisplayName(inquiry.category)}
                         </div>
-                        <div className="w-[60%] truncate">{inquiry.title}</div>
+                        <div className="w-[60%] truncate text-left">
+                          {inquiry.title}
+                        </div>
                         <div className="w-[15%] text-right">
                           {getInquiryStatusDisplayName(inquiry.status)}
                         </div>
-                      </div>
+                      </button>
                     ))}
                   {activeTab === 'bookedEvents' &&
                     bookedEvents.slice(0, 3).map((event) => (
-                      <div
-                        key={event.calendarId}
+                      <button
+                        key={event.contentId}
                         className="bg-gray-6 flex rounded-[5px] px-5 py-4"
+                        onClick={() => {
+                          router.push(`/event/${event.contentId}`);
+                        }}
                       >
-                        <div className="w-[25%] truncate font-semibold">
+                        <div className="w-[25%] truncate text-left font-semibold">
                           {event.category}
                         </div>
-                        <div className="w-[60%] truncate">
+                        <div className="w-[60%] truncate text-left">
                           {event.contentTitle}
                         </div>
                         <div className="w-[15%] text-right">
@@ -444,41 +430,55 @@ export default function Profile() {
                             },
                           )}
                         </div>
-                      </div>
+                      </button>
                     ))}
                 </div>
               </div>
             </div>
             <div className="bg-gray-7 h-full w-[calc(100%*(467/1440))] rounded-[5px] px-5 py-[26px]">
               <div className="mb-5 flex justify-between border-b-1 border-[#4d4d4d] pb-4 text-[#a8a8a8]">
-                <div>오늘의 일정</div>
+                <div>
+                  {selectedDate
+                    ? `${moment(selectedDate).format('YYYY년 MM월 DD일')} 일정`
+                    : '오늘의 일정'}
+                </div>
                 <button onClick={() => setShowDailyEventsModal(true)}>
                   <LucideArrowUpRight />
                 </button>
               </div>
               <div className="flex flex-col gap-[15px]">
-                {dailyEvents.map((event) => (
-                  <div key={event.activityId}>
-                    <div className="flex items-center gap-5">
-                      <Image src={mapIcon} alt="icon" />
-                      <div className="flex flex-col items-baseline gap-[3px]">
-                        <div className="text-gray-1 font-semibold">
-                          {event.title}
-                        </div>
-                        <div className="text-sm font-medium text-[#7e7e7e]">
-                          {new Date(event.selectedDate).toLocaleDateString(
-                            'ko-KR',
-                            {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                            },
-                          )}
+                {dailyEventsLoading ? (
+                  <div className="flex h-20 items-center justify-center">
+                    <HashLoader color="#36d7b7" size={30} />
+                  </div>
+                ) : dailyEvents.length > 0 ? (
+                  dailyEvents.slice(0, 4).map((event) => (
+                    <div key={event.calendarId}>
+                      <div className="flex items-center gap-5">
+                        <Image src={mapIcon} alt="icon" />
+                        <div className="flex flex-col items-baseline gap-[3px]">
+                          <div className="text-gray-1 font-semibold">
+                            {event.title}
+                          </div>
+                          <div className="text-sm font-medium text-[#7e7e7e]">
+                            {new Date(event.selectedDate).toLocaleDateString(
+                              'ko-KR',
+                              {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                              },
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="text-center text-gray-400">
+                    일정이 없습니다.
                   </div>
-                ))}
+                )}
               </div>
             </div>
           </div>
@@ -654,7 +654,7 @@ export default function Profile() {
               key={group.groupId}
               className="bg-gray-6 flex cursor-pointer rounded-[5px] px-5 py-4"
               onClick={() => {
-                router.push(`/user/gathering?groupId=${group.groupId}`);
+                router.push(`/gathering/${group.groupId}`);
                 setShowMyPostsModal(false);
               }}
             >
@@ -675,18 +675,22 @@ export default function Profile() {
           data={myInquiries}
           onClose={() => setShowMyInquiriesModal(false)}
           renderItem={(inquiry) => (
-            <div
+            <button
               key={inquiry.id}
-              className="bg-gray-6 flex rounded-[5px] px-5 py-4"
+              className="bg-gray-6 flex cursor-pointer rounded-[5px] px-5 py-4"
+              onClick={() => {
+                router.push(`/inquiry/${inquiry.id}`);
+                setShowMyInquiriesModal(false);
+              }}
             >
-              <div className="w-[25%] truncate font-semibold">
+              <div className="w-[25%] truncate text-left font-semibold">
                 {getInquiryCategoryDisplayName(inquiry.category)}
               </div>
-              <div className="w-[60%] truncate">{inquiry.title}</div>
+              <div className="w-[60%] truncate text-left">{inquiry.title}</div>
               <div className="w-[15%] text-right">
                 {getInquiryStatusDisplayName(inquiry.status)}
               </div>
-            </div>
+            </button>
           )}
         />
       )}
@@ -697,8 +701,12 @@ export default function Profile() {
           onClose={() => setShowBookedEventsModal(false)}
           renderItem={(event) => (
             <div
-              key={event.calendarId}
-              className="bg-gray-6 flex rounded-[5px] px-5 py-4"
+              key={event.contentId}
+              className="bg-gray-6 flex cursor-pointer rounded-[5px] px-5 py-4"
+              onClick={() => {
+                router.push(`/event/${event.contentId}`);
+                setShowBookedEventsModal(false);
+              }}
             >
               <div className="w-[25%] truncate font-semibold">
                 {event.category}
@@ -717,11 +725,15 @@ export default function Profile() {
       )}
       {showDailyEventsModal && (
         <DetailListModal
-          title="오늘의 일정"
+          title={
+            selectedDate
+              ? `${moment(selectedDate).format('YYYY년 MM월 DD일')} 일정`
+              : '오늘의 일정'
+          }
           data={dailyEvents}
           onClose={() => setShowDailyEventsModal(false)}
           renderItem={(event) => (
-            <div key={event.activityId}>
+            <div key={event.calendarId}>
               <div className="flex items-center gap-5">
                 <Image src={mapIcon} alt="icon" />
                 <div className="flex flex-col items-baseline gap-[3px]">
@@ -737,6 +749,82 @@ export default function Profile() {
               </div>
             </div>
           )}
+        />
+      )}
+
+      {showEditProfileModal && userInfo && (
+        <EditProfileModal
+          isOpen={showEditProfileModal}
+          onClose={() => setShowEditProfileModal(false)}
+          currentNickname={userInfo.nickname}
+          currentIntroduction={userInfo.introduction || ''}
+          currentImageUrl={userInfo.imageUrl || basicProfileImg.src}
+          onSave={async (
+            newNickname,
+            newIntroduction,
+            newImageUrl,
+            newImageFile,
+          ) => {
+            try {
+              const imageChanged =
+                newImageFile !== undefined || newImageUrl !== userInfo.imageUrl;
+              const profileRequest: ProfileRequest = {
+                introduction: newIntroduction,
+                imageChanged: imageChanged,
+              };
+
+              if (newImageFile) {
+                profileRequest.image = newImageFile;
+              } else if (
+                newImageUrl === basicProfileImg.src &&
+                userInfo.imageUrl !== basicProfileImg.src
+              ) {
+                // If image is reset to basic and was not basic before, set image to null to delete it
+                profileRequest.image = null; // Or a specific value to indicate deletion
+              }
+
+              if (userInfo.nickname !== newNickname) {
+                await changeNickname(newNickname);
+              }
+              await updateProfile(profileRequest);
+
+              setUserInfo({
+                ...userInfo,
+                nickname: newNickname,
+                introduction: newIntroduction,
+                imageUrl: newImageUrl,
+              });
+              Toast.success('프로필이 성공적으로 업데이트되었습니다.');
+            } catch (error) {
+              console.error('Failed to update profile:', error);
+              Toast.error('프로필 업데이트에 실패했습니다.');
+            }
+          }}
+          onAccountDelete={() => {
+            setShowWithdrawConfirmModal(true); // 확인 모달을 띄웁니다.
+            setShowEditProfileModal(false); // EditProfileModal은 닫습니다.
+          }}
+        />
+      )}
+
+      {showWithdrawConfirmModal && (
+        <ConfirmModal
+          isOpen={showWithdrawConfirmModal}
+          onClose={() => setShowWithdrawConfirmModal(false)}
+          onConfirm={async () => {
+            try {
+              await withdrawUser();
+              Toast.success('회원 탈퇴가 완료되었습니다.');
+              router.push('/');
+            } catch (error) {
+              console.error('Failed to withdraw user:', error);
+              Toast.error('회원 탈퇴에 실패했습니다.');
+            } finally {
+              setShowWithdrawConfirmModal(false); // 확인 모달 닫기
+            }
+          }}
+          title="회원 탈퇴 확인"
+          message="정말로 회원 탈퇴를 하시겠습니까? 모든 정보가 삭제됩니다."
         />
       )}
     </>

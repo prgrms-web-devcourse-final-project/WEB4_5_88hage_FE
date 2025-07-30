@@ -1,4 +1,3 @@
-import { ProfileRequest } from '@/types/user';
 import { get, put } from './fetchInstance';
 // 프로필 수정
 export const updateProfile = async (profileData: ProfileRequest) => {

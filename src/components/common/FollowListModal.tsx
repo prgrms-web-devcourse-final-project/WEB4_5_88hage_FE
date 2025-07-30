@@ -145,14 +145,7 @@ export default function FollowListModal({
                 <div className="flex gap-2">
                   {user?.email !== listUser.email && (
                     <>
-                      <button
-                        className="bg-gray-4 rounded px-3 py-1 text-sm text-white"
-                        onClick={() =>
-                          toast.info(`메시지 보내기: ${listUser.nickname}`)
-                        }
-                      >
-                        메시지
-                      </button>
+                      
                       {listUser.isFollowing ? (
                         <button
                           className="bg-gray-4 rounded px-3 py-1 text-sm text-white"

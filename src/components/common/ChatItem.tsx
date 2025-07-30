@@ -17,7 +17,7 @@ export default function ChatItem({
 }: ChatItemProps) {
   return (
     <div
-      className="hover:bg-gray-5 flex w-full cursor-pointer items-start justify-between rounded-[4px] px-3 py-3 transition"
+      className="hover:bg-gray-5 flex w-full cursor-pointer items-start justify-between rounded-[4px] px-2 py-2 transition"
       onClick={onClick}
     >
       {/* 프로필 사진 */}
