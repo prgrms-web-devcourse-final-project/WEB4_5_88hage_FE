@@ -46,7 +46,7 @@ export default function PostCard({ group }: PostCardProps) {
           src={group.imageUrl || '/hip-girl-thinking.svg'}
           alt="썸네일"
           fill
-          className="rounded-t-lg object-cover"
+          className="rounded-t-[5px] object-cover"
           priority
         />
       </div>

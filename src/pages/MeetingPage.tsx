@@ -280,7 +280,9 @@ const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
                     <PostCard group={group} />
                   </div>
                 ) : (
-                  <PostCard key={`${group.id}-${idx}`} group={group} />
+                  <PostCard
+                  className="rounded-[5px] overflow-hidden"
+                   key={`${group.id}-${idx}`} group={group} />
                 )
               )
             ) : (
