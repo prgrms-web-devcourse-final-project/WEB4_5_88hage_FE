@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { HashLoader } from "react-spinners";
 
 type Notice = {
   title: string;
@@ -34,7 +35,9 @@ export default function NotiDetail() {
       });
   }, [id, API]);
 
-  if (!notice) return <div className="text-white">로딩 중...</div>;
+  if (!notice) return <div className="flex h-screen items-center justify-center">
+        <HashLoader color="#36d7b7" size={50} />
+      </div>;
 
   return (
     <div className="flex flex-col bg-[#121212]">

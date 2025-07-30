@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import { HashLoader } from 'react-spinners';
 //import Greeting from '@/components/common/Greeting';
 import { toast } from 'react-toastify';
 
@@ -136,9 +137,9 @@ export default function InquiryDetail({ id }: { id: string }) {
           </div>
         )}
         {!inquiryData && (
-          <div className="absolute top-0 left-0 flex h-screen w-screen items-center justify-center text-xl font-semibold text-white">
-            로딩 중...
-          </div>
+          <div className="flex h-screen items-center justify-center">
+        <HashLoader color="#36d7b7" size={50} />
+      </div>
         )}
       </DashboardLayout>
     </>
