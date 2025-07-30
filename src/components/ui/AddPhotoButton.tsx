@@ -1,6 +1,6 @@
 'use client';
 import { CircleX } from 'lucide-react';
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { FaCamera } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
 

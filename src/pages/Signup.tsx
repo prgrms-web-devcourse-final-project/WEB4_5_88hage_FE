@@ -6,7 +6,6 @@ import signupImg from '@/assets/images/signUpImg.png';
 import Input from '@/components/common/Input';
 import Checkbox from '@/components/common/Checkbox';
 import { FormEvent, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useSignupStore } from '@/stores/signupStore';
 import SearchAddressModal from '@/components/auth/SearchAddressModal';
 import { toast } from 'react-toastify';

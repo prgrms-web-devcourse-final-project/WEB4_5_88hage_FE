@@ -7,7 +7,6 @@ import {
   checkFollowingStatus,
 } from '@/lib/api/follow';
 import { useEffect, useState } from 'react';
-import { toast } from "react-toastify";
 import Image from 'next/image';
 import Toast from './common/Toast';
 
@@ -37,7 +36,7 @@ export default function GatheringHostBox({
       }
     };
     checkStatus();
-  }, [hostEmail, user?.email]);
+  }, [hostEmail, user?.email, hostImg]);
 
   const handleFollow = async () => {
     try {

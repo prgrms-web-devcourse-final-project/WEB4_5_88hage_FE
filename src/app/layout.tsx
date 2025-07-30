@@ -9,7 +9,11 @@ import SessionInit from "@/components/SessionInit";
 export const metadata = {
   title: 'FUNFUN',
   description: 'FUNFUN으로 여가생활 즐기자!',
+  icons: {
+    icon: '/favicon.png',
+  },
 };
+
 
 export default function RootLayout({
   children,
