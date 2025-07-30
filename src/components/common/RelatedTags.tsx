@@ -1,10 +1,10 @@
-import cultureIcon from '@/assets/images/지구 1.svg';
-import sportIcon from '@/assets/images/운동 아이콘 1.svg';
-import foodIcon from '@/assets/images/햄버거 1.svg';
-import studyIcon from '@/assets/images/측면 하트 1.svg';
-import gameIcon from '@/assets/images/게임기 아이콘 1.svg';
-import travelIcon from '@/assets/images/여행 1.svg';
-import artIcon from '@/assets/images/붓 1.svg';
+import cultureIcon from '@/assets/images/categoryImg1.png';
+import sportIcon from '@/assets/images/categoryImg6.png';
+import foodIcon from '@/assets/images/categoryImg2.png';
+import studyIcon from '@/assets/images/categoryImg7.png';
+import gameIcon from '@/assets/images/categoryImg5.png';
+import travelIcon from '@/assets/images/categoryImg4.png';
+import artIcon from '@/assets/images/categoryImg3.png';
 import Image from 'next/image';
 
 const TAGS = [

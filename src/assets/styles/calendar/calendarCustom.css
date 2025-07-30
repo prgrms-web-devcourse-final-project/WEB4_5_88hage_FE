@@ -172,6 +172,9 @@
 .rbc-show-more:hover{
     color: #3174ad;;
 }
+.rbc-date-cell .rbc-button-link {
+    justify-content: start;
+}
 
 @media screen and (max-width: 500px) {
 .rbc-calendar{

@@ -108,6 +108,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => router.push('/login/password-change')}
+                className='text-[16px] font-semibold'
               >
                 비밀번호 찾기
               </button>
