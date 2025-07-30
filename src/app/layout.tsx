@@ -5,6 +5,12 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import '../assets/styles/toast.css';
 import SessionInit from "@/components/SessionInit";
+import { Noto_Sans_KR } from 'next/font/google';
+
+const notoSans = Noto_Sans_KR({
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 export const metadata = {
   title: 'FUNFUN',
@@ -21,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={notoSans.className}>
       <body className="bg-bg">
         <Script
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&libraries=services,clusterer&autoload=false`}
