@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Buffer } from 'buffer';
 import { login as apiLogin } from '@/lib/api/auth';
-import { get as fetchGet } from '@/lib/api/fetchInstance';
+import { get as fetchGet, patch as fetchPatch } from '@/lib/api/fetchInstance';
 import { toast } from "react-toastify";
 
 interface User {
@@ -21,6 +21,7 @@ interface AuthState {
   fetchCoordinate: () => Promise<void>;
   logout: () => void;
   checkSession: () => Promise<void>;
+  leave: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -76,7 +77,7 @@ export const useAuthStore = create<AuthState>()(
           const headers: Record<string, string> = {};
           if (token) headers.Authorization = `Bearer ${token}`;
           const response = await fetchGet<CoordinateResponse>(
-            `/api/users/coordinate`,
+            '/api/users/coordinate',
             { headers, credentials: 'include' }
           );
           const { latitude, longitude } = response.data;
@@ -111,6 +112,25 @@ export const useAuthStore = create<AuthState>()(
 
       logout: () => {
         set({ token: null, user: null, isAuthenticated: false });
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("authState");
+        }
+      },
+
+      leave: async () => {
+        try {
+          const { token } = get();
+          const headers: Record<string, string> = {};
+          if (token) headers.Authorization = `Bearer ${token}`;
+          await fetchPatch('/api/users', {}, { headers, credentials: 'include' });
+          set({ token: null, user: null, isAuthenticated: false });
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("authState");
+          }
+          toast.success("회원탈퇴가 완료되었습니다.");
+        } catch (e) {
+          toast.error('회원탈퇴 실패: ' + (e?.message || ''));
+        }
       },
     }),
     {

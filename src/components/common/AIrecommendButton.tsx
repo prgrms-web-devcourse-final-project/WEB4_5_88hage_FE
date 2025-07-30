@@ -4,6 +4,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "@/assets/styles/datepicker.css";
 import { ko } from "date-fns/locale/ko";
+import { toast } from "react-toastify";
 
 registerLocale("ko", ko);
 
@@ -12,6 +13,7 @@ type Props = {
   loading?: boolean;
   className?: string;
   disabled?: boolean;
+  isLoggedIn: boolean;
 };
 
 export default function AIrecommendButton({
@@ -19,6 +21,7 @@ export default function AIrecommendButton({
   loading,
   //className,
   disabled,
+  isLoggedIn
 }: Props) {
   const [showModal, setShowModal] = useState(false);
   const [showAddrModal, setShowAddrModal] = useState(false)
@@ -84,7 +87,13 @@ type AddressData = {
     <>
       <button
         className={"h2 from-main to-text rounded-[4px] lg:text-[16px] bg-gradient-to-r font-semibold flex justify-center items-center w-[145px] h-[35px] text-white"}
-        onClick={() => setShowModal(true)}
+        onClick={() => {
+          if (!isLoggedIn) {
+            toast.info("로그인 후 이용하실 수 있습니다.");
+            return;
+          }
+          setShowModal(true);
+        }}
         disabled={disabled || loading}
       >
         {loading ? "로딩중..." : "빠른 AI 추천 ✨"}

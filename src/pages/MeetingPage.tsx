@@ -9,6 +9,7 @@ import { ChevronDown } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useRouter, useSearchParams } from "next/navigation";
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuthStore } from "@/stores/UseAuthStore";
 
 const SORT_OPTIONS = [
   { label: "최신순", value: "recent" },
@@ -57,16 +58,20 @@ export default function MeetingPage() {
     }
     setLoading(true);
     try {
+      const token = useAuthStore.getState().token;
       const res = await fetch(`${API}/api/recommend/group`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          startTime: start,
-          endTime: end,
-          address,
-        }),
-      });
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}), // 토큰 있으면 Authorization 헤더 추가
+  },
+  credentials: "include",
+  body: JSON.stringify({
+    startTime: start,
+    endTime: end,
+    address,
+  }),
+});
       if (!res.ok) {
         toast.error("추천 결과를 불러오지 못했습니다.");
         setLoading(false);
@@ -180,6 +185,8 @@ export default function MeetingPage() {
     .filter(Boolean)
     .join('\n\n');
 
+const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
   return (
     <div className="w-full">
       {loading && (
@@ -195,7 +202,9 @@ export default function MeetingPage() {
         <div className="flex items-center justify-between my-[20px] lg:my-[32px]">
           <AIrecommendButton
             onRecommend={handleRecommend}
+            loading={loading}
             disabled={recommendClick > 0}
+            isLoggedIn={isAuthenticated}
           />
           <div className="relative" ref={sortRef}>
             <button

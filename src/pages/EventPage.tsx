@@ -9,6 +9,7 @@ import CategoryDropdown from "@/components/ui/CategoryDropdown";
 import MoreRecommendButton from "@/components/common/MoreRecommendButton";
 import { toast } from "react-toastify";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useAuthStore } from "@/stores/UseAuthStore";
 
 const SORT_OPTIONS = [
   { label: "인기순", value: "bookmarkCount" },
@@ -191,6 +192,8 @@ export default function EventPage() {
     [loading, hasMore]
   );
 
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
   return (
     <div className="w-full">
       {page === 0 && loading && (
@@ -206,7 +209,9 @@ export default function EventPage() {
         <div className="flex items-center justify-between my-[20px] lg:my-[32px]">
           <AIrecommendButton 
             onRecommend={handleEventRecommend}
+            loading={loading}
             className="mr-4"
+            isLoggedIn={isAuthenticated}
           />
           <div className="flex items-center gap-5">
             <CategoryDropdown
@@ -244,33 +249,39 @@ export default function EventPage() {
         </div>
         <div className="relative">
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 min-h-[300px]">
-            {recommendedEvents.length > 0 ? (
-              recommendedEvents
-                .slice(recommendClick * 4, recommendClick * 4 + 4)
-                .map((event) => (
-                  <EventCard key={event.id} event={mapEventToCard(event)} />
-                ))
-            ) : data.length > 0 ? (
-              data.map((event, idx) =>
-                idx === data.length - 1 ? (
-                  <div key={`${event.id}-${idx}`} ref={lastCardRef}>
-                    <EventCard event={mapEventToCard(event)} />
-                  </div>
-                ) : (
-                  <EventCard key={`${event.id}-${idx}`} event={mapEventToCard(event)} />
-                )
-              )
-            ) : (
-              <div className="col-span-4 text-center text-[#aaa] py-10">
-                검색 결과가 없습니다.
-              </div>
-            )}
-            {loading && page > 0 && (
-              <div className="col-span-4 flex justify-center items-center py-6">
-                <span className="text-white text-lg">로딩중...</span>
-              </div>
-            )}
-          </div>
+  {recommendedEvents.length > 0 ? (
+    recommendedEvents
+      .slice(recommendClick * 4, recommendClick * 4 + 4)
+      .map((event) => (
+        <EventCard key={event.id} event={mapEventToCard(event)} />
+      ))
+  ) : data.length > 0 ? (
+    data.map((event, idx) =>
+      idx === data.length - 1 ? (
+        <div key={`${event.id}-${idx}`} ref={lastCardRef}>
+          <EventCard event={mapEventToCard(event)} />
+        </div>
+      ) : (
+        <EventCard key={`${event.id}-${idx}`} event={mapEventToCard(event)} />
+      )
+    )
+  ) : (
+    search ? (
+      <div className="col-span-4 text-center text-[#aaa] py-10">
+        검색 결과가 없습니다.
+      </div>
+    ) : (
+      // 아무 메시지도 없고 min-height만
+      <div className="col-span-4 py-10" />
+    )
+  )}
+  {loading && page > 0 && (
+    <div className="col-span-4 flex justify-center items-center py-6">
+      <span className="text-white text-lg">로딩중...</span>
+    </div>
+  )}
+</div>
+
         </div>
         {recommendedEvents.length > 0 && (
           <div className="gradient-box mt-[51.45px] mb-[100px] flex flex-col rounded-[5px] px-[40px] text-white">
