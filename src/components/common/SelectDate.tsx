@@ -17,18 +17,18 @@ export default function SelectDate({title,id,setShow,show}:Props){
     const [eventDate,setEventDate] = useState('');
 
     useEffect(() => {
+    const cls = 'modal-open';
     if (show) {
-      document.body.style.overflow = 'hidden';
+      document.body.classList.add(cls);
     } else {
-      document.body.style.overflow = '';
+      document.body.classList.remove(cls);
     }
-
     return () => {
-      document.body.style.overflow = '';
+      document.body.classList.remove(cls);
     };
   }, [show]);
 
-  if (!show) return null;
+    if (!show) return null;
 
     const addCalendar = async (data: { activityId: number; selectedDate: string }) => {
     try {
