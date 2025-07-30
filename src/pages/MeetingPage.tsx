@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { useRouter, useSearchParams } from "next/navigation";
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuthStore } from "@/stores/UseAuthStore";
+import { HashLoader } from "react-spinners";
 
 const SORT_OPTIONS = [
   { label: "최신순", value: "recent" },
@@ -196,7 +197,7 @@ const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     <div className="w-full">
       {loading && (
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-[9999]">
-          <span className="text-white text-2xl font-bold">로딩중...</span>
+          <HashLoader />
         </div>
       )}
       <div className="meetingPage-gradient lg:h-[450px] lg:pt-[115px] h-fit pt-[70px] pb-[25px]">
