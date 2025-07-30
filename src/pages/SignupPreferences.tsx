@@ -76,12 +76,7 @@ export default function SignupPreferences({ isOAuth }: { isOAuth?: boolean }) {
   useEffect(() => {
     if (userData && !isOAuth) {
       loginInThisPage();
-    }
-    // else if (userData && isOAuth) {
-    //   clearAll();
-    //   localStorage.removeItem('signup-store');
-    // }
-  }, [userData]);
+   });
 
   const tagSelectHandler = (
     type: string,

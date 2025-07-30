@@ -151,7 +151,7 @@ console.log("[추천 버튼] fetch 결과 status:", res.status);
       setLoading(false);
     };
     fetchData();
-  }, [selectedCategory, sortBy, page, groups.length]);
+  }, );
 
   useEffect(() => {
     setSearch("");
