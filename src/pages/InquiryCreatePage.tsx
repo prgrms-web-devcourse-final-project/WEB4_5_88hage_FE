@@ -12,7 +12,6 @@ import { toast } from "react-toastify";
 export default function InquiryCreatePage() {
   // let formData = new FormData();
   const [images, setImages] = useState<File[]>([]);
-  const API = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
   const handleDataChange = (data: File[]) => setImages(data);
@@ -22,7 +21,7 @@ export default function InquiryCreatePage() {
 
     // formData 만들기
     const formData = new FormData(e.currentTarget);
-    let formDataRequested: ContactRequest = {
+    const formDataRequested: ContactRequest = {
       title: '',
       content: '',
       category: '',
