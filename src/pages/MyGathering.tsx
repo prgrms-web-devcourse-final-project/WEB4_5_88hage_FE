@@ -67,10 +67,7 @@ export default function MyGathering() {
     }
   }, [
     setLoading,
-    getMyGroups,
-    getGroupById,
     setMyGatherings,
-    getLastChatHistory,
     setLastMessages,
     setError,
   ]);

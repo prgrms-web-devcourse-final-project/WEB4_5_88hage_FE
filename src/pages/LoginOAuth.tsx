@@ -42,7 +42,7 @@ export default function LoginOAuth() {
 
   useEffect(() => {
     getUserInfo();
-  }, []);
+  },);
 
   const handleCheckChange = (id: string) => {
     const isChecked = checkedList.includes(id);

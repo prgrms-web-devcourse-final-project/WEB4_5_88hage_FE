@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+
 import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ArrowUp } from "lucide-react";
 import DatePicker from "react-datepicker";

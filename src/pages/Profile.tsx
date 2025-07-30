@@ -114,16 +114,16 @@ export default function Profile() {
         setUserInfo(userData.data as unknown as UserInfo);
         console.log('userData:', userData);
 
-        const statsData = await getGroupCompletedStats(); // Fetch group stats
-        setGroupStats(statsData.data); // Set group stats
+        const statsData = await getGroupCompletedStats();
+        setGroupStats(statsData.data);
 
-        const leaderGroupsData = await getLeaderMyGroups(); // Fetch leader groups
+        const leaderGroupsData = await getLeaderMyGroups();
         setLeaderGroups(leaderGroupsData);
 
         if (selectedDate) {
-          setDailyEventsLoading(true); // Start loading
+          setDailyEventsLoading(true);
           const year = selectedDate.getFullYear();
-          const month = selectedDate.getMonth() + 1; // Month is 0-indexed
+          const month = selectedDate.getMonth() + 1;
           const day = selectedDate.getDate();
           try {
             const dailyCalendarData = await getDailyCalendar(year, month, day);

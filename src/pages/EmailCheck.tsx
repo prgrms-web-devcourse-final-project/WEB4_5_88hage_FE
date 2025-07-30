@@ -74,7 +74,7 @@ export default function EmailCheck({
 
   useEffect(() => {
     if (codeInput.length === 6) codeEvent(codeInput);
-  }, [codeInput]);
+  },);
 
   return (
     <form

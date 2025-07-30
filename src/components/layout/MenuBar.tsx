@@ -41,23 +41,23 @@ export default function MenuBar({ close }: { close: () => void }) {
   const router = useRouter();
 
   const NAV_ITEMS = isAuthenticated ? loginItem : logoutItem;
-
-  const getNotificationCount = async () => {
+  
+useEffect(() => {
+  const fetchNotificationCount = async () => {
     if (user) {
       const response = await fetch(
         `${API}/api/notifications/unread-count?email=${user.email}`,
         {
-        credentials: "include",
-      }
+          credentials: "include",
+        }
       );
       const { data } = await response.json();
       setNotiCount(data);
     }
   };
 
-  useEffect(() => {
-    getNotificationCount();
-  }, [isAuthenticated === true, user]);
+  fetchNotificationCount();
+}, [isAuthenticated, user,API]);
 
   useEffect(() => {
     const getNowWeather = async () => {
