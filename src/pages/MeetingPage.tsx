@@ -86,9 +86,26 @@ export default function MeetingPage() {
         setLoading(false);
         return;
       }
-      const json = await res.json();
+            const json = await res.json();
       console.log('[추천 버튼] 응답 json:', json);
-      setGroups(json.data.groups ?? []);
+      const mappedGroups = (json.data.groups ?? []).map((g: {
+  id: number;
+  title: string;
+  imageUrl: string;
+  leader: string;
+  groupDate: string;
+  simpleExplain?: string;
+  reason?: string;
+}) => ({
+  id: g.id,
+  title: g.title,
+  imageUrl: g.imageUrl,
+  leaderNickname: g.leader,
+  groupDate: g.groupDate,
+  simpleExplain: g.simpleExplain,
+  reason: g.reason,
+}));
+      setGroups(mappedGroups);
       setRecommendClick(0);
     } catch (e: unknown) {
       toast.error('에러가 발생했습니다.');

@@ -2,6 +2,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSignupStore } from '@/stores/signupStore';
 import { useEffect } from 'react';
+import { HashLoader } from 'react-spinners';
 
 export default function AuthVerify() {
   const searchParams = useSearchParams();
@@ -29,7 +30,9 @@ export default function AuthVerify() {
 
   return (
     <div className="flex h-screen w-screen items-center justify-center">
-      <div className="text-xl font-bold text-white">로딩 중...</div>
+      <div className="flex h-screen items-center justify-center">
+        <HashLoader color="#36d7b7" size={50} />
+      </div>
     </div>
   );
 }
