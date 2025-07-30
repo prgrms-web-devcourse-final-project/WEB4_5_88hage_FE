@@ -22,6 +22,7 @@ interface AuthState {
   logout: () => void;
   checkSession: () => Promise<void>;
   leave: () => Promise<void>;
+  setNickname: (nickname: string) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -114,12 +115,16 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      logout: () => {
-        set({ token: null, user: null, isAuthenticated: false });
-        if (typeof window !== "undefined") {
-          localStorage.removeItem("authState");
-        }
-      },
+      logout: async () => {
+  try {
+    await fetch("https://funfun.cloud/api/auth/logout", {
+      method: "GET",
+      credentials: "include",
+    });
+  } catch {
+  }
+  set({ token: null, user: null, isAuthenticated: false });
+},
 
       leave: async () => {
         try {
@@ -139,6 +144,12 @@ export const useAuthStore = create<AuthState>()(
       : "";
   toast.error("회원탈퇴 실패: " + errorMsg);
 }
+      },
+
+      setNickname: (nickname: string) => {
+        set((state) => ({
+          user: state.user ? { ...state.user, nickname } : null,
+        }));
       },
     }),
     {

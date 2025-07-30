@@ -17,6 +17,7 @@ type NotificationData = {
   scheduledAt: string;
   sentAt: string;
   calendarId: null;
+  applicantEmail: string | null;
 };
 
 export default function Notification() {
@@ -30,7 +31,7 @@ export default function Notification() {
 
   const convertTime = (createdAt: string) => {
     const date = new Date(createdAt);
-    date.setHours(date.getHours() + 9);
+    // date.setHours(date.getHours() + 9);
     return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
   };
 
@@ -61,6 +62,11 @@ export default function Notification() {
       fetchNotification(); // Call fetchNotification after successful read
     } else toast.info(message);
   };
+
+  // const fetchGroupApprove = async (link: string, select: string) => {
+  //   const groupId = link.split('/')[link.split('/').length - 1];
+  //   console.log(groupId, select);
+  // };
 
   useEffect(() => {
     fetchNotification();
@@ -156,6 +162,23 @@ export default function Notification() {
                 <span className="lg:hidden">{convertTime(item.sentAt)}</span>
               </div>
               <div className="grow"></div>
+              {/* {item.link.includes('/groups') && (
+                <div className="mr-10 flex min-w-24 gap-10 lg:mr-12">
+                  <button
+                    type="button"
+                    onClick={() => fetchGroupApprove(item.link, '수락')}
+                  >
+                    수락
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => fetchGroupApprove(item.link, '거절')}
+                    className="text-[#ff4e4e]"
+                  >
+                    거절
+                  </button>
+                </div>
+              )} */}
               <div className="flex items-center gap-10 lg:mr-2.5">
                 <div className="hidden lg:block">
                   {convertTime(item.sentAt)}
