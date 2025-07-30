@@ -10,6 +10,7 @@ import { useSignupStore } from '@/stores/signupStore';
 import SearchAddressModal from '@/components/auth/SearchAddressModal';
 import { toast } from 'react-toastify';
 import Logo from '@/components/common/Logo';
+import { useRouter } from 'next/navigation';
 
 export default function Signup() {
   const [nickname, setNickname] = useState('');
@@ -27,7 +28,7 @@ export default function Signup() {
   const API = process.env.NEXT_PUBLIC_API_URL;
   // const [requiredAlert, setRequiredAlert] = useState(false);
   const { userData, setData } = useSignupStore((state) => state);
-  // const router = useRouter();
+  const router = useRouter();
 
   const nicknameCheck = /^[가-힣a-zA-Z0-9]{2,10}$/;
   const emailCheck = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
@@ -91,8 +92,8 @@ export default function Signup() {
         confirmPassword: confirmPassword,
         nickname: nickname,
         address: address,
-        latitude: latitude,
-        longitude: longitude,
+        latitude: +latitude.toFixed(4),
+        longitude: +longitude.toFixed(4),
         birthDate: birthDate,
         gender: maleSelected ? 'MALE' : 'FEMALE',
         isMarketingAgreed: checkedList.includes('marketing'),
@@ -105,12 +106,17 @@ export default function Signup() {
     if (userData) {
       fetch(`${API}/api/users/signup`, {
         method: 'POST',
-        body: JSON.stringify({ email: email }),
+        body: JSON.stringify(userData),
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       })
         .then((response) => response.json())
-        .then((data) => console.log(data))
+        .then((data) => {
+          console.log(data);
+          if (data.code === '0000') {
+            router.push('/signup/verify');
+          } else toast.error(data.message);
+        })
         .catch((error) => {
           console.log(error);
         });
@@ -119,7 +125,7 @@ export default function Signup() {
 
   return (
     <div className="flex">
-      <Logo className="absolute top-10 left-10" />
+      <Logo className="absolute top-10 left-10 hidden lg:block" />
       <div className="hidden h-screen w-1/2 items-center justify-center lg:flex">
         <Image src={signupImg} alt="signupImg" className="z-10" />
       </div>
@@ -158,14 +164,13 @@ export default function Signup() {
                   })
                     .then((response) => response.json())
                     .then((data) => {
-                      console.log(data);
-                      toast.info(data.data);
-                      setDuplicationCheck(true);
-                    })
-                    .catch((error) => {
-                      console.log(error.response.data);
-                      toast.error(error.response.data.message);
-                      setDuplicationCheck(false);
+                      if (data.code === '0000') {
+                        toast.success(data.data);
+                        setDuplicationCheck(true);
+                      } else {
+                        toast.error(data.message);
+                        setDuplicationCheck(false);
+                      }
                     });
                 }
               }}
