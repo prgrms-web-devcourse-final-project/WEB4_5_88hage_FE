@@ -46,7 +46,7 @@ export default function Login() {
         setLoginError('올바른 이메일 형식이 아닙니다.');
       } else if (loginError.code === '4017') {
         console.error('로그인 실패', err);
-        setLoginError(err.message);
+        setLoginError(loginError.message);
       } else {
         console.error('로그인 실패: ', err);
         setLoginError('이메일 또는 비밀번호가 일치하지 않습니다.');
