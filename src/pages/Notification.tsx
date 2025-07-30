@@ -63,10 +63,10 @@ export default function Notification() {
     } else toast.info(message);
   };
 
-  const fetchGroupApprove = async (link: string, select: string) => {
-    const groupId = link.split('/')[link.split('/').length - 1];
-    console.log(groupId, select);
-  };
+  // const fetchGroupApprove = async (link: string, select: string) => {
+  //   const groupId = link.split('/')[link.split('/').length - 1];
+  //   console.log(groupId, select);
+  // };
 
   useEffect(() => {
     fetchNotification();
@@ -162,7 +162,7 @@ export default function Notification() {
                 <span className="lg:hidden">{convertTime(item.sentAt)}</span>
               </div>
               <div className="grow"></div>
-              {item.link.includes('/groups') && (
+              {/* {item.link.includes('/groups') && (
                 <div className="mr-10 flex min-w-24 gap-10 lg:mr-12">
                   <button
                     type="button"
@@ -178,7 +178,7 @@ export default function Notification() {
                     거절
                   </button>
                 </div>
-              )}
+              )} */}
               <div className="flex items-center gap-10 lg:mr-2.5">
                 <div className="hidden lg:block">
                   {convertTime(item.sentAt)}
