@@ -480,12 +480,19 @@ export default function Profile() {
                     <HashLoader color="#36d7b7" size={30} />
                   </div>
                 ) : dailyEvents.length > 0 ? (
-                  dailyEvents.slice(0, 3).map((event) => (
+                  dailyEvents.slice(0, 4).map((event) => (
                     <div key={event.calendarId}>
                       <div className="flex items-center gap-5">
-                        <Image src={mapIcon} alt="icon" />
-                        <div className="flex flex-col items-baseline gap-[3px]">
-                          <div className="text-gray-1 font-semibold">
+                        <div className="flex-shrink-0">
+                          <Image
+                            src={mapIcon}
+                            alt="icon"
+                            width={40}
+                            height={40}
+                          />
+                        </div>
+                        <div className="flex min-w-0 flex-grow flex-col items-baseline gap-[3px]">
+                          <div className="text-gray-1 w-full truncate font-semibold">
                             {event.title}
                           </div>
                           <div className="text-sm font-medium text-[#7e7e7e]">
