@@ -1,5 +1,4 @@
 import fetchInstance, { get } from './fetchInstance';
-import { AdminReportProcessRequest } from '@/types/global';
 
 // 신고 처리
 export const processReport = async (
