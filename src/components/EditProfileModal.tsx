@@ -21,6 +21,11 @@ interface EditProfileModalProps {
   onAccountDelete: () => void;
 }
 
+type VerifyNicknameResponse =
+  | { code: '0000'; message: string; reason: null; data: string }
+  | { code: '4000' | '4014'; message: string; reason: string | null; data: { nickname?: string } }
+  | { code: string; message: string; reason?: string | null; data?: { nickname?: string | undefined; } };
+
 export default function EditProfileModal({
   isOpen,
   onClose,
@@ -61,8 +66,8 @@ export default function EditProfileModal({
       return;
     }
     try {
-      const response = await verifyNickname(nickname);
-      console.log(response);
+      const response = await verifyNickname(nickname) as VerifyNicknameResponse;
+      console.log("리스폰스 확인", response);
       if (response.code === '4014') {
         setErrorMessage('이미 사용 중인 닉네임입니다.');
         setIsNicknameValidated(false);
@@ -74,7 +79,9 @@ export default function EditProfileModal({
         setErrorMessage(response.data.nickname);
         setIsNicknameValidated(false);
       } else if (!response.reason) {
-        setNicknameValidationMessage(response.data);
+        if (typeof response.data === 'string') {
+          setNicknameValidationMessage(response.data);
+        }
         setIsNicknameValidated(true);
       } else {
         setNicknameValidationMessage('알 수 없는 응답입니다.');
