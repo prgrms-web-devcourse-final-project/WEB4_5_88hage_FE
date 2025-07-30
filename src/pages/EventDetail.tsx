@@ -19,14 +19,12 @@ import SelectDate from '@/components/common/SelectDate';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { filterContentCategory } from '@/lib/utils/filterCategory';
+import Spinner from '@/components/common/Spinner';
 
 export default function EventDetail({ data }: { data: EventData }) {
   const [show, setShow] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const route = useRouter();
-  if (!data) {
-    return null;
-  }
   const { content, related, nearby } = data;
 
   const routing = (id: number) => {
@@ -39,6 +37,10 @@ export default function EventDetail({ data }: { data: EventData }) {
   const dateFormatting = (date: string) => {
     return moment(date).format('YYYY년 MM월 DD일');
   };
+
+  if(!data){
+    return <Spinner/>
+  }
 
   return (
     <div className="eventDetail-gradient flex w-screen min-w-screen justify-center bg-[#121212] lg:w-340">
@@ -162,12 +164,11 @@ export default function EventDetail({ data }: { data: EventData }) {
           <div className="flex flex-col gap-9">
             <div className="flex items-center justify-between">
               <div
-                onClick={() => route.push('/event')}
                 className="text-main text-2xl"
               >
                 주변에 가까운 행사 추천 해드려요
               </div>
-              <button className="cursor-pointer text-[#a1a1a1]">더보기</button>
+              <button onClick={() => route.push('/event')} className="cursor-pointer text-[#a1a1a1]">더보기</button>
             </div>
             <div className="flex gap-5">
               {nearbyArr.map((data) => {

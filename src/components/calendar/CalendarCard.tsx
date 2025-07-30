@@ -3,6 +3,7 @@ import { EllipsisVertical } from 'lucide-react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import CalendarSelectDate from '../common/CalendarSelectDate';
 import Toast from '../common/Toast';
+import { useRouter } from 'next/navigation';
 
 type Props ={
   info:CalendarEvent,
@@ -17,6 +18,7 @@ export default function CalendarCard({info,setSelectListData,setCalendarData}:Pr
   const[showBox,setShowBox] = useState(false);
   //데이터피커 모달
   const[showModal,setShowModal] = useState(false);
+  const router = useRouter()
 
   const timeFormatting = () => {
     const date = new Date(info.start)
@@ -42,22 +44,26 @@ export default function CalendarCard({info,setSelectListData,setCalendarData}:Pr
       Toast.success('삭제 성공')
     }
 
-     const data = await response.json();
-     setSelectListData((prev) => prev.filter(data => data.calendarId !== info.calendarId));
-     setCalendarData((prev) => prev.filter(data => data.calendarId !== info.calendarId));
-     console.log('삭제 성공 : ', data);
+    const data = await response.json();
+    setSelectListData((prev) => prev.filter(data => data.calendarId !== info.calendarId));
+    setCalendarData((prev) => prev.filter(data => data.calendarId !== info.calendarId));
+    console.log('삭제 성공 : ', data);
     } catch(error) {
       console.log('이벤트 삭제 실패: ', error)
     }
   }
 
-  // const redirectDetailPage = ()=>{
-
-  // }
+  const redirectDetailPage = ()=>{
+    if(info.type === "CONTENT"){
+      router.push(`/event/${info.activityId}`);
+    } else {
+      router.push(`/gathering/${info.activityId}`);
+    }
+  }
 
   return (
     <>
-    <div className="h-fit text-[14px] justify-between flex min-w-[310px] bg-gray-6 rounded-[5px] lg:min-w-[250px] lg:w-[250px] cursor-pointer">
+    <div onClick={redirectDetailPage}  className="h-fit text-[14px] justify-between flex min-w-[310px] bg-gray-6 rounded-[5px] lg:min-w-[250px] lg:w-[250px] cursor-pointer">
       <div className='flex'>
         <div className={`w-[4px] min-h-auto rounded-tl-[5px] rounded-bl-[5px] ${info.type === "CONTENT" ?'bg-[#4BFF69]':'bg-[#FF8A4B]'}`}></div>
         <div className="pl-[15px] pt-[15px] pb-[15px] flex gap-[15px] text-gray-sub flex-col">

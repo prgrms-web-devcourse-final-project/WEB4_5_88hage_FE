@@ -18,6 +18,7 @@ import { EllipsisVertical } from 'lucide-react';
 import { useAuthStore } from '@/stores/UseAuthStore';
 import { deleteGroup } from '@/lib/api/group';
 import { filterGatheringCategory } from '@/lib/utils/filterCategory';
+import Spinner from '@/components/common/Spinner';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -115,6 +116,11 @@ export default function GatheringDetail({
 
     return `${year}년 ${month}월 ${day}일`;
   };
+
+  if(!data){
+    return <Spinner/>
+  }
+
   return (
     <div className="eventDetail-gradient flex w-screen min-w-screen justify-center bg-[#121212] lg:w-340">
       <div className="hidden h-full min-h-screen py-15 text-[#f6f6f6] lg:flex">
