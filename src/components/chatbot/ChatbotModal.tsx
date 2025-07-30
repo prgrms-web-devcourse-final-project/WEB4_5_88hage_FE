@@ -102,6 +102,7 @@ export default function ChatbotModal({ onClose }: ChatbotModalProps) {
       const res = await fetch(`${API}/api/chatBot/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(payload),
       });
       const result = await res.json();
