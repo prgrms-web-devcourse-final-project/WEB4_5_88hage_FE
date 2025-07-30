@@ -3,9 +3,8 @@
 import { useState } from 'react';
 import Input from '@/components/common/Input';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import logo from '@/assets/images/logo.svg';
 import { toast } from "react-toastify";
+import Logo from '@/components/common/Logo';
 
 export default function PasswordChangePage({ email }: { email: string }) {
   const [password, setPassword] = useState('');
@@ -47,7 +46,7 @@ export default function PasswordChangePage({ email }: { email: string }) {
             <span className="text-white">FU</span>N
             <span className="text-white">FU</span>N
           </h1> */}
-          <Image src={logo} alt="logo" />
+          <Logo/>
 
           <div className="flex w-full flex-col gap-4">
             <Input

@@ -2,9 +2,17 @@
 import Image from 'next/image';
 import email from '../assets/images/email.svg';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { sendCodeEmail, verifyAuthCode } from '@/lib/api/user';
-import { toast } from "react-toastify";
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+
+type FormValues = {
+  c1: string;
+  c2: string;
+  c3: string;
+  c4: string;
+  c5: string;
+  c6: string;
+};
 
 export default function EmailCheck({
   next,
@@ -14,39 +22,52 @@ export default function EmailCheck({
   const [emailInput, setEmailInput] = useState('');
   const [isCodeInput, setIsCodeInput] = useState(false);
   const [codeInput, setCodeInput] = useState('');
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<FormValues>();
+  const API = process.env.NEXT_PUBLIC_API_URL;
 
-  const sendMailToMe = () => {
-    sendCodeEmail(emailInput)
-      .then((response) => {
-        toast.info(response.data);
-        setIsCodeInput(true);
-      })
-      .catch((error) => toast.error(error));
+  const sendMailToMe = async () => {
+    const response = await fetch(`${API}/api/users/send/code/${emailInput}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+    const { code, message, data } = await response.json();
+    if (code === '0000') {
+      toast.info(data);
+      setIsCodeInput(true);
+    } else toast.error(message);
   };
 
   const sendMailAgain = async () => {
-    sendCodeEmail(emailInput)
-      .then((response) => {
-        toast.info(response.data);
-        // setIsCodeInput(true);
-      })
-      .catch((error) => toast.error(error));
+    const response = await fetch(`${API}/api/users/send/code/${emailInput}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+    const { code, message, data } = await response.json();
+    if (code === '0000') {
+      toast.info(data);
+    } else toast.error(message);
   };
 
   const codeEvent = async (c: string) => {
-    verifyAuthCode(c, emailInput)
-      .then((response) => {
-        console.log(response);
-        toast.info(response.message);
-        if (next) next(emailInput);
-      })
-      .catch((error) => {
-        toast.error(error);
-      });
+    const response = await fetch(
+      `${API}//api/users/verify/code/${emailInput}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: c }),
+        credentials: 'include',
+      },
+    );
+    const { code, message } = await response.json();
+    if (code === '0000') {
+      toast.info(message);
+      if (next) next(emailInput);
+    } else toast.info(message);
   };
 
-  const codeSubmit = (d) => {
+  const codeSubmit: SubmitHandler<FormValues> = (d) => {
     const { c1, c2, c3, c4, c5, c6 } = d;
     setCodeInput(`${c1}${c2}${c3}${c4}${c5}${c6}`);
   };

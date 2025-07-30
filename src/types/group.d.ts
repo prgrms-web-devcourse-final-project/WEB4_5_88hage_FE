@@ -38,15 +38,15 @@ declare interface GroupDetailData {
   placeName: string;
   address: string;
   viewCount: number;
-  groupDate: string;         // ISO string
+  groupDate: string; // ISO string
   createdAt: string;
   maxPeople: number;
   nowPeople: number;
   status: 'RECRUITING' | 'CLOSED' | string;
   latitude: number;
   longitude: number;
-  during: number;            // 단위: 시간
-  category: string;          // e.g. 'STUDY', 'SPORT', 'MUSIC'
+  during: number; // 단위: 시간
+  category: string; // e.g. 'STUDY', 'SPORT', 'MUSIC'
   leaderNickname: string;
   leaderEmail: string;
   leaderExplain: string;
@@ -133,15 +133,16 @@ declare interface GroupCreateRequest {
   placeName: string;
   groupDate: string;
   address: string;
-  category:
-    | 'ART'
-    | 'TRAVEL'
-    | 'FOOD'
-    | 'GAME'
-    | 'CULTURE'
-    | 'SPORT'
-    | 'STUDY'
-    | 'MOVIE';
+  // category:
+  //   | 'ART'
+  //   | 'TRAVEL'
+  //   | 'FOOD'
+  //   | 'GAME'
+  //   | 'CULTURE'
+  //   | 'SPORT'
+  //   | 'STUDY'
+  //   | 'MOVIE';
+  category: string;
   maxPeople: number;
   latitude: number;
   longitude: number;

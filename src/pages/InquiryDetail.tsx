@@ -1,10 +1,11 @@
 'use client';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 //import Greeting from '@/components/common/Greeting';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 export default function InquiryDetail({ id }: { id: string }) {
   type InquiryData = {
@@ -14,9 +15,9 @@ export default function InquiryDetail({ id }: { id: string }) {
     category: string;
     status: string;
     createdAt: string;
-    answer: any;
-    answeredAt: any;
-    imageUrls: any[];
+    answer: string;
+    answeredAt: string;
+    imageUrls: string[];
   };
   const API = process.env.NEXT_PUBLIC_API_URL;
   const [inquiryData, setInquiryData] = useState<InquiryData>();
@@ -84,6 +85,16 @@ export default function InquiryDetail({ id }: { id: string }) {
                     <span className="text-[15px] text-[#00e6ae] lg:text-[18px]">
                       Q. {inquiryData.title}
                     </span>
+                  </div>
+                  <div className="mb-4 flex w-full flex-col items-center gap-6">
+                    {inquiryData.imageUrls.map((image, index) => (
+                      <div
+                        key={image}
+                        className="relative flex h-50 w-100 flex-col justify-center"
+                      >
+                        <Image src={image} alt={`inquiryImage${index}`} fill />
+                      </div>
+                    ))}
                   </div>
                   <p className="ml-0 text-[13px] leading-relaxed text-[#f6f6f6] lg:ml-[25px] lg:text-[16px]">
                     {inquiryData.content}

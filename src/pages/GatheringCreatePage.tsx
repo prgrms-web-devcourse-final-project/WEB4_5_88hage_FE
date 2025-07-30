@@ -25,6 +25,10 @@ export default function GatheringCreatePage() {
   const router = useRouter();
   const handleDataChange = (data: File[]) => setImages(data);
 
+  const getCategory = (d: FormDataEntryValue | null) => {
+    if (d === 'ART') return 'ART';
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -33,10 +37,6 @@ export default function GatheringCreatePage() {
     miniData.delete('images');
 
     // 데이터 변환
-    const newFormData: { [key: string]: any } = {};
-    miniData.forEach((value, key) => {
-      newFormData[key] = value;
-    });
     const newData: GroupCreateRequest = {
       title: '',
       explain: '',
@@ -51,17 +51,18 @@ export default function GatheringCreatePage() {
       hashTags: [],
       // during: 0, 선택 항목
     };
-    newData.title = newFormData.title;
-    newData.explain = newFormData.explain;
-    newData.simpleExplain = newFormData.explain;
-    newData.address = newFormData.address;
+    newData.title = String(miniData.get('title'));
+    newData.explain = String(miniData.get('explain'));
+    newData.simpleExplain = String(miniData.get('explain'));
+    newData.address = String(miniData.get('address'));
     newData.latitude = +latitude.toFixed(4);
     newData.longitude = +longitude.toFixed(4);
-    newData.maxPeople = +newFormData.maxPeople;
-    newData.category = newFormData.category;
+    newData.maxPeople = Number(miniData.get('maxPeople'));
+    newData.category = String(miniData.get('category'));
     newData.groupDate = groupDate;
     newData.hashTags = tags;
-    if (!!newFormData.during) newData.during = +newFormData.during;
+    if (!!miniData.get('during'))
+      newData.during = Number(miniData.get('during'));
     if (images.length > 0) newData.image = images[0];
 
     console.log(newData);
