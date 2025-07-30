@@ -3,7 +3,21 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-export default function PostCard({ group }) {
+type GroupItem = {
+  id: number;
+  title: string;
+  imageUrl: string;
+  simpleExplain: string;
+  placeName: string;
+  leaderNickname?: string;
+  groupDate?: string;
+};
+
+type PostCardProps = {
+  group: GroupItem;
+};
+
+export default function PostCard({ group }: PostCardProps) {
   const router = useRouter();
 
   if (!group) return null;
@@ -11,6 +25,7 @@ export default function PostCard({ group }) {
   const handleClick = () => {
     router.push(`/gathering/${group.id}`);
   };
+
   return (
     <div
       className="
@@ -38,7 +53,9 @@ export default function PostCard({ group }) {
       {/* 콘텐츠 */}
       <div className="h-[120px] bg-[#1b1b1b] p-3">
         <h2 className="t3 mb-1">{group.title}</h2>
-        <p className="mb-5 text-[14px] text-[#ffffff]">주최자: {group.leaderNickname}</p>
+        <p className="mb-5 text-[14px] text-[#ffffff]">
+          주최자: {group.leaderNickname ?? ""}
+        </p>
         <p className="text-[14px] text-[#bdbdbd]">
           시작일: {group.groupDate
             ? (() => {

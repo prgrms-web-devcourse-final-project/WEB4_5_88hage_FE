@@ -5,7 +5,13 @@ import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
 
-async function fetchFaqs() {
+type FaqItem = {
+  id: number;
+  title: string;
+  content: string;
+};
+
+async function fetchFaqs(): Promise<FaqItem[]> {
   const res = await fetch(`${API}/api/faqs`, {
     method: "GET",
     credentials: "include",
@@ -15,7 +21,7 @@ async function fetchFaqs() {
 }
 
 export default function FaqAccordion() {
-  const [faqs, setFaqs] = useState([]);
+  const [faqs, setFaqs] = useState<FaqItem[]>([]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [page, setPage] = useState(0);
   const PAGE_SIZE = 5;
@@ -36,7 +42,7 @@ export default function FaqAccordion() {
         const isOpen = openIndex === idx;
         return (
           <div
-            key={idx}
+            key={item.id}
             className="relative bg-[#1C1C1C] rounded-xl overflow-hidden w-[327px] mx-auto lg:w-[900px]"
           >
             <span className="absolute inset-y-0 left-0 w-[5px] bg-[#06c29e]" />
