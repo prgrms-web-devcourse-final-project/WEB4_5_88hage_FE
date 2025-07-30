@@ -34,6 +34,9 @@ export default function Notification() {
     if (user) {
       const response = await fetch(
         `${API}/api/notifications/${activeTab}?email=${user.email}`,
+        {
+    credentials: "include",
+  }
       );
       const { code, message, data } = await response.json();
       if (code === '0000') setNotiList(data);
@@ -45,6 +48,7 @@ export default function Notification() {
     const response = await fetch(`${API}/api/notifications/read-selected`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
+      credentials: "include",
       body: JSON.stringify(selectedId),
     });
     const { code, message } = await response.json();
