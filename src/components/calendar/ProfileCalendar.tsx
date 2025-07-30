@@ -11,6 +11,13 @@ import '../../assets/styles/calendar/profileCalendar.css';
 moment.locale('ko');
 const localizer = momentLocalizer(moment);
 
+interface SlotInfo {
+  start: Date;
+  end: Date;
+  slots: Date[];
+  action: 'click' | 'select';
+}
+
 export default function ProfileCalendar({
   onDateSelect,
 }: {
@@ -27,7 +34,7 @@ export default function ProfileCalendar({
     onDateSelect(date);
   };
 
-  const cellClickGetDateInfo = (slotInfo: any) => {
+  const cellClickGetDateInfo = (slotInfo:SlotInfo) => {
     console.log(
       'Cell clicked from: ',
       moment(slotInfo.start).format('YYYY년 MM월 DD일 HH:mm'),
