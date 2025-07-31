@@ -95,19 +95,23 @@ export const useAuthStore = create<AuthState>()(
       },
 
       checkSession: async () => {
-        try {
-          const response = await fetchGet<{ data: User }>('/api/users/info', {
-            credentials: 'include',
-          });
-          set({
-            user: response.data,
-            isAuthenticated: true,
-          });
-          await get().fetchCoordinate();
-        } catch {
-          set({ token: null, user: null, isAuthenticated: false });
-        }
-      },
+  try {
+    const response = await fetchGet<{ data: User }>('/api/users/info', {
+      credentials: 'include',
+    });
+    if (!response || !response.data) {
+      set({ token: null, user: null, isAuthenticated: false });
+      return;
+    }
+    set({
+      user: response.data,
+      isAuthenticated: true,
+    });
+    await get().fetchCoordinate();
+  } catch {
+    set({ token: null, user: null, isAuthenticated: false });
+  }
+},
 
       logout: async () => {
         try {
