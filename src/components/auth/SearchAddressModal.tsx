@@ -22,7 +22,7 @@ export default function SearchAddressModal({
   const themeObj = {
    bgColor: "#313131", //바탕 배경색
    searchBgColor: "#313131", //검색창 배경색
-   contentBgColor: "#545454", //본문 배경색(검색결과,결과없음,첫화면,검색서제스트)
+   contentBgColor: "#545454", 
    pageBgColor: "#888888", //페이지 배경색
    textColor: "#F2F2F2", //기본 글자색
    queryTextColor: "#D0D0D0", //검색창 글자색
