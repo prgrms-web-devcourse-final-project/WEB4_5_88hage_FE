@@ -27,13 +27,17 @@ export default function Signup() {
   const [longitude, setLongitude] = useState(0);
   const API = process.env.NEXT_PUBLIC_API_URL;
   // const [requiredAlert, setRequiredAlert] = useState(false);
-  const { userData, setData } = useSignupStore((state) => state);
+  const { userData, setData, clearAll } = useSignupStore((state) => state);
   const router = useRouter();
 
   const nicknameCheck = /^[가-힣a-zA-Z0-9]{2,10}$/;
   const emailCheck = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
   const passwordCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=_-])(?=.*[0-9]).{8,20}$/;
   const birthDateCheck = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/;
+
+  useEffect(() => {
+    clearAll();
+  }, [clearAll]);
 
   const handleCheckChange = (id: string) => {
     const isChecked = checkedList.includes(id);
@@ -121,7 +125,7 @@ export default function Signup() {
           console.log(error);
         });
     }
-  }, [userData, API, email, router]);
+  }, [userData, API, router]);
 
   return (
     <div className="flex">
