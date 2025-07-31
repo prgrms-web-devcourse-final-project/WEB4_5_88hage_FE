@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import thinking from '@/assets/images/thinking.svg';
-import tagspageImg from '@/assets/images/tagspageImg.png';
+import tagspageImg from '@/assets/images/signupImg1.png';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSignupStore } from '@/stores/signupStore';
@@ -122,7 +122,7 @@ export default function SignupPreferences({ isOAuth }: { isOAuth?: boolean }) {
   return (
     <div className="flex w-screen">
       <div className="hidden items-center justify-center lg:flex lg:w-1/2">
-        <Image src={tagspageImg} alt="tagsPageImg" />
+        <Image src={tagspageImg} width={500} height={500} alt="tagsPageImg" />
       </div>
       <div className="signup-bg w-full lg:w-1/2">
         <div></div>
