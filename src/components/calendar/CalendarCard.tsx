@@ -75,7 +75,10 @@ export default function CalendarCard({info,setSelectListData,setCalendarData}:Pr
       <div className='relative'>
         {info.type !== 'GROUP' &&       
         <button className='mt-[18px] mr-[8px]'>
-          <EllipsisVertical size={18} onClick={()=> setShowBox(prev => !prev)} className='text-[#e4e4e4]'/>
+          <EllipsisVertical size={18} onClick={(e) => {
+        e.stopPropagation();  
+        setShowBox((prev) => !prev);
+      }} className='text-[#e4e4e4]'/>
         </button>
         }
         {showBox && <div className='w-[80px] flex flex-col bg-[#252525] border border-[rgba(192,192,192,.4)] rounded-[5px] text-[#fff] absolute z-5 left-[-65px]'>
