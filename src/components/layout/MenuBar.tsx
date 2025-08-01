@@ -77,7 +77,7 @@ export default function MenuBar({ close }: { close: () => void }) {
         <button
           type="button"
           onClick={close}
-          className="bg-gray-7 ml-3 flex items-center justify-around rounded-full p-1"
+          className="from-main/20 bg-transparent to-[#FF58D8]/20 lg:rounded-full lg:bg-gradient-to-b lg:p-1"
         >
           <X className="text-main h-8 w-8" />
         </button>
