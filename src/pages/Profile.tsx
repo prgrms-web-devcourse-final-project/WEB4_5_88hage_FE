@@ -71,7 +71,6 @@ export default function Profile() {
   const fetchFollowData = async () => {
     try {
       const followersData = await getFollowers();
-      console.log(followersData);
       setFollowers(
         Array.isArray(followersData.data.content)
           ? followersData.data.content.map((f: Follower) => ({
@@ -98,7 +97,6 @@ export default function Profile() {
       // userInfo (팔로워/팔로잉 수 포함) 업데이트
       const currentUserInfo: ServiceResponse<CurrentUserInfo> =
         await getUserInfo();
-      console.log('currentUserInfo', currentUserInfo);
       const userEmail = currentUserInfo.data.email;
       const userData = await getUserDetailInfoByEmail(userEmail);
       setUserInfo(userData.data as unknown as UserInfo);
@@ -112,17 +110,16 @@ export default function Profile() {
       try {
         const currentUserInfo: ServiceResponse<CurrentUserInfo> =
           await getUserInfo();
-        console.log('currentUserInfo:', currentUserInfo);
         const userEmail = currentUserInfo.data.email;
         const userData = await getUserDetailInfoByEmail(userEmail);
         setUserInfo(userData.data as unknown as UserInfo);
-        console.log('userData:', userData);
 
         const statsData = await getGroupCompletedStats();
         setGroupStats(statsData.data);
 
         const leaderGroupsData = await getLeaderMyGroups();
         setLeaderGroups(leaderGroupsData);
+        console.log('LeaderGroupsData', leaderGroupsData);
 
         if (selectedDate) {
           setDailyEventsLoading(true);
@@ -156,14 +153,14 @@ export default function Profile() {
 
         const inquiriesData = await getContacts();
 
-        const data = inquiriesData.data as Inquiry[];
-        setMyInquiries(data);
+        setMyInquiries(inquiriesData.data.content || []);
+        console.log('inquiriesData', inquiriesData.data.content);
 
         const bookedEventsData = await getCalendarForContent();
-        console.log(bookedEventsData);
+        console.log('BookedEventData', bookedEventsData);
         setBookedEvents(
-          Array.isArray(bookedEventsData.data)
-            ? bookedEventsData.data.filter(
+          Array.isArray(bookedEventsData.data.content)
+            ? bookedEventsData.data.content.filter(
                 (
                   event: CalendarContent,
                   index: number,

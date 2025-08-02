@@ -1,4 +1,4 @@
-import { ServiceResponse } from '@/types/api';
+import { ApiResponse } from '@/types/api';
 import { get, post, put, patch } from './fetchInstance';
 
 // 문의 작성
@@ -21,7 +21,7 @@ export const createInquiry = async (data: ContactRequest) => {
 // 문의 목록 조회
 export const getContacts = async (
   params?: GetContactsParams,
-): Promise<ServiceResponse<Inquiry[]>> => {
+): Promise<ApiResponse<Inquiry>> => {
   const stringifiedParams = params
     ? Object.entries(params).reduce(
         (acc, [key, value]) => {
