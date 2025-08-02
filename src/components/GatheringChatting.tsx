@@ -33,11 +33,11 @@ interface ChatMessage {
 // UI message format
 interface DisplayMessage {
   type: 'sent' | 'received';
-  sender: string; // senderEmail
-  name: string; // senderNickname
+  sender: string;
+  name: string;
   text: string;
   time?: string;
-  senderImageUrl?: string; // Added for sender's profile image
+  senderImageUrl?: string;
 }
 
 export default function GatheringChatting({
