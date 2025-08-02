@@ -3,8 +3,8 @@ import logo from '@/assets/images/logo.png';
 
 export default function Footer() {
   return (
-    <>
-      <div className="w-[375px] bg-[#1c1c1c] p-4 pl-50 lg:w-full">
+    <div className='w-full bg-[#1c1c1c] px-5 py-[23px] flex justify-center'>
+      <div className="bg-[#1c1c1c] w-full max-w-360">
         <div className="relative h-[24px] w-[60px] lg:h-[40px] lg:w-[100px]">
           <Image
             alt="logo"
@@ -23,13 +23,14 @@ export default function Footer() {
           지금, funfun에서 새로운 경험을 만나보세요.
         </div>
         <hr className="my-4 mr-4 text-[#393939] lg:mr-0 lg:mb-7" />
-        <div className="t4 text-white">
+        <div className="t4 text-white lg:flex lg:justify-between">
           <span>@2025 Funfun Inc. All rights reserved</span>
-          <div className="font-extrabold lg:ml-30 lg:inline">
+          <div className="font-extrabold lg:inline">
             개인정보 취급방침 | 이용약관 | 위치 기반 서비스 이용약관
           </div>
+					<span className='hidden lg:block w-[209.3px]'></span>
         </div>
       </div>
-    </>
+    </div>
   );
 }
