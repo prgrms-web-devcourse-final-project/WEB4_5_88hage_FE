@@ -18,7 +18,7 @@ export default function Navigation() {
         {NAV_ITEMS.map((item) => (
           <li key={item.value} className="mt-[5px] flex flex-col items-center">
             <button
-              className={`text-lg font-semibold transition-colors ${active === item.value ? 'text-main' : 'text-white'} hover:text-main`}
+              className={`text-lg font-semibold transition-colors ${active === item.value ? 'text-main' : 'text-white'} hover:text-main transition-colors duration-300`}
               onClick={() => setActive(item.value)}
               type="button"
             >
