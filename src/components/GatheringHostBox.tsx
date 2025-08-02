@@ -7,8 +7,8 @@ import {
   checkFollowingStatus,
 } from '@/lib/api/follow';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import Toast from './common/Toast';
+import ProfileImage from './common/ProfileImage';
 
 type Props = {
   hostName: string;
@@ -64,11 +64,12 @@ export default function GatheringHostBox({
 
   return (
     <div className="flex w-full gap-[20px] rounded-[5px] border border-[#393939] p-[20px]">
-      <div className="size-[100px] bg-amber-200 rounded-full overflow-hidden">
+      <ProfileImage src={hostImg} isLogin={hostImg ? true : false}/>
+      {/* <div className="size-[100px] bg-amber-200 rounded-full overflow-hidden">
         {hostImg ? (
             <Image src={hostImg} alt={`${hostName}의 프로필 이미지`} width={100} height={100} className="w-full object-cover"/>
         ) : null}
-      </div>
+      </div> */}
       <div className="flex grow-1 flex-col">
         <div className="text-[18px] text-white">{hostName}</div>
         <div className="pt-[11.33px] pb-[14.33px] text-[#ababab]">

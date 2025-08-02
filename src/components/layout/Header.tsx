@@ -60,7 +60,7 @@ export default function Header() {
             aria-label="오버레이 닫기"
           />
           {/* 실제 사이드바 */}
-          <aside className="relative z-50">
+          <aside className={`relative z-50`}>
             <MenuBar close={() => setSidebarOpen(false)} />
           </aside>
         </div>

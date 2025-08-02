@@ -71,6 +71,7 @@ export default function MenuBar({ close }: { close: () => void }) {
   const bottomBorder = ['알림', '고객지원', '회원가입'];
 
   return (
+    <>
     <aside className="fixed top-0 right-0 z-50 flex h-screen w-[335px] flex-col p-5 backdrop-blur-[20px] lg:w-[480px] lg:bg-[rgba(0,0,0,0.6)] lg:p-15">
       <div className="absolute top-3 right-6 flex">
         {/* <DarkModeToggle /> */}
@@ -111,7 +112,7 @@ export default function MenuBar({ close }: { close: () => void }) {
               {item.label !== '로그아웃' ? (
                 <Link
                   href={`/${item.value}`}
-                  className={`h2 group ml-[-15px] flex w-full items-center py-1 text-left font-semibold transition ${
+                  className={`h2 group ml-[-15px] flex w-full items-center py-1 text-left font-semibold transition duration-300 ${
                     active === item.label ? 'text-main font-bold' : 'text-white'
                   } hover:text-main`}
                   onClick={() => {
@@ -162,5 +163,6 @@ export default function MenuBar({ close }: { close: () => void }) {
         </nav>
       </div>
     </aside>
+    </>
   );
 }
