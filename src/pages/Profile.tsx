@@ -418,7 +418,7 @@ export default function Profile() {
                     </div>
                   )}
                   {activeTab === 'myInquiries' &&
-                    myInquiries.content.length > 0 &&
+                    // myInquiries.content.length > 0 &&
                     (Array.isArray(myInquiries)
                       ? myInquiries.slice(0, 3)
                       : []
@@ -441,12 +441,12 @@ export default function Profile() {
                         </div>
                       </button>
                     ))}
-                  {activeTab === 'myInquiries' &&
+                  {/* {activeTab === 'myInquiries' &&
                     myInquiries.content.length < 1 && (
                       <div className="py-5 text-center text-gray-400">
                         내가 작성한 문의 글이 없습니다.
                       </div>
-                    )}
+                    )} */}
                   {activeTab === 'bookedEvents' &&
                     bookedEvents.length > 0 &&
                     (Array.isArray(bookedEvents)
