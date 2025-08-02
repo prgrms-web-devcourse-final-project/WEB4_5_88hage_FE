@@ -252,7 +252,7 @@ export default function Profile() {
 
   return (
     <>
-      <div className="hidden w-full flex-col gap-5 text-white lg:flex">
+      <div className="ml-5 hidden w-full flex-col gap-5 text-white lg:flex">
         <div className="flex w-full max-w-[1440px] flex-col self-center">
           <div className="mb-6 text-[28px] font-semibold">내 프로필</div>
           <div className="mb-[34px] flex gap-[calc(100%*(30/1440))]">
@@ -331,7 +331,7 @@ export default function Profile() {
                 })}
               </div>
             </div>
-            <div className="bg-gray-7 h-90 w-[calc(100%*(467/1440))] rounded-[5px] px-3">
+            <div className="bg-gray-7 h-90 w-[calc(100%*(440/1440))] rounded-[5px] px-3">
               <ProfileCalendar onDateSelect={setSelectedDate} />
             </div>
           </div>
@@ -463,7 +463,7 @@ export default function Profile() {
                 </div>
               </div>
             </div>
-            <div className="bg-gray-7 h-full w-[calc(100%*(467/1440))] rounded-[5px] px-5 py-[26px]">
+            <div className="bg-gray-7 h-full w-[calc(100%*(440/1440))] rounded-[5px] px-5 py-[26px]">
               <div className="mb-5 flex justify-between border-b-1 border-[#4d4d4d] pb-4 text-[#a8a8a8]">
                 <div>
                   {selectedDate
