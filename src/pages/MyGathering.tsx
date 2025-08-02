@@ -114,6 +114,11 @@ export default function MyGathering() {
     }
   };
 
+  const handleGroupUpdate = () => {
+    fetchData();
+    setSelectedGathering(null);
+  };
+
   const handleTabChange = (tab: 'my-gathering' | 'chat') => {
     setActiveTab(tab);
     setSelectedGathering(null); // 탭 변경 시 선택된 모임 초기화
@@ -169,7 +174,7 @@ export default function MyGathering() {
             <GatheringMain
               selectedGathering={selectedGathering}
               onParticipantUpdate={handleParticipantUpdate}
-              onGroupUpdate={fetchData}
+              onGroupUpdate={handleGroupUpdate}
             />
           ) : activeTab === 'chat' && selectedGathering ? (
             <GatheringChatting
