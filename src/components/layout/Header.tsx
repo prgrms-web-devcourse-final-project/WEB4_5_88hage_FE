@@ -13,12 +13,11 @@ export default function Header() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
 
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
   return (
     <>
       {/* 헤더 전체 컨테이너 */}
@@ -61,7 +60,7 @@ export default function Header() {
             aria-label="오버레이 닫기"
           />
           {/* 실제 사이드바 */}
-          <aside className="relative z-50">
+          <aside className={`relative z-50`}>
             <MenuBar close={() => setSidebarOpen(false)} />
           </aside>
         </div>
