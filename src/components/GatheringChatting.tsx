@@ -205,7 +205,7 @@ export default function GatheringChatting({
       />
       <div
         ref={chatContainerRef}
-        className="my-5 flex min-h-[400px] flex-1 flex-col gap-2 overflow-y-auto"
+        className="flex min-h-[400px] flex-1 flex-col gap-2 overflow-y-auto"
       >
         {messages.map((msg, index) => {
           const previousMessage = messages[index - 1];
