@@ -63,13 +63,13 @@ export default function CalendarCard({info,setSelectListData,setCalendarData}:Pr
 
   return (
     <>
-    <div onClick={redirectDetailPage}  className="h-fit text-[14px] justify-between flex min-w-[310px] bg-gray-6 rounded-[5px] lg:min-w-[250px] lg:w-[250px] cursor-pointer">
+    <div  className="h-fit text-[14px] justify-between flex min-w-[310px] bg-gray-6 rounded-[5px] lg:min-w-[250px] lg:w-[250px]">
       <div className='flex'>
         <div className={`w-[4px] min-h-auto rounded-tl-[5px] rounded-bl-[5px] ${info.type === "CONTENT" ?'bg-[#4BFF69]':'bg-[#FF8A4B]'}`}></div>
         <div className="pl-[15px] pt-[15px] pb-[15px] flex gap-[15px] text-gray-sub flex-col">
-            <h3>{info.title}</h3>
-            <p className='text-[#A19F9F]'>{info.address}</p>
-            <p className='text-[#A19F9F]'>{timeFormatting()}</p>
+            <h3 onClick={redirectDetailPage} className='cursor-pointer'>{info.title}</h3>
+            <p className='text-[#A19F9F] cursor-default'>{info.address}</p>
+            <p className='text-[#A19F9F] cursor-default'>{timeFormatting()}</p>
         </div>
       </div>
       <div className='relative'>

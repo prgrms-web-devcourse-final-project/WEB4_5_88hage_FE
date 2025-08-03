@@ -12,6 +12,7 @@ export default function DashboardHeader() {
   const previousHistory = () => {
     router.back();
   };
+
   return (
     <>
       <header className="fixed top-0 right-0 z-10 w-full min-w-[335px] lg:min-w-[1240px]">
