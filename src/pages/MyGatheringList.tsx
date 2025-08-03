@@ -16,7 +16,10 @@ export default function MyGatheringList() {
     const fetchMyGatherings = async () => {
       try {
         const data = await getLeaderMyGroups();
-        const sortedData = data.sort((a, b) => new Date(b.groupDate).getTime() - new Date(a.groupDate).getTime());
+        const sortedData = data.sort(
+          (a, b) =>
+            new Date(b.groupDate).getTime() - new Date(a.groupDate).getTime(),
+        );
         setMyGatherings(sortedData);
       } catch (error) {
         console.error('Failed to fetch my gatherings:', error);
@@ -80,7 +83,7 @@ export default function MyGatheringList() {
               {currentItems.map((item) => (
                 <tr
                   key={item.groupId}
-                  className="mb-1 flex flex-col border-b border-[#383838] lg:table-row cursor-pointer"
+                  className="mb-1 flex cursor-pointer flex-col border-b border-[#383838] lg:table-row"
                   onClick={() => router.push(`/gathering/${item.groupId}`)}
                 >
                   <td className="px-8 py-2 font-semibold whitespace-nowrap text-[#06CE9E] lg:py-6 lg:align-top">
@@ -99,27 +102,43 @@ export default function MyGatheringList() {
         </div>
 
         {/* 페이징 */}
-        <div className="mt-[44px] flex justify-center space-x-3 text-[#C1C1E0]">
-          <button className="p-2 transition hover:text-white" onClick={handlePrevPage} disabled={currentPage === 1}>
-            <ChevronLeft size={16} />
-          </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+        {myGatherings.length > 0 && (
+          <div className="mt-[44px] flex justify-center space-x-3 text-[#C1C1E0]">
             <button
-              key={p}
-              onClick={() => paginate(p)}
-              className={`rounded-full px-3 py-1 transition ${
-                p === currentPage
-                  ? 'bg-main text-black'
-                  : 'hover:bg-[#3E3E5E] hover:text-white'
-              } `}
+              className="p-2 transition hover:text-white"
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
             >
-              {p}
+              <ChevronLeft size={16} />
             </button>
-          ))}
-          <button className="p-2 transition hover:text-white" onClick={handleNextPage} disabled={currentPage === totalPages}>
-            <ChevronRight size={16} />
-          </button>
-        </div>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <button
+                key={p}
+                onClick={() => paginate(p)}
+                className={`rounded-full px-3 py-1 transition ${
+                  p === currentPage
+                    ? 'bg-main text-black'
+                    : 'hover:bg-[#3E3E5E] hover:text-white'
+                } `}
+              >
+                {p}
+              </button>
+            ))}
+            <button
+              className="p-2 transition hover:text-white"
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        )}
+
+        {myGatherings.length < 1 && (
+          <div className="py-10 text-center text-[#888]">
+            게시글이 없습니다.
+          </div>
+        )}
       </div>
     </section>
   );

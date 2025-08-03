@@ -107,58 +107,60 @@ export default function InquiryListPage() {
             )}
           </div>
           {/* 페이지네이션 */}
-          <div className="flex items-center justify-center space-x-3 text-[#ffffff] lg:mt-[52px]">
-            <button
-              onClick={() => setPage((prev) => prev - 5)}
-              disabled={
-                pageNum.slice(
-                  Math.floor(page / 5) * 5,
-                  Math.floor(page / 5) * 5 + 5,
-                )[0] === 1
-              }
-              className="disabled:text-gray-disabled p-2 disabled:cursor-none"
-            >
-              <ChevronLeft />
-            </button>
-            {pageNum
-              .slice(Math.floor(page / 5) * 5, Math.floor(page / 5) * 5 + 5)
-              .map((p) => (
-                <button
-                  key={p}
-                  className={`h-[29px] w-[29px] rounded-full text-[15px] transition ${
-                    page === p - 1 ? 'bg-[#1CEBB9] font-bold text-black' : ''
-                  } `}
-                  onClick={() => setPage(p - 1)}
-                >
-                  {p}
-                </button>
-              ))}
-            <button
-              onClick={() => {
-                const arr = pageNum.slice(
-                  Math.floor((page + 5) / 5) * 5,
-                  Math.floor((page + 5) / 5) * 5 + 5,
-                );
-                if (!arr.includes(page + 6)) {
-                  setPage(pageNum[pageNum.length - 2]);
-                } else setPage((prev) => prev + 5);
-              }}
-              disabled={
-                pageNum.slice(
-                  Math.floor(page / 5) * 5,
-                  Math.floor(page / 5) * 5 + 5,
-                )[
+          {contacts.length > 0 && (
+            <div className="flex items-center justify-center space-x-3 text-[#ffffff] lg:mt-[52px]">
+              <button
+                onClick={() => setPage((prev) => prev - 5)}
+                disabled={
                   pageNum.slice(
                     Math.floor(page / 5) * 5,
                     Math.floor(page / 5) * 5 + 5,
-                  ).length - 1
-                ] === pageNum[pageNum.length - 1]
-              }
-              className="disabled:text-gray-disabled p-2 disabled:cursor-none"
-            >
-              <ChevronRight />
-            </button>
-          </div>
+                  )[0] === 1
+                }
+                className="disabled:text-gray-disabled p-2 disabled:cursor-none"
+              >
+                <ChevronLeft />
+              </button>
+              {pageNum
+                .slice(Math.floor(page / 5) * 5, Math.floor(page / 5) * 5 + 5)
+                .map((p) => (
+                  <button
+                    key={p}
+                    className={`h-[29px] w-[29px] rounded-full text-[15px] transition ${
+                      page === p - 1 ? 'bg-[#1CEBB9] font-bold text-black' : ''
+                    } `}
+                    onClick={() => setPage(p - 1)}
+                  >
+                    {p}
+                  </button>
+                ))}
+              <button
+                onClick={() => {
+                  const arr = pageNum.slice(
+                    Math.floor((page + 5) / 5) * 5,
+                    Math.floor((page + 5) / 5) * 5 + 5,
+                  );
+                  if (!arr.includes(page + 6)) {
+                    setPage(pageNum[pageNum.length - 2]);
+                  } else setPage((prev) => prev + 5);
+                }}
+                disabled={
+                  pageNum.slice(
+                    Math.floor(page / 5) * 5,
+                    Math.floor(page / 5) * 5 + 5,
+                  )[
+                    pageNum.slice(
+                      Math.floor(page / 5) * 5,
+                      Math.floor(page / 5) * 5 + 5,
+                    ).length - 1
+                  ] === pageNum[pageNum.length - 1]
+                }
+                className="disabled:text-gray-disabled p-2 disabled:cursor-none"
+              >
+                <ChevronRight />
+              </button>
+            </div>
+          )}
         </main>
       </div>
     </div>

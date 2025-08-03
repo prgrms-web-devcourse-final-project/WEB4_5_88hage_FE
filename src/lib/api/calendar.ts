@@ -1,5 +1,5 @@
 // import { CalendarContentRequest } from '@/types/global';
-import { CalendarContent, DailyCalendar, ServiceResponse } from '@/types/api';
+import { ApiResponse, CalendarContent, DailyCalendar, ServiceResponse } from '@/types/api';
 import { get, post, del, patch } from './fetchInstance';
 
 // 캘린더 일정 등록 - 예약하기
@@ -47,7 +47,7 @@ export const getCalendarForContent = async (params?: {
   page: number;
   size: number;
   sort: string[];
-}): Promise<ServiceResponse<CalendarContent[]>> => {
+}): Promise<ApiResponse<CalendarContent>> => {
   const defaultParams = {
     pastIncluded: true,
     page: 0,

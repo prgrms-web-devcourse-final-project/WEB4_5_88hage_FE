@@ -31,8 +31,7 @@ export default function GatheringMain({
     try {
       await completeGroup(groupId);
       toast.success('모임이 완료 처리되었습니다.');
-
-      // Optionally, refresh or redirect
+      onGroupUpdate?.();
     } catch (error) {
       console.error('Failed to complete group:', error);
       toast.error('모임 완료 처리에 실패했습니다.');
@@ -43,7 +42,7 @@ export default function GatheringMain({
     try {
       await deleteGroup(groupId);
       toast.success('모임이 삭제되었습니다.');
-      // Optionally, refresh or redirect
+      onGroupUpdate?.();
     } catch (error) {
       console.error('Failed to delete group:', error);
       toast.error('모임 삭제에 실패했습니다.');

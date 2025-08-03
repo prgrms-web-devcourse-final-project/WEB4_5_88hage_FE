@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import profileImg from '@/assets/images/profile_test.png';
 import mapIcon from '@/assets/images/map_icon_test.png';
-import { LucideArrowUpRight, LucideUsers2 } from 'lucide-react';
+import { LucideArrowUpRight, LucideUsers2, PencilLine, List, ListTodo } from 'lucide-react';
 import 'swiper/css';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
@@ -71,7 +71,6 @@ export default function Profile() {
   const fetchFollowData = async () => {
     try {
       const followersData = await getFollowers();
-      console.log(followersData);
       setFollowers(
         Array.isArray(followersData.data.content)
           ? followersData.data.content.map((f: Follower) => ({
@@ -98,7 +97,6 @@ export default function Profile() {
       // userInfo (팔로워/팔로잉 수 포함) 업데이트
       const currentUserInfo: ServiceResponse<CurrentUserInfo> =
         await getUserInfo();
-      console.log('currentUserInfo', currentUserInfo);
       const userEmail = currentUserInfo.data.email;
       const userData = await getUserDetailInfoByEmail(userEmail);
       setUserInfo(userData.data as unknown as UserInfo);
@@ -108,21 +106,24 @@ export default function Profile() {
   };
 
   useEffect(() => {
+    console.log(myInquiries);
+  }, [activeTab, myInquiries]); // test
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const currentUserInfo: ServiceResponse<CurrentUserInfo> =
           await getUserInfo();
-        console.log('currentUserInfo:', currentUserInfo);
         const userEmail = currentUserInfo.data.email;
         const userData = await getUserDetailInfoByEmail(userEmail);
         setUserInfo(userData.data as unknown as UserInfo);
-        console.log('userData:', userData);
 
         const statsData = await getGroupCompletedStats();
         setGroupStats(statsData.data);
 
         const leaderGroupsData = await getLeaderMyGroups();
         setLeaderGroups(leaderGroupsData);
+        console.log('LeaderGroupsData', leaderGroupsData);
 
         if (selectedDate) {
           setDailyEventsLoading(true);
@@ -156,14 +157,14 @@ export default function Profile() {
 
         const inquiriesData = await getContacts();
 
-        const data = inquiriesData.data as Inquiry[];
-        setMyInquiries(data);
+        setMyInquiries(inquiriesData.data.content || []);
+        console.log('inquiriesData', inquiriesData.data.content);
 
         const bookedEventsData = await getCalendarForContent();
-        console.log(bookedEventsData);
+        console.log('BookedEventData', bookedEventsData);
         setBookedEvents(
-          Array.isArray(bookedEventsData.data)
-            ? bookedEventsData.data.filter(
+          Array.isArray(bookedEventsData.data.content)
+            ? bookedEventsData.data.content.filter(
                 (
                   event: CalendarContent,
                   index: number,
@@ -252,7 +253,7 @@ export default function Profile() {
 
   return (
     <>
-      <div className="hidden w-full flex-col gap-5 text-white lg:flex">
+      <div className="ml-5 hidden w-full flex-col gap-5 text-white lg:flex">
         <div className="flex w-full max-w-[1440px] flex-col self-center">
           <div className="mb-6 text-[28px] font-semibold">내 프로필</div>
           <div className="mb-[34px] flex gap-[calc(100%*(30/1440))]">
@@ -331,7 +332,7 @@ export default function Profile() {
                 })}
               </div>
             </div>
-            <div className="bg-gray-7 h-90 w-[calc(100%*(467/1440))] rounded-[5px] px-3">
+            <div className="bg-gray-7 h-90 w-[calc(100%*(440/1440))] rounded-[5px] px-3">
               <ProfileCalendar onDateSelect={setSelectedDate} />
             </div>
           </div>
@@ -342,14 +343,14 @@ export default function Profile() {
                   className={`bg-gray-7 t2 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 ${activeTab === 'myPosts' ? 'text-main font-semibold' : ''}`}
                   onClick={() => setActiveTab('myPosts')}
                 >
-                  <div className="bg-gray-4 size-[31px] rounded-full"></div>
+                  <div className="bg-gray-4 size-[31px] rounded-full"><PencilLine className='w-[15px] h-[15px] text-[#A8A8A8]'/></div>
                   내가 작성한 모임 글<div />
                 </button>
                 <button
                   className={`bg-gray-7 t2 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 ${activeTab === 'myInquiries' ? 'text-main font-semibold' : ''}`}
                   onClick={() => setActiveTab('myInquiries')}
                 >
-                  <div className="bg-gray-4 size-[31px] rounded-full"></div>
+                  <div className="bg-gray-4 size-[31px] rounded-full"><List className='w-[19px] h-[19px] text-[#A8A8A8]' /></div>
                   내 문의 내역
                   <div />
                 </button>
@@ -357,7 +358,7 @@ export default function Profile() {
                   className={`bg-gray-7 t2 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 ${activeTab === 'bookedEvents' ? 'text-main font-semibold' : ''}`}
                   onClick={() => setActiveTab('bookedEvents')}
                 >
-                  <div className="bg-gray-4 size-[31px] rounded-full"></div>
+                  <div className="bg-gray-4 size-[31px] rounded-full"><ListTodo className='w-[19px] h-[19px] text-[#A8A8A8]'/></div>
                   예약한 행사
                   <div />
                 </button>
@@ -385,6 +386,7 @@ export default function Profile() {
                 </div>
                 <div className="flex flex-col gap-3">
                   {activeTab === 'myPosts' &&
+                    leaderGroups.length > 0 &&
                     (Array.isArray(leaderGroups)
                       ? leaderGroups.slice(0, 3)
                       : []
@@ -407,7 +409,13 @@ export default function Profile() {
                         </div>
                       </button>
                     ))}
+                  {activeTab === 'myPosts' && leaderGroups.length < 1 && (
+                    <div className="py-5 text-center text-gray-400">
+                      내가 작성한 모임 글이 없습니다.
+                    </div>
+                  )}
                   {activeTab === 'myInquiries' &&
+                    // myInquiries.content.length > 0 &&
                     (Array.isArray(myInquiries)
                       ? myInquiries.slice(0, 3)
                       : []
@@ -430,7 +438,14 @@ export default function Profile() {
                         </div>
                       </button>
                     ))}
+                  {/* {activeTab === 'myInquiries' &&
+                    myInquiries.content.length < 1 && (
+                      <div className="py-5 text-center text-gray-400">
+                        내가 작성한 문의 글이 없습니다.
+                      </div>
+                    )} */}
                   {activeTab === 'bookedEvents' &&
+                    bookedEvents.length > 0 &&
                     (Array.isArray(bookedEvents)
                       ? bookedEvents.slice(0, 3)
                       : []
@@ -460,10 +475,15 @@ export default function Profile() {
                         </div>
                       </button>
                     ))}
+                  {activeTab === 'bookedEvents' && bookedEvents.length < 1 && (
+                    <div className="py-5 text-center text-gray-400">
+                      예약한 행사가 없습니다.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="bg-gray-7 h-full w-[calc(100%*(467/1440))] rounded-[5px] px-5 py-[26px]">
+            <div className="bg-gray-7 h-full w-[calc(100%*(440/1440))] rounded-[5px] px-5 py-[26px]">
               <div className="mb-5 flex justify-between border-b-1 border-[#4d4d4d] pb-4 text-[#a8a8a8]">
                 <div>
                   {selectedDate
