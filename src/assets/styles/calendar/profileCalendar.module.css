@@ -1,0 +1,35 @@
+/* .calendar {
+  background-color: yellow;
+} */
+.calendar :global(.rbc-calendar){
+    height: 100% !important;
+}
+.calendar :global(.rbc-row-content) {
+    height: 100%;
+}
+.calendar :global(.rbc-row) {
+    margin-bottom: 0;
+}
+.calendar :global(.rbc-row-content .rbc-row:first-child) {
+    margin-bottom: 0;
+    height: 100%;
+}
+.calendar :global(.rbc-date-cell) {
+    padding: 0;
+}
+.calendar :global(.rbc-date-cell .rbc-button-link) {
+    padding-top: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.calendar :global(.rbc-date-cell .rbc-button-link) {
+    justify-content: center;
+}
+.calendar :global(.rbc-date-cell .rbc-button-link) {
+    align-items: center;
+}
+.calendar :global(.rbc-date-cell .rbc-button-link) {
+    padding-top: 0;
+}

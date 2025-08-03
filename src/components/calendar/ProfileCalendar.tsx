@@ -6,7 +6,7 @@ import 'moment/locale/ko';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../../assets/styles/calendar/calendarCustom.css';
-import '../../assets/styles/calendar/profileCalendar.css';
+import style from '../../assets/styles/calendar/profileCalendar.module.css';
 
 moment.locale('ko');
 const localizer = momentLocalizer(moment);
@@ -34,6 +34,9 @@ export default function ProfileCalendar({
     onDateSelect(date);
   };
 
+  console.log('style:', style);
+  console.log('style.calendar:', style.calendar)
+
   const cellClickGetDateInfo = (slotInfo: SlotInfo) => {
     console.log(
       'Cell clicked from: ',
@@ -45,7 +48,7 @@ export default function ProfileCalendar({
   };
   return (
     <>
-      <div className="h-[100%] w-[100%]">
+      <div className={`h-[100%] w-[100%] ${style.calendar}`}>
         <Calendar
           localizer={localizer}
           views={['month']}
@@ -55,10 +58,8 @@ export default function ProfileCalendar({
           // startAccessor="start"
           // endAccessor="end"
           // titleAccessor="title"
-          //달력 cell 클릭
           onSelectSlot={cellClickGetDateInfo}
           selectable={true}
-          //컨트롤러 클릭
           onNavigate={calenderGetDateInfo}
           messages={{
             next: '>',

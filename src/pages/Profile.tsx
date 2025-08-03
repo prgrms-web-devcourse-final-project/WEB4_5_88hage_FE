@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import profileImg from '@/assets/images/profile_test.png';
 import mapIcon from '@/assets/images/map_icon_test.png';
-import { LucideArrowUpRight, LucideUsers2 } from 'lucide-react';
+import { LucideArrowUpRight, LucideUsers2, PencilLine, List, ListTodo } from 'lucide-react';
 import 'swiper/css';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
@@ -343,14 +343,14 @@ export default function Profile() {
                   className={`bg-gray-7 t2 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 ${activeTab === 'myPosts' ? 'text-main font-semibold' : ''}`}
                   onClick={() => setActiveTab('myPosts')}
                 >
-                  <div className="bg-gray-4 size-[31px] rounded-full"></div>
+                  <div className="bg-gray-4 size-[31px] flex items-center justify-center rounded-full"><PencilLine className='w-[15px] h-[15px] text-[#A8A8A8]'/></div>
                   내가 작성한 모임 글<div />
                 </button>
                 <button
                   className={`bg-gray-7 t2 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 ${activeTab === 'myInquiries' ? 'text-main font-semibold' : ''}`}
                   onClick={() => setActiveTab('myInquiries')}
                 >
-                  <div className="bg-gray-4 size-[31px] rounded-full"></div>
+                  <div className="bg-gray-4 size-[31px] rounded-full flex items-center justify-center"><List className='w-[19px] h-[19px] text-[#A8A8A8]' /></div>
                   내 문의 내역
                   <div />
                 </button>
@@ -358,7 +358,7 @@ export default function Profile() {
                   className={`bg-gray-7 t2 flex h-full w-full items-center justify-between rounded-[5px] px-2.5 ${activeTab === 'bookedEvents' ? 'text-main font-semibold' : ''}`}
                   onClick={() => setActiveTab('bookedEvents')}
                 >
-                  <div className="bg-gray-4 size-[31px] rounded-full"></div>
+                  <div className="bg-gray-4 size-[31px] rounded-full flex items-center justify-center"><ListTodo className='w-[19px] h-[19px] text-[#A8A8A8]'/></div>
                   예약한 행사
                   <div />
                 </button>

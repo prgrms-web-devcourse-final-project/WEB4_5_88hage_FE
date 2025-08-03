@@ -17,6 +17,17 @@ type Props = {
   isLoggedIn: boolean;
 };
 
+const themeObj = {
+   bgColor: "#313131", //바탕 배경색
+   searchBgColor: "#313131", //검색창 배경색
+   contentBgColor: "#545454", 
+   pageBgColor: "#888888", //페이지 배경색
+   textColor: "#F2F2F2", //기본 글자색
+   queryTextColor: "#D0D0D0", //검색창 글자색
+   postcodeTextColor: "#1CEBB9", //우편번호 글자색
+   outlineColor: "#D0D0D0" //테두리
+};
+
 export default function AIrecommendButton({
   onRecommend,
   loading,
@@ -131,7 +142,7 @@ export default function AIrecommendButton({
             {showAddrModal && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
                 <div className="rounded-lg bg-[#232323] p-5">
-                  <DaumPostcode onComplete={handleComplete} />
+                  <DaumPostcode onComplete={handleComplete} theme={themeObj}/>
                   <button
                     className="mt-2 text-sm text-gray-400"
                     onClick={() => setShowAddrModal(false)}
