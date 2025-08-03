@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { getApprovedParticipants, leaveGroup } from '@/lib/api/participant';
 import ParticipantListModal from './ParticipantListModal';
 import ConfirmModal from './ConfirmModal';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 interface MainPostHeaderProps {
   title: string;

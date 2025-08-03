@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { HashLoader } from "react-spinners";
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { HashLoader } from 'react-spinners';
 
 type Notice = {
   title: string;
@@ -12,55 +12,58 @@ type Notice = {
 
 export default function NotiDetail() {
   const params = useParams();
-  console.log("params:", params);
+  console.log('params:', params);
 
   const id =
     params && params.noticeId
       ? Array.isArray(params.noticeId)
-        ? params.noticeId[0] ?? ""
+        ? (params.noticeId[0] ?? '')
         : params.noticeId
-      : "";
+      : '';
 
   const [notice, setNotice] = useState<Notice | null>(null);
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
-    console.log("useEffect 동작, id:", id);
+    console.log('useEffect 동작, id:', id);
     if (!id) return;
     fetch(`${API}/api/admin/notices/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        console.log("fetch 결과:", data);
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('fetch 결과:', data);
         setNotice(data.data);
       });
   }, [id, API]);
 
-  if (!notice) return <div className="flex h-screen items-center justify-center">
+  if (!notice)
+    return (
+      <div className="flex h-screen items-center justify-center">
         <HashLoader color="#36d7b7" size={50} />
-      </div>;
+      </div>
+    );
 
   return (
-    <div className="flex flex-col bg-[#121212]">
-      <div className="flex flex-col items-center pt-8 pb-3 bg-[#1d1d1d]">
-        <span className="text-lg font-semibold text-white mb-1 tracking-tight">
+    <div className="flex h-screen flex-col">
+      <div className="flex flex-col items-center bg-[#1d1d1d] pt-20 pb-10">
+        <span className="mb-1 text-lg font-semibold tracking-tight text-white">
           고객지원
         </span>
-        <h1 className="text-3xl font-extrabold text-center mb-2">
+        <h1 className="mt-5 text-center text-3xl font-extrabold">
           <span className="bg-gradient-to-r from-[#1cebb9] to-[#7f74ff] bg-clip-text text-transparent">
             공지사항
           </span>
         </h1>
       </div>
-      <main className="flex justify-center bg-[#121212] mb-20">
-        <div className="w-full max-w-[1220px] mx-auto px-6 mt-[46px]">
-          <p className="text-base lg:text-lg text-white font-semibold">
+      <main className="mb-20 flex justify-center bg-[#121212]">
+        <div className="mx-auto mt-[46px] w-full max-w-[1220px] px-6">
+          <p className="text-base font-semibold text-white lg:text-lg">
             {notice.title}
           </p>
-          <p className="text-xs lg:text-sm text-white mt-[20px] mb-[20px]">
+          <p className="mt-[20px] mb-[20px] text-xs text-white lg:text-sm">
             {notice.createdAt?.slice(0, 10)}
           </p>
           <div className="border-y-1 border-[#4d4d4d]"></div>
-          <p className="text-xs lg:text-sm text-[#ababab] mt-[50px]">
+          <p className="mt-[50px] text-xs text-[#ababab] lg:text-sm">
             {notice.content}
           </p>
         </div>

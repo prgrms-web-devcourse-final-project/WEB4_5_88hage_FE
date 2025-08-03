@@ -7,12 +7,20 @@ interface GatheringItemProps {
   onClick: () => void;
 }
 
+const truncateText = (text: string | undefined, maxLength: number) => {
+  if (!text) return '';
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + '...';
+};
+
 export default function GatheringItem({
   name,
   description,
   imageUrl,
   onClick,
 }: GatheringItemProps) {
+  const truncatedDescription = truncateText(description, 20); // Adjust max length as needed
+
   return (
     <div
       className="border-gray-6 flex cursor-pointer items-center space-x-3 border-b p-2 last:border-b-0"
@@ -29,7 +37,9 @@ export default function GatheringItem({
       </div>
       <div className="flex-1">
         <h3 className="text-sm font-semibold text-white">{name}</h3>
-        <p className="text-gray-disabled t4 mt-1 truncate">{description}</p>
+        <p className="text-gray-disabled t4 mt-1 truncate">
+          {truncatedDescription}
+        </p>
       </div>
     </div>
   );

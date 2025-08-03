@@ -33,11 +33,11 @@ interface ChatMessage {
 // UI message format
 interface DisplayMessage {
   type: 'sent' | 'received';
-  sender: string; // senderEmail
-  name: string; // senderNickname
+  sender: string;
+  name: string;
   text: string;
   time?: string;
-  senderImageUrl?: string; // Added for sender's profile image
+  senderImageUrl?: string;
 }
 
 export default function GatheringChatting({
@@ -205,7 +205,7 @@ export default function GatheringChatting({
       />
       <div
         ref={chatContainerRef}
-        className="my-5 flex min-h-[400px] flex-1 flex-col gap-2 overflow-y-auto"
+        className="flex min-h-[400px] flex-1 flex-col gap-2 overflow-y-auto"
       >
         {messages.map((msg, index) => {
           const previousMessage = messages[index - 1];

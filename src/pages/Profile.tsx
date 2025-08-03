@@ -71,7 +71,6 @@ export default function Profile() {
   const fetchFollowData = async () => {
     try {
       const followersData = await getFollowers();
-      console.log(followersData);
       setFollowers(
         Array.isArray(followersData.data.content)
           ? followersData.data.content.map((f: Follower) => ({
@@ -98,7 +97,6 @@ export default function Profile() {
       // userInfo (팔로워/팔로잉 수 포함) 업데이트
       const currentUserInfo: ServiceResponse<CurrentUserInfo> =
         await getUserInfo();
-      console.log('currentUserInfo', currentUserInfo);
       const userEmail = currentUserInfo.data.email;
       const userData = await getUserDetailInfoByEmail(userEmail);
       setUserInfo(userData.data as unknown as UserInfo);
@@ -112,17 +110,16 @@ export default function Profile() {
       try {
         const currentUserInfo: ServiceResponse<CurrentUserInfo> =
           await getUserInfo();
-        console.log('currentUserInfo:', currentUserInfo);
         const userEmail = currentUserInfo.data.email;
         const userData = await getUserDetailInfoByEmail(userEmail);
         setUserInfo(userData.data as unknown as UserInfo);
-        console.log('userData:', userData);
 
         const statsData = await getGroupCompletedStats();
         setGroupStats(statsData.data);
 
         const leaderGroupsData = await getLeaderMyGroups();
         setLeaderGroups(leaderGroupsData);
+        console.log('LeaderGroupsData', leaderGroupsData);
 
         if (selectedDate) {
           setDailyEventsLoading(true);
@@ -156,14 +153,14 @@ export default function Profile() {
 
         const inquiriesData = await getContacts();
 
-        const data = inquiriesData.data as Inquiry[];
-        setMyInquiries(data);
+        setMyInquiries(inquiriesData.data.content || []);
+        console.log('inquiriesData', inquiriesData.data.content);
 
         const bookedEventsData = await getCalendarForContent();
-        console.log(bookedEventsData);
+        console.log('BookedEventData', bookedEventsData);
         setBookedEvents(
-          Array.isArray(bookedEventsData.data)
-            ? bookedEventsData.data.filter(
+          Array.isArray(bookedEventsData.data.content)
+            ? bookedEventsData.data.content.filter(
                 (
                   event: CalendarContent,
                   index: number,
@@ -252,7 +249,7 @@ export default function Profile() {
 
   return (
     <>
-      <div className="hidden w-full flex-col gap-5 text-white lg:flex">
+      <div className="ml-5 hidden w-full flex-col gap-5 text-white lg:flex">
         <div className="flex w-full max-w-[1440px] flex-col self-center">
           <div className="mb-6 text-[28px] font-semibold">내 프로필</div>
           <div className="mb-[34px] flex gap-[calc(100%*(30/1440))]">
@@ -331,7 +328,7 @@ export default function Profile() {
                 })}
               </div>
             </div>
-            <div className="bg-gray-7 h-90 w-[calc(100%*(467/1440))] rounded-[5px] px-3">
+            <div className="bg-gray-7 h-90 w-[calc(100%*(440/1440))] rounded-[5px] px-3">
               <ProfileCalendar onDateSelect={setSelectedDate} />
             </div>
           </div>
@@ -463,7 +460,7 @@ export default function Profile() {
                 </div>
               </div>
             </div>
-            <div className="bg-gray-7 h-full w-[calc(100%*(467/1440))] rounded-[5px] px-5 py-[26px]">
+            <div className="bg-gray-7 h-full w-[calc(100%*(440/1440))] rounded-[5px] px-5 py-[26px]">
               <div className="mb-5 flex justify-between border-b-1 border-[#4d4d4d] pb-4 text-[#a8a8a8]">
                 <div>
                   {selectedDate
