@@ -81,7 +81,7 @@ export default function MyCalendar() {
 
   return (
     <>
-      <div className="bg-gray-7 mb-[80px] ml-10 flex w-full min-w-[335px] flex-col lg:mb-0 lg:h-[calc(100vh-170px)] lg:max-h-[calc(100vh-170px)] lg:min-h-[calc(100vh-170px)] lg:min-w-[375px] lg:bg-transparent">
+      <div className="bg-gray-7 mb-[80px] flex w-full min-w-[335px] flex-col lg:mb-0 lg:h-[calc(100vh-170px)] lg:max-h-[calc(100vh-170px)] lg:min-h-[calc(100vh-170px)] lg:min-w-[375px] lg:bg-transparent lg:w-full">
         <h2 className="pt-[15px] pb-[5px] pl-[10px] font-semibold text-[#fff] lg:mb-[35px] lg:pl-0 lg:text-[28px]">
           일정관리
         </h2>

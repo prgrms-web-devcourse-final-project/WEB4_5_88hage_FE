@@ -8,7 +8,7 @@ export default function Greeting() {
 
   return (
     <>
-      <h1 className="mb-[20px] text-left text-[16px] font-extrabold text-white lg:mb-10 lg:text-[24px] xl:pl-[calc(max(0px,(100vw-1600px)*0.12))] xl:text-[32px]">
+      <h1 className="mb-[20px] text-left text-[16px] font-extrabold text-white lg:mb-10 lg:text-[24px] xl:text-[32px]">
         안녕하세요,{' '}
         {isAuthenticated && user ? (
           <span className="text-main">{user.nickname}</span>
