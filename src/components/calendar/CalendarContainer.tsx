@@ -57,7 +57,7 @@ export default function CalendarContainer({
 
   return (
     <>
-      <div className="h-full w-[70%] lg:w-[calc(100%-400px)]">
+      <div className="h-ful w-[70%] lg:w-[80%]">
         <Calendar
           localizer={localizer}
           views={['month']}
