@@ -223,6 +223,7 @@ export default function MeetingPage() {
     .filter(Boolean)
     .join('\n\n');
 
+
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   return (
