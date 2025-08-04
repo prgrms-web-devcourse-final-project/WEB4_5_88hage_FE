@@ -10,25 +10,21 @@ import heroImages from './imageArray';
 
 const MotionImage = motion(Image);
 
-// ── 그리드 설정 ───────────────────────────────────────
-const CARD_COUNT = 15;                   // 총 카드 개수
-const COLS       = 5;                    // 한 줄(행)에 배치할 카드 수
-const H_GAP      = 335;                  // 카드 간 기본 가로 간격(px)
-const V_GAP      = 475;                  // 카드 간 기본 세로 간격(px)
+const CARD_COUNT = 15;                  
+const COLS       = 5;                    
+const H_GAP      = 335;                  
+const V_GAP      = 475;                
 const ROWS       = Math.ceil(CARD_COUNT / COLS);
 const CENTER_COL = (COLS - 1) / 2;
 const CENTER_ROW = (ROWS - 1) / 2;
 
-// ── 각 카드별 펼쳐질 위치(x,y) 계산 ────────────────────
 const OFFSETS = Array.from({ length: CARD_COUNT }, (_, i) => {
   const row = Math.floor(i / COLS);
   const col = i % COLS;
 
-  // 기본 X/Y 오프셋
   const baseX = (col - CENTER_COL) * H_GAP;
   const baseY = (row - CENTER_ROW) * V_GAP;
 
-  // 세로 스태거: 2,4,…번째 열만 V_GAP/2 만큼 Y축으로 추가 이동
   const staggerY = col % 2 === 1 ? V_GAP / 2 : 0;
 
   return {
